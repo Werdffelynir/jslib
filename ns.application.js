@@ -30,6 +30,7 @@
         this.query = app.query;
         this.queryAll = app.queryAll;
         this.queryUp = app.queryUp;
+        this.on = app.on;
         this.each = app.each;
 
     };
@@ -297,7 +298,12 @@
 
 
         if (from) {
-            elems = [].slice.call(from.querySelectorAll(selector));
+            console.log(selector);
+            if (typeof selector === 'object' &&
+                (selector.nodeType === Node.ELEMENT_NODE || selector.nodeType === Node.DOCUMENT_NODE))
+                elems = [selector];
+            else
+                elems = [].slice.call(from.querySelectorAll(selector));
         }
 
 
@@ -350,6 +356,24 @@
             for (i = 0; i < list.length; i++) callback.call({}, list[i], i, tmp);
         else
             for (i in list) callback.call({}, list[i], i, tmp);
+    };
+
+    
+    /**
+     *
+     * @param eventName
+     * @param selector
+     * @param callback
+     * @param bubble
+     */
+    app.on = function (eventName, selector, callback, bubble) {
+        var elements =  app.queryAll(selector);
+        if(elements) {
+            app.each(elements, function (item) {
+                if(typeof item === 'object')
+                    item.addEventListener(eventName, callback, !!bubble);
+            });
+        }
     };
 
 
