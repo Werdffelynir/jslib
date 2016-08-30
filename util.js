@@ -226,6 +226,10 @@
         return typeof value === 'number' && !(value % 1);
     };
 
+    Util.isIterated = function (data) {
+        return typeof data === 'object';
+    };
+
     // Determine whether a variable is empty
     Util.isEmpty = function (param) {
         return (param === "" || param === 0 || param === "0" || param === null || param === undefined || param === false || (Util.inArray(param) && param.length === 0));

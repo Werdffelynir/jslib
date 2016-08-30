@@ -358,7 +358,7 @@
             for (i in list) callback.call({}, list[i], i, tmp);
     };
 
-    
+
     /**
      *
      * @param eventName
