@@ -46,6 +46,7 @@ encodeData
 parseGet
 parseUrl
 each
+eachParent
 ucfirst
 node2html
 html2node
@@ -71,7 +72,7 @@ getURLParameter
 asyncForEach
 waitFor
 rmInArray
-eachTreeElement
+
 toTranslit
 isMobile
 isInteger

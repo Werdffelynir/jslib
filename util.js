@@ -954,21 +954,25 @@
     };
 
 
+
     /**
      *
-     * @param elem
-     * @param callback
-     * @param limit
+     * @param elem     Node елемент
+     * @param callback получи как аргумет родительский елемент при каждой итерации,
+     *                  если функция вернот false итерация прикратится
+     * @param limit    количество итерация с возможных,
      */
-    Util.eachTreeElement = function (elem, callback, limit) {
+    util.eachParent = function (elem, callback, limit) {
         var i = 0;
         limit = limit || 99;
         while(elem.nodeType === Node.ELEMENT_NODE && i < limit ) {
-            callback.call({}, elem);
+            var res = callback.call({}, elem);
+            if(res === false) i = limit;
             elem = elem.parentNode;
             i ++;
         }
     };
+
 
 
     /**
