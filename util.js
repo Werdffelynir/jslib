@@ -12,7 +12,7 @@
         };
     }
 
-    window.Util = window.Util || {};
+    var Util = {};
 
     /**
      * Deeply extends two objects
@@ -826,8 +826,6 @@
 
 
 
-
-
     /**
      * возвращает cookie с именем name, если есть, если нет, то undefined
      * @param name
@@ -962,7 +960,7 @@
      *                  если функция вернот false итерация прикратится
      * @param limit    количество итерация с возможных,
      */
-    util.eachParent = function (elem, callback, limit) {
+    Util.eachParent = function (elem, callback, limit) {
         var i = 0;
         limit = limit || 99;
         while(elem.nodeType === Node.ELEMENT_NODE && i < limit ) {
@@ -1004,7 +1002,6 @@
         return false;
     };
 
-    //if (typeof window.Util !== 'object')
-    //    window.Util = Util;
+    window.Util = Util;
 
 })(window);
