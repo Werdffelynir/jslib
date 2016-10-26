@@ -68,8 +68,13 @@
         xhr.open(method, url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        if (typeof callback === 'function') xhr.onloadend = callback;
-        if (typeof callbackError === 'function') xhr.onerror = callbackError;
+
+        if (typeof callback === 'function')
+            xhr.onloadend = callback;
+
+        if (typeof callbackError === 'function')
+            xhr.onerror = callbackError;
+
         xhr.send();
         return xhr;
     };
