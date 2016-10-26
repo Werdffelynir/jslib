@@ -1,43 +1,113 @@
 # namespace Application
 
 
-```
+```js
 App = new NamespaceApplication(properties)
 
-App.version = version;
-App.domLoaded
-App.request
-App.script
-App.style
-App.file
-App.extend
-App.store
-App.route
-App.assign
-App.inject
-App.query;
-App.queryAll
-App.each
-App.prototype.namespace
-App.prototype.constructsStart
-App.prototype.require
-App.prototype.requireStart
-App.prototype.setProperties
-App.prototype.constructsStart
+// Get version
+App.version
 
+// Get debug status or set debug mod  
+App.debug
+
+// Base application path
+App.path
+
+// Get debug status or set startup type mod for controllers
+App.constructsType
+
+// reate namespace for module-script (namespace "Action.Name")
+App.prototype.namespace (namespace, callback, args)
+                       
+// Run all modules constructs
+App.prototype.constructsStart (args)
+                             
+// Designate a list of scripts for loading
+App.prototype.require (key, path, oncomplete, onerror)
+                     
+// Start loading the list of scripts by key (identifier)
+App.prototype.requireStart (key)
+                          
+// Apply properties object to instance properties
+App.prototype.setProperties ()
+
+// Get uri
+App.prototype.uri (uri)
+
+
+
+// - - - Static methost and aliasses in prototype
+
+// Execute callback function if or when DOM is loaded
 NamespaceApplication.domLoaded
+App.domLoaded (callback)
+
+// Base url request
 NamespaceApplication.request
+App.request (method, url, callback, callbackError)
+
+// Loads the script element
 NamespaceApplication.script
+App.script (src, onload, onerror)
+
+// Loads the CSS link element
 NamespaceApplication.style
+App.style (src, onload, onerror)
+
+// Loads the file (AJAX GET request)
 NamespaceApplication.file
+App.file(url, onload, onerror) 
+
+// Merge objects
 NamespaceApplication.extend
+App.extend (obj, src, callback)
+
+// Storage in memory
 NamespaceApplication.store
+App.store (object, keyWithValue)
+
+// Simple router
 NamespaceApplication.route
+App.route (uri, callback, hash, query)
+
+// Get route - URI Path 
+NamespaceApplication.routePath
+App.routePath (hash, query)
+
+// Simple redirect
+NamespaceApplication.redirect
+App.redirect (to)
+
+// Simple template builder
 NamespaceApplication.assign
-NamespaceApplication.inject
-NamespaceApplication.query;
+App.assign (stringData, params)
+
+// Simple inject data to HTMLElement [by selector]
+NamespaceApplication.
+App.inject (selector, data)
+
+// Query DOM Element by selector
+NamespaceApplication.query
+App.query (selector, parent)
+
+// Query DOM Elements by selector
 NamespaceApplication.queryAll
+App.queryAll (selector, parent)
+
+// Query DOM Element by selector to up in tree
+NamespaceApplication.queryUp
+App.queryUp (selector, from, loops)
+
+// Execute callback for each element in list
 NamespaceApplication.each
+App.each (list, callback, tmp)
+        
+// Simple adding event listener for element or selector
+NamespaceApplication.on
+App.prototype.on (eventName, selector, callback, bubble)
+
+
+
 ```
 
 ## config properties
@@ -54,40 +124,6 @@ var App = new NamespaceApplication({
                                //   constructor methods, use `App.constructsStart()`
     param: 'some'              // Custom params
 });
-```
-
-
-## methods
-
-```js
-App.setProperties(config:Object):App
-App.namespace(namespace:String, callback:Function):Object
-App.constructsStart(args:*):App
-App.require(key:String, path:Array, oncomplete:Function, onerror:Function):App
-App.requireStart(key:String):App
-App.script(src:String, onload:Function, onerror:Function):HTMLElement
-App.style(src:String, onload:Function, onerror:Function):HTMLElement
-App.file(url:String, onload:Function, onerror:Function):void
-App.request(method:String, url:String, callback:Function, callbackError:Function):XMLHttpRequest
-App.assign(stringData:String, params:Object):String
-App.route(urlPath:String, callback:Function):App
-App.query(selector:String, callback:Function):HTMLElement
-App.queryAll(selector:String, callback:Function):Array
-App.each(list:Array|Object, callback:Function, tmp:Object):Array|Object
-App.inject(selector:String|Object, data:String|Object):HTMLElement
-App.extend (obj:Object, src:Object, callback:Function) )
-```
-
-
-## static methods
-
-```js
-NamespaceApplication.request(method:String, url:String, callback:Function, callbackError:Function):XMLHttpRequest
-NamespaceApplication.assign(stringData:String, params:Object):String
-NamespaceApplication.script(src:String, onload:Function, onerror:Function):HTMLElement
-NamespaceApplication.style(src:String, onload:Function, onerror:Function):HTMLElement
-NamespaceApplication.file(url:String, onload:Function, onerror:Function):void
-NamespaceApplication.extend(obj:Object, src:Object, callback:Function):void
 ```
 
 

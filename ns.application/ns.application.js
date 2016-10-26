@@ -35,7 +35,9 @@
 
     };
 
-    /** Execute callback function if or when DOM is loaded
+    /**
+     * Execute callback function if or when DOM is loaded
+     *
      * @param callback
      */
     app.domLoaded = function (callback) {
@@ -51,6 +53,7 @@
 
     /**
      * Base url request
+     *
      * @param method
      * @param url
      * @param callback
@@ -74,6 +77,7 @@
 
     /**
      * Loads the script element
+     *
      * @param src
      * @param onload
      * @param onerror
@@ -123,6 +127,7 @@
 
     /**
      * Loads the file
+     *
      * @param url
      * @param onload
      * @param onerror
@@ -138,6 +143,7 @@
 
     /**
      * Merge objects
+     *
      * @param obj objectBase
      * @param src
      * @param callback
@@ -156,6 +162,7 @@
 
     /**
      * Storage in memory
+     *
      * if `object` is a Object - set new objects
      * if `object` is a String - return object by name
      * if `object` is a not set - return all objects
@@ -210,7 +217,9 @@
         return false;
     };
 
+
     /**
+     * Get route - URI Path
      *
      * @returns {string}
      */
@@ -225,12 +234,20 @@
         return path;
     };
 
+
+    /**
+     * Simple redirect
+     *
+     * @param to
+     */
     app.redirect = function (to) {
         window.location.href = to || window.location.href;
     };
 
+
     /**
      * Simple template builder
+     *
      * @param stringData    source string data with marks "{{key1}}"
      * @param params        object {key1 : 'value'}
      * @returns {*}
@@ -246,6 +263,7 @@
 
     /**
      * Simple inject data to HTMLElement [by selector]
+     *
      * @param selector
      * @param data
      * @returns {*}
@@ -319,6 +337,7 @@
 
     /**
      * Query DOM Element by selector to up in tree
+     *
      * @param selector
      * @param from
      * @param loops
@@ -345,6 +364,7 @@
     };
 
     /**
+     * Execute callback for each element in list
      *
      * @param list
      * @param callback
@@ -360,14 +380,20 @@
 
 
     /**
-     *
+     * Simple add event listener
      * @param eventName
      * @param selector
      * @param callback
      * @param bubble
      */
     app.on = function (eventName, selector, callback, bubble) {
-        var elements =  app.queryAll(selector);
+        var elements = null;
+
+        if (typeof selector === 'string')
+            elements = app.queryAll(selector);
+        else if (typeof selector === 'object' && selector.nodeType == Node.ELEMENT_NODE)
+            elements = [selector];
+
         if(elements) {
             app.each(elements, function (item) {
                 if(typeof item === 'object')
@@ -416,6 +442,7 @@
 
     /**
      * Create namespace for module-script
+     *
      * @param namespace  "Controller.Name" or "Action.Name"
      * @param callback
      * @param args
@@ -548,19 +575,10 @@
 
 
     /**
-     * Run all modules constructs
-     * @param args
-     * @returns {app|NamespaceApplication}
+     * Get uri
+     * @param uri
+     * @returns {string}
      */
-    app.prototype.constructsStart = function (args) {
-        this.each(this._stackConstructs, function (item, index) {
-            if (typeof item.construct === 'function')
-                item.construct.apply(item, args);
-        }, args);
-        this._stackConstructs = [];
-        return this;
-    };
-
     app.prototype.uri = function (uri) {
         var _uri = uri ? this.path + '/' + uri : this.path;
         _uri = _uri.replace(/\/+/ig,'/');
