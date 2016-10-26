@@ -4,8 +4,9 @@
 ## Reference
 
 
+### Properties
 ```js
-App = new NamespaceApplication(properties)
+App = new NamespaceApplication({properties})
 
 // Get version
 App.version
@@ -13,13 +14,19 @@ App.version
 // Get debug status or set debug mod  
 App.debug
 
-// Base application path
-App.path
-
 // Get debug status or set startup type mod for controllers
 App.constructsType
 
-// reate namespace for module-script (namespace "Action.Name")
+// Other can set with properties
+App.path
+App.url
+
+```
+
+
+### Methods
+```js
+// Create namespace for module-script (like namespace "Action.Name")
 App.prototype.namespace (namespace, callback, args)
                        
 // Run all modules constructs
@@ -37,9 +44,11 @@ App.prototype.setProperties ()
 // Get uri
 App.prototype.uri (uri)
 
+```
 
 
-// - - - Static methost and aliasses in prototype
+### Static methods have aliases in instance
+```js
 
 // Execute callback function if or when DOM is loaded
 NamespaceApplication.domLoaded
@@ -109,13 +118,7 @@ App.each (list, callback, tmp)
 NamespaceApplication.on
 App.prototype.on (eventName, selector, callback, bubble)
 
-
-
 ```
-
-
-
-
 
 
 ### App.namespace()
@@ -161,7 +164,6 @@ Syntax: `App.require(key:String, path:Array, oncomplete:Function, onerror:Functi
 
 ### App.requireStart()
 Syntax: `App.requireStart(key:String):App`
-
 ```js
 
 // List of scripts
@@ -169,13 +171,13 @@ App.require('library',[
     '/js/library/lib1.js',
     '/js/library/lib2.js',
     '/js/library/lib3.js'
-], onLibraryLoaded, onRequireError);
+], onSuccess, onError);
 
 // Execute if loading is success
-function onLibraryLoaded(list){}
+function onSuccess(list){}
 
 // Execute if loading failed
-function onRequireError(error){}
+function onError(error){}
 
 // Strart loading
 App.requireStart('library')
@@ -183,7 +185,8 @@ App.requireStart('library')
 
 
 ### App.domLoaded()
-Syntax: ``
+Syntax: `App.domLoaded(callback: Function)`
+
 ```js
 App.domLoaded(foo);
 
@@ -194,18 +197,44 @@ App.domLoaded(function (){
 
 
 ### App.request()
-Syntax: ``
-```js
+Syntax: `App.request(method:String, url:String, callback:Function, callbackError:Function):XMLHttpRequest`
 
+```js
+App.request('POST', '/to', onRequest, onRequestError)
+
+function onRequest (event) {}
+function onRequestError (event) {}
 ```
 
 
 ### App.script()
-### App.style()
-### App.file()
-Syntax: ``
-```js
+Syntax: `App.script(src:String, onload:Function, onerror:Function):HTMLElement`
 
+### App.style()
+Syntax: `App.style(src:String, onload:Function, onerror:Function):HTMLElement`
+
+```js
+// loading of js script file
+App.script('/js/script.js', function(element){}, function(error){});
+
+// loading of css style file
+App.style('/css/style.css', function(element){}, function(error){});
+```
+
+
+### App.file()
+Syntax: `App.file(url:String, onload:Function, onerror:Function):void`
+
+```js
+App.file('/templates/popup.html', onSuccess, onError);
+
+function onSuccess(data) {
+    App.inject('#content', data);
+}
+
+function onError(error) {
+    console.error('File loading error!', error);
+}
 ```
 
 
@@ -223,15 +252,28 @@ Syntax: ``
 ### App.routePath()
 Syntax: ``
 ```js
+App.route('/', App.Controller.Page.construct, true);
+App.route('/#login', App.Controller.Login.construct, true);
 
+var route = App.routePath()
 ```
 
 
 ### App.assign()
-### App.inject()
-Syntax: ``
-```js
+Syntax: `App.assign(stringData:String, params:Object):String`
 
+### App.inject()
+Syntax: `App.inject(selector:String, data:String|Object):Void`
+
+```js
+var tpl = '<h1>{{title}}</h1><div>{{content}}</div>';
+
+var pageContent = App.assign(tpl, {
+    title:"hello world",
+    content:"hello world"
+})
+
+App.inject('#content', pageContent);
 ```
 
 
@@ -239,11 +281,31 @@ Syntax: ``
 
 
 ### App.query()
-### App.queryAll()
-### App.queryUp()
-Syntax: ``
-```js
+Syntax: `App.query(selector:String, callback:Function):HTMLElement`
 
+### App.queryAll()
+Syntax: `App.queryAll(selector:String, callback:Function):Array`
+
+### App.queryUp()
+Syntax: `App.queryUp(selector:String, callback:Function):HTMLElement`
+
+```js
+// example 1
+var nodeContent = App.query('#content');
+// equal
+App.query('#content', function(nodeContent){
+    // do ...
+});
+
+// example 2
+var menuLinks = App.queryAll('#menu li>a');
+// equal
+App.queryAll('#menu li>a', function(menuLinks){
+    // do ...
+});
+
+// example 3
+var activeElement = App.queryUp('.active', '#menu', 10);
 ```
 
 
@@ -266,9 +328,22 @@ Syntax: ``
 
 
 ### App.each()
-Syntax: ``
+Syntax: `App.each(list:Array|Object, callback:Function, tmp:Object):Array|Object`
 ```js
+var tmpSum = 'conf', 
+    arr = [1,2,3,4,5];
+    
+App.each(arr, function (item, index, sum) {
+    sum += '-' + index + '-' + (item * 100);
+    console.log(item, index, sum);
+}, tmpSum);
 
+
+var obj = {id: 123, name: 'Class', root: '/'};
+
+App.each(obj, function(item, key){
+    console.log(item, key);
+});
 ```
 
 
@@ -296,11 +371,25 @@ Syntax: ``
 ```
 
 
-------------------------------------------------------------------------
-### App.()
-Syntax: ``
+### App.store()
+
+Syntax: `NamespaceApplication.store(object:*, keyWithValue:*): *`
+
+Storage in memory
+if `object` is a Object - set new objects
+if `object` is a String - return object by name
+if `object` is a not set - return all objects
 ```js
 
-```
+App.store({
+    key1 : 'value1',
+    key2 : 'value2',
+    key3 : 'value3'
+});
 
+App.store('key4','data-string');
+
+NamespaceApplication.store()
+NamespaceApplication.store('key1')
+```
 
