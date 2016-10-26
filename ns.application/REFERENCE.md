@@ -164,6 +164,7 @@ Syntax: `App.require(key:String, path:Array, oncomplete:Function, onerror:Functi
 
 ### App.requireStart()
 Syntax: `App.requireStart(key:String):App`
+
 ```js
 
 // List of scripts
@@ -238,19 +239,12 @@ function onError(error) {
 ```
 
 
-
-
-
-### App.store()
-Syntax: ``
-```js
-
-```
-
-
 ### App.route()
+Syntax: `App.route():String`
+
 ### App.routePath()
-Syntax: ``
+Syntax: `App.routePath():String`
+
 ```js
 App.route('/', App.Controller.Page.construct, true);
 App.route('/#login', App.Controller.Login.construct, true);
@@ -311,8 +305,11 @@ var activeElement = App.queryUp('.active', '#menu', 10);
 
 
 ### App.setProperties()
+Syntax: `App.setProperties(): `
+
 ### App.constructsStart()
-Syntax: ``
+Syntax: `App.constructsStart(): `
+
 ```js
 
 ```
@@ -320,15 +317,22 @@ Syntax: ``
 
 
 ### App.on()
-Syntax: ``
-```js
+Syntax: `App.on(eventName:String, selector:String, callback:Function, bubble:Boolean): `
 
+```js
+App.on('change', '#button-add', onChange, false);
+
+
+function onChange(event) {
+    // code...
+}
 ```
 
 
 
 ### App.each()
 Syntax: `App.each(list:Array|Object, callback:Function, tmp:Object):Array|Object`
+
 ```js
 var tmpSum = 'conf', 
     arr = [1,2,3,4,5];
@@ -349,23 +353,27 @@ App.each(obj, function(item, key){
 
 
 ### App.extend()
-Syntax: ``
-```js
+Syntax: `App.extend(obj: Object, src: Object, callback: Function): Object`
 
+```js
+var baseObjectExtend = App.extend(baseObject, sourceObject)
 ```
 
 
 
 ### App.redirect()
-Syntax: ``
-```js
+Syntax: `App.redirect(url: String): Void`
 
+```js
+App.redirect('/go/to')
+
+App.redirect('https://domain.com/go/to')
 ```
 
 
-
 ### App.uri()
-Syntax: ``
+Syntax: `App.uri(): `
+
 ```js
 
 ```
@@ -373,12 +381,14 @@ Syntax: ``
 
 ### App.store()
 
-Syntax: `NamespaceApplication.store(object:*, keyWithValue:*): *`
+Syntax: `App.store(object:*, keyWithValue:*): *`
 
-Storage in memory
-if `object` is a Object - set new objects
-if `object` is a String - return object by name
-if `object` is a not set - return all objects
+Storage in memory:
+
+> if `object` is a Object - set new objects
+> if `object` is a String - return object by name
+> if `object` is a not set - return all objects
+
 ```js
 
 App.store({
