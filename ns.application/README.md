@@ -1,117 +1,48 @@
-# namespace Application
+# JS NamespaceApplication
+
+- NamespaceApplication предназначин для структуризации кода на javascript
+- NamespaceApplication придерживается модульной структуры.
+- NamespaceApplication не строг сам по себе, но вынуждает следовать определенным
+правилам в структурировании приложений, важно следовать правилам NamespaceApplication
+описаных в спецификации NamespaceApplication
 
 
-```js
-App = new NamespaceApplication(properties)
+## How use it
 
-// Get version
-App.version
-
-// Get debug status or set debug mod  
-App.debug
-
-// Base application path
-App.path
-
-// Get debug status or set startup type mod for controllers
-App.constructsType
-
-// reate namespace for module-script (namespace "Action.Name")
-App.prototype.namespace (namespace, callback, args)
-                       
-// Run all modules constructs
-App.prototype.constructsStart (args)
-                             
-// Designate a list of scripts for loading
-App.prototype.require (key, path, oncomplete, onerror)
-                     
-// Start loading the list of scripts by key (identifier)
-App.prototype.requireStart (key)
-                          
-// Apply properties object to instance properties
-App.prototype.setProperties ()
-
-// Get uri
-App.prototype.uri (uri)
-
-
-
-// - - - Static methost and aliasses in prototype
-
-// Execute callback function if or when DOM is loaded
-NamespaceApplication.domLoaded
-App.domLoaded (callback)
-
-// Base url request
-NamespaceApplication.request
-App.request (method, url, callback, callbackError)
-
-// Loads the script element
-NamespaceApplication.script
-App.script (src, onload, onerror)
-
-// Loads the CSS link element
-NamespaceApplication.style
-App.style (src, onload, onerror)
-
-// Loads the file (AJAX GET request)
-NamespaceApplication.file
-App.file(url, onload, onerror) 
-
-// Merge objects
-NamespaceApplication.extend
-App.extend (obj, src, callback)
-
-// Storage in memory
-NamespaceApplication.store
-App.store (object, keyWithValue)
-
-// Simple router
-NamespaceApplication.route
-App.route (uri, callback, hash, query)
-
-// Get route - URI Path 
-NamespaceApplication.routePath
-App.routePath (hash, query)
-
-// Simple redirect
-NamespaceApplication.redirect
-App.redirect (to)
-
-// Simple template builder
-NamespaceApplication.assign
-App.assign (stringData, params)
-
-// Simple inject data to HTMLElement [by selector]
-NamespaceApplication.
-App.inject (selector, data)
-
-// Query DOM Element by selector
-NamespaceApplication.query
-App.query (selector, parent)
-
-// Query DOM Elements by selector
-NamespaceApplication.queryAll
-App.queryAll (selector, parent)
-
-// Query DOM Element by selector to up in tree
-NamespaceApplication.queryUp
-App.queryUp (selector, from, loops)
-
-// Execute callback for each element in list
-NamespaceApplication.each
-App.each (list, callback, tmp)
-        
-// Simple adding event listener for element or selector
-NamespaceApplication.on
-App.prototype.on (eventName, selector, callback, bubble)
-
-
+Структура приложения. 
 
 ```
+app
+    action
+        navigate.js
+        sidebar.js
+
+    controller
+        page.js
+        login.js
+
+    extension
+        api.js
+        tool.js
+
+    library
+        ns.application.js
+
+    init.js
+    
+index.html
+```
+
+Основные файлы 
+
+- `ns.application.js` - ядро
+- `index.html` - рабочий шаблон
+- `init.js` - скрипт инициализации модулей, загрузчиков, конфигурации, различных настроек
+
+все остальные будут динамически подключены или отключены
 
 
-### Include scripts to template `index.html`
+### `index.html`. Template
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -126,75 +57,76 @@ App.prototype.on (eventName, selector, callback, bubble)
 ```
 
 
-### Application start. `init.js`
+### `init.js`. Application start. 
 ```js
 (function(window, NamespaceApplication){
 
-window.App = new NamespaceApplication({
-                                          url: '/',
-                                          name: true,
-                                          debug: true
-                                      });
+    window.App = new NamespaceApplication({
+        url: '/',
+        name: true,
+        debug: true
+    });
 
-// Loadings style
-App.loadCSSLink(App.url + 'css/mobile.css', null, onRequireError);
+    // Loadings style
+    App.style(App.url + 'css/mobile.css', null, onRequireError);
 
-// Loadings script
-App.loadScript(App.url + 'js/script.js', null, onRequireError);
+    // Loadings script
+    App.script(App.url + 'js/script.js', null, onRequireError);
 
-// assign scripts for loading
-App.require('libs',
-    [
-        App.url + 'js/library/lib1.js',
-        App.url + 'js/library/lib2.js',
-        App.url + 'js/library/lib3.js'
-    ],
-    onLibraryLoaded, onRequireError);
+    // assign scripts for loading
+    App.require('libs',
+        [
+            App.url + 'js/library/lib1.js',
+            App.url + 'js/library/lib2.js',
+            App.url + 'js/library/lib3.js'
+        ],
+        onLibraryLoaded, onRequireError);
 
-App.require('dependence',
-    [
-        // Modules
-        'js/app/module/api.js',
+    App.require('dependence',
+        [
+            // Extension
+            'js/app/extension/api.js',
+            'js/app/extension/tool.js',
 
-        // Actions
-        'js/app/action/sidebar.js',
+            // Actions
+            'js/app/action/api.js',
+            'js/app/action/sidebar.js',
+            'js/app/action/navigate.js',
 
-        // Controllers
-        'js/app/controller/login.js'
+            // Controllers
+            'js/app/controller/page.js',
+            'js/app/controller/login.js'
 
-    ],
-    onDependenceLoaded, onRequireError);
-
-// Start loading resources of scripts by key 
-App.requireStart('libs');
-
-// Loaging error handler
-function onRequireError(error){
-    console.error('onRequireError', error);
-}
-
-// Loaging complete handler
-function onLibraryLoaded(list){
+        ],
+        onDependenceLoaded, onRequireError);
 
     // Start loading resources of scripts by key 
-    App.requireStart('dependence');
-}
+    App.requireStart('libs');
 
-// Loaging complete handler
-function onDependenceLoaded(list){
-    console.log('Application start!');
+    // Loaging error handler
+    function onRequireError(error){
+        console.error('onRequireError', error);
+    }
 
-    // work starts here ...
+    // Loaging complete handler
+    function onLibraryLoaded(list){
 
-}
+        // Start loading resources of scripts by key
+        App.requireStart('dependence');
+    }
+
+    // Loaging complete handler
+    function onDependenceLoaded(list){
+        console.log('Application start!');
+
+        // work starts here ...
+    }
 
 })(window, NamespaceApplication);
 ```
 
 
-
-
-### config properties
+### Config properties
 
 ```js
 var App = new NamespaceApplication({
@@ -209,6 +141,50 @@ var App = new NamespaceApplication({
     param: 'some'              // Custom params
 });
 ```
+
+
+### Template for module-controller
+```js
+if(App.namespace){App.namespace('Controller.Register', function(App){
+    /**
+     * @namespace App.Controller.Register
+     */
+    var _ = {};
+
+    _.construct = function(){
+        App.domLoaded(_.domLoaded);
+    };
+    
+    _.domLoaded = function(){};
+
+    return _;
+})}
+```
+
+
+### Template for module
+```js
+App.namespace('Action.Register', function(App, _) {
+    /**
+     * @namespace App.Controller.Register
+     */
+    var _ = {};
+    
+    _.run = function(){};
+    
+    return _;
+});
+```
+
+
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+
 
 
 
