@@ -385,8 +385,8 @@ Syntax: `App.store(object:*, keyWithValue:*): *`
 
 Storage in memory:
 
-> if `object` is a Object - set new objects
-> if `object` is a String - return object by name
+> if `object` is a Object - set new objects. 
+> if `object` is a String - return object by name. 
 > if `object` is a not set - return all objects
 
 ```js

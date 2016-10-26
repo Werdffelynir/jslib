@@ -164,11 +164,11 @@ if(App.namespace){App.namespace('Controller.Register', function(App){
 
 ### Template for module
 ```js
-App.namespace('Action.Register', function(App, _) {
+App.namespace('Action.Register', function(App) {
     /**
      * @namespace App.Controller.Register
      */
-    var _ = _ || {};
+    var _ = {};
     
     _.run = function(){};
     
