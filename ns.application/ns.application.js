@@ -319,16 +319,13 @@
         else if (typeof parent === 'object' && parent.nodeType === Node.ELEMENT_NODE)
             from = parent;
 
-
         if (from) {
-            console.log(selector);
             if (typeof selector === 'object' &&
                 (selector.nodeType === Node.ELEMENT_NODE || selector.nodeType === Node.DOCUMENT_NODE))
                 elems = [selector];
             else
                 elems = [].slice.call(from.querySelectorAll(selector));
         }
-
 
         if (elems.length > 0 && typeof callback == 'function')
             callback.call(this, elems);
