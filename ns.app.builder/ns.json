@@ -1,0 +1,16 @@
+{
+
+  "ns": "/var/www/jslib.loc/ns.application/ns.application.js",
+
+  "init": "/var/www/jslib.loc/ns.app.builder/app/init.js",
+
+  "files": [
+    "/var/www/jslib.loc/ns.app.builder/app/lib/aj.js",
+    "/var/www/jslib.loc/ns.app.builder/app/lib/util.js",
+    "/var/www/jslib.loc/ns.app.builder/app/module/index.js",
+    "/var/www/jslib.loc/ns.app.builder/app/module/query.js",
+    "/var/www/jslib.loc/ns.app.builder/app/module/view.js",
+    "/var/www/jslib.loc/ns.app.builder/app/module/api.js"
+  ]
+
+}
