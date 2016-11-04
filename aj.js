@@ -488,7 +488,7 @@
         var src = 'cb' + String(Math.random()).slice(-10),
             script = document.createElement("script");
         registry[src] = jsonpResponse;
-        document.head.insertBefore(script, document.head.lastChild).src = url + "=AjJsonp.registry." + src;
+        document.head.insertBefore(script, document.head.lastChild).src = url + "=Aj.jsonp.registry." + src;
     };
     aj.jsonp.registry = {}; // реестр
 
@@ -539,17 +539,17 @@
      */
 
     window.Aj = aj.open;
-    /*window.AjGet     = */window.Aj.get     = aj.get;
-    /*window.AjPost    = */window.Aj.post    = aj.post;
-    /*window.AjHead    = */window.Aj.head    = aj.head;
-    /*window.AjLoad    = */window.Aj.load    = aj.load;
-    /*window.AjRequest = */window.Aj.request = aj.request;
-    /*window.AjForm    = */window.Aj.form    = aj.form;
-    /*window.AjJson    = */window.Aj.json    = aj.json;
-    /*window.AjJsonp   = */window.Aj.jsonp   = aj.jsonp;
-    /*window.AjScript  = */window.Aj.script  = aj.script;
-    /*window.AjWorker  = */window.Aj.worker  = aj.worker;
-    /*window.AjUpload  = */window.Aj.upload  = aj.upload;
-    /*window.AjUtil    = */window.Aj.util    = util;
+    window.Aj.get     = aj.get;
+    window.Aj.post    = aj.post;
+    window.Aj.head    = aj.head;
+    window.Aj.load    = aj.load;
+    window.Aj.request = aj.request;
+    window.Aj.form    = aj.form;
+    window.Aj.json    = aj.json;
+    window.Aj.jsonp   = aj.jsonp;
+    window.Aj.script  = aj.script;
+    window.Aj.worker  = aj.worker;
+    window.Aj.upload  = aj.upload;
+    window.Aj.util    = util;
 
 })(window);

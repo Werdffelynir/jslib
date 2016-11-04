@@ -61,6 +61,7 @@
      * @returns {XMLHttpRequest}
      */
     app.request = function (method, url, callback, callbackError) {
+
         var xhr = new XMLHttpRequest();
         method = method || 'POST';
         url = url || '/';
@@ -445,9 +446,9 @@
     /**
      * Create namespace for module-script
      *
-     * @param namespace  "Controller.Name" or "Action.Name"
-     * @param callback
-     * @param args
+     * @param namespace     namespace. Ex: "Module.Name" - global address is "App.Module.Name"
+     * @param callback      must return Object or Function
+     * @param args          arguments for a method Object.construct.
      * @returns {{}}
      */
     app.prototype.namespace = function (namespace, callback, args) {
