@@ -3,181 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <script src="../ns.application/ns.application.js"></script>
 </head>
 <body>
 
-
-<!--
-<table class="aui tron_table">
-    <thead>
-    <tr>
-        <td rowspan="2">ID*</td>
-        <td rowspan="2">Завдання</td>
-        <td rowspan="2">Тип роботи</td>
-        <td rowspan="2">Початку роботи</td>
-        <td rowspan="2">Оцінка тиждня</td>
-        <td rowspan="2">Час за тиждень, годин</td>
-        <td colspan="5">Денні витрати часу, годин</td>
-    </tr>
-    <tr>
-        <td>Пн</td>
-        <td>Вт</td>
-        <td>Ср</td>
-        <td>Чт</td>
-        <td>Пт</td>
-    </tr>
-    </thead>
-    <tbody><tr><td colspan="11" class="tron_header">Непроектні та повсякденні завдання</td></tr><tr id="issue3"><td></td><td>Some issue</td><td><a id="issue3-dd-trigger" href="#issue3-dd" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger" resolved="" aria-controls="issue3-dd" aria-expanded="false">Trigger Name</a><div id="issue3-dd" class="aui-style-default aui-dropdown2 aui-layer" resolved="" aria-hidden="true"><ul class="aui-list-truncate"><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li></ul></div></td><td>01.06.2016</td><td></td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td></tr><tr id="issue4"><td></td><td>Some issue</td><td><a id="issue4-dd-trigger" href="#issue4-dd" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger" resolved="" aria-controls="issue4-dd" aria-expanded="false">Trigger Name</a><div id="issue4-dd" class="aui-style-default aui-dropdown2 aui-layer" resolved="" aria-hidden="true"><ul class="aui-list-truncate"><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li></ul></div></td><td>01.06.2016</td><td></td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td></tr><tr><td colspan="11" class="tron_header">Проекти</td></tr><tr id="issue1"><td>UPC</td><td>Some issue</td><td><a id="issue1-dd-trigger" href="#issue1-dd" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger" resolved="" aria-controls="issue1-dd" aria-expanded="false">Trigger Name</a><div id="issue1-dd" class="aui-style-default aui-dropdown2 aui-layer" resolved="" aria-hidden="true"><ul class="aui-list-truncate"><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li></ul></div></td><td>01.06.2016</td><td></td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td></tr><tr id="issue2"><td>UPC</td><td>Some issue</td><td><a id="issue2-dd-trigger" href="#issue2-dd" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger" resolved="" aria-controls="issue2-dd" aria-expanded="false">Trigger Name</a><div id="issue2-dd" class="aui-style-default aui-dropdown2 aui-layer" resolved="" aria-hidden="true"><ul class="aui-list-truncate"><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li><li><a href="#">Menu item</a></li></ul></div></td><td>01.06.2016</td><td></td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td><td>0:0</td></tr></tbody>
-</table>
--->
-
-
-
-<form id="email" action="/server.php" method="get">
+<form id="emailform" action="/server.php" method="get">
     <input type="text" name="id" value="123">
     <input type="text" name="name" value="SuperUser">
     <input type="submit" value="Send">
 </form>
 
-
-
 <script>
 
-    var app = {};
+    NamespaceApplication.domLoaded(function(){
+        var emailform = document.forms['emailform'];
 
-    /**
-     * Base AJAX request. Example:
-     *  app.ajax({
-     *      method: 'POST',
-     *      url: '/server.php',
-     *      data: {id:123, name:'UserName'}
-     *  }, function (status, data) {
-     *      console.log(status, data);
-     *  });
-     * @param {*} config        {method: 'POST', data: {}, headers: {}, action: '/index'}
-     * @param callback          executing event - onloadend. function (status, responseText)
-     * @returns {XMLHttpRequest}
-     */
-    app.ajax = function (config, callback) {
-        var conf = {
-            method:     config.method || 'GET',
-            data:       config.data || {},
-            headers:    config.headers || {},
-            action:     config.action || config.url || document.location
-        };
-        var xhr = new XMLHttpRequest();
-        var kd, kh, fd = new FormData();
-
-        if (conf.method.toUpperCase() !== 'POST') {
-            conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
-            for (kd in conf.data) {
-                conf.action += '&' + kd + '=' + encodeURIComponent(conf.data[kd])
-            }
-        } else
-            for (kd in conf.data) {
-                fd.append(kd, encodeURIComponent(conf.data[kd]));
-            }
-
-        xhr.open (conf.method, conf.action, true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-        for (kd in conf.headers) {
-            xhr.setRequestHeader(kd, conf.headers[kd]);
-        }
-
-        xhr.onloadend = function () {
-            if (typeof callback === 'function')
-                callback.call(xhr, xhr.status, xhr.responseText);
-        };
-
-        xhr.send(fd);
-        return xhr;
-    };
-
-    /**
-     * Send Form Data on AJAX request. Example:
-     *  app.ajaxPostForm(FORM_ELEMENT, {
-     *      action: '/server.php',
-     *      data: {id:123, name:'UserName'}
-     *  }, function (status, data) {
-     *      console.log(status, data);
-     *  });
-     * @param form              FORM_ELEMENT
-     * @param {*} config        {data: {}, headers: {}, action: '/index'}
-     * @param callback          executing event - onloadend. function (status, responseText)
-     * @returns {XMLHttpRequest}
-     */
-    app.ajaxPostForm = function (form, config, callback) {
-        if (typeof config === 'function') {
-            callback = config;
-            config = false;
-        }
-        else if (typeof config === 'object')
-            form.action = config.url || config.action || form.action;
-
-        form.method = 'POST';
-        form.onsubmit = function (event) {
+        NamespaceApplication.on('submit', emailform,function (event) {
             event.preventDefault();
 
-            var formData = new FormData(this);
-            var kd, xhr = new XMLHttpRequest();
-
-            xhr.open(this.method, this.action, true);
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-            if (config && typeof config.headers === 'object') {
-                for (kd in config.headers)
-                    xhr.setRequestHeader(kd, config.headers[kd]);
-            }
-
-            if (config && typeof config.data === 'object') {
-                for (kd in config.data)
-                    formData.append(kd, config.data[kd]);
-            }
-
-            xhr.onloadend = function () {
-                if (typeof callback === 'function')
-                    callback.call(xhr, xhr.status, xhr.responseText);
-            };
-            xhr.send(formData);
-        };
-
-        return form;
-    };
+            NamespaceApplication.ajax({
+                'action': '/devajaxpart/server.php',
+                'method': 'POST',
+                'data': {
+                    id: 000,
+                    name: 'Guest'
+                }
+            }, function (status, data) {
+                console.log(status);
+                if (status === 200 ) {
+                    console.log(data);
+                }
+            });
+        });
 
 
 
-    var emailForm = document.getElementById('email');
-
-    app.ajaxPostForm(emailForm, {
-        url: '/devajaxpart/server.php',
-        headers: {h1:'', h2:''},
-        data: {
-            bin:'bin-bin',
-            etc:'etc-etc',
-            token:'ASD123QWE'
-        }
-    }, function (status, data) {
-        console.log(status, data);
     });
 
-
-
-/*
-    app.ajaxForm(emailForm, function (status, data) {
-        console.log(status, data);
-    });
-*/
-
-/*
-    app.ajax({
-        method: 'POST',
-        url: '/server.php',
-        data: {id:123, name:'UserName'}
-    }, function (status, data) {
-        console.log(status, data);
-    });
-*/
 
 </script>
 </body>
