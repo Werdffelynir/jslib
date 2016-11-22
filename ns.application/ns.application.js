@@ -24,7 +24,8 @@
         this.style = app.style;
         this.file = app.file;
         this.extend = app.extend;
-        this.store = app.store;
+        this.storage = app.storage;
+        this.stack = app.stack;
         this.route = app.route;
         this.routePath = app.routePath;
         this.assign = app.assign;
@@ -228,6 +229,7 @@
      * @param url
      * @param onload
      * @param onerror
+     * @deprecated
      */
     app.file = function (url, onload, onerror) {
         app.request('GET', url, function (event) {
@@ -268,12 +270,12 @@
      * @param keyWithValue
      * @returns {*}
      */
-    app.store = function (object, keyWithValue) {
+    app.stack = function (object, keyWithValue) {
 
         if(typeof object === 'string' && keyWithValue !== undefined) {
             var _object = {};
             _object[object] = keyWithValue;
-            return this.store(_object);
+            return this.stack(_object);
         }
 
         if (typeof object === 'object') {
@@ -287,6 +289,51 @@
         else if (object === undefined)
             return this._stackStorage;
     };
+
+    /**
+     * Storage of local
+     *
+     * @param name
+     * @param value
+     * @returns {boolean}
+     */
+    app.storage = function(name, value){
+        if(!name){
+            return false;
+        }else if(value === undefined){
+            return Util.Storage.get(name);
+        }else if(!value){
+            return Util.Storage.remove(name);
+        }else{
+            return Util.Storage.set(name, value);
+        }
+    };
+    app.storage.set = function (name, value) {
+        try{value = JSON.stringify(value)}catch(error){}
+        return window.localStorage.setItem(name, value);
+    };
+    app.storage.get = function (name) {
+        var value = window.localStorage.getItem(name);
+        if(value)
+            try{value = JSON.parse(value)}catch(error){}
+        return value;
+    };
+    app.storage.remove = function (name) {
+        return window.localStorage.removeItem(name);
+    };
+    app.storage.key = function (name) {
+        return window.localStorage.key(key);
+    };
+    // when invoked, will empty all keys out of the storage.
+    app.storage.clear = function () {
+        return window.localStorage.clear();
+    };
+    // returns an integer representing the number of data items stored in the Storage object.
+    app.storage.length = function () {
+        return window.localStorage.length;
+    };
+
+
 
     /**
      * Storage for static calls
@@ -363,16 +410,25 @@
      *
      * @param selector
      * @param data
+     * @param append
      * @returns {*}
      */
-    app.inject = function (selector, data) {
-        if (typeof selector === 'string') selector = this.query(selector);
+    app.inject = function (selector, data, append) {
+
+        if (typeof selector === 'string')
+            selector = this.query(selector);
+
         if (typeof selector === 'object' && selector.nodeType === Node.ELEMENT_NODE) {
-            selector.textContent = '';
-            if (typeof data === 'object')
+
+            if (typeof data === 'string') {
+                selector.innerHTML = (!append) ? data : selector.innerHTML + data;
+            }
+            else if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+                if (!append)
+                    selector.textContent = '';
                 selector.appendChild(data);
-            else
-                selector.innerHTML = data;
+            }
+
             return selector;
         }
         return null;
