@@ -1,6 +1,10 @@
-
 (function (window) {
 
+    /**
+     * @param global    Set global access for events
+     * @returns {ObserverManager}
+     * @constructor
+     */
     var ObserverManager = function (global) {
         if (!(this instanceof ObserverManager)) {
             return new ObserverManager(global);
@@ -11,14 +15,27 @@
     ObserverManager.varsion = '0.0.1';
     ObserverManager.prototype.events = {};
     ObserverManager.prototype.listeners = {};
+
+    /**
+     * Add / replace event
+     * @param eventName
+     * @param callback
+     * @param thisInst
+     */
     ObserverManager.prototype.add = function (eventName, callback, thisInst) {
         this.events[eventName] = {eventName:eventName, callback:callback||function(){}, thisInst:thisInst}
     };
 
+    /**
+     * Remove event by eventName
+     * @param eventName
+     * @returns {*}
+     */
     ObserverManager.prototype.remove = function (eventName) {
         if (this.events[eventName]) delete this.events[eventName];
         return eventName;
     };
+
 
     ObserverManager.randString = function (length) {
         var abc = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), result = '';
@@ -28,6 +45,13 @@
         return result;
     };
 
+    /**
+     * Add only listener for event
+     * @param listenerName
+     * @param callback
+     * @param args
+     * @returns {boolean|string|*}
+     */
     ObserverManager.prototype.addListener = function (listenerName, callback, args) {
         var event = this.decodeListenerName(listenerName).event,
             listener = this.decodeListenerName(listenerName).listener;
@@ -49,6 +73,11 @@
         return result;
     };
 
+    /**
+     * Get array with listeners of event
+     * @param listenerName
+     * @returns {Array}
+     */
     ObserverManager.prototype.getListeners = function (listenerName) {
         var event = this.decodeListenerName(listenerName).event,
             listener = this.decodeListenerName(listenerName).listener,
@@ -63,12 +92,21 @@
         return listeners;
     };
 
+    /**
+     * Activate / deactivate listeners of event
+     * @param listenerName
+     * @param active
+     */
     ObserverManager.prototype.activeListener = function (listenerName, active) {
         var listeners = this.getListeners(listenerName);
         if (listeners)
             listeners.map(function(listener){listener.active = !!active});
     };
 
+    /**
+     * Remove listeners of event
+     * @param listenerName
+     */
     ObserverManager.prototype.removeListener = function (listenerName) {
         var event = this.decodeListenerName(listenerName).event,
             listener = this.decodeListenerName(listenerName).listener;
@@ -83,6 +121,10 @@
             delete this.listeners[event];
     };
 
+    /**
+     * Dispatch event by eventName
+     * @param eventName
+     */
     ObserverManager.prototype.dispatch = function (eventName) {
         if (typeof this.events[eventName] === 'object' && typeof this.events[eventName]['callback'] === 'function') {
             var thisInst = this.events[eventName]['thisInst']||{};

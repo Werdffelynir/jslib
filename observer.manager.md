@@ -22,9 +22,15 @@ observer.getListeners(eventListenerName)
 observer.activeListener(eventListenerName)
 ```
 
+If to constructor ObserverManager set true - all events have global instance
+
 > 
-> ### eventListenerName
-> eventListenerName - can by eventName 'myEvent' or eventName-listenerName 'myEvent:before'
+> eventListenerName - can by eventName __`myEvent`__ 
+> `.addListener('myEvent' ...`
+> 
+> or eventName-listenerName __`myEvent:myListener`__ separator __`:`__
+> `.addListener('myEvent:myListener' ...`
+> `.removeListener('myEvent:myListener')`
 > 
 
 ## Global events example
