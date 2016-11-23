@@ -6,19 +6,19 @@
 
     "use strict";
 
-    var
-        timerProto = {
+    var timerProto = {
             ms: 0,
             mark: 0,
             delay: 0,
             onstart: null,
             onprogress: null,
             oncomplete: null,
-            _eventTarget: null,
             timerHandler: 0,
             iterator: 0,
+            _eventTarget: null,
             _events: {_onstart:null,_onprogress:null,_oncomplete:null}
         },
+
 
         /**
          * Timer constructor
@@ -36,6 +36,12 @@
             this._events._onprogress = new Event(Timer.PROGRESS);
             this._events._oncomplete = new Event(Timer.COMPLETE);
             this._eventTarget = document.createDocumentFragment();
+            /**
+             *
+             * @param event String Timer.START Timer.PROGRESS Timer.COMPLETE
+             * @param callback Function
+             * @param useCapture this
+             */
             this.addEventListener = function(event, callback, useCapture){
                 useCapture = useCapture || false;
                 this._eventTarget.addEventListener.call(this._eventTarget, event, callback, useCapture)
@@ -72,6 +78,9 @@
                 clearInterval(this.timerHandler)
             };
 
+            /**
+             *
+             */
             this.reset = function(){
                 clearInterval(this.timerHandler);
                 this._events._onprogress.iterator = this._events._onprogress.progress = instance.iterator = 0;
@@ -79,12 +88,26 @@
 
         };
 
+    /**
+     *
+     * @param callback Function
+     * @param ms Numeric
+     * @param thisInst this for callback
+     * @returns {number}
+     */
     timer.timeout = function (callback, ms, thisInst) {
         if(typeof callback === 'function' && !isNaN(ms) && ms > 0){
             thisInst = typeof thisInst === 'object' ? thisInst : {};
             return setTimeout(function(){callback.call(thisInst)}, ms);
         }
     };
+    /**
+     *
+     * @param callback Function
+     * @param ms Numeric
+     * @param thisInst this for callback
+     * @returns {number}
+     */
     timer.interval = function (callback, ms, thisInst) {
         if(typeof callback === 'function' && !isNaN(ms) && ms > 0){
             thisInst = typeof thisInst === 'object' ? thisInst : {};
