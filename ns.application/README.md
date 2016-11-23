@@ -61,7 +61,7 @@ index.html
 ```js
 (function(window, NamespaceApplication){
 
-    window.App = new NamespaceApplication({
+    var App = new NamespaceApplication({
         url: '/',
         name: true,
         debug: true
@@ -123,6 +123,44 @@ index.html
     }
 
 })(window, NamespaceApplication);
+```
+
+### `init.js`. Application start. namespace 
+
+```js
+var App = new NamespaceApplication({
+    url: '/',
+    name: true,
+    debug: true,
+    constructsType: false
+});
+
+
+App.namespace('Index', function () {
+    /**
+     * @namespace App.Index
+     */
+    var ob = {};
+    ob.construct = function () {
+        console.log('App.Index::construct');
+    };
+    ob.m = function () {};
+
+    return ob;
+});
+
+App.namespace('Action', function () {
+    /**
+     * @namespace App.Action
+     */
+    var ob = {};
+    ob.construct = function () {
+        console.log('App.Action::construct');
+    };
+    ob.m = function () {};
+
+    return ob;
+});
 ```
 
 

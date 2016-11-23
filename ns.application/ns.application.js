@@ -1,8 +1,10 @@
 (function () {
 
-
+    /**
+     *
+     * @type {string}
+     */
     var version = '0.1.2';
-
 
     /**
      * Constructor
@@ -14,7 +16,6 @@
             return new NamespaceApplication(properties);
 
         this.setProperties(properties);
-
         this.domLoaded = app.domLoaded;
         this.redirect = app.redirect;
         this.request = app.request;
@@ -35,7 +36,6 @@
         this.queryUp = app.queryUp;
         this.on = app.on;
         this.each = app.each;
-
     };
 
     /**
