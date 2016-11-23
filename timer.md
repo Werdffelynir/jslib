@@ -2,9 +2,9 @@
 
 
 ### 
-```
+```js
 // Constructor
-tm = new Timer(ms, delay)
+var tm = new Timer(ms, delay)
 
 // instance proprties
 tm.ms
@@ -33,7 +33,7 @@ Timer.intervalStop()
 
 
 ### Use
-```
+```js
 var tm = new Timer(1000, 5);
 
 tm.addEventListener(Timer.START, function (n) {
@@ -53,7 +53,7 @@ tm.start();
 
 
 ### Timer.interval
-```
+```js
 var timeData = {name: 'timeData', i: 0};
 
 var timerId = Timer.interval(function () {
@@ -66,7 +66,7 @@ var timerId = Timer.interval(function () {
 ```
 
 ### Timer.timeout
-```
+```js
 var timeData = {name: 'timeData', i: 0};
 var timer = function () {
     console.log(this === timeData, this.name, this.i);
