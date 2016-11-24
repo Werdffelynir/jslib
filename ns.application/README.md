@@ -57,14 +57,16 @@ index.html
 ```
 
 
+
 ### `init.js`. Application start. 
 ```js
 (function(window, NamespaceApplication){
 
     var App = new NamespaceApplication({
         url: '/',
-        name: true,
-        debug: true
+        name: 'My Application',
+        debug: true,
+        constructsType: false
     });
 
     // Loadings style
@@ -125,44 +127,6 @@ index.html
 })(window, NamespaceApplication);
 ```
 
-### `init.js`. Application start. namespace 
-
-```js
-var App = new NamespaceApplication({
-    url: '/',
-    name: true,
-    debug: true,
-    constructsType: false
-});
-
-
-App.namespace('Index', function () {
-    /**
-     * @namespace App.Index
-     */
-    var ob = {};
-    ob.construct = function () {
-        console.log('App.Index::construct');
-    };
-    ob.m = function () {};
-
-    return ob;
-});
-
-App.namespace('Action', function () {
-    /**
-     * @namespace App.Action
-     */
-    var ob = {};
-    ob.construct = function () {
-        console.log('App.Action::construct');
-    };
-    ob.m = function () {};
-
-    return ob;
-});
-```
-
 
 ### Config properties
 
@@ -212,4 +176,37 @@ App.namespace('Action.Register', function(App) {
     
     return _;
 });
+```
+
+
+
+
+### Example of modules or custom structures
+
+```
+var App = NamespaceApplication({
+    url: '/',
+    name: 'My Application',
+    debug: true,
+    constructsType: false
+});
+
+App.require('libs',
+    [
+        App.url + 'js/library1.js',
+        App.url + 'js/library2.js',
+        App.url + 'js/library3.js'
+    ],
+    onLibraryLoaded, onRequireError)
+    .constructsStart('libs');
+
+function onRequireError(error){
+    console.error('onRequireError', error);
+}
+
+function onLibraryLoaded(){
+    console.log('Application start!');
+
+    // work starts here ...
+}
 ```

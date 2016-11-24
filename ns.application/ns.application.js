@@ -1,7 +1,17 @@
 (function () {
 
     /**
-     *
+     * var App = NamespaceApplication({
+     *     url: '/',
+     *     name: 'My Application',
+     *     debug: true,
+     *     constructsType: false
+     * });
+     */
+
+    /**
+     * Current script version
+     * @updated
      * @type {string}
      */
     var version = '0.1.2';
@@ -420,14 +430,15 @@
 
         if (typeof selector === 'object' && selector.nodeType === Node.ELEMENT_NODE) {
 
-            if (typeof data === 'string') {
-                selector.innerHTML = (!append) ? data : selector.innerHTML + data;
-            }
-            else if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+            if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+
                 if (!append)
                     selector.textContent = '';
+
                 selector.appendChild(data);
-            }
+
+            } else
+                selector.innerHTML = (!append) ? data : selector.innerHTML + data;
 
             return selector;
         }
