@@ -1,5 +1,17 @@
 # Template js
 
+```js
+var template = Template(config)
+template.loades {*}
+template.inject (selector, data, append)
+template.assign (viewString, params)
+template.get (name)
+template.load (urls, callback)
+template.ajax (config, callback, thisInstance)
+
+// static
+Template.ajax
+```
 
 ### Uses
 ``` js
@@ -12,8 +24,8 @@ var loadList = [
 ];
 
 function templatesLoaded(list) {
-    template.inject(node['header'], template.get('header'));
-    template.inject(node['sidebar'],
+    template.inject(document.getElementById('header'), list.header);
+    template.inject(document.getElementById('sidebar'),
         template.assign(
             template.get('sidebar'),
             {navigation: template.get('navigation')}
