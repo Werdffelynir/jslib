@@ -100,19 +100,20 @@ var Tpl = Tpl || {
      * @param callbackError
      */
     o.request = function(url, callback, callbackError) {
-        callbackError ? callbackError : o.callbackError;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         if(typeof callback === 'function')
-            xhr.onload = callback;
-        xhr.onerror = function(err){callbackError.call(o, err)};
-        xhr.onloadend = function(err){callbackError.call(o, err)};
+            xhr.onloadend = function(){callback.call(xhr, xhr.status, xhr.responseText)};
+        callbackError = callbackError ? callbackError : o.callbackError;
+        xhr.onerror = function(err){callbackError.call(xhr, err)};
         xhr.send();
+        return xhr
     };
 
     o.loadLastPath = '';
+
     /**
      * Загружает templates файл
      * Результат вернется как аргумент в функцию обратного вызова callback,
@@ -137,26 +138,23 @@ var Tpl = Tpl || {
         // generate url to template
         var url = o.templates + fileName + ext,
 
-            onload = function(event) {
+            onload = function(status, responseText) {
                 o.loadLastPath = url;
-                if(event.target instanceof XMLHttpRequest){
-                    var xhr = event.target;
-                    if(xhr.status === 200 && typeof callback === 'function'){
-                        internal.data[fileName] = {
-                            id: fileName,
-                            source: o.templates + fileName + ext,
-                            response: xhr.responseText
-                        };
-                        callback.call(o, xhr.responseText, internal.data[fileName]);
-                    }
+                if(status === 200 && typeof callback === 'function'){
+                    internal.data[fileName] = {
+                        id: fileName,
+                        source: o.templates + fileName + ext,
+                        response: responseText
+                    };
+                    callback.call(this, responseText, internal.data[fileName]);
+
                 } else {
-                    callbackError.call(o, xhr);
+                    callbackError.call(this);
                 }
             },
 
             onerror = function(event) {
-                if(event.target.status != 200)
-                    callbackError.call(o, event.target);
+                callbackError.call(o, event.target);
             };
         
         o.request(url, onload, onerror);
@@ -167,16 +165,12 @@ var Tpl = Tpl || {
      * Загружает JSON данные
      */
     o.loadJSON = function(url, callback, callbackError) {
-        var result, onload = function (event){
-            if(event.target instanceof XMLHttpRequest){
-                var xhr = event.target;
-                if(xhr.status === 200 && typeof callback === 'function') {
-                    result = JSON.parse(xhr.responseText);
-                    callback.call(o, result);
-                }
+        var result, onload = function (status, responseText){
+            if(status === 200 && typeof callback === 'function') {
+                result = JSON.parse(responseText);
+                callback.call(this, result);
             } else {
-                var _callbackError = callbackError || o.callbackError;
-                _callbackError.call(o, xhr);
+                (callbackError || o.callbackError).call(this, xhr);
             }
         };
 
@@ -300,7 +294,7 @@ var Tpl = Tpl || {
      * Execute callback function if DOM is loaded
      * @param callback
      */
-    o.domLoaded = function(callback){
+    o.domLoaded = function(callback) {
         if(o.domIsLoaded){
             callback();
         }else{

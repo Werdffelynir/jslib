@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="ns.application/ns.application.js"></script>
+    <script src="tpl.js"></script>
+</head>
+<body>
+
+<script>
+    var App = new NamespaceApplication({
+        url: '/',
+        name: true,
+        debug: true,
+        constructsType: false
+    });
+
+    App.namespace('Controller', function () {
+        /** @namespace App.Controller */
+        var _ = {};
+
+        /** @namespace App.Controller.initialize */
+        _.initialize = function () {
+            initializeGlobalObjects();
+            App.domLoaded(domLoaded)
+        };
+
+        function initializeGlobalObjects () {
+
+            //console.log(Tpl);
+            //Tpl.loadHTML('')
+        }
+
+        function domLoaded () {
+
+
+
+        }
+        return _
+    });
+
+    App.Controller.initialize();
+
+
+
+
+
+</script>
+</body>
+</html>

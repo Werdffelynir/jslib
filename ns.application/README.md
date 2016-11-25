@@ -64,7 +64,8 @@ index.html
     var App = new NamespaceApplication({
         url: '/',
         name: true,
-        debug: true
+        debug: true,
+        constructsType: false
     });
 
     // Loadings style

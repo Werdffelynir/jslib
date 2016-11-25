@@ -54,7 +54,7 @@ EventManager.dispatchEvent('main');
 <br>
 
 ## Remove listener with closure callback
-```
+```js
 // Create event
 EventManager.addEvent('main');
 
