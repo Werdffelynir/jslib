@@ -64,11 +64,7 @@ index.html
 
     var App = new NamespaceApplication({
         url: '/',
-<<<<<<< HEAD
-        name: true,
-=======
         name: 'My Application',
->>>>>>> d7d8627f14dfa5a3e6af3b52845cc9a033f0e489
         debug: true,
         constructsType: false
     });

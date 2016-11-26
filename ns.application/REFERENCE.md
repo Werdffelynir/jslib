@@ -49,6 +49,8 @@ App.prototype.uri (uri)
 
 ### Static methods have aliases in instance
 ```js
+// Add extantion
+NamespaceApplication.extension(name, callback)
 
 // Execute callback function if or when DOM is loaded
 NamespaceApplication.domLoaded
@@ -403,3 +405,38 @@ NamespaceApplication.store()
 NamespaceApplication.store('key1')
 ```
 
+### Extension 
+
+Syntax: `NamespaceApplication.extension(name, callback)`
+
+
+#### index.html
+```html
+<!doctype html>
+<head>
+    <script src="/js/lib/ns.application.js"></script>
+    <script src="/js/lib/ns.extensions/ns.template.js"></script>
+</head>
+<body>
+
+</body>
+</html>
+```
+
+
+#### ns.extension.js
+```js
+NamespaceApplication.extension('ExtensionName', function (App) {
+
+    /**
+     * @namespace App.ExtensionName
+     */
+    var extension = function () {
+        return template
+    };
+    
+    extension.method = function (name, data) {};
+    
+    return extension;
+}); 
+```
