@@ -1,7 +1,17 @@
 (function () {
 
     /**
-     *
+     * var App = NamespaceApplication({
+     *     url: '/',
+     *     name: 'My Application',
+     *     debug: true,
+     *     constructsType: false
+     * });
+     */
+
+    /**
+     * Current script version
+     * @updated
      * @type {string}
      */
     var version = '0.1.2';
@@ -36,6 +46,7 @@
         this.queryUp = app.queryUp;
         this.on = app.on;
         this.each = app.each;
+        this.initExtensions();
     };
 
     /**
@@ -95,9 +106,10 @@
      *  });
      * @param {*} config        {method: 'POST', data: {}, headers: {}, action: '/index'}
      * @param callback          executing event - onloadend. function (status, responseText)
+     * @param thisInstance      object 'this' for callback
      * @returns {XMLHttpRequest}
      */
-    app.ajax = function (config, callback) {
+    app.ajax = function (config, callback, thisInstance) {
         var conf = {
             method:     config.method || 'GET',
             data:       config.data || {},
@@ -121,8 +133,10 @@
             xhr.setRequestHeader(kd, conf.headers[kd]);
         }
         xhr.onloadend = function () {
+            if (typeof thisInstance !== 'object') thisInstance = {};
+            thisInstance.XMLHttpRequest = xhr;
             if (typeof callback === 'function')
-                callback.call(xhr, xhr.status, xhr.responseText);
+                callback.call(thisInstance, xhr.status, xhr.responseText);
         };
         xhr.send(fd);
         return xhr;
@@ -392,16 +406,16 @@
     /**
      * Simple template builder
      *
-     * @param stringData    source string data with marks "{{key1}}"
+     * @param viewString    source string data with marks "{{key1}}"
      * @param params        object {key1 : 'value'}
      * @returns {*}
      */
-    app.assign = function (stringData, params) {
+    app.assign = function (viewString, params) {
         if (typeof params === 'object')
             for (var k in params)
-                stringData = stringData.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
+                viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
 
-        return stringData;
+        return viewString;
     };
 
 
@@ -420,14 +434,15 @@
 
         if (typeof selector === 'object' && selector.nodeType === Node.ELEMENT_NODE) {
 
-            if (typeof data === 'string') {
-                selector.innerHTML = (!append) ? data : selector.innerHTML + data;
-            }
-            else if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+            if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+
                 if (!append)
                     selector.textContent = '';
+
                 selector.appendChild(data);
-            }
+
+            } else
+                selector.innerHTML = (!append) ? data : selector.innerHTML + data;
 
             return selector;
         }
@@ -552,6 +567,20 @@
         }
     };
 
+
+    /**
+     *
+     * @param extensionName
+     * @param callback
+     */
+    app.extension = function (extensionName, callback) {
+        app.extension.list[extensionName] = {
+            name:extensionName,
+            callback:callback
+        };
+    };
+
+    app.extension.list = {};
 
     /**
      *
@@ -733,6 +762,19 @@
         var _uri = uri ? this.path + '/' + uri : this.path;
         _uri = _uri.replace(/\/+/ig,'/');
         return _uri.length > 1 && _uri.slice(0,1) != '/' ? '/' + _uri : _uri;
+    };
+
+
+    app.prototype.initExtensions = function () {
+        if (typeof app.extension === 'function' && typeof app.extension.list === 'object') {
+            var name, callback;
+            for (name in app.extension.list) {
+                callback = app.extension.list[name]['callback'];
+                if (typeof callback === 'function') {
+                    this[name] = callback.call(callback, this)
+                }
+            }
+        }
     };
 
     /**
