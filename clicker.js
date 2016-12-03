@@ -7,7 +7,7 @@
      * clicker.get('group')
      * clicker.set('group', elem)
      * clicker.on('click', 'group', function (event) {})
-     * clicker.click('group', function (elem, value) {});
+     * clicker.click('group', function (event, elem, value) {});
      **/
 
     /**
@@ -59,12 +59,12 @@
     /**
      *
      * @param key
-     * @param callback
+     * @param callback function (event, target, value)
      * @param useCapture
      */
     clicker.prototype.click = function (key,  callback, useCapture) {
         var valueName = this.valueName;
-        var specialCallback = function (event) {callback.call(event, event.target, event.target.getAttribute(valueName))};
+        var specialCallback = function (event) {callback.call(event, event, event.target, event.target.getAttribute(valueName))};
         this.on('click', key,  specialCallback, useCapture);
     };
 
@@ -90,7 +90,8 @@
      */
     clicker.prototype.set = function (key, elem) {
         elem.key = key;
-        this.list.push(elem);
+        if (this.list.indexOf(elem) === -1)
+            this.list.push(elem);
     };
 
     window.Clicker = clicker;

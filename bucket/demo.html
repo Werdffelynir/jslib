@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document bucket</title>
+    <link rel="stylesheet" href="../grid.css">
+    <style>
+        *{}
+        html, body{
+            font-family: "Ubuntu Condensed", "Ubuntu", "sans", "sans-serif";
+            font-size: 95%;
+            background-color: #8b8b8b;
+        }
+        a{color: #3e1900}
+        a:hover{color: #ff6900}
+        #page{
+            width: 800px;
+            margin: 0 auto;
+        }
+        #logo{
+            color: #7d0000;
+            text-shadow: 0px 0px 2px #3e1900;
+        }
+        #header{}
+        #header{
+            background-color: #767676;
+        }
+        #header>div{
+            border: 5px solid #271f1f;
+            align-items: center;
+            padding: 3px;
+        }
+        #header ul li{display: inline-block;}
+        #header ul li a{
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        #sidebar{}
+        #sidebar{
+            background-color: #271f1f;
+        }
+        #sidebar ul{
+            width: 250px;
+        }
+        #sidebar ul li{display: block}
+        #sidebar ul li a{
+            display: block;
+            padding: 2px 5px;
+            color: red;
+        }
+        #sidebar ul li a:hover{
+            background-color: #1b1515;
+            color: #ff6b03;
+        }
+        #sidebar img{}
+
+        #lightbox{
+            border: 5px solid #271f1f;
+            background-color: #ffffff;
+            padding: 15px;
+
+            /*position absolute to center*/
+            width: 500px;
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+
+            top: 100px;
+        }
+
+        #tip{}
+
+        #content{width: 100%;}
+
+        div#content>[id^='content-']{
+            padding: 5px;
+        }
+
+
+        #content-preview{}
+        #content-user{}
+        #content-services{}
+        #content-settings{}
+        #content-login{}
+    </style>
+</head>
+<body>
+<div id="tip" class="hide"></div>
+<div id="lightbox" class="hide"></div>
+<div id="page">
+    <div id="header">
+        <div class="flex-space-between">
+            <div><h1 id="logo">BucketJS</h1></div>
+            <div>
+                <ul>
+                    <li><a href="#services" data-key="services">Services</a></li>
+                    <li><a href="#settings" data-key="settings">Settings</a></li>
+                    <li><a href="#login" data-key="login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-space-between">
+        <div id="sidebar">
+            <ul>
+                <li><a href="#user1"  data-key="user" data-value="1">User Name 1</a></li>
+                <li><a href="#user2"  data-key="user" data-value="2">User Name 2</a></li>
+                <li><a href="#user3"  data-key="user" data-value="3">User Name 3</a></li>
+                <li><a href="#user4"  data-key="user" data-value="4">User Name 4</a></li>
+                <li><a href="#user5"  data-key="user" data-value="5">User Name 5</a></li>
+                <li><a href="#user6"  data-key="user" data-value="6">User Name 6</a></li>
+                <li><a href="#user7"  data-key="user" data-value="7">User Name 7</a></li>
+                <li><a href="#user8"  data-key="user" data-value="8">User Name 8</a></li>
+                <li><a href="#user9"  data-key="user" data-value="9">User Name 9</a></li>
+                <li><a href="#user10" data-key="user" data-value="10">User Name 10</a></li>
+            </ul>
+            <img src="http://placehold.it/250x150">
+        </div>
+        <div id="content">
+
+
+
+            <div id="content-preview">
+                <h2>Users Data Context</h2>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A dolorum fugit hic illum ipsum, pariatur unde!
+                    Autem consequatur cum doloribus eligendi ex omnis quisquam quo tempora tenetur ut. Sapiente,
+                    similique.</p>
+                <p>Accusamus accusantium amet aperiam asperiores culpa cum distinctio, eaque enim eum excepturi expedita
+                    ipsam minima natus nobis perferendis, porro quae quam quasi rem repudiandae rerum sit soluta veniam
+                    voluptatem voluptates.</p>
+                <p>Debitis distinctio dolorem eos et eum ipsam ipsum, iure modi molestias odio omnis perspiciatis porro
+                    praesentium quo recusandae sapiente vero! Doloribus, eius est eum in iure mollitia numquam praesentium
+                    repellendus!</p>
+            </div>
+
+<!--            <div id="content-user">user</div>
+            <div id="content-services">services</div>
+            <div id="content-settings">settings</div>
+            <div id="content-login">login</div>-->
+
+        </div>
+    </div>
+
+</div>
+
+<script src="bucket.js"></script>
+<script>
+
+    var usersData = [
+        {
+            id: 1,
+            name: 'User Name 1',
+            desc: 'Debitis distinctio dolorem eos et eum ipsam ipsum, iure modi molestias odio omnis perspiciatis porro'
+        },
+        {
+            id: 2,
+            name: 'User Name 2',
+            desc: 'Ipsam molestias praesentium quo recusandae sapiente vero'
+        },
+        {
+            id: 3,
+            name: 'User Name 3',
+            desc: 'Doloribus, eius est eum in iure mollitia numquam praesentium repellendus!'
+        },
+        {
+            id: 4,
+            name: 'User Name 4',
+            desc: 'Autem consequatur cum doloribus eligendi ex omnis quisquam quo tempora tenetur ut.'
+        },
+        {
+            id: 5,
+            name: 'User Name 5',
+            desc: 'Rem repudiandae rerum sit soluta veniam voluptatem voluptates.'
+        },
+        {
+            id: 6,
+            name: 'User Name 6',
+            desc: 'Oznis dolorem eos et eum ipsam ipsum  perspiciatis porro, iure modi molestias odio'
+        },
+        {
+            id: 7,
+            name: 'User Name 7',
+            desc: 'Eos et eum ipsam ipsum,ebitis distinctio dolorem eomnis porro perspiciatis'
+        },
+        {
+            id: 8,
+            name: 'User Name 8',
+            desc: 'A dolorum fugit hic illum ipsum, pariatur unde! Autem consequatur cum doloribus'
+        },
+        {
+            id: 9,
+            name: 'User Name 9',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+        },
+        {
+            id: 10,
+            name: 'User Name 10',
+            desc: 'Accusamus accusantium amet aperiam asperiores culpa cum distinctio'
+        }
+    ];
+
+    var templates = {
+        user: Bucket.create('div', {id:'content-user'})
+    };
+
+    var views = {
+        user: '<div class="flex"><img src="http://placehold.it/100"><div><p><strong>{{user_name}}</strong></p>{{user_desc}}</div></div>'
+    };
+
+    Bucket.config.searchSelector = false;
+    Bucket.config.keyName = 'data-key';
+    Bucket.config.valueName = 'data-value';
+
+    Bucket();
+
+    Bucket.add('tip', Bucket.queryOne('#tip'));
+    Bucket.add('logo', Bucket.queryOne('#logo'));
+    Bucket.add('content', Bucket.queryOne('#content'));
+    Bucket.add('lightbox', Bucket.queryOne('#lightbox'));
+
+    Bucket.getOne('logo', function (elem) {
+        elem.appendChild(document.createTextNode(' Demo'));
+    });
+
+    Bucket.click('login', function (event, target, value) {
+        var lightbox = Bucket.getOne('lightbox');
+        lightbox.innerHTML = "<p>Login content:</p>";
+        lightbox.classList.toggle('hide');
+    });
+
+    Bucket.click('user', function (event, target, value) {
+        usersData.forEach(function (elem, i) {
+            if (elem.id == value) {
+                Bucket.getOne('content').innerHTML = Bucket.template(views.user, {
+                    user_name: usersData[i]['name'],
+                    user_desc: usersData[i]['desc']
+                });
+            }
+        })
+    });
+
+</script>
+</body>
+</html>

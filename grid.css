@@ -1,5 +1,7 @@
 *{margin: 0; padding: 0;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box;}
-/**{font-family: "Ubuntu Condensed", "Ubuntu", "sans", "sans-serif";font-size: 95%  }*/
+/**{font-family: "Ubuntu Condensed", "Ubuntu", "sans", "sans-serif";font-size: 95% }*/
+ul, ol{list-style: none}
+a{text-decoration: none}
 *:focus{outline: none}
 .grid1:first-child,
 .grid2:first-child,
@@ -70,3 +72,19 @@
 .valign_middle{vertical-align:middle}
 .valign_top{vertical-align:top}
 .select_off{-webkit-user-select: none; -moz-user-select: none; user-select: none}
+.flex{display: flex}
+.flex-space-around{display: flex; justify-content: space-around}
+.flex-space-between{display: flex; justify-content: space-between}
+.flex-items-center{display: flex; align-items: center}
+.flex-item-grow-1{ flex-grow: 1 }
+.flex-item-grow-2{ flex-grow: 2 }
+.flex-item-grow-3{ flex-grow: 3 }
+.flex-item-grow-4{ flex-grow: 4 }
+.flex-item-grow-5{ flex-grow: 5 }
+.flex-item-grow-6{ flex-grow: 6 }
+.flex-item-grow-7{ flex-grow: 7 }
+.flex-item-grow-8{ flex-grow: 8 }
+.flex-item-grow-9{ flex-grow: 9 }
+.flex-item-grow-10{ flex-grow: 10 }
+.flex-item-grow-11{ flex-grow: 11 }
+.flex-item-grow-12{ flex-grow: 12 }
