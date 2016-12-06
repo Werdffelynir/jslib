@@ -83,10 +83,18 @@
         return Noder._nodes;
     };
     Noder.add = function (key, elem) {
+        if (typeof elem === 'string') {
+            elem = Noder.queryOne(elem);
+        }
+        if (elem.nodeType !== Node.ELEMENT_NODE ) {
+            console.error('Error. Second argument ['+elem.toString()+'] is not node element!');
+            return;
+        }
         if (Noder._nodes.indexOf(elem) === -1) {
             elem.key = key;
             Noder._nodes.push(elem);
-        }
+        } else
+            console.error('Element ['+elem.toString()+'] was not added! It exits in storage.');
     };
     Noder.remove = function (key, elem) {
         for(var i = 0; i < Noder._nodes.length; i ++) {
