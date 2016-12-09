@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>util.js</title>
+    <script src="util-new.js"></script>
+</head>
+<body>
+
+<div id="page">
+    <ul id="list">
+        <li>list item 1</li>
+        <li>list item 2</li>
+        <li>list item 3</li>
+        <li>list item 4</li>
+        <li>list item 5</li>
+    </ul>
+</div>
+
+<script>
+
+    var num = 544;
+    var str = 'hello string';
+    var arr = [1, 2, 3, 4, 5, 6];
+    var objBase = {name: 'objBase', m1: function(){}, m2: function(){}};
+    var obj = {a:'A',b:'B',c:'C', name: 'obj'};
+
+
+
+    //Util.Array(arr).is();
+    //Util.Object(obj).is();
+    //Util.Object(obj).clone();
+    //Util.Object(objBase).extend(obj)
+    //Util.Object(objBase).merge(obj)
+
+    console.log(UtilObject.toJson(arr));
+    console.log();
+
+
+
+//    console.log(Util);
+//    console.log(Util.Object);
+</script>
+
+</body>
+</html>
