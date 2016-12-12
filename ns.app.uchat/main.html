@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Site: jslib.loc</title>
+    <script src="../ns.application/ns.application.js"></script>
+    <script src="../ns.extensions/ns.template.js"></script>
+
+    <script src="../noder/noder.js"></script>
+
+    <script src="app/init.js"></script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        *{margin: 0; padding: 0; box-sizing: border-box;}
+        html, body{
+            font-family: SansSerif, Sans;
+            background-color: #2D2D27;
+            color: #f1f1d0;
+        }
+        #app{width: 80%; margin: 0 auto;}
+
+        #app-head{}
+        #app-side{}
+        #app-area{}
+        #app-dash{}
+        #app-ulist{
+            display: block;
+            width: 200px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="app">
+
+    <div id="app-head"></div>
+
+    <div class="flex-space-between">
+        <div id="app-area"></div>
+        <div id="app-side"></div>
+    </div>
+
+    <div id="app-dash"></div>
+
+</div>
+
+</body>
+</html>

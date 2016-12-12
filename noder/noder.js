@@ -96,17 +96,21 @@
     Noder.config = {
         searchSelector: '.noder',
         keyName: 'data-key',
-        valueName: 'data-value'
+        valueName: 'data-value',
+        defaultKeyName: '*'
     };
     Noder.refresh = function () {
         var key,
             selector = Noder.config.searchSelector || '*['+Noder.config.keyName+']',
             elems = document.querySelectorAll(selector);
 
-        for(var i = 0; i < elems.length; i ++ ){
-            if (elems[i].getAttribute(Noder.config.keyName) && Noder._nodes.indexOf(elems[i]) === -1) {
-                key = elems[i].getAttribute(Noder.config.keyName);
-                Noder.add(key, elems[i]);
+        for (var i = 0; i < elems.length; i ++ ) {
+            key = elems[i].getAttribute(Noder.config.keyName);
+            if ( Noder._nodes.indexOf(elems[i]) === -1) {
+                if (key)
+                    Noder.add(key, elems[i]);
+                else
+                    Noder.add(Noder.config.defaultKeyName, elems[i]);
             }
         }
         return Noder._nodes;
@@ -166,8 +170,11 @@
             result = list;
         }
 
-        if (typeof callback === 'function')
-            callback.call({}, list);
+        if (typeof callback === 'function') {
+            var callResult = callback.call({}, list);
+            if (!!callResult)
+                return callResult
+        }
 
         return result;
     };
@@ -176,8 +183,11 @@
         var elem = Noder.get(key);
         if (elem.length > 0) elem = elem[0];
         else elem = false;
-        if (typeof callback === 'function')
-            callback.call({}, elem);
+        if (typeof callback === 'function') {
+            var callResult = callback.call({}, elem);
+            if (!!callResult)
+                return callResult
+        }
         return elem;
     };
     Noder.exist = function (key, ifCallback, elseCallback) {
@@ -266,6 +276,17 @@
         elems.map (function (elem) {
             for (k in styleObject)
                 elem.style[k] = styleObject[k]
+        });
+    };
+
+    Noder.html = function (key, html, append) {
+        var k, elems = [];
+
+        if (typeof key === 'string')                        elems = Noder.get(key);
+        else if (key && key.nodeType === Node.ELEMENT_NODE) elems = [key];
+
+        elems.map (function (elem) {
+            elem.innerHTML = !!append ? elem.innerHTML + html : html
         });
     };
 
