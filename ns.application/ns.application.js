@@ -315,11 +315,11 @@
         if(!name){
             return false;
         }else if(value === undefined){
-            return Util.Storage.get(name);
+            return app.storage.get(name);
         }else if(!value){
-            return Util.Storage.remove(name);
+            return app.storage.remove(name);
         }else{
-            return Util.Storage.set(name, value);
+            return app.storage.set(name, value);
         }
     };
     app.storage.set = function (name, value) {
