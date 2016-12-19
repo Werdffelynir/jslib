@@ -546,12 +546,12 @@
 
     /**
      * Simple add event listener
-     * @param eventName
      * @param selector
+     * @param eventName
      * @param callback
      * @param bubble
      */
-    app.on = function (eventName, selector, callback, bubble) {
+    app.on = function (selector, eventName, callback, bubble) {
         var elements = null;
 
         if (typeof selector === 'string')
