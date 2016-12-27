@@ -49,7 +49,7 @@
      * Noder.remove ('group', elem)
      *
      * // Добавить событие
-     * Noder.on ('click', 'group', function (event) {})
+     * Noder.on ('group', 'click', function (event) {})
      *
      * // Добавить событие click
      * Noder.click ('group', function (event, elem, value) {});
@@ -213,8 +213,21 @@
         }
         return Noder
     };
-    Noder.on = function (event, key, callback, useCapture) {
-        var elem = Noder.get(key);
+    Noder.eachElement = function (data, callback) {
+        if(data && data.length > 0) {
+            for(var i = 0; i < data.length; i ++) callback.call(data, data[i], i);
+        }else if(Object.prototype.toString.call(data) === '[object Object]'){
+            for(var k in data) callback.call(data, data[k], k);
+        }
+    };
+
+    Noder.on = function (key, event, callback, useCapture) {
+        var elem;
+        if (key && typeof key === 'object' && key.nodeType === Node.ELEMENT_NODE)
+            elem = [key];
+        else if (typeof key === 'string')
+            elem = Noder.get(key);
+
         if(elem) {
             for(var i = 0; i < elem.length; i ++) {
                 elem[i].addEventListener(event, callback, useCapture);
@@ -227,7 +240,7 @@
         var specialCallback = function (event) {
             callback.call(event, event, event.target, event.target.getAttribute(valueName))
         };
-        Noder.on('click', key,  specialCallback, useCapture);
+        Noder.on(key, 'click', specialCallback, useCapture);
         return Noder
     };
     Noder.query = function (selector, callback) {
@@ -258,15 +271,6 @@
                 viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
         return viewString;
     };
-
-    Noder.eachElement = function (data, callback) {
-        if(data && data.length > 0) {
-            for(var i = 0; i < data.length; i ++) callback.call(data, data[i], i);
-        }else if(Object.prototype.toString.call(data) === '[object Object]'){
-            for(var k in data) callback.call(data, data[k], k);
-        }
-    };
-
     Noder.style = function (key, styleObject) {
         var k, elems = [];
 

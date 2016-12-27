@@ -46,6 +46,7 @@
         this.queryUp = app.queryUp;
         this.on = app.on;
         this.each = app.each;
+        this.typeOf = app.typeOf;
         this.initExtensions();
     };
 
@@ -565,6 +566,21 @@
                     item.addEventListener(eventName, callback, !!bubble);
             });
         }
+    };
+
+
+    /**
+     * Вернет тип передаваемого параметра value,
+     * или сравнит тип value с передаваемым type и вернет boolean
+     * Возможные заначения: null, boolean, undefined, function, string, number, date, number, array, object
+     * @param value
+     * @param type
+     * @returns {string}
+     */
+    app.typeOf = function (value, type) {
+        var t = Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
+        t = t.toLowerCase();
+        return typeof type === 'string' ? type.toLowerCase() === t : t;
     };
 
 

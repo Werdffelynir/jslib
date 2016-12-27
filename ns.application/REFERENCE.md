@@ -405,6 +405,33 @@ NamespaceApplication.store()
 NamespaceApplication.store('key1')
 ```
 
+### App.typeOf 
+
+Syntax: `NamespaceApplication.typeOf(value, type)`
+```
+function foo(){}
+var types = [
+    0,
+    null,
+    false,
+    true,
+    undefined,
+    function(){},
+    foo,
+    'hello',
+    132456,
+    new Date(),
+    Object.create,
+    3.14,
+    [1,2,3,4],
+    {name:'John', age:34}
+];
+
+types.map(function(it, i){
+    console.log(types[i], App.typeOf(it),  App.typeOf(it, 'array'));
+});
+```
+
 ### Extension 
 
 Syntax: `NamespaceApplication.extension(name, callback)`

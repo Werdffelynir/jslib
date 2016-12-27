@@ -52,7 +52,7 @@ Noder.remove ('group')
 Noder.remove ('group', elem)
 
 // Добавить событие
-Noder.on ('click', 'group', function (event) {})
+Noder.on ('group', 'click', function (event) {})
 
 // Добавить событие click
 Noder.click ('group', function (event, elem, value) {})
