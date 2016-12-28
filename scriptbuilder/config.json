@@ -1,43 +1,17 @@
-# javascript Lib-Builder
-
-
-### config.json
-```json
 {
-
-  "dump":     "build/util.js",
-
+  "dump":     "build/application.js",
   "layout":   "src/layout.js",
-
   "root":     "src/",
-
+  
+  "modules_auto_include": false,
   "modules": {
-
     "module_one":    "module_one.js",
-
     "module_two":    "module_two.js",
-
     "helper":        "helper.js",
-
     "static":        "static.js"
-
   },
 
   "delete_string_marker" : "// <<< DELETE THIS STRING",
-
-  "replaces" : {
-  
-    "this string": "to this"
-    
-  }
+  "replaces" : {}
 
 }
-
-```
-
-
-### Run 
-```
-php -f parser.php
-```
-

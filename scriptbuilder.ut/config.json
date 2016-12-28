@@ -1,0 +1,22 @@
+{
+  "dump": "build/utilities.js",
+  "layout": "src/layout.js",
+  "root": "src/",
+  "modules_auto_include": true,
+  "modules": {
+    "base": "base.js",
+    "object": "object.js",
+    "array": "array.js",
+    "date": "date.js",
+    "cookie": "cookie.js",
+    "storage": "storage.js",
+    "timer": "timer.js",
+    "dom": "dom.js",
+    "style": "style.js",
+    "math": "math.js",
+    "crypt": "crypt.js",
+    "func": "func.js"
+  },
+  "delete_string_marker": "// <<< DELETE THIS STRING",
+  "replaces": {}
+}
