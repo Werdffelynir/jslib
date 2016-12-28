@@ -1,6 +1,6 @@
 {
 
-  "dump":     "build/util.js",
+  "dump":     "build/application.js",
 
   "layout":   "src/layout.js",
 
