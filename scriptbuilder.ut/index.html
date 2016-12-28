@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="js/utilities.js"></script>
+</head>
+<body>
+
+<div id="page">
+    <div id="menu">
+        <ul>
+            <li>1 - listitem</li>
+            <li>2 - listitem</li>
+            <li>3 - listitem</li>
+            <li>4 - listitem</li>
+            <li>5 - listitem</li>
+            <li>6 - listitem</li>
+            <li>7 - listitem</li>
+            <li>8 - listitem</li>
+            <li>9 - listitem</li>
+        </ul>
+    </div>
+    <div id="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, adipisci autem consequatur dolores
+            ducimus laborum libero, molestias, possimus quae quaerat quo saepe sequi sit suscipit totam! Dolores
+            explicabo nihil voluptatibus.</p>
+    </div>
+</div>
+
+
+<script>
+    var page = Ut.Dom.query('#page');
+    var menu = Ut.Dom.query('#menu>ul');
+    var content = Ut.Dom.query('#content');
+
+    var o = {
+        one: '0001',
+        two: '0002'
+    };
+
+    var a = [o, 'hello', 558];
+
+    var a2 = Ut.Array.copy(a);
+    a2[0].next = 'Next';
+
+//    console.log(a);
+//    console.log(a2);
+//    console.log(o);
+
+    //var boxDiv = Ut.Dom.create('div', {class: 'app-box'}, 'hello data-string');
+    //content.appendChild(boxDiv);
+
+    //
+
+    var timer = new Ut.Timer(1000, 10);
+
+    timer.addEventListener(Ut.Timer.START, function(e){
+        console.log('START');
+    });
+    timer.addEventListener(Ut.Timer.PROGRESS, function(e){
+        console.log('PROGRESS:', e.iterator);
+    });
+
+    timer.start();
+
+
+
+    //console.log(Ut.Dom.query('body'));
+
+    //AppStyleObject.add('body', ['font-size: 10px']);
+
+//    AppStyleObject.add('body', {'font-size': '12px'});
+//    AppStyleObject.add('.app-box', {
+//        'background-color': 'red',
+//        'padding': '20px',
+//        'color': '#ddd'
+//    });
+//    AppStyleObject.initialize();
+
+    //console.log();
+
+//    var StyleBox = Ut.Dom.createStyleObject('.app-box', {
+//        color: 'red',
+//        background: 'black'
+//    });
+//
+//    StyleBox.add('#page', {'font-size': '22px'});
+//
+//    console.log(boxDiv);
+//    console.log(StyleBox.getString());
+
+    //console.log(Object.is(o));
+    //console.log(Ut.Object.is(o));
+
+</script>
+</body>
+</html>
