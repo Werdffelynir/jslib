@@ -1,11 +1,10 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Timer Methods
 
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
 
 /**
- * // Timer function
+ * Timer function
  *
  * var timer = new Ut.Timer(1000, 10);
  * timer.addEventListener(Ut.Timer.START, function(e){
@@ -78,7 +77,7 @@ Ut.Timer = function(ms, delay) {
     };
 
     /**
-     *
+     * Reset timer
      */
     this.reset = function(){
         clearInterval(this.timerHandler);
@@ -115,6 +114,7 @@ Ut.Timer.timeout = function (callback, ms, thisInst) {
         return setTimeout(function(){callback.call(thisInst)}, ms);
     }
 };
+
 /**
  *
  * @param callback Function
@@ -128,6 +128,7 @@ Ut.Timer.interval = function (callback, ms, thisInst) {
         return setInterval(function(){callback.call(thisInst)}, ms);
     }
 };
+
 Ut.Timer.timeoutStop = function (intervalId) {clearTimeout(intervalId)};
 Ut.Timer.intervalStop = function (intervalId) {clearInterval(intervalId)};
 

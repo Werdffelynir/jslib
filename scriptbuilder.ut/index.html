@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="js/utilities.js"></script>
+    <script src="build/utilities.js"></script>
 </head>
 <body>
 
@@ -35,15 +35,17 @@
     var menu = Ut.Dom.query('#menu>ul');
     var content = Ut.Dom.query('#content');
 
-    var o = {
-        one: '0001',
-        two: '0002'
-    };
-
-    var a = [o, 'hello', 558];
-
-    var a2 = Ut.Array.copy(a);
-    a2[0].next = 'Next';
+    var url = Ut.URL.parse('http://js.loc/scriptbuilder.ut/index.html?id=123&uid=jokerman');
+    console.log(Ut);
+//    var o = {
+//        one: '0001',
+//        two: '0002'
+//    };
+//
+//    var a = [o, 'hello', 558];
+//
+//    var a2 = Ut.Array.copy(a);
+//    a2[0].next = 'Next';
 
 //    console.log(a);
 //    console.log(a2);
@@ -54,16 +56,16 @@
 
     //
 
-    var timer = new Ut.Timer(1000, 10);
-
-    timer.addEventListener(Ut.Timer.START, function(e){
-        console.log('START');
-    });
-    timer.addEventListener(Ut.Timer.PROGRESS, function(e){
-        console.log('PROGRESS:', e.iterator);
-    });
-
-    timer.start();
+//    var timer = new Ut.Timer(1000, 10);
+//
+//    timer.addEventListener(Ut.Timer.START, function(e){
+//        console.log('START');
+//    });
+//    timer.addEventListener(Ut.Timer.PROGRESS, function(e){
+//        console.log('PROGRESS:', e.iterator);
+//    });
+//
+//    timer.start();
 
 
 

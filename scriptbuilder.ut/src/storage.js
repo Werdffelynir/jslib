@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Storage Methods
 
@@ -16,13 +15,20 @@ Ut.Storage = function(name, value){
     }
 };
 
-
+/**
+ * Set
+ * @param name
+ * @param value
+ */
 Ut.Storage.set = function (name, value) {
     try{value = JSON.stringify(value)}catch(error){}
     return window.localStorage.setItem(name, value);
 };
 
-
+/**
+ * Get
+ * @param name
+ */
 Ut.Storage.get = function (name) {
     var value = window.localStorage.getItem(name);
     if(value)
@@ -30,25 +36,34 @@ Ut.Storage.get = function (name) {
     return value;
 };
 
-
+/**
+ * Remove
+ * @param name
+ */
 Ut.Storage.remove = function (name) {
     return window.localStorage.removeItem(name);
 };
 
-
-Ut.Storage.key = function (name) {
-    return window.localStorage.key(key);
+/**
+ * Get by index
+ * @param index
+ * @returns {string}
+ */
+Ut.Storage.key = function (index) {
+    return window.localStorage.key(index);
 };
 
-
-// when invoked, will empty all keys out of the storage.
+/**
+ * when invoked, will empty all keys out of the storage.
+ */
 Ut.Storage.clear = function () {
     return window.localStorage.clear();
 };
 
-
-// returns an integer representing the number of data items stored in the Storage object.
+/**
+ * returns an integer representing the number of data items stored in the Storage object.
+ * @returns {number}
+ */
 Ut.Storage.length = function () {
     return window.localStorage.length;
 };
-

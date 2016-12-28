@@ -1,13 +1,9 @@
 (function (window) {
 
-    window.Ut = {};
-
+window.Ut = {};
 
 ////////////////////////////////////////////////////////////////////////
 // Base Methods
-
-
-
 /**
  * Вернет тип передаваемого параметра value, или сравнит тип value с передаваемым type и вернет boolean
  * Возможные заначения: null, boolean, undefined, function, string, number, date, number, array, object
@@ -21,7 +17,6 @@ Ut.typeOf = function (src, type_is) {
     return typeof type_is === 'string' ? type_is.toLowerCase() === type : type;
 };
 
-
 /**
  * Проверка на пустой элемент
  * @param src
@@ -31,7 +26,6 @@ Ut.empty = function (src) {
     return (src === "" || src === 0 || src === "0" || src === null || src === undefined || src === false || (Array.isArray(src) && src.length === 0))
 };
 
-
 /**
  * Determine param to undefined type
  * @param src
@@ -40,31 +34,6 @@ Ut.empty = function (src) {
 Ut.defined = function (src) {
     return typeof(src) != 'undefined';
 };
-
-
-/**
- * First symbol to UpperCase
- * @param src
- * @returns {*|string}
- */
-Ut.ucfirst = function (src){
-    return src && src[0].toUpperCase() + src.slice(1);
-};
-
-
-/**
- * Device detection
- * @returns {boolean}
- */
-Ut.isMobile = function() {
-    if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
-        || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) {
-        return true;
-    }
-    return false;
-};
-
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -79,9 +48,7 @@ if (!Object.values) {
 }
 
 
-
 Ut.Object = {};
-
 
 /**
  * Is object
@@ -91,7 +58,6 @@ Ut.Object.is = function (src) {
     return Object.is(src)
 };
 
-
 /**
  * Convert Object to Array
  * @param src
@@ -99,7 +65,6 @@ Ut.Object.is = function (src) {
 Ut.Object.toArray = function (src) {
     return Object.values(src)
 };
-
 
 /**
  * Execute callback function for each element in Object `src`
@@ -111,8 +76,6 @@ Ut.Object.each = function (src, callback) {
         callback.call(null, src[k], k, src);
 };
 
-
-
 /**
  * Count object length. Atl to Object.keys(source).length
  * @param   {Object} source
@@ -123,7 +86,6 @@ Ut.Object.length = function (source) {
     for (var k in source) it++;
     return it;
 };
-
 
 /**
  * Deeply extends two objects
@@ -143,7 +105,6 @@ Ut.Object.extend = function(destination, source) {
     return destination;
 };
 
-
 /**
  * Merge an array `src` into the array `arrBase`
  * @param srcDefault
@@ -160,7 +121,6 @@ Ut.Object.merge = function (srcDefault, src) {
     return srcDefault;
 };
 
-
 /**
  * Clone object
  * @param   {Object} source
@@ -174,9 +134,6 @@ Ut.Object.copy = function (source) {
     return temp;
 };
 
-
-
-
 /**
  * Javascript object to JSON data
  * @param data
@@ -184,7 +141,6 @@ Ut.Object.copy = function (source) {
 Ut.Object.toJson = function (data) {
     return JSON.stringify(data);
 };
-
 
 /**
  * JSON data to Javascript object
@@ -195,9 +151,6 @@ Ut.Object.json = function (data) {
 };
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////
 // Array Methods
 
@@ -206,33 +159,46 @@ if (!Array.isArray) {
 }
 
 
-
-
 Ut.Array = {};
 
-
+/**
+ *
+ * @param src
+ * @returns {boolean}
+ */
 Ut.Array.is = function (src) {
     return Array.isArray(src)
 };
 
-
+/**
+ *
+ * @param needle
+ * @param haystack
+ * @returns {boolean}
+ */
 Ut.Array.in = function (needle, haystack) {
     if(Array.isArray(haystack))
         return haystack.indexOf(needle) !== -1;
 };
 
-
+/**
+ *
+ * @param src
+ */
 Ut.Array.copy = function (src) {
     if(Array.isArray(src))
         return JSON.parse(JSON.stringify(src));
 };
 
-
+/**
+ *
+ * @param src
+ * @param callback
+ */
 Ut.Array.each = function (src, callback) {
     for(var i = 0; i < src.length; i ++)
         callback.call(null, src[i], i, src);
 };
-
 
 /**
  * Cleans the array of empty elements
@@ -247,7 +213,6 @@ Ut.Array.clean = function (src) {
     return arr;
 };
 
-
 /**
  * Removes duplicate values from an array
  * @param arr
@@ -261,7 +226,6 @@ Ut.Array.unique = function (arr) {
     }
     return tmp;
 };
-
 
 /**
  * Remove item from array
@@ -294,8 +258,6 @@ Ut.Array.merge = function (srcDefault, src) {
     return srcDefault;
 };
 
-
-
 /**
  * Computes the difference of arrays
  * Compares arr1 against one or more other arrays and returns the values in arr1
@@ -312,7 +274,6 @@ Ut.Array.diff = function (arr1, arr2) {
     }
     return false;
 };
-
 
 /**
  * Removes duplicate values from an array
@@ -332,24 +293,19 @@ Ut.Array.unique = function (arr) {
 // Math Methods
 
 
-
 Ut.Math = {};
-
 
 Ut.Math.isNumeric = function (src) {
     return !isNaN(parseFloat(src)) && isFinite(src)
 };
 
-
 Ut.Math.isInteger = function (src) {
     return typeof src === 'number' && !(src % 1)
 };
 
-
 Ut.Math.isIterated = function (src) {
     return src && src.length > 0
 };
-
 
 /**
  * Returns a random integer between min, max, if not specified the default of 0 to 100
@@ -363,7 +319,6 @@ Ut.Math.rand = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-
 /**
  * Returns random string color, HEX format
  * @returns {string}
@@ -376,7 +331,6 @@ Ut.Math.randColor = function () {
     return color;
 };
 
-
 /**
  * Converts degrees to radians
  * @param deg
@@ -386,7 +340,6 @@ Ut.Math.degreesToRadians = function (deg) {
     return (deg * Math.PI) / 180;
 };
 
-
 /**
  * Converts radians to degrees
  * @param rad
@@ -395,7 +348,6 @@ Ut.Math.degreesToRadians = function (deg) {
 Ut.Math.radiansToDegrees = function (rad) {
     return (rad * 180) / Math.PI;
 };
-
 
 /**
  * The calculation of the distance between points
@@ -409,7 +361,6 @@ Ut.Math.distanceBetween = function (point1, point2) {
     var dy = point2.y - point1.y;
     return Math.sqrt(dx * dx + dy * dy);
 };
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -428,7 +379,11 @@ Ut.Dom.is = function (src) {
     return ['ELEMENT_NODE', 'DOCUMENT_NODE', 'DOCUMENT_FRAGMENT_NODE'].indexOf(typeName) !== -1
 };
 
-
+/**
+ * If is html
+ * @param src
+ * @returns {boolean}
+ */
 Ut.Dom.isHTML = function (src) {
     if(Ut.Dom.is(src))
         return true;
@@ -449,7 +404,6 @@ Ut.Dom.clone = function (src) {
     return Ut.Dom.copy(src);
 };
 
-
 /**
  * Query DOM Element by selector
  *
@@ -463,7 +417,6 @@ Ut.Dom.query = function (selector, parent) {
         return elems[0];
     return null;
 };
-
 
 /**
  * Query DOM Elements by selector
@@ -524,8 +477,6 @@ Ut.Dom.queryUp = function(selector, from, loops) {
     return item;
 };
 
-
-
 /**
  *
  * @param elem     Node елемент
@@ -544,9 +495,8 @@ Ut.Dom.eachParent = function (elem, callback, limit) {
     }
 };
 
-
-
 /**
+ * Get nodeType entry
  * Node.ELEMENT_NODE - 1
  * Node.TEXT_NODE - 3
  * Node.PROCESSING_INSTRUCTION_NODE - 7
@@ -571,7 +521,7 @@ Ut.Dom.nodeType = function (src) {
 };
 
 /**
- *
+ * Convert HTML string to DOMElement
  * @param string
  * @returns {*}
  */
@@ -587,16 +537,14 @@ Ut.Dom.toNode = function (string){
     return fragment.childNodes.length === 1 ? fragment.firstChild : fragment;
 };
 
-
-
 /**
- * HTML string convert to DOM Elements Object
- * @param data
+ * Convert HTML string to DOMElements
+ * @param string
  * @returns {*}
  */
-Ut.Dom.toNodeString = function (data) {
+Ut.Dom.toNodeString = function (string) {
     var parser = new DOMParser();
-    var node = parser.parseFromString(data, "text/xml");
+    var node = parser.parseFromString(string, "text/xml");
     console.log(node);
     if (typeof node == 'object' && node.firstChild.nodeType == Node.ELEMENT_NODE)
         return node.firstChild;
@@ -605,7 +553,7 @@ Ut.Dom.toNodeString = function (data) {
 };
 
 /**
- *
+ * Convert DOMElement to HTML string
  * @param element
  * @returns {*}
  */
@@ -614,8 +562,6 @@ Ut.Dom.toHTML = function (element){
     container.appendChild(element.cloneNode(true));
     return container.innerHTML;
 };
-
-
 
 /**
  * Create new NodeElement
@@ -641,17 +587,13 @@ Ut.Dom.create = function (tag, attrs, inner) {
     return elem;
 };
 
-
-
-
-
 /**
  * Calculates the position and size of elements.
  *
  * @param elem
  * @returns {{y: number, x: number, width: number, height: number}}
  */
-Ut.Dom.elementPosition = function (elem) {
+Ut.Dom.position = function (elem) {
     var top = 0, left = 0;
     if (elem.getBoundingClientRect) {
         var box = elem.getBoundingClientRect();
@@ -676,40 +618,12 @@ Ut.Dom.elementPosition = function (elem) {
 };
 
 
-/**
- * Returns the coordinates of the mouse on any element
- * @param event
- * @param element
- * @returns {{x: number, y: number}}
- */
-Ut.Dom.mousePosition = function (event, element) {
-    var positions = {x: 0, y: 0};
-    element = element || document.body;
-    if(element instanceof HTMLElement && event instanceof MouseEvent) {
-        if(element.getBoundingClientRect) {
-            var rect = element.getBoundingClientRect();
-            positions.x = event.clientX - rect.left;
-            positions.y = event.clientY - rect.top;
-        }else {
-            positions.x = event.pageX - element.offsetLeft;
-            positions.y = event.pageY - element.offsetTop;
-        }
-    }
-    return positions;
-};
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////
 // Func Methods
 
 
-
 Ut.Func = {};
-
 
 /**
  * Variable if type of function
@@ -717,7 +631,6 @@ Ut.Func = {};
  * @returns {boolean}
  */
 Ut.Func.is = function (src) { return typeof src === 'function' };
-
 
 /**
  * Copy function
@@ -733,7 +646,6 @@ Ut.Func.copy = function (src) {
     }
     return temp;
 };
-
 
 /**
  * An asynchronous for-each loop
@@ -765,7 +677,6 @@ Ut.Func.asyncForEach = function (array, done, iterator) {
     }
 };
 
-
 /**
  * Calls the callback in a given interval until it returns true
  * @param {function} callback
@@ -789,7 +700,11 @@ Ut.Func.waitFor = function(callback, interval) {
 
 Ut.Crypt = {};
 
-
+/**
+ * Encode to base64
+ * @param str
+ * @returns {string}
+ */
 Ut.Crypt.base64encode = function (str){
     var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     var b64encoded = '';
@@ -809,7 +724,11 @@ Ut.Crypt.base64encode = function (str){
     return b64encoded;
 };
 
-
+/**
+ * Decode from base64
+ * @param str
+ * @returns {string}
+ */
 Ut.Crypt.base64decode = function (str) {
     var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     var b64decoded = '';
@@ -836,21 +755,6 @@ Ut.Crypt.base64decode = function (str) {
 };
 
 
-/**
- * Encode URI params
- * @param data      Object key=value
- * @returns {*}     query string
- */
-Ut.Crypt.encodeData = function(data){
-    if(typeof data === 'string') return data;
-    if(typeof data !== 'object') return '';
-    var convertData = [];
-    Object.keys(data).forEach(function(key){
-        convertData.push(key+'='+encodeURIComponent(data[key]));
-    });
-    return convertData.join('&');
-};
-
 
 /**
  * @param text
@@ -867,97 +771,6 @@ Ut.Crypt.toTranslit = function (text) {
             return t[index];
         });
 };
-
-
-/**
- * Parse URI Request data into object
- * @param url
- * @returns {{}}
- */
-Ut.Crypt.parseGet = function(url){
-    url = url || document.location;
-    var params = {};
-    var parser = document.createElement('a');
-    parser.href = url;
-    if(parser.search.length > 1){
-        parser.search.substr(1).split('&').forEach(function(part){
-            var item = part.split('=');
-            params[item[0]] = decodeURIComponent(item[1]);
-        });
-    }
-    return params;
-};
-
-
-/**
- * Parse Url string/location into object
- * @param url
- * @returns {{}}
- */
-Ut.Crypt.parseUrl = function(url){
-    url = url || document.location;
-    var params = {};
-    var parser = document.createElement('a');
-    parser.href = url;
-    params.protocol = parser.protocol;
-    params.host = parser.host;
-    params.hostname = parser.hostname;
-    params.port = parser.port;
-    params.pathname = parser.pathname;
-    params.hash = parser.hash;
-    params.search = parser.search;
-    params.get = Util.parseGet(parser.search);
-    return params;
-};
-
-
-Ut.Crypt.getURLParameter = function(name) {
-    var reg = (new RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1];
-    return reg === null ? undefined : decodeURI(reg);
-};
-
-
-/**
- * Convert HTML form to encode URI string
- * @param form
- * @param asObject
- * @returns {*}
- */
-Ut.Crypt.formData = function (form, asObject) {
-    var obj = {}, str = '';
-    for (var i = 0; i < form.length; i++) {
-        var f = form[i];
-        if (f.type == 'submit' || f.type == 'button') continue;
-        if ((f.type == 'radio' || f.type == 'checkbox') && f.checked == false) continue;
-        var fName = f.nodeName.toLowerCase();
-        if (fName == 'input' || fName == 'select' || fName == 'textarea') {
-            obj[f.name] = f.value;
-            str += ((str == '') ? '' : '&') + f.name + '=' + encodeURIComponent(f.value);
-        }
-    }
-    return (asObject === true) ? obj : str;
-};
-
-
-/**
- * Cross-browser function for the character of the event keypress:
- * @param event     event.type must be keypress
- * @returns {*}
- */
-Ut.Crypt.getChar = function (event) {
-    if (event.which == null) {
-        if (event.keyCode < 32)
-            return null;
-        return String.fromCharCode(event.keyCode)
-    }
-    else if (event.which != 0 && event.charCode != 0) {
-        if (event.which < 32)
-            return null;
-        return String.fromCharCode(event.which);
-    }
-    return null;
-};
-
 
 
 
@@ -977,7 +790,6 @@ Ut.Date.time = function(date){
     return date instanceof Date ? date.getTime() : (new Date).getTime()
 };
 
-
 /**
  * Add days to some date
  * @param day           number of days. 0.04 - 1 hour, 0.5 - 12 hour, 1 - 1 day
@@ -989,7 +801,6 @@ Ut.Date.addDays = function (day, startDate){
     date.setTime(date.getTime() + (day * 86400000));
     return date;
 };
-
 
 /**
  * Time between Dates
@@ -1014,6 +825,111 @@ Ut.Date.betweenDates = function(dateFrom, dateTo){
 };
 
 
+////////////////////////////////////////////////////////////////////////
+// Data Methods
+Ut.Data = {};
+
+/**
+ * Convert HTML form to encode URI string
+ * @param form
+ * @param asObject
+ * @returns {*}
+ */
+Ut.Data.parseForm = function (form, asObject) {
+    var obj = {}, str = '';
+    for (var i = 0; i < form.length; i++) {
+        var f = form[i];
+        if (f.type == 'submit' || f.type == 'button') continue;
+        if ((f.type == 'radio' || f.type == 'checkbox') && f.checked == false) continue;
+        var fName = f.nodeName.toLowerCase();
+        if (fName == 'input' || fName == 'select' || fName == 'textarea') {
+            obj[f.name] = f.value;
+            str += ((str == '') ? '' : '&') + f.name + '=' + encodeURIComponent(f.value);
+        }
+    }
+    return (asObject === true) ? obj : str;
+};
+
+/**
+ * Cross-browser function for the character of the event keypress:
+ * @param event     event.type must be keypress
+ * @returns {*}
+ */
+Ut.Data.getChar = function (event) {
+    if (event.which == null) {
+        if (event.keyCode < 32)
+            return null;
+        return String.fromCharCode(event.keyCode)
+    }
+    else if (event.which != 0 && event.charCode != 0) {
+        if (event.which < 32)
+            return null;
+        return String.fromCharCode(event.which);
+    }
+    return null;
+};
+
+/**
+ * First symbol to UpperCase
+ * @param src
+ * @returns {*|string}
+ */
+Ut.Data.ucfirst = function (src){
+    return src && src[0].toUpperCase() + src.slice(1);
+};
+
+
+
+////////////////////////////////////////////////////////////////////////
+// URL Methods
+
+
+Ut.URL = {};
+
+Ut.URL.parse = function (url) {
+    url = url || document.location;
+    var params = {}, link = document.createElement('a');
+    link.href = url;
+    ['protocol','host','hostname','port','pathname','hash','search','href'].forEach(function(prop, i, arr) {
+        if (link[prop] !== undefined)
+            params[prop] = link[prop]
+    });
+    params.get = link.search.length > 0 ? Ut.URL.get(link.search) : {};
+    return params;
+};
+
+Ut.URL.get = function (src) {
+    var item, params = {};
+    if (src === undefined) src = document.location.search;
+    if (src.length > 2) {
+        src.substr(1).split('&').forEach(function(part){
+            item = part.split('=');
+            params[item[0]] = decodeURIComponent(item[1]);
+        });
+    }
+    return params
+};
+
+/**
+ * Encode URI params
+ * @param data      Object key=value
+ * @returns {*}     query string
+ */
+Ut.URL.encode = function (data) {
+    if (data && typeof data === 'object') {
+        var convertData = [];
+        Object.keys(data).forEach(function(key){
+            convertData.push(key+'='+encodeURIComponent(data[key]));
+        });
+        data = convertData.join('&');
+    }
+    return data;
+};
+
+Ut.URL.getURLParameter = function(name) {
+    var reg = (new RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1];
+    return reg === null ? undefined : decodeURI(reg);
+};
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -1032,13 +948,20 @@ Ut.Storage = function(name, value){
     }
 };
 
-
+/**
+ * Set
+ * @param name
+ * @param value
+ */
 Ut.Storage.set = function (name, value) {
     try{value = JSON.stringify(value)}catch(error){}
     return window.localStorage.setItem(name, value);
 };
 
-
+/**
+ * Get
+ * @param name
+ */
 Ut.Storage.get = function (name) {
     var value = window.localStorage.getItem(name);
     if(value)
@@ -1046,34 +969,41 @@ Ut.Storage.get = function (name) {
     return value;
 };
 
-
+/**
+ * Remove
+ * @param name
+ */
 Ut.Storage.remove = function (name) {
     return window.localStorage.removeItem(name);
 };
 
-
-Ut.Storage.key = function (name) {
-    return window.localStorage.key(key);
+/**
+ * Get by index
+ * @param index
+ * @returns {string}
+ */
+Ut.Storage.key = function (index) {
+    return window.localStorage.key(index);
 };
 
-
-// when invoked, will empty all keys out of the storage.
+/**
+ * when invoked, will empty all keys out of the storage.
+ */
 Ut.Storage.clear = function () {
     return window.localStorage.clear();
 };
 
-
-// returns an integer representing the number of data items stored in the Storage object.
+/**
+ * returns an integer representing the number of data items stored in the Storage object.
+ * @returns {number}
+ */
 Ut.Storage.length = function () {
     return window.localStorage.length;
 };
 
 
-
-
 ////////////////////////////////////////////////////////////////////////
 // Cookie Methods
-
 
 
 /**
@@ -1105,7 +1035,6 @@ Ut.Cookie.get = function (name) {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-
 /**
  * Set Cookie key, value
  * @param name
@@ -1136,7 +1065,6 @@ Ut.Cookie.set = function (name, value, options) {
     document.cookie = updatedCookie;
 };
 
-
 /**
  * Remove Cookie by key
  * @param name
@@ -1150,11 +1078,8 @@ Ut.Cookie.remove = function (name, option){
 };
 
 
-
-
 ////////////////////////////////////////////////////////////////////////
 // Style Methods
-
 
 
 /**
@@ -1233,13 +1158,12 @@ Ut.Style = function (selector, property) {
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////
 // Timer Methods
 
 
 /**
- * // Timer function
+ * Timer function
  *
  * var timer = new Ut.Timer(1000, 10);
  * timer.addEventListener(Ut.Timer.START, function(e){
@@ -1312,7 +1236,7 @@ Ut.Timer = function(ms, delay) {
     };
 
     /**
-     *
+     * Reset timer
      */
     this.reset = function(){
         clearInterval(this.timerHandler);
@@ -1349,6 +1273,7 @@ Ut.Timer.timeout = function (callback, ms, thisInst) {
         return setTimeout(function(){callback.call(thisInst)}, ms);
     }
 };
+
 /**
  *
  * @param callback Function
@@ -1362,12 +1287,63 @@ Ut.Timer.interval = function (callback, ms, thisInst) {
         return setInterval(function(){callback.call(thisInst)}, ms);
     }
 };
+
 Ut.Timer.timeoutStop = function (intervalId) {clearTimeout(intervalId)};
 Ut.Timer.intervalStop = function (intervalId) {clearInterval(intervalId)};
 
 Ut.Timer.START = 'start';
 Ut.Timer.PROGRESS = 'progress';
 Ut.Timer.COMPLETE = 'complete';
+
+
+////////////////////////////////////////////////////////////////////////
+// System Methods
+
+
+Ut.System = {};
+
+/**
+ * Device detection
+ * @returns {boolean}
+ */
+Ut.System.isMobile = function() {
+    if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
+        || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) {
+        return true;
+    }
+    return false;
+};
+
+
+////////////////////////////////////////////////////////////////////////
+// Mouse Methods
+
+
+Ut.Mouse = {};
+
+Ut.Mouse.m = function (src){};
+
+/**
+ * Returns the coordinates of the mouse on any element
+ * @param event
+ * @param element
+ * @returns {{x: number, y: number}}
+ */
+Ut.Mouse.position = function (event, element) {
+    var positions = {x: 0, y: 0};
+    element = element || document.body;
+    if(element instanceof HTMLElement && event instanceof MouseEvent) {
+        if(element.getBoundingClientRect) {
+            var rect = element.getBoundingClientRect();
+            positions.x = event.clientX - rect.left;
+            positions.y = event.clientY - rect.top;
+        }else {
+            positions.x = event.pageX - element.offsetLeft;
+            positions.y = event.pageY - element.offsetTop;
+        }
+    }
+    return positions;
+};
 
 
 })(window);

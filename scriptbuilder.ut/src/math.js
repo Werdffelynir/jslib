@@ -1,27 +1,21 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Math Methods
 
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
 
-
 Ut.Math = {};
-
 
 Ut.Math.isNumeric = function (src) {
     return !isNaN(parseFloat(src)) && isFinite(src)
 };
 
-
 Ut.Math.isInteger = function (src) {
     return typeof src === 'number' && !(src % 1)
 };
 
-
 Ut.Math.isIterated = function (src) {
     return src && src.length > 0
 };
-
 
 /**
  * Returns a random integer between min, max, if not specified the default of 0 to 100
@@ -35,7 +29,6 @@ Ut.Math.rand = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-
 /**
  * Returns random string color, HEX format
  * @returns {string}
@@ -48,7 +41,6 @@ Ut.Math.randColor = function () {
     return color;
 };
 
-
 /**
  * Converts degrees to radians
  * @param deg
@@ -58,7 +50,6 @@ Ut.Math.degreesToRadians = function (deg) {
     return (deg * Math.PI) / 180;
 };
 
-
 /**
  * Converts radians to degrees
  * @param rad
@@ -67,7 +58,6 @@ Ut.Math.degreesToRadians = function (deg) {
 Ut.Math.radiansToDegrees = function (rad) {
     return (rad * 180) / Math.PI;
 };
-
 
 /**
  * The calculation of the distance between points

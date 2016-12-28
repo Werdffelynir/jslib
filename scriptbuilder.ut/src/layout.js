@@ -1,6 +1,6 @@
 (function (window) {
 
-    window.Ut = {};
+window.Ut = {};
 
 [[['base']]]
 
@@ -18,6 +18,10 @@
 
 [[['date']]]
 
+[[['data']]]
+
+[[['url']]]
+
 [[['storage']]]
 
 [[['cookie']]]
@@ -25,6 +29,10 @@
 [[['style']]]
 
 [[['timer']]]
+
+[[['system']]]
+
+[[['mouse']]]
 
 })(window);
 

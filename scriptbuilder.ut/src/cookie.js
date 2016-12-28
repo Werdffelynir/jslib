@@ -1,9 +1,7 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Cookie Methods
 
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
-
 
 /**
  * возвращает cookie с именем name, если есть, если нет, то undefined
@@ -33,7 +31,6 @@ Ut.Cookie.get = function (name) {
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
 };
-
 
 /**
  * Set Cookie key, value
@@ -65,7 +62,6 @@ Ut.Cookie.set = function (name, value, options) {
     document.cookie = updatedCookie;
 };
 
-
 /**
  * Remove Cookie by key
  * @param name
@@ -77,4 +73,3 @@ Ut.Cookie.remove = function (name, option){
     option.expires = -1;
     Ut.Cookie.set(name, "", option);
 };
-

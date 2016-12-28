@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Date Methods
 
@@ -16,7 +15,6 @@ Ut.Date.time = function(date){
     return date instanceof Date ? date.getTime() : (new Date).getTime()
 };
 
-
 /**
  * Add days to some date
  * @param day           number of days. 0.04 - 1 hour, 0.5 - 12 hour, 1 - 1 day
@@ -28,7 +26,6 @@ Ut.Date.addDays = function (day, startDate){
     date.setTime(date.getTime() + (day * 86400000));
     return date;
 };
-
 
 /**
  * Time between Dates
@@ -51,4 +48,3 @@ Ut.Date.betweenDates = function(dateFrom, dateTo){
         diffMins = Math.round(((diffMs % 864e5) % 36e5) / 6e4);
     return {day: diffDays, hour: diffHrs, minute: diffMins};
 };
-

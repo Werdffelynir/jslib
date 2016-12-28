@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Dom Methods
 
@@ -16,7 +15,11 @@ Ut.Dom.is = function (src) {
     return ['ELEMENT_NODE', 'DOCUMENT_NODE', 'DOCUMENT_FRAGMENT_NODE'].indexOf(typeName) !== -1
 };
 
-
+/**
+ * If is html
+ * @param src
+ * @returns {boolean}
+ */
 Ut.Dom.isHTML = function (src) {
     if(Ut.Dom.is(src))
         return true;
@@ -37,7 +40,6 @@ Ut.Dom.clone = function (src) {
     return Ut.Dom.copy(src);
 };
 
-
 /**
  * Query DOM Element by selector
  *
@@ -51,7 +53,6 @@ Ut.Dom.query = function (selector, parent) {
         return elems[0];
     return null;
 };
-
 
 /**
  * Query DOM Elements by selector
@@ -112,8 +113,6 @@ Ut.Dom.queryUp = function(selector, from, loops) {
     return item;
 };
 
-
-
 /**
  *
  * @param elem     Node елемент
@@ -132,9 +131,8 @@ Ut.Dom.eachParent = function (elem, callback, limit) {
     }
 };
 
-
-
 /**
+ * Get nodeType entry
  * Node.ELEMENT_NODE - 1
  * Node.TEXT_NODE - 3
  * Node.PROCESSING_INSTRUCTION_NODE - 7
@@ -159,7 +157,7 @@ Ut.Dom.nodeType = function (src) {
 };
 
 /**
- *
+ * Convert HTML string to DOMElement
  * @param string
  * @returns {*}
  */
@@ -175,16 +173,14 @@ Ut.Dom.toNode = function (string){
     return fragment.childNodes.length === 1 ? fragment.firstChild : fragment;
 };
 
-
-
 /**
- * HTML string convert to DOM Elements Object
- * @param data
+ * Convert HTML string to DOMElements
+ * @param string
  * @returns {*}
  */
-Ut.Dom.toNodeString = function (data) {
+Ut.Dom.toNodeString = function (string) {
     var parser = new DOMParser();
-    var node = parser.parseFromString(data, "text/xml");
+    var node = parser.parseFromString(string, "text/xml");
     console.log(node);
     if (typeof node == 'object' && node.firstChild.nodeType == Node.ELEMENT_NODE)
         return node.firstChild;
@@ -193,7 +189,7 @@ Ut.Dom.toNodeString = function (data) {
 };
 
 /**
- *
+ * Convert DOMElement to HTML string
  * @param element
  * @returns {*}
  */
@@ -202,8 +198,6 @@ Ut.Dom.toHTML = function (element){
     container.appendChild(element.cloneNode(true));
     return container.innerHTML;
 };
-
-
 
 /**
  * Create new NodeElement
@@ -229,17 +223,13 @@ Ut.Dom.create = function (tag, attrs, inner) {
     return elem;
 };
 
-
-
-
-
 /**
  * Calculates the position and size of elements.
  *
  * @param elem
  * @returns {{y: number, x: number, width: number, height: number}}
  */
-Ut.Dom.elementPosition = function (elem) {
+Ut.Dom.position = function (elem) {
     var top = 0, left = 0;
     if (elem.getBoundingClientRect) {
         var box = elem.getBoundingClientRect();
@@ -262,29 +252,3 @@ Ut.Dom.elementPosition = function (elem) {
         return {x: left, y: top, width: elem.offsetWidth, height: elem.offsetHeight};
     }
 };
-
-
-/**
- * Returns the coordinates of the mouse on any element
- * @param event
- * @param element
- * @returns {{x: number, y: number}}
- */
-Ut.Dom.mousePosition = function (event, element) {
-    var positions = {x: 0, y: 0};
-    element = element || document.body;
-    if(element instanceof HTMLElement && event instanceof MouseEvent) {
-        if(element.getBoundingClientRect) {
-            var rect = element.getBoundingClientRect();
-            positions.x = event.clientX - rect.left;
-            positions.y = event.clientY - rect.top;
-        }else {
-            positions.x = event.pageX - element.offsetLeft;
-            positions.y = event.pageY - element.offsetTop;
-        }
-    }
-    return positions;
-};
-
-
-

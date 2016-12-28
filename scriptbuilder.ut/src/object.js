@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Object Methods
 
@@ -12,9 +11,7 @@ if (!Object.values) {
 
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
 
-
 Ut.Object = {};
-
 
 /**
  * Is object
@@ -24,7 +21,6 @@ Ut.Object.is = function (src) {
     return Object.is(src)
 };
 
-
 /**
  * Convert Object to Array
  * @param src
@@ -32,7 +28,6 @@ Ut.Object.is = function (src) {
 Ut.Object.toArray = function (src) {
     return Object.values(src)
 };
-
 
 /**
  * Execute callback function for each element in Object `src`
@@ -44,8 +39,6 @@ Ut.Object.each = function (src, callback) {
         callback.call(null, src[k], k, src);
 };
 
-
-
 /**
  * Count object length. Atl to Object.keys(source).length
  * @param   {Object} source
@@ -56,7 +49,6 @@ Ut.Object.length = function (source) {
     for (var k in source) it++;
     return it;
 };
-
 
 /**
  * Deeply extends two objects
@@ -76,7 +68,6 @@ Ut.Object.extend = function(destination, source) {
     return destination;
 };
 
-
 /**
  * Merge an array `src` into the array `arrBase`
  * @param srcDefault
@@ -93,7 +84,6 @@ Ut.Object.merge = function (srcDefault, src) {
     return srcDefault;
 };
 
-
 /**
  * Clone object
  * @param   {Object} source
@@ -107,9 +97,6 @@ Ut.Object.copy = function (source) {
     return temp;
 };
 
-
-
-
 /**
  * Javascript object to JSON data
  * @param data
@@ -118,7 +105,6 @@ Ut.Object.toJson = function (data) {
     return JSON.stringify(data);
 };
 
-
 /**
  * JSON data to Javascript object
  * @param data
@@ -126,5 +112,3 @@ Ut.Object.toJson = function (data) {
 Ut.Object.json = function (data) {
     return JSON.parse(data);
 };
-
-

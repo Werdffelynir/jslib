@@ -4,9 +4,7 @@
 
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
 
-
 Ut.Func = {};
-
 
 /**
  * Variable if type of function
@@ -14,7 +12,6 @@ Ut.Func = {};
  * @returns {boolean}
  */
 Ut.Func.is = function (src) { return typeof src === 'function' };
-
 
 /**
  * Copy function
@@ -30,7 +27,6 @@ Ut.Func.copy = function (src) {
     }
     return temp;
 };
-
 
 /**
  * An asynchronous for-each loop
@@ -61,7 +57,6 @@ Ut.Func.asyncForEach = function (array, done, iterator) {
         }
     }
 };
-
 
 /**
  * Calls the callback in a given interval until it returns true

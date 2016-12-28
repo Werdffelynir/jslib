@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////
 // Array Methods
 
@@ -6,35 +5,48 @@ if (!Array.isArray) {
     Array.isArray = function (src) {return Object.prototype.toString.call(src) === '[object Array]'};
 }
 
-
 var Ut = window.Ut || {};   // <<< DELETE THIS STRING
-
 
 Ut.Array = {};
 
-
+/**
+ *
+ * @param src
+ * @returns {boolean}
+ */
 Ut.Array.is = function (src) {
     return Array.isArray(src)
 };
 
-
+/**
+ *
+ * @param needle
+ * @param haystack
+ * @returns {boolean}
+ */
 Ut.Array.in = function (needle, haystack) {
     if(Array.isArray(haystack))
         return haystack.indexOf(needle) !== -1;
 };
 
-
+/**
+ *
+ * @param src
+ */
 Ut.Array.copy = function (src) {
     if(Array.isArray(src))
         return JSON.parse(JSON.stringify(src));
 };
 
-
+/**
+ *
+ * @param src
+ * @param callback
+ */
 Ut.Array.each = function (src, callback) {
     for(var i = 0; i < src.length; i ++)
         callback.call(null, src[i], i, src);
 };
-
 
 /**
  * Cleans the array of empty elements
@@ -49,7 +61,6 @@ Ut.Array.clean = function (src) {
     return arr;
 };
 
-
 /**
  * Removes duplicate values from an array
  * @param arr
@@ -63,7 +74,6 @@ Ut.Array.unique = function (arr) {
     }
     return tmp;
 };
-
 
 /**
  * Remove item from array
@@ -96,8 +106,6 @@ Ut.Array.merge = function (srcDefault, src) {
     return srcDefault;
 };
 
-
-
 /**
  * Computes the difference of arrays
  * Compares arr1 against one or more other arrays and returns the values in arr1
@@ -114,7 +122,6 @@ Ut.Array.diff = function (arr1, arr2) {
     }
     return false;
 };
-
 
 /**
  * Removes duplicate values from an array
