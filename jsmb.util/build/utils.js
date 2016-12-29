@@ -47,7 +47,6 @@ if (!Object.values) {
     Object.values = function (src) {var a = []; for(var k in src) a.push(src[k]); return a};
 }
 
-
 Ut.Object = {};
 
 /**
@@ -153,11 +152,9 @@ Ut.Object.json = function (data) {
 
 ////////////////////////////////////////////////////////////////////////
 // Array Methods
-
 if (!Array.isArray) {
     Array.isArray = function (src) {return Object.prototype.toString.call(src) === '[object Array]'};
 }
-
 
 Ut.Array = {};
 
@@ -291,8 +288,6 @@ Ut.Array.unique = function (arr) {
 
 ////////////////////////////////////////////////////////////////////////
 // Math Methods
-
-
 Ut.Math = {};
 
 Ut.Math.isNumeric = function (src) {
@@ -365,8 +360,6 @@ Ut.Math.distanceBetween = function (point1, point2) {
 
 ////////////////////////////////////////////////////////////////////////
 // Dom Methods
-
-
 Ut.Dom = {};
 
 /**
@@ -618,11 +611,8 @@ Ut.Dom.position = function (elem) {
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////
 // Func Methods
-
-
 Ut.Func = {};
 
 /**
@@ -692,12 +682,8 @@ Ut.Func.waitFor = function(callback, interval) {
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////
 // Crypt Methods
-
-
-
 Ut.Crypt = {};
 
 /**
@@ -776,8 +762,6 @@ Ut.Crypt.toTranslit = function (text) {
 
 ////////////////////////////////////////////////////////////////////////
 // Date Methods
-
-
 Ut.Date = {};
 
 Ut.Date.msInDay = 864e5;
@@ -879,10 +863,8 @@ Ut.Data.ucfirst = function (src){
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////
 // URL Methods
-
 
 Ut.URL = {};
 
@@ -1005,7 +987,6 @@ Ut.Storage.length = function () {
 ////////////////////////////////////////////////////////////////////////
 // Cookie Methods
 
-
 /**
  * возвращает cookie с именем name, если есть, если нет, то undefined
  * @param name
@@ -1080,7 +1061,6 @@ Ut.Cookie.remove = function (name, option){
 
 ////////////////////////////////////////////////////////////////////////
 // Style Methods
-
 
 /**
  * Создает генератор для елементов style.
@@ -1160,7 +1140,6 @@ Ut.Style = function (selector, property) {
 
 ////////////////////////////////////////////////////////////////////////
 // Timer Methods
-
 
 /**
  * Timer function
@@ -1298,8 +1277,6 @@ Ut.Timer.COMPLETE = 'complete';
 
 ////////////////////////////////////////////////////////////////////////
 // System Methods
-
-
 Ut.System = {};
 
 /**
@@ -1317,8 +1294,6 @@ Ut.System.isMobile = function() {
 
 ////////////////////////////////////////////////////////////////////////
 // Mouse Methods
-
-
 Ut.Mouse = {};
 
 Ut.Mouse.m = function (src){};

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 // Base Methods
-var Ut = window.Ut || {}; // <<< DELETE THIS STRING
+var Ut = window.Ut || {}; // THIS-LINE-WILL-DELETED
 /**
  * Вернет тип передаваемого параметра value, или сравнит тип value с передаваемым type и вернет boolean
  * Возможные заначения: null, boolean, undefined, function, string, number, date, number, array, object

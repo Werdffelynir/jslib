@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 // Style Methods
-
-var Ut = window.Ut || {};   // <<< DELETE THIS STRING
+var Ut = window.Ut || {};   // THIS-LINE-WILL-DELETED
 
 /**
  * Создает генератор для елементов style.

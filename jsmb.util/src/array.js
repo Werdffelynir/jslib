@@ -1,12 +1,10 @@
 ////////////////////////////////////////////////////////////////////////
 // Array Methods
-
 if (!Array.isArray) {
     Array.isArray = function (src) {return Object.prototype.toString.call(src) === '[object Array]'};
 }
 
-var Ut = window.Ut || {};   // <<< DELETE THIS STRING
-
+var Ut = window.Ut || {};   // THIS-LINE-WILL-DELETED
 Ut.Array = {};
 
 /**

@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 // Timer Methods
-
-var Ut = window.Ut || {};   // <<< DELETE THIS STRING
+var Ut = window.Ut || {};   // THIS-LINE-WILL-DELETED
 
 /**
  * Timer function

@@ -1,0 +1,8 @@
+{
+  "output": "build/utils.js",
+  "main":  "src/layout.js",
+  "root": "src/",
+  "devline": "THIS-LINE-WILL-DELETED",
+  "watcher_directory": "src/",
+  "watcher_command": "php -f builder.php < config.json"
+}

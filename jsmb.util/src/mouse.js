@@ -1,8 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 // Mouse Methods
-
-var Ut = window.Ut || {};   // <<< DELETE THIS STRING
-
+var Ut = window.Ut || {};   // THIS-LINE-WILL-DELETED
 Ut.Mouse = {};
 
 Ut.Mouse.m = function (src){};

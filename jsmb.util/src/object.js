@@ -9,8 +9,7 @@ if (!Object.values) {
     Object.values = function (src) {var a = []; for(var k in src) a.push(src[k]); return a};
 }
 
-var Ut = window.Ut || {};   // <<< DELETE THIS STRING
-
+var Ut = window.Ut || {};   // THIS-LINE-WILL-DELETED
 Ut.Object = {};
 
 /**
