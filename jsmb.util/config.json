@@ -1,5 +1,5 @@
 {
-  "output": "build/utils.js",
+  "output": "build/utilities.js",
   "main":  "src/layout.js",
   "root": "src/",
   "devline": "THIS-LINE-WILL-DELETED",
