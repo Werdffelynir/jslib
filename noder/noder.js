@@ -160,6 +160,74 @@
         return Noder;
     };
     Noder.get = function (key, callback) {
+        var i, result = [], list;
+        if (typeof key === 'string' && key.split(':').length === 2) {
+
+            var attrs = key.split(':');
+            var newKey = attrs[0].trim();
+            var attr = attrs[1].trim();
+            list = Noder.get(newKey);
+
+            for (i = 0; i < list.length; i ++) {
+                if (list[i].getAttribute(Noder.config.valueName) == attr) {
+                    result.push(list[i]);
+                }
+            }
+        }
+        else {
+            list = Noder._nodes;
+
+            if (key) {
+                for(i = 0; i < list.length; i ++) {
+                    if(list[i].noderKey === key)
+                        result.push(list[i]);
+                }
+            }
+            else if (arguments.length === 0) {
+                result = list;
+            }
+        }
+
+        if (typeof callback === 'function') {
+            var callResult = callback.call({}, result);
+            if (!!callResult)
+                return callResult
+        }
+        return result;
+    };
+
+    Noder.getOne = function (key, callback) {
+        var elem;
+        if (typeof key === 'string' && key.split(':').length === 2) {
+            var attrs = key.split(':');
+            var newKey = attrs[0].trim();
+            var attr = attrs[1].trim();
+            var list = Noder.get(newKey);
+            for (var i = 0; i < list.length; i ++) {
+                if (list[i].getAttribute(Noder.config.valueName) == attr) {
+                    elem = list[i];
+                    break;
+                }
+            }
+        }
+        else {
+            var elems = Noder.get(key);
+            if (elems && elems.length > 0)
+                elem = elems[0];
+            else
+                elem = false;
+        }
+
+        if (typeof callback === 'function') {
+            var callResult = callback.call({}, elem, elem.getAttribute(Noder.config.valueName));
+            if (!!callResult)
+                return callResult
+        }
+
+        return elem;
+    };
+
+/*    Noder.get = function (key, callback) {
         var i, result = [], list = Noder._nodes;
         if (key) {
             for(i = 0; i < list.length; i ++) {
@@ -189,7 +257,7 @@
                 return callResult
         }
         return elem;
-    };
+    };*/
     Noder.exist = function (key, ifCallback, elseCallback) {
         var elems = [];
         if (typeof key === 'string')                        elems = Noder.get(key);
@@ -282,7 +350,6 @@
                 elem.style[k] = styleObject[k]
         });
     };
-
     Noder.html = function (key, html, append) {
         var k, elems = [];
 
@@ -290,7 +357,11 @@
         else if (key && key.nodeType === Node.ELEMENT_NODE) elems = [key];
 
         elems.map (function (elem) {
-            elem.innerHTML = !!append ? elem.innerHTML + html : html
+            if (html && html.nodeType === Node.ELEMENT_NODE) {
+                if (!append) elem.innerHTML = '';
+                elem.appendChild(html);
+            } else
+                elem.innerHTML = !!append ? elem.innerHTML + html : html
         });
     };
 

@@ -133,3 +133,28 @@ Ut.Array.unique = function (arr) {
     }
     return tmp;
 };
+
+/**
+ * Get object by param and value from array
+ * Example:
+ *  var values = [{id:1}, {id:2}, ...]
+ *  var attr = 'id'
+ *  var attrValue = 2
+ *  itemByAttr(values, attr, attrValue) // {id:2}
+ * @param values
+ * @param attr
+ * @param attrValue
+ * @returns {*}
+ */
+Ut.Array.itemByAttr = function (values, attr, attrValue) {
+    var i,
+        tmp,
+        list = values || [];
+
+    for (i = 0; i < list.length; i ++) {
+        if (list[i][attr] !== undefined && list[i][attr] == attrValue) {
+            tmp = list[i];
+        }
+    }
+    return tmp;
+};
