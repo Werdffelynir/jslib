@@ -794,6 +794,17 @@
     };
 
     /**
+     * Try load init script file
+     * todo: изменить
+     */
+    app.domLoaded(function(){
+        var script = app.query('script[data-init]');
+        if (script && script.getAttribute('data-init').length > 2){
+            app.script(script.getAttribute('data-init'));
+        }
+    });
+
+    /**
      * @type {app}
      */
     window.NamespaceApplication = app;
