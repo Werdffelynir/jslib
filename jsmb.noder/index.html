@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="build/noder.js"></script>
+</head>
+<body>
+
+<div id="page">
+    <div id="menu">
+        <ul>
+            <li>1 - listitem</li>
+            <li>2 - listitem</li>
+            <li>3 - listitem</li>
+            <li>4 - listitem</li>
+            <li>5 - listitem</li>
+            <li>6 - listitem</li>
+            <li>7 - listitem</li>
+            <li>8 - listitem</li>
+            <li>9 - listitem</li>
+        </ul>
+    </div>
+    <div id="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, adipisci autem consequatur dolores
+            ducimus laborum libero, molestias, possimus quae quaerat quo saepe sequi sit suscipit totam! Dolores
+            explicabo nihil voluptatibus.</p>
+    </div>
+    <div id="editor">
+        <form name="item">
+            <input type="text" name="title">
+            <input type="text" name="content">
+            <input type="submit" name="submit" value="send">
+        </form>
+    </div>
+    <div id="footer">
+        <ul>
+            <li data-key="footer-element-1">1 - footer</li>
+            <li data-key="footer-element-2">2 - footer</li>
+            <li data-key="footer-element-3">3 - footer</li>
+        </ul>
+    </div>
+</div>
+
+
+<script>
+    // python3 watcher.py config.json
+
+    var formElements;
+    var form = new Noder('input', 'name');
+    form.search('#editor');
+
+    form.onClick('submit', function (event, target) {
+        event.preventDefault();
+
+        formElements = form.getElements();
+        formElements.title.value = 'Title';
+        formElements.content.value = 'Hello world, text-content';
+    });
+
+    form.on('submit', 'click', function (event) {
+        event.preventDefault();
+
+        formElements = form.getElements();
+        formElements.title.value = 'Title';
+        formElements.content.value = 'Hello world, text-content';
+    });
+
+    var menuElements;
+    var menu = new Noder('li', false, 'menu');
+    menu.search('#menu');
+
+    menu.on('menu', 'click', function (event, target) {
+        event.preventDefault();
+
+        console.log(target);
+    });
+
+</script>
+</body>
+</html>
