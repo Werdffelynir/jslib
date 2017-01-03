@@ -1,9 +1,9 @@
 (function (window) {
 
-    var Noder = (function () {
+    var NodeManager = (function () {
 
-        return function (selector, attr, orName) {
-            if (!(this instanceof Noder)) return new Noder(selector, attr, orName);
+        return function (selector, attr, orNameTransform) {
+            if (!(this instanceof NodeManager)) return new NodeManager(selector, attr, orNameTransform);
 
             this.config = {
                 attr: 'name',
@@ -12,37 +12,37 @@
             };
 
             this.elements = {};
-            this.query = Noder.query;
-            this.queryAll = Noder.queryAll;
-            this.create = Noder.create;
-            this.template = Noder.template;
+            this.query = NodeManager.query;
+            this.queryAll = NodeManager.queryAll;
+            this.create = NodeManager.create;
+            this.template = NodeManager.template;
 
             if (selector && typeof selector === 'object')
                 this.setConfiguration(selector);
             else
-                this.setConfiguration({selector: selector, attr: attr || false, name: orName || false});
+                this.setConfiguration({selector: selector, attr: attr || false, name: orNameTransform || false});
 
             return this;
         }
     })();
 
-    Noder.prototype = (function () {
+    NodeManager.prototype = (function () {
 
         /**
          *
-         * @namespace Noder.prototype
+         * @namespace NodeManager.prototype
          */
         var prototype = {};
 
         /**
          * Search elements by config
          * @param from
-         * @returns {Noder.search}
+         * @returns {NodeManager.search}
          */
         prototype.search = function (from) {
             var i,
                 k,
-                elems = Noder.queryAll(this.config.selector, from);
+                elems = NodeManager.queryAll(this.config.selector, from);
 
             if (elems) {
                 for (i = 0; i < elems.length; i++) {
@@ -92,7 +92,29 @@
 
             return this;
         };
+        //prototype.transformName = function (name) {this.config.name = name; return this; };
 
+        prototype.setConfigurationName = function (data) {
+            this.config.name = data;
+            return this;
+        };
+        prototype.setConfigurationAttr = function (data) {
+            this.config.attr = data;
+            return this;
+        };
+        prototype.setConfigurationSelector = function (data) {
+            this.config.selector = data;
+            return this;
+        };
+
+        /**
+         * Add callback for events, on element|s by attr
+         * @param attr          Name is attr
+         * @param event         Event name
+         * @param callback      Special callback function
+         * @param useCapture
+         * @returns {NodeManager.prototype.on}
+         */
         prototype.on = function (attr, event, callback, useCapture) {
             var elems = this.get(attr),
                 callbackFunction = function (event) {
@@ -102,12 +124,18 @@
             if (elems) {
                 if (elems.nodeType === Node.ELEMENT_NODE)
                     elems = [elems];
-                Noder.on(elems, event, callbackFunction, useCapture);
+                NodeManager.on(elems, event, callbackFunction, useCapture);
             }
-
             return this;
         };
 
+        /**
+         * Simply callback for event MouseClick on element|s by attr
+         * @param attr
+         * @param callback
+         * @param useCapture
+         * @returns {NodeManager.prototype.onClick}
+         */
         prototype.onClick = function (attr, callback, useCapture) {
             this.on(attr, 'click', callback, useCapture);
             return this;
@@ -117,9 +145,9 @@
 
     })();
 
-    Noder.prototype.constructor = window.Noder;
+    NodeManager.prototype.constructor = NodeManager;
 
-    /** Noder Static Methods //////////////////////////////////////////////////////////////////////////////////////// */
+    /** NodeManager Static Methods //////////////////////////////////////////////////////////////////////////////////////// */
 
     /**
      * Query DOM Element by selector
@@ -128,8 +156,8 @@
      * @param parent|callback
      * @returns {Element}
      */
-    Noder.query = function (selector, parent) {
-        var elems = Noder.queryAll(selector, parent);
+    NodeManager.query = function (selector, parent) {
+        var elems = NodeManager.queryAll(selector, parent);
         if (elems && elems.length > 0)
             return elems[0];
         return null;
@@ -142,7 +170,7 @@
      * @param parent    callback
      * @returns {*}
      */
-    Noder.queryAll = function (selector, parent) {
+    NodeManager.queryAll = function (selector, parent) {
         var callback, _elemsList, elems, from = document;
 
         if (typeof parent === 'function')
@@ -173,19 +201,19 @@
      * @param callback
      * @param useCapture
      */
-    Noder.on = function (selector, event, callback, useCapture) {
+    NodeManager.on = function (selector, event, callback, useCapture) {
 
         if (selector.nodeType === Node.ELEMENT_NODE) {
             selector.addEventListener(event, callback || function () {
                 }, useCapture);
         }
         if (typeof selector === 'string') {
-            Noder.on(Noder.queryAll(selector), event, callback, useCapture);
+            NodeManager.on(NodeManager.queryAll(selector), event, callback, useCapture);
         }
         else if (selector && selector.length > 0) {
             var i;
             for (i = 0; i < selector.length; i++) {
-                Noder.on(selector[i], event, callback, useCapture);
+                NodeManager.on(selector[i], event, callback, useCapture);
             }
         }
     };
@@ -197,7 +225,7 @@
      * @param inner
      * @returns {*}
      */
-    Noder.create = function (tag, attrs, inner) {
+    NodeManager.create = function (tag, attrs, inner) {
         var key, elem = document.createElement(tag);
         if (typeof elem !== 'object') return null;
         if (typeof attrs === 'object')
@@ -209,12 +237,12 @@
     };
 
     /**
-     *
-     * @param viewString
-     * @param params
+     * Render template
+     * @param viewString    String view, binding {{key}}
+     * @param params        Object params {key: 'Title'}
      * @returns {*}
      */
-    Noder.template = function (viewString, params) {
+    NodeManager.template = function (viewString, params) {
         if (typeof params === 'object')
             for (var k in params)
                 viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
@@ -222,6 +250,6 @@
     };
     ;
 
-    window.Noder = Noder;
+    window.NodeManager = NodeManager;
 
 })(window);

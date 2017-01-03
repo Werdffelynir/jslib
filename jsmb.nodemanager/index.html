@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="build/noder.js"></script>
+    <script src="build/nodemanager.js"></script>
 </head>
 <body>
 
@@ -47,9 +47,10 @@
 <script>
     // python3 watcher.py config.json
 
+    /*
     var formElements;
-    var form = new Noder('input', 'name');
-    form.search('#editor');
+    var form = new NodeManager('input', 'name')
+        .search('#editor');
 
     form.onClick('submit', function (event, target) {
         event.preventDefault();
@@ -58,25 +59,46 @@
         formElements.title.value = 'Title';
         formElements.content.value = 'Hello world, text-content';
     });
+*/
 
-    form.on('submit', 'click', function (event) {
+    /*
+    var form2Elements;
+    var form2 = new NodeManager('input')
+        .setConfigurationAttr('name')
+        .search('#editor');
+
+    form2.onClick('submit', function (event, target) {
         event.preventDefault();
 
-        formElements = form.getElements();
-        formElements.title.value = 'Title';
-        formElements.content.value = 'Hello world, text-content';
+        form2Elements = form2.getElements();
+        form2Elements.title.value = 'Title';
+        form2Elements.content.value = 'Hello world, text-content';
     });
-
-    var menuElements;
-    var menu = new Noder('li', false, 'menu');
-    menu.search('#menu');
+*/
+/*
+    var menu = new NodeManager('li', false, 'menu').search('#menu');
 
     menu.on('menu', 'click', function (event, target) {
+        event.preventDefault();
+        console.log(target);
+    });
+    */
+    var menu2 = new NodeManager('li');
+    menu2.setConfigurationName('manu2');
+    menu2.search('#menu');
+
+    menu2.on('manu2', 'click', function (event, target) {
         event.preventDefault();
 
         console.log(target);
     });
 
+    /*
+
+
+
+
+    */
 </script>
 </body>
 </html>

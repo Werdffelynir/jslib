@@ -1,5 +1,5 @@
-/** Noder Static Methods //////////////////////////////////////////////////////////////////////////////////////// */
-var Noder = window.Noder || {}; // THIS-LINE-WILL-DELETED
+/** NodeManager Static Methods //////////////////////////////////////////////////////////////////////////////////////// */
+var NodeManager = window.NodeManager || {}; // THIS-LINE-WILL-DELETED
 
 /**
  * Query DOM Element by selector
@@ -8,8 +8,8 @@ var Noder = window.Noder || {}; // THIS-LINE-WILL-DELETED
  * @param parent|callback
  * @returns {Element}
  */
-Noder.query = function (selector, parent) {
-    var elems = Noder.queryAll(selector, parent);
+NodeManager.query = function (selector, parent) {
+    var elems = NodeManager.queryAll(selector, parent);
     if (elems && elems.length > 0)
         return elems[0];
     return null;
@@ -22,7 +22,7 @@ Noder.query = function (selector, parent) {
  * @param parent    callback
  * @returns {*}
  */
-Noder.queryAll = function (selector, parent) {
+NodeManager.queryAll = function (selector, parent) {
     var callback, _elemsList, elems, from = document;
 
     if (typeof parent === 'function')
@@ -53,18 +53,18 @@ Noder.queryAll = function (selector, parent) {
  * @param callback
  * @param useCapture
  */
-Noder.on = function (selector, event, callback, useCapture) {
+NodeManager.on = function (selector, event, callback, useCapture) {
 
     if (selector.nodeType === Node.ELEMENT_NODE) {
         selector.addEventListener(event, callback || function(){}, useCapture);
     }
     if (typeof selector === 'string') {
-        Noder.on(Noder.queryAll(selector), event, callback, useCapture);
+        NodeManager.on(NodeManager.queryAll(selector), event, callback, useCapture);
     }
     else if (selector && selector.length > 0) {
         var i;
         for(i = 0; i < selector.length; i++ ) {
-            Noder.on(selector[i], event, callback, useCapture);
+            NodeManager.on(selector[i], event, callback, useCapture);
         }
     }
 };
@@ -76,7 +76,7 @@ Noder.on = function (selector, event, callback, useCapture) {
  * @param inner
  * @returns {*}
  */
-Noder.create = function (tag, attrs, inner) {
+NodeManager.create = function (tag, attrs, inner) {
     var key, elem = document.createElement(tag);
     if (typeof elem  !== 'object') return null;
     if (typeof attrs === 'object')
@@ -93,7 +93,7 @@ Noder.create = function (tag, attrs, inner) {
  * @param params
  * @returns {*}
  */
-Noder.template = function (viewString, params) {
+NodeManager.template = function (viewString, params) {
     if (typeof params === 'object')
         for (var k in params)
             viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);

@@ -1,5 +1,5 @@
 {
-  "output": "build/noder.js",
+  "output": "build/nodemanager.js",
   "main":  "src/layout.js",
   "root": "src/",
   "devline": "THIS-LINE-WILL-DELETED",
