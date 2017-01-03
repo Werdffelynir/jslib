@@ -12,6 +12,10 @@
             };
 
             this.elements = {};
+            this.query = Noder.query;
+            this.queryAll = Noder.queryAll;
+            this.create = Noder.create;
+            this.template = Noder.template;
 
             if (selector && typeof selector === 'object')
                 this.setConfiguration(selector);
@@ -185,6 +189,38 @@
             }
         }
     };
+
+    /**
+     * Create an element of document.createElement
+     * @param tag
+     * @param attrs
+     * @param inner
+     * @returns {*}
+     */
+    Noder.create = function (tag, attrs, inner) {
+        var key, elem = document.createElement(tag);
+        if (typeof elem !== 'object') return null;
+        if (typeof attrs === 'object')
+            for (key in attrs)
+                elem.setAttribute(key, attrs[key]);
+        if (typeof inner === 'string') elem.innerHTML = inner;
+        else if (typeof inner === 'object') elem.appendChild(inner);
+        return elem;
+    };
+
+    /**
+     *
+     * @param viewString
+     * @param params
+     * @returns {*}
+     */
+    Noder.template = function (viewString, params) {
+        if (typeof params === 'object')
+            for (var k in params)
+                viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
+        return viewString;
+    };
+    ;
 
     window.Noder = Noder;
 
