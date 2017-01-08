@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="build/namespaceapplication.js"></script>
+</head>
+<body>
+
+<script !src="">
+
+    NamespaceApplication.extension('SuperExtension', function (App) {
+        return {a:1}
+    });
+
+    var App = new NamespaceApplication({
+        path: '/jsmb_ns/'
+    });
+
+    App.require('base', [
+
+        'js/demo_one',
+        'js/demo_two'
+
+    ], baseLoaded, baseError).requireStart();
+
+    function baseError(){
+        console.log('Error');
+    }
+
+    function baseLoaded(scriptList){
+        console.log(scriptList);
+    }
+
+    App.namespace('SuperNamespace', function (App) {
+        return {b:2}
+    });
+
+    App.
+
+    console.log(App.domLoaded == NamespaceApplication.domLoaded);
+
+</script>
+</body>
+</html>
