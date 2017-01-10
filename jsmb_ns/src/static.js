@@ -512,5 +512,4 @@ NamespaceApplication.Storage.clear = function () {return window.localStorage.cle
  * Returns an integer representing the number of data items stored in the Storage object.
  * @returns {number}
  */
-NamespaceApplication.Storage.length = function () {return window.localStorage.length};
-
+NamespaceApplication.Storage.length = function () {return window.localStorage.length}

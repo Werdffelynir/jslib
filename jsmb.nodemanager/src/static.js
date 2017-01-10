@@ -98,4 +98,4 @@ NodeManager.template = function (viewString, params) {
         for (var k in params)
             viewString = viewString.replace(new RegExp('{{' + k + '}}', 'gi'), params[k]);
     return viewString;
-};
+}
