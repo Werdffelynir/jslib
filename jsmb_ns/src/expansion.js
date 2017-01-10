@@ -20,7 +20,7 @@
         return false;
     };
 
-
+    /*assign static as instance methods*/
     prototype.loadJS = NamespaceApplication.loadJS;
     prototype.loadCSS = NamespaceApplication.loadCSS;
     prototype.domLoaded = NamespaceApplication.domLoaded;
