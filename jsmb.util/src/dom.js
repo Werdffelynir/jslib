@@ -176,7 +176,7 @@ Ut.Dom.toNode = function (string){
  * @param string
  * @returns {*}
  */
-Ut.Dom.toNodeString = function (string) {
+Ut.Dom.toNodeStrict = function (string) {
     var parser = new DOMParser();
     var node = parser.parseFromString(string, "text/xml");
     console.log(node);
@@ -228,25 +228,43 @@ Ut.Dom.create = function (tag, attrs, inner) {
  * @returns {{y: number, x: number, width: number, height: number}}
  */
 Ut.Dom.position = function (elem) {
-    var top = 0, left = 0;
-    if (elem.getBoundingClientRect) {
-        var box = elem.getBoundingClientRect();
-        var body = document.body;
-        var docElem = document.documentElement;
-        var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
-        var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
-        var clientTop = docElem.clientTop || body.clientTop || 0;
-        var clientLeft = docElem.clientLeft || body.clientLeft || 0;
-        top = box.top + scrollTop - clientTop;
-        left = box.left + scrollLeft - clientLeft;
-        return {y: Math.round(top), x: Math.round(left), width: elem.offsetWidth, height: elem.offsetHeight};
-    } else {
-        //fallback to naive approach
-        while (elem) {
-            top = top + parseInt(elem.offsetTop, 10);
-            left = left + parseInt(elem.offsetLeft, 10);
-            elem = elem.offsetParent;
-        }
-        return {x: left, y: top, width: elem.offsetWidth, height: elem.offsetHeight};
+    var data = {x: 0, y: 0, width: 0, height: 0};
+
+    if (typeof elem === 'string')
+        elem = document.querySelector(elem);
+
+    if (elem === undefined || elem === window || elem === document) {
+        data.width = window.innerWidth;
+        data.height = window.innerHeight;
+        data.element = window;
     }
+    else
+    if (elem && elem.nodeType === Node.ELEMENT_NODE) {
+        if (elem.getBoundingClientRect) {
+            var rect = elem.getBoundingClientRect(),
+                scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
+                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+                clientTop = document.documentElement.clientTop || document.body.clientTop || 0,
+                clientLeft = document.documentElement.clientLeft || document.body.clientLeft || 0;
+
+            data.y = Math.round(rect.top + scrollTop - clientTop);
+            data.x = Math.round(rect.left + scrollLeft - clientLeft);
+            data.width = elem.offsetWidth;
+            data.height = elem.offsetHeight;
+        }
+        else {
+            var top = 0, left = 0;
+            while (elem) {
+                top += parseInt(elem.offsetTop, 10);
+                left += parseInt(elem.offsetLeft, 10);
+                elem = elem.offsetParent;
+            }
+            data.y = top;
+            data.x = left;
+            data.width = elem.offsetWidth;
+            data.height = elem.offsetHeight;
+        }
+        data.element = elem;
+    }
+    return data;
 };

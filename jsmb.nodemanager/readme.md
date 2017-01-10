@@ -1,4 +1,4 @@
-# Noder.JS
+# NodeManager.JS
 
 Эксперимент. манипулирования элементами.
 
@@ -7,7 +7,7 @@
 // selector - Выберает по селектору в список
 // attr - атрибут, имя в списке
 // name - если attr = false, елементы ложатся в массив, имя в списке - name
-var inst = new Noder(selector, attr [, name]);
+var inst = new NodeManager(selector, attr [, name]);
 
 // начать поиск, можно указать где
 inst.search([from])
@@ -22,10 +22,10 @@ inst.get(attr [, index])
 inst.setConfiguration(conf)
 
 // выборка одного элемента
-Noder.query(selector, from)
+NodeManager.query(selector, from)
 
 // выборка множества элемента
-Noder.queryAll(selector, from)
+NodeManager.queryAll(selector, from)
 ```
 
 ### Пример 
@@ -41,7 +41,7 @@ Noder.queryAll(selector, from)
 ```
 
 ```js
-var formElements, formNoder = new Noder({
+var formElements, formNoder = new NodeManager({
     selector: '*[name]',
     attr: 'name',
 });
@@ -54,7 +54,7 @@ formElements = formNoder.getElements();
 
 
 ```js
-var formElements = new Noder('*[name]', 'name')
+var formElements = new NodeManager('*[name]', 'name')
     .search()
     .getElements();
     
@@ -63,7 +63,7 @@ var formElements = new Noder('*[name]', 'name')
 
 
 ```js
-var formElements = new Noder('*[name]', false, 'my_form')
+var formElements = new NodeManager('*[name]', false, 'my_form')
     .search()
     .getElements();
     
@@ -73,7 +73,7 @@ var formElements = new Noder('*[name]', false, 'my_form')
 
 ```js
 var formElements,
-    form = new Noder('input', 'name').search('#editor');
+    form = new NodeManager('input', 'name').search('#editor');
 
 form.on('submit', 'click', function (event, target) {
     event.preventDefault();
@@ -116,13 +116,13 @@ form.onClick('submit', function (event, target) {
 ```
 
 ```js
-var menuElements = new Noder('#menu li', false, 'menu')
+var menuElements = new NodeManager('#menu li', false, 'menu')
     .search()
     .getElements();
 // menuElements = Object { menu: Array[5] }
 
 
-var footerElements = new Noder('#footer li', 'data-key')
+var footerElements = new NodeManager('#footer li', 'data-key')
         .search()
         .getElements();
 // footerElements = Object { footer-element-1: <li>, footer-element-2: <li>, footer-element-3: <li> }
@@ -130,7 +130,7 @@ var footerElements = new Noder('#footer li', 'data-key')
 
 ```js
 var menuElements;
-var menu = new Noder('li', false, 'menu');
+var menu = new NodeManager('li', false, 'menu');
 menu.search('#menu');
 
 menu.on('menu', 'click', function (event, target) {
