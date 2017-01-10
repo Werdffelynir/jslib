@@ -27,6 +27,7 @@
     prototype.typeOf = NamespaceApplication.typeOf;
     prototype.typeOfStrict = NamespaceApplication.typeOfStrict;
     prototype.defined = NamespaceApplication.defined;
+    prototype.isNode = NamespaceApplication.isNode;
     prototype.extend = NamespaceApplication.extend;
     prototype.uri = NamespaceApplication.uri;
     prototype.redirect = NamespaceApplication.redirect;
