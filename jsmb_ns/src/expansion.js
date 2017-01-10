@@ -25,6 +25,8 @@
     prototype.loadCSS = NamespaceApplication.loadCSS;
     prototype.domLoaded = NamespaceApplication.domLoaded;
     prototype.typeOf = NamespaceApplication.typeOf;
+    prototype.typeOfStrict = NamespaceApplication.typeOfStrict;
+    prototype.defined = NamespaceApplication.defined;
     prototype.extend = NamespaceApplication.extend;
     prototype.uri = NamespaceApplication.uri;
     prototype.redirect = NamespaceApplication.redirect;

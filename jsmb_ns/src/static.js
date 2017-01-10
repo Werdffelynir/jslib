@@ -75,17 +75,54 @@ NamespaceApplication.domLoaded = function (callback) {
 };
 
 /**
- * Вернет тип передаваемого параметра value,
+ * Вернет обобщенный тип передаваемого параметра value,
  * или сравнит тип value с передаваемым type и вернет boolean
- * Возможные заначения: null, boolean, undefined, function, string, number, date, number, array, object
+ * Поддержуемые значение типов: null, boolean, undefined, function, string, number, date, number, array, object
  * @param value
  * @param type
  * @returns {string}
  */
 NamespaceApplication.typeOf = function (value, type) {
-    var t = Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
-    t = t.toLowerCase();
+    var simpleTypes = ['null','boolean','undefined','function','string','number','date','number','array','object'],
+        t = NamespaceApplication.typeOfStrict(value).toLowerCase();
+    if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
+        t = 'object';
+
     return typeof type === 'string' ? type.toLowerCase() === t : t;
+};
+
+/**
+ * Вернет строгий/точный тип передаваемого параметра value,
+ * или сравнит тип value с передаваемым type и вернет boolean
+ * Возможные заначения: null, Boolean, undefined, Function, String, Number, Date, Number, Array, Object ...
+ * для HTML елементов / объектов WebAPI возвращает имя объекта, например для <a> вернет HTMLAnchorElement
+ * https://developer.mozilla.org/ru/docs/Web/API
+ *
+ * @param value
+ * @param type
+ * @returns {*}
+ */
+NamespaceApplication.typeOfStrict = function (value, type) {
+    var t = Object.prototype.toString.call(value).slice(8, -1);
+    return typeof type === 'string' ? type === t : t;
+};
+
+/**
+ * Is defined value
+ * @param value
+ * @returns {boolean}
+ */
+NamespaceApplication.defined = function (value) {
+    return value !== undefined
+};
+
+/**
+ * Checked value, is Node.ELEMENT
+ * @param value
+ * @returns {*|boolean}
+ */
+NamespaceApplication.isNode = function (value) {
+    return value && (value.nodeType !== Node.ELEMENT_NODE || value.nodeType === Node.DOCUMENT_NODE)
 };
 
 /**
@@ -243,44 +280,67 @@ NamespaceApplication.each = function (list, callback, tmp) {
  * @param bubble
  */
 NamespaceApplication.on = function (selector, eventName, callback, bubble) {
-    var elements = null;
+    var i, elements = null,
+        typeSelector = NamespaceApplication.typeOf(selector);
 
-    if (typeof selector === 'string')
+    if (typeSelector == 'string')
         elements = NamespaceApplication.queryAll(selector);
-    else if (typeof selector === 'object' && selector.nodeType == Node.ELEMENT_NODE)
+    else if (typeSelector == 'object' && selector.nodeType == Node.ELEMENT_NODE)
         elements = [selector];
+    else if (typeSelector == 'array')
+        elements = selector;
 
-    if(elements) {
-        NamespaceApplication.each(elements, function (item) {
-            if(typeof item === 'object')
-                item.addEventListener(eventName, callback, !!bubble);
-        });
+    if (elements) {
+        for (i = 0; i < elements.length; i ++ )
+            if (typeof elements[i] === 'object')
+                elements[i].addEventListener(eventName, callback, !!bubble);
     }
 };
 
 /**
+ * App style\s to HTMLElement\s
+ * .css('.menuinline', 'background-color: #ffffff')
+ * .css(HTMLElement, 'background-color: #10b626; color: #3a363f')
+ * .css([HTMLElement, HTMLElement, ...], {fontSize: '22px'})
  *
  * @param selector
- * @param styles
+ * @param properties
  * @returns {*}
  */
-NamespaceApplication.css = function (selector, styles) {
-    var i, k, stylesObject, temp, temp2, elements = NamespaceApplication.queryAll(selector);
+NamespaceApplication.css = function (selector, properties) {
+    if (!selector || !properties) return;
 
-    if (typeof styles === 'string') {
-        temp = styles.split(';');
-        stylesObject = {};
-        for (i in temp) {
-            temp2 = styles.split(':');
-            if (temp2.length == 2)
-                stylesObject[temp2[0]] = temp2[1]
-        }
-        return NamespaceApplication.css(stylesObject);
-    }
-    else if (styles && typeof styles === 'object') {
+    var i, k, elements = null,
+        typeSelector = NamespaceApplication.typeOf(selector),
+        typeProperties = NamespaceApplication.typeOf(properties),
+        parse = function (str) {
+            var i, p1 = str.split(';'), p2, pn, ix, o = {};
+            for (i = 0; i < p1.length; i++) {
+                p2 = p1[i].split(':');
+                pn = p2[0].trim();
+                ix = pn.indexOf('-');
+                if (ix !== -1)
+                    pn =  pn.substring(0, ix) + pn[ix+1].toUpperCase() + pn.substring(ix + 2);
+                if (p2.length == 2)
+                    o[pn] = p2[1].trim()
+            }
+            return o;
+        };
+
+    if (typeProperties == 'string')
+        properties = parse(properties);
+
+    if (typeSelector == 'string')
+        elements = NamespaceApplication.queryAll(selector);
+    else if (typeSelector == 'object' && selector.nodeType == Node.ELEMENT_NODE)
+        elements = [selector];
+    else if (typeSelector == 'array')
+        elements = selector;
+
+    if (elements) {
         for (i in elements)
-            for (k in styles)
-                elements[i].style[k] = styles[k];
+            for (k in properties)
+                elements[i].style[k] = properties[k];
     }
     return elements
 };

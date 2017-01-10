@@ -14,7 +14,7 @@
     prototype.search = function (from) {
         var i,
             k,
-            elems = NodeManager.queryAll(this.config.selector, from);
+            elems = NodeManager.queryAll(this.config.selector, from || document.body);
 
         if (elems) {
             for (i = 0; i < elems.length; i ++) {
