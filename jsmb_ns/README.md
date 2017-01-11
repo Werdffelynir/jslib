@@ -56,7 +56,7 @@ index.html
 </body>
 </html>
 ```
-
+__data-init="init.js"__ - Если атрибут объявлен, происходит подгрузка скрипта по указанному пути
 
 
 ### `init.js`. Application start. 

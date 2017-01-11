@@ -1,19 +1,17 @@
 # JS NamespaceApplication
-
-
 ## Reference
 
 
-### Create instance
+## Create instance
 ```js
-App = new NamespaceApplication({configuration})
+App = new NamespaceApplication({})
 ```
 
 
-### Properties
+## Properties
 ```js
 
-// Get script version [read only]
+// Get script version [read-only]
 App.version
 
 // Get debug status or set debug mod  
@@ -25,23 +23,23 @@ App.url
 ```
 
 
-### Methods of instance
+## Methods of instance
 ```js
 // Create namespace for module-script (like namespace "Action.Name")
-namespace (namespace, callback, args)
+App.namespace (namespace, callback, args);
 
 // Designate a list of scripts for loading
-require (key, path, oncomplete, onerror)
+App.require (key, path, oncomplete, onerror);
 
 // Start loading the list of scripts by key (identifier)
-requireStart (key)
+App.requireStart (key);
 
 // Simple router
-router (uri, callback, hash, query)
+App.router (uri, callback, hash, query);
 ```
 
 
-### Static methods and aliases it in instance
+## Static methods and aliases it in instance
 ```js
 // Loads the script element
 NamespaceApplication.loadJS (src, onload, onerror)
@@ -76,19 +74,19 @@ NamespaceApplication.redirect (to)
 // Get route - URI Path
 NamespaceApplication.routePath (hash, query)
 
-// Selects and return a one (first) element by selector
+// Select and return a one (first) element by selector
 NamespaceApplication.query (selector, fromCallback, thisInstance)
 
 // Selects and return an all elements by selector
 NamespaceApplication.queryAll (selector, fromCallback, thisInstance)
 
-// Selects and return a one element by selector. Search go to up in a DOM tree
+// Select and return a one element by selector. Search up on a DOM tree
 NamespaceApplication.queryUp (selector, from, loops)
 
 // Execute callback for each element in list
 NamespaceApplication.each (list, callback, tmp)
 
-// Simple adding event listener for element
+// Simple adding event listener for element|s
 NamespaceApplication.on (selector, eventName, callback, bubble)
 
 // Add style\s to HTMLElement\s
@@ -103,25 +101,39 @@ NamespaceApplication.format;
 // Base ajax request
 NamespaceApplication.ajax (config, callback, thisInstance)
 
-// Simple timer realis. Return self-instance
+// Simple timer. Return self-instance
 NamespaceApplication.Timer (callback, delay, repeat, thisInstance)
-
+    timer.repeat
+    timer.iterator
+    timer.start()
+    timer.stop()
+    timer.pause()
+    timer.reset()
+    timer.clear()
+    
 // Storage of local
 NamespaceApplication.Storage (name, value)
+    storage.length
+    storage.set(name, value)
+    storage.get(name)
+    storage.key(index)
+    storage.clear()
+    storage.remove(name)
 ```
 
 
-### Static methods
+## Static methods
 
 ```js
-// Add extantion
+// Create & add global extension.
 NamespaceApplication.extension (name, callback)
 ```
 
 
+## Details
+
 ### App.namespace()
 Syntax: `App.namespace(namespace:String, callback:Function):Object`
-
 ```js
 // example 1
 if(App.namespace){App.namespace('Controller.Register', function(App){
@@ -162,7 +174,6 @@ Syntax: `App.require(key:String, path:Array, oncomplete:Function, onerror:Functi
 
 ### App.requireStart()
 Syntax: `App.requireStart(key:String):App`
-
 ```js
 
 // List of scripts
@@ -185,91 +196,85 @@ App.requireStart('library')
 
 ### App.domLoaded()
 Syntax: `App.domLoaded(callback: Function)`
-
 ```js
-App.domLoaded(foo);
-
 App.domLoaded(function (){
     // code...
 });
 ```
 
 
-### App.request()
-Syntax: `App.request(method:String, url:String, callback:Function, callbackError:Function):XMLHttpRequest`
+### App.typeOf
 
+Syntax: `App.typeOf(value, type)`
 ```js
-App.request('POST', '/to', onRequest, onRequestError)
+App.typeOf('hello world');
+// > "string"
 
-function onRequest (event) {}
-function onRequestError (event) {}
+App.typeOf({}, 'array');
+// > false
 ```
 
 
-### App.script()
-Syntax: `App.script(src:String, onload:Function, onerror:Function):HTMLElement`
-
-### App.style()
-Syntax: `App.style(src:String, onload:Function, onerror:Function):HTMLElement`
+### App.loadJS()
+Syntax: `App.loadJS(src: String, onload: Function, onerror: Function): HTMLElement`
 
 ```js
 // loading of js script file
-App.script('/js/script.js', function(element){}, function(error){});
-
-// loading of css style file
-App.style('/css/style.css', function(element){}, function(error){});
+App.loadJS('/js/script.js', function(element){}, function(error){});
 ```
 
 
-### App.file()
-Syntax: `App.file(url:String, onload:Function, onerror:Function):void`
+### App.loadCSS()
+Syntax: `App.loadCSS(src: String, onload: Function, onerror: Function): HTMLElement`
 
 ```js
-App.file('/templates/popup.html', onSuccess, onError);
-
-function onSuccess(data) {
-    App.inject('#content', data);
-}
-
-function onError(error) {
-    console.error('File loading error!', error);
-}
+// loading of css style file
+App.loadCSS('/css/style.css', function(element){}, function(error){});
 ```
 
 
-### App.route()
+### App.router()
 Syntax: `App.route():String`
 
 ### App.routePath()
 Syntax: `App.routePath():String`
 
 ```js
-App.route('/', App.Controller.Page.construct, true);
-App.route('/#login', App.Controller.Login.construct, true);
+App.router('/', function(){}, true);
+App.router('/#login', function(){}, true);
 
 var route = App.routePath()
 ```
 
 
-### App.assign()
+### App.format() 
+Formatting of string, or maybe template builder
+
 Syntax: `App.assign(stringData:String, params:Object):String`
-
-### App.inject()
-Syntax: `App.inject(selector:String, data:String|Object):Void`
-
 ```js
-var tpl = '<h1>{{title}}</h1><div>{{content}}</div>';
+// example 1
+var str = '<h1>{title}</h1><div>{content}</div>';
 
-var pageContent = App.assign(tpl, {
-    title:"hello world",
-    content:"hello world"
-})
+str = App.format(str, {
+    title:"Hello World",
+    content:"lorem text"
+});
 
-App.inject('#content', pageContent);
+// example 2
+var str = '<h1>{0}</h1><div>{1}</div>';
+
+str = App.format(str, [
+    "Hello World",
+    "lorem text"
+]);
 ```
 
 
-
+### App.inject()
+Syntax: `App.inject(selector:String, data:String|Object):Void`
+```js
+App.inject('#content', 'lorem text');
+```
 
 
 ### App.query()
@@ -280,7 +285,6 @@ Syntax: `App.queryAll(selector:String, callback:Function):Array`
 
 ### App.queryUp()
 Syntax: `App.queryUp(selector:String, callback:Function):HTMLElement`
-
 ```js
 // example 1
 var nodeContent = App.query('#content');
@@ -301,31 +305,17 @@ var activeElement = App.queryUp('.active', '#menu', 10);
 ```
 
 
-
-### App.setProperties()
-Syntax: `App.setProperties(): `
-
-### App.constructsStart()
-Syntax: `App.constructsStart(): `
-
-```js
-
-```
-
-
-
 ### App.on()
-Syntax: `App.on(eventName:String, selector:String, callback:Function, bubble:Boolean): `
+Simple add event listener
 
+Syntax: `App.on(selector:String, eventName:String, callback:Function, bubble:Boolean): `
 ```js
-App.on('change', '#button-add', onChange, false);
-
+App.on('#button-add', 'change', onChange, false);
 
 function onChange(event) {
     // code...
 }
 ```
-
 
 
 ### App.each()
@@ -349,14 +339,12 @@ App.each(obj, function(item, key){
 ```
 
 
-
 ### App.extend()
 Syntax: `App.extend(obj: Object, src: Object, callback: Function): Object`
 
 ```js
 var baseObjectExtend = App.extend(baseObject, sourceObject)
 ```
-
 
 
 ### App.redirect()
@@ -369,76 +357,63 @@ App.redirect('https://domain.com/go/to')
 ```
 
 
-### App.uri()
-Syntax: `App.uri(): `
-
+### App.ajax()
+Syntax: `App.ajax(config: Object, callback: Function, thisInstance: Object): XMLHttpRequest`
 ```js
+App.ajax(
+    {
+        method: 'POST', 
+        url: '/server.php', 
+        data: {id:123}
+    }, 
+    onRequest
+);
 
+function onRequest (statusCode, data) {}
 ```
 
 
-### App.store()
+### App.Timer() 
 
-Syntax: `App.store(object:*, keyWithValue:*): *`
-
-Storage in memory:
-
-> if `object` is a Object - set new objects. 
-> if `object` is a String - return object by name. 
-> if `object` is a not set - return all objects
-
+Syntax: `App.Timer(callback, delay, repeat, thisInstance) : NamespaceApplication.Timer`
 ```js
+function timerIteration (iterator, repeat) {
+    if (iterator > 5)
+        this.stop();
+}
 
-App.store({
-    key1 : 'value1',
-    key2 : 'value2',
-    key3 : 'value3'
-});
+var timer = App.Timer(timerIteration, 1000, 10);
 
-App.store('key4','data-string');
-
-NamespaceApplication.store()
-NamespaceApplication.store('key1')
+timer.start();
 ```
 
-### App.typeOf 
 
-Syntax: `NamespaceApplication.typeOf(value, type)`
-```
-function foo(){}
-var types = [
-    0,
-    null,
-    false,
-    true,
-    undefined,
-    function(){},
-    foo,
-    'hello',
-    132456,
-    new Date(),
-    Object.create,
-    3.14,
-    [1,2,3,4],
-    {name:'John', age:34}
-];
+### App.Storage() 
+Storage of local
+ 
+Syntax: `App.Storage([name, value]): *`
+```js
+var store = Storage();
+store.set('data', {data:'hello world'})
+store.get('data')
+// > {data:'hello world'}
 
-types.map(function(it, i){
-    console.log(types[i], App.typeOf(it),  App.typeOf(it, 'array'));
-});
+Storage('data', {data:'hello world'});
+Storage('data');
+// > {data:'hello world'}
 ```
+
 
 ### Extension 
 
 Syntax: `NamespaceApplication.extension(name, callback)`
 
-
-#### index.html
+__index.html__
 ```html
 <!doctype html>
 <head>
-    <script src="/js/lib/ns.application.js"></script>
-    <script src="/js/lib/ns.extensions/ns.template.js"></script>
+    <script src="/js/lib/ns.application.js" data-init="js/app/init.js"></script>
+    <script src="/js/lib/ns.extensions/ns.extension.js"></script>
 </head>
 <body>
 
@@ -446,8 +421,7 @@ Syntax: `NamespaceApplication.extension(name, callback)`
 </html>
 ```
 
-
-#### ns.extension.js
+__ns.extension.js__
 ```js
 NamespaceApplication.extension('ExtensionName', function (App) {
 

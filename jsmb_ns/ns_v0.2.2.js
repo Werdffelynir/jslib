@@ -26,8 +26,6 @@
         }
     })();
 
-    NamespaceApplication.version = '0.2.2';
-
     NamespaceApplication.prototype = (function () {
         /**
          * @namespace NamespaceApplication.prototype
@@ -137,7 +135,7 @@
     /** Static Methods * */
 
     /**
-     * Loads the script element
+     * Loads a script element with javascript source
      *
      * @param src
      * @param onload
@@ -161,8 +159,7 @@
     };
 
     /**
-     *
-     * Loads the CSS link element
+     * Loads a link element with CSS stylesheet
      *
      * @param url
      * @param onload
@@ -186,7 +183,9 @@
     };
 
     /**
-     * Create global extension
+     * Create global extension.
+     * Need declare after loading core, but before loading modules
+     *
      * @param extensionName
      * @param callback
      */
@@ -200,6 +199,7 @@
 
     /**
      * Execute callback function if or when DOM is loaded
+     *
      * @param callback
      */
     NamespaceApplication.domLoaded = function (callback) {
@@ -246,6 +246,7 @@
 
     /**
      * Is defined value
+     *
      * @param value
      * @returns {boolean}
      */
@@ -254,7 +255,8 @@
     };
 
     /**
-     * Checked value, is Node.ELEMENT
+     * Checked value on nodeType Node.ELEMENT
+     *
      * @param value
      * @returns {*|boolean}
      */
@@ -264,6 +266,7 @@
 
     /**
      * Deeply extends two objects
+     *
      * @param  {Object} destination The destination object, This object will change
      * @param  {Object} source      The custom options to extend destination by
      * @return {Object}             The desination object
@@ -282,6 +285,7 @@
 
     /**
      * Get rel URI
+     *
      * @param uri
      * @returns {string}
      */
@@ -293,6 +297,7 @@
 
     /**
      * Simple redirect
+     *
      * @param to
      */
     NamespaceApplication.redirect = function (to) {
@@ -301,6 +306,7 @@
 
     /**
      * Get route - URI Path
+     *
      * @returns {string}
      */
     NamespaceApplication.routePath = function (hash, query) {
@@ -317,7 +323,7 @@
     };
 
     /**
-     * Selects and return a one (first) element by selector
+     * Select and return a one (first) element by selector
      *
      * @param selector      String
      * @param fromCallback  String|HTMLElement|Function
@@ -363,7 +369,8 @@
     };
 
     /**
-     * Selects and return a one element by selector. Search go to up in a DOM tree
+     * Select and return a one element by selector. Search up on a DOM tree
+     *
      * @param selector
      * @param from
      * @param loops
@@ -409,6 +416,7 @@
 
     /**
      * Simple add event listener
+     *
      * @param selector
      * @param eventName
      * @param callback
@@ -434,6 +442,7 @@
 
     /**
      * App style\s to HTMLElement\s
+     *
      * .css('.menuinline', 'background-color: #ffffff')
      * .css(HTMLElement, 'background-color: #10b626; color: #3a363f')
      * .css([HTMLElement, HTMLElement, ...], {fontSize: '22px'})
@@ -481,7 +490,7 @@
     };
 
     /**
-     * Simple inject data in to HTMLElement
+     * Inject data into HTMLElement by selector
      *
      * @param selector
      * @param data
@@ -504,7 +513,8 @@
     };
 
     /**
-     * Formatting of string, maybe template builder
+     * Formatting of string, or maybe template builder
+     *
      * Examples:
      * .format("Hello {0}, your code is {1}!", ['Ivan', 'Prefect']);
      * .format("Hello {name}, your code is {mean}!", {name:'Ivan', mean: 'Prefect'});
@@ -577,9 +587,8 @@
     };
 
     /**
-     * Simple timer realis. Return self-instance
-     * new .Timer(function, 1000, 5)
-     * todo: need review of this code
+     * Simple timer realise. Return self-instance
+     * timer = new .Timer(function(iterator, repeat){}, 1000, 5)
      *
      * @param callback
      * @param delay
@@ -592,14 +601,20 @@
         if (!(this instanceof NamespaceApplication.Timer))
             return new NamespaceApplication.Timer(callback, delay, repeat, thisInstance);
 
-        var config = {self: this, callback: callback, delay: delay || 500, repeat: repeat || 0};
-        var ht = null;
-        var hc = function () {
-            config.self.iterator++;
-            if (config.repeat !== 0 && config.repeat <= config.self.iterator)
-                config.self.stop();
-            config.callback.call(thisInstance || this, config.self.iterator, config.repeat);
-        };
+        delay = delay !== undefined ? parseInt(delay) : 500;
+        repeat = repeat !== undefined ? parseInt(repeat) : 0;
+
+        var
+            config = {self: this, callback: callback, delay: delay, repeat: repeat},
+            ht = null,
+            hc = function () {
+                config.self.iterator++;
+                if (config.repeat !== 0 && config.repeat <= config.self.iterator)
+                    config.self.stop();
+                config.callback.call(thisInstance || this, config.self.iterator, config.repeat);
+            };
+
+        this.repeat = repeat;
         this.iterator = 0;
         this.start = function () {
             if (config.repeat === 0 || config.repeat > config.self.iterator)
@@ -610,18 +625,19 @@
             this.clear();
         };
         this.pause = function () {
-            this.clear();
+            this.clear()
         };
         this.reset = function () {
-            this.iterator = 0;
+            this.iterator = 0
         };
         this.clear = function () {
-            clearInterval(ht);
+            clearInterval(ht)
         };
     };
 
     /**
-     * Storage of local
+     * LocalStorage wrapper
+     *
      * @param name
      * @param value
      * @returns {{set: (NamespaceApplication.Storage.set|*), get: (NamespaceApplication.Storage.get|*), key: (NamespaceApplication.Storage.key|*), clear: (NamespaceApplication.Storage.clear|*), remove: (NamespaceApplication.Storage.remove|*), length: (NamespaceApplication.Storage.length|*)}}
@@ -709,8 +725,10 @@
 
     /** Expansion Base **/
     (function (prototype) {
+
         /**
          * Simple router
+         *
          * @param uri
          * @param callback
          * @param hash
@@ -755,11 +773,21 @@
 
     })(NamespaceApplication.prototype);
 
+    /**
+     * Tries loading script init,  if it declared on attribute of data-init into script element
+     */
     NamespaceApplication.domLoaded(function () {
         var script = NamespaceApplication.query('script[data-init]');
         if (script && script.getAttribute('data-init').length > 2) {
             NamespaceApplication.loadJS(script.getAttribute('data-init'));
         }
+    });
+
+    /**
+     * Set script version. Property [read-only]
+     */
+    Object.defineProperty(NamespaceApplication, 'version', {
+        enumerable: false, configurable: false, writable: false, value: '0.2.2'
     });
 
     window.NamespaceApplication = NamespaceApplication;

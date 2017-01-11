@@ -188,7 +188,7 @@ NamespaceApplication.routePath = function (hash, query) {
 };
 
 /**
- * Query DOM Element by selector
+ * Select and return a one (first) element by selector
  *
  * @param selector      String
  * @param fromCallback  String|HTMLElement|Function
@@ -201,7 +201,7 @@ NamespaceApplication.query = function (selector, fromCallback, thisInstance) {
 };
 
 /**
- * Query DOM Elements by selector
+ * Selects and return an all elements by selector
  *
  * @param selector      String
  * @param fromCallback  String|HTMLElement|Function
@@ -236,7 +236,8 @@ NamespaceApplication.queryAll = function (selector, fromCallback, thisInstance) 
 };
 
 /**
- * Query DOM Element by selector to up in tree
+ * Select and return a one element by selector. Search up on a DOM tree
+ *
  * @param selector
  * @param from
  * @param loops
@@ -282,6 +283,7 @@ NamespaceApplication.each = function (list, callback, tmp) {
 
 /**
  * Simple add event listener
+ *
  * @param selector
  * @param eventName
  * @param callback
@@ -307,6 +309,7 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
 
 /**
  * App style\s to HTMLElement\s
+ *
  * .css('.menuinline', 'background-color: #ffffff')
  * .css(HTMLElement, 'background-color: #10b626; color: #3a363f')
  * .css([HTMLElement, HTMLElement, ...], {fontSize: '22px'})
@@ -354,7 +357,7 @@ NamespaceApplication.css = function (selector, properties) {
 };
 
 /**
- * Simple inject data to HTMLElement [by selector]
+ * Inject data into HTMLElement by selector
  *
  * @param selector
  * @param data
@@ -377,7 +380,8 @@ NamespaceApplication.inject = function (selector, data, append) {
 };
 
 /**
- * Simple template builder
+ * Formatting of string, or maybe template builder
+ *
  * Examples:
  * .format("Hello {0}, your code is {1}!", ['Ivan', 'Prefect']);
  * .format("Hello {name}, your code is {mean}!", {name:'Ivan', mean: 'Prefect'});
@@ -450,9 +454,8 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
 };
 
 /**
- * Simple timer realise
- * new .Timer(function, 1000, 5)
- * todo: need review of this code
+ * Simple timer realise. Return self-instance
+ * timer = new .Timer(function(iterator, repeat){}, 1000, 5)
  *
  * @param callback
  * @param delay
@@ -465,14 +468,20 @@ NamespaceApplication.Timer = function (callback, delay, repeat, thisInstance) {
     if (!(this instanceof NamespaceApplication.Timer))
         return new NamespaceApplication.Timer(callback, delay, repeat, thisInstance);
 
-    var config = {self: this, callback: callback, delay: delay || 500, repeat: repeat || 0};
-    var ht = null;
-    var hc = function () {
-        config.self.iterator++;
-        if (config.repeat !== 0 && config.repeat <= config.self.iterator)
-            config.self.stop();
-        config.callback.call(thisInstance || this, config.self.iterator, config.repeat);
-    };
+    delay = delay !== undefined ? parseInt(delay) : 500;
+    repeat = repeat !== undefined ? parseInt(repeat) : 0;
+
+    var
+        config = {self: this, callback: callback, delay: delay, repeat: repeat},
+        ht = null,
+        hc = function () {
+            config.self.iterator++;
+            if (config.repeat !== 0 && config.repeat <= config.self.iterator)
+                config.self.stop();
+            config.callback.call(thisInstance || this, config.self.iterator, config.repeat);
+        };
+
+    this.repeat = repeat;
     this.iterator = 0;
     this.start = function () {
         if (config.repeat === 0 || config.repeat > config.self.iterator)
@@ -482,19 +491,14 @@ NamespaceApplication.Timer = function (callback, delay, repeat, thisInstance) {
         this.iterator = config.repeat;
         this.clear();
     };
-    this.pause = function () {
-        this.clear();
-    };
-    this.reset = function () {
-        this.iterator = 0;
-    };
-    this.clear = function () {
-        clearInterval(ht);
-    };
+    this.pause = function () {this.clear()};
+    this.reset = function () {this.iterator = 0};
+    this.clear = function () {clearInterval(ht)};
 };
 
 /**
- * Storage of local
+ * LocalStorage wrapper
+ *
  * @param name
  * @param value
  * @returns {{set: (NamespaceApplication.Storage.set|*), get: (NamespaceApplication.Storage.get|*), key: (NamespaceApplication.Storage.key|*), clear: (NamespaceApplication.Storage.clear|*), remove: (NamespaceApplication.Storage.remove|*), length: (NamespaceApplication.Storage.length|*)}}

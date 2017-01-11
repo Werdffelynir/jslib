@@ -1,7 +1,9 @@
 /** Expansion Base **/
 (function (prototype) {
+
     /**
      * Simple router
+     *
      * @param uri
      * @param callback
      * @param hash
