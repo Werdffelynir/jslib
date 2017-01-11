@@ -317,7 +317,7 @@
     };
 
     /**
-     * Query DOM Element by selector
+     * Selects and return a one (first) element by selector
      *
      * @param selector      String
      * @param fromCallback  String|HTMLElement|Function
@@ -330,7 +330,7 @@
     };
 
     /**
-     * Query DOM Elements by selector
+     * Selects and return an all elements by selector
      *
      * @param selector      String
      * @param fromCallback  String|HTMLElement|Function
@@ -363,7 +363,7 @@
     };
 
     /**
-     * Query DOM Element by selector to up in tree
+     * Selects and return a one element by selector. Search go to up in a DOM tree
      * @param selector
      * @param from
      * @param loops
@@ -481,7 +481,7 @@
     };
 
     /**
-     * Simple inject data to HTMLElement [by selector]
+     * Simple inject data in to HTMLElement
      *
      * @param selector
      * @param data
@@ -504,7 +504,7 @@
     };
 
     /**
-     * Simple template builder
+     * Formatting of string, maybe template builder
      * Examples:
      * .format("Hello {0}, your code is {1}!", ['Ivan', 'Prefect']);
      * .format("Hello {name}, your code is {mean}!", {name:'Ivan', mean: 'Prefect'});
@@ -577,7 +577,7 @@
     };
 
     /**
-     * Simple timer realise
+     * Simple timer realis. Return self-instance
      * new .Timer(function, 1000, 5)
      * todo: need review of this code
      *
