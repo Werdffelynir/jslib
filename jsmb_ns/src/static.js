@@ -2,7 +2,7 @@
 var NamespaceApplication = window.NamespaceApplication || {}; // THIS-LINE-WILL-DELETED
 
 /**
- * Loads the script element
+ * Loads a script element with javascript source
  *
  * @param src
  * @param onload
@@ -26,8 +26,7 @@ NamespaceApplication.loadJS = function (src, onload, onerror) {
 };
 
 /**
- *
- * Loads the CSS link element
+ * Loads a link element with CSS stylesheet
  *
  * @param url
  * @param onload
@@ -51,7 +50,9 @@ NamespaceApplication.loadCSS = function (src, onload, onerror) {
 };
 
 /**
- * Create global extension
+ * Create global extension.
+ * Need declare after loading core, but before loading modules
+ *
  * @param extensionName
  * @param callback
  */
@@ -65,6 +66,7 @@ NamespaceApplication.extension.stack = {};
 
 /**
  * Execute callback function if or when DOM is loaded
+ *
  * @param callback
  */
 NamespaceApplication.domLoaded = function (callback) {
@@ -109,6 +111,7 @@ NamespaceApplication.typeOfStrict = function (value, type) {
 
 /**
  * Is defined value
+ *
  * @param value
  * @returns {boolean}
  */
@@ -117,7 +120,8 @@ NamespaceApplication.defined = function (value) {
 };
 
 /**
- * Checked value, is Node.ELEMENT
+ * Checked value on nodeType Node.ELEMENT
+ *
  * @param value
  * @returns {*|boolean}
  */
@@ -127,6 +131,7 @@ NamespaceApplication.isNode = function (value) {
 
 /**
  * Deeply extends two objects
+ *
  * @param  {Object} destination The destination object, This object will change
  * @param  {Object} source      The custom options to extend destination by
  * @return {Object}             The desination object
@@ -145,6 +150,7 @@ NamespaceApplication.extend = function(destination, source) {
 
 /**
  * Get rel URI
+ *
  * @param uri
  * @returns {string}
  */
@@ -156,6 +162,7 @@ NamespaceApplication.uri = function (uri) {
 
 /**
  * Simple redirect
+ *
  * @param to
  */
 NamespaceApplication.redirect = function (to) {
@@ -164,6 +171,7 @@ NamespaceApplication.redirect = function (to) {
 
 /**
  * Get route - URI Path
+ *
  * @returns {string}
  */
 NamespaceApplication.routePath = function (hash, query) {
