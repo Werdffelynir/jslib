@@ -2,7 +2,7 @@
 
     var NamespaceApplication = [[['constructor']]];
 
-    NamespaceApplication.version = '0.2.1';
+    NamespaceApplication.version = '0.2.2';
 
     NamespaceApplication.prototype = [[['prototype']]];
 

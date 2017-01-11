@@ -442,6 +442,50 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
 };
 
 /**
+ * Simple timer realise
+ * new .Timer(function, 1000, 5)
+ * todo: need review of this code
+ *
+ * @param callback
+ * @param delay
+ * @param repeat
+ * @param thisInstance  if not set, uses instance of Timer
+ * @returns {Window.NamespaceApplication.Timer|NamespaceApplication.Timer}
+ * @constructor
+ */
+NamespaceApplication.Timer = function (callback, delay, repeat, thisInstance) {
+    if (!(this instanceof NamespaceApplication.Timer))
+        return new NamespaceApplication.Timer(callback, delay, repeat, thisInstance);
+
+    var config = {self: this, callback: callback, delay: delay || 500, repeat: repeat || 0};
+    var ht = null;
+    var hc = function () {
+        config.self.iterator++;
+        if (config.repeat !== 0 && config.repeat <= config.self.iterator)
+            config.self.stop();
+        config.callback.call(thisInstance || this, config.self.iterator, config.repeat);
+    };
+    this.iterator = 0;
+    this.start = function () {
+        if (config.repeat === 0 || config.repeat > config.self.iterator)
+            ht = setInterval(hc, config.delay);
+    };
+    this.stop = function () {
+        this.iterator = config.repeat;
+        this.clear();
+    };
+    this.pause = function () {
+        this.clear();
+    };
+    this.reset = function () {
+        this.iterator = 0;
+    };
+    this.clear = function () {
+        clearInterval(ht);
+    };
+};
+
+/**
  * Storage of local
  * @param name
  * @param value
