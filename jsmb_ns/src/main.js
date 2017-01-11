@@ -2,8 +2,6 @@
 
     var NamespaceApplication = [[['constructor']]];
 
-    NamespaceApplication.version = '0.2.2';
-
     NamespaceApplication.prototype = [[['prototype']]];
 
     NamespaceApplication.prototype.constructor = NamespaceApplication;
@@ -17,6 +15,10 @@
         if (script && script.getAttribute('data-init').length > 2){
             NamespaceApplication.loadJS(script.getAttribute('data-init'));
         }
+    });
+
+    Object.defineProperty(NamespaceApplication, 'version', {
+        enumerable: false, configurable: false, writable: false, value: '0.2.2'
     });
 
     window.NamespaceApplication = NamespaceApplication;

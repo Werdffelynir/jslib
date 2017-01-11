@@ -4,122 +4,118 @@
 ## Reference
 
 
+### Create instance
+```js
+App = new NamespaceApplication({configuration})
+```
+
+
 ### Properties
 ```js
-App = new NamespaceApplication({properties})
 
-// Get version
+// Get script version [read only]
 App.version
 
 // Get debug status or set debug mod  
 App.debug
 
-// Get debug status or set startup type mod for controllers
-App.constructsType
-
-// Other can set with properties
+// Other custom properties
 App.path
 App.url
-
 ```
 
 
-### Methods
+### Methods of instance
 ```js
 // Create namespace for module-script (like namespace "Action.Name")
-App.prototype.namespace (namespace, callback, args)
-                       
-// Run all modules constructs
-App.prototype.constructsStart (args)
-                             
+namespace (namespace, callback, args)
+
 // Designate a list of scripts for loading
-App.prototype.require (key, path, oncomplete, onerror)
-                     
+require (key, path, oncomplete, onerror)
+
 // Start loading the list of scripts by key (identifier)
-App.prototype.requireStart (key)
-                          
-// Apply properties object to instance properties
-App.prototype.setProperties ()
+requireStart (key)
 
-// Get uri
-App.prototype.uri (uri)
-
+// Simple router
+router (uri, callback, hash, query)
 ```
 
 
-### Static methods have aliases in instance
+### Static methods and aliases it in instance
 ```js
-// Add extantion
-NamespaceApplication.extension(name, callback)
-
-// Execute callback function if or when DOM is loaded
-NamespaceApplication.domLoaded
-App.domLoaded (callback)
-
-// Base url request
-NamespaceApplication.request
-App.request (method, url, callback, callbackError)
-
 // Loads the script element
-NamespaceApplication.script
-App.script (src, onload, onerror)
+NamespaceApplication.loadJS (src, onload, onerror)
 
 // Loads the CSS link element
-NamespaceApplication.style
-App.style (src, onload, onerror)
+NamespaceApplication.loadCSS (src, onload, onerror)
 
-// Loads the file (AJAX GET request)
-NamespaceApplication.file
-App.file(url, onload, onerror) 
+// Execute callback function if or when DOM is loaded
+NamespaceApplication.domLoaded (callback)
 
-// Merge objects
-NamespaceApplication.extend
-App.extend (obj, src, callback)
+// Give back a type of transmitted value
+NamespaceApplication.typeOf (value, type)
 
-// Storage in memory
-NamespaceApplication.store
-App.store (object, keyWithValue)
+// Give back a full object type of transmitted value
+NamespaceApplication.typeOfStrict (value, type)
 
-// Simple router
-NamespaceApplication.route
-App.route (uri, callback, hash, query)
+// Is defined a value. Return boolean
+NamespaceApplication.defined (value)
 
-// Get route - URI Path 
-NamespaceApplication.routePath
-App.routePath (hash, query)
+// Check type of value on NodeType. Return boolean
+NamespaceApplication.isNode (value)
+
+// Deeply extends two objects
+NamespaceApplication.extend (destination, source)
+
+// Get rel URI
+NamespaceApplication.uri (uri)
 
 // Simple redirect
-NamespaceApplication.redirect
-App.redirect (to)
+NamespaceApplication.redirect (to)
 
-// Simple template builder
-NamespaceApplication.assign
-App.assign (stringData, params)
+// Get route - URI Path
+NamespaceApplication.routePath (hash, query)
 
-// Simple inject data to HTMLElement [by selector]
-NamespaceApplication.inject
-App.inject (selector, data)
+// Selects and return a one (first) element by selector
+NamespaceApplication.query (selector, fromCallback, thisInstance)
 
-// Query DOM Element by selector
-NamespaceApplication.query
-App.query (selector, parent)
+// Selects and return an all elements by selector
+NamespaceApplication.queryAll (selector, fromCallback, thisInstance)
 
-// Query DOM Elements by selector
-NamespaceApplication.queryAll
-App.queryAll (selector, parent)
-
-// Query DOM Element by selector to up in tree
-NamespaceApplication.queryUp
-App.queryUp (selector, from, loops)
+// Selects and return a one element by selector. Search go to up in a DOM tree
+NamespaceApplication.queryUp (selector, from, loops)
 
 // Execute callback for each element in list
-NamespaceApplication.each
-App.each (list, callback, tmp)
-        
-// Simple adding event listener for element or selector
-NamespaceApplication.on
-App.prototype.on (eventName, selector, callback, bubble)
+NamespaceApplication.each (list, callback, tmp)
 
+// Simple adding event listener for element
+NamespaceApplication.on (selector, eventName, callback, bubble)
+
+// Add style\s to HTMLElement\s
+NamespaceApplication.css (selector, properties)
+
+// Inject data into HTMLElement
+NamespaceApplication.inject (selector, data, append)
+
+// Formatting of string, maybe template builder
+NamespaceApplication.format;
+
+// Base ajax request
+NamespaceApplication.ajax (config, callback, thisInstance)
+
+// Simple timer realis. Return self-instance
+NamespaceApplication.Timer (callback, delay, repeat, thisInstance)
+
+// Storage of local
+NamespaceApplication.Storage (name, value)
+```
+
+
+### Static methods
+
+```js
+// Add extantion
+NamespaceApplication.extension (name, callback)
 ```
 
 

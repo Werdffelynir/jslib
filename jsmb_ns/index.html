@@ -10,7 +10,7 @@
 <script>
 
     NamespaceApplication.extension('SuperExtension', function (App) {
-        return {a:1}
+        return {a: 1}
     });
 
     var App = new NamespaceApplication({
@@ -24,15 +24,16 @@
 
     ], baseLoaded, baseError).requireStart();
 
-    function baseError(){
+    function baseError() {
         console.log('Error');
     }
 
-    function baseLoaded(scriptList){
-        console.log('Base scripts loaded:', scriptList);
+    function baseLoaded(scriptList) {
+        console.log('Application loaded. Version of: ', App.version);
+        console.log('Base scripts loaded: ', scriptList);
     }
 
-
+    // simple module
     App.namespace('SuperModule', function (app) {
 
         /**
@@ -64,8 +65,8 @@
 
     App.SuperModule.init();
 
-    //App.
-    //console.log(App.domLoaded == NamespaceApplication.domLoaded);
+
+
 
 </script>
 </body>

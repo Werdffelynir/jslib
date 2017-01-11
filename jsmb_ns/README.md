@@ -4,7 +4,7 @@
 - NamespaceApplication придерживается модульной структуры.
 - NamespaceApplication не строг сам по себе, но вынуждает следовать определенным
 правилам в структурировании приложений, важно следовать правилам NamespaceApplication
-описаных в спецификации NamespaceApplication
+описаных в спецификации [SPECIFICATION.md](/Werdffelynir/jslib/blob/master/jsmb_ns/SPECIFICATION.md)
 
 
 ## How use it
@@ -49,8 +49,9 @@ index.html
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <script src="ns.application.js"></script>
-    <script src="init.js"></script>
+    
+    <script src="ns.application.js" data-init="init.js"></script>
+    
 </head>
 </body>
 </html>
@@ -66,7 +67,6 @@ index.html
         url: '/',
         name: 'My Application',
         debug: true,
-        constructsType: false
     });
 
     // Loadings style
@@ -135,11 +135,6 @@ var App = new NamespaceApplication({
     url: '/',                  // Base application URL path
     name: 'My Application',    // Application name
     debug: true,               // Debug mod
-    constructsType: 'runtime', // Constructors execute type
-                               //   false - off constructor
-                               //   'runtime' - perform during the assignment of namespace
-                               //   'gather' - save in the stack, for call and execute all 
-                               //   constructor methods, use `App.constructsStart()`
     param: 'some'              // Custom params
 });
 ```
@@ -147,7 +142,13 @@ var App = new NamespaceApplication({
 
 ### Template for module-controller
 ```js
-if(App.namespace){App.namespace('Controller.Register', function(App){
+if(App.namespace){App.namespace('Controller.Register', function(app){
+
+    /**
+     * @type {NamespaceApplication|App}
+     */
+    var App = app;
+    
     /**
      * @namespace App.Controller.Register
      */
@@ -166,7 +167,13 @@ if(App.namespace){App.namespace('Controller.Register', function(App){
 
 ### Template for module
 ```js
-App.namespace('Action.Register', function(App) {
+App.namespace('Action.Register', function(app) {
+
+    /**
+     * @type {NamespaceApplication|App}
+     */
+    var App = app;
+    
     /**
      * @namespace App.Controller.Register
      */
@@ -187,8 +194,7 @@ App.namespace('Action.Register', function(App) {
 var App = NamespaceApplication({
     url: '/',
     name: 'My Application',
-    debug: true,
-    constructsType: false
+    debug: true
 });
 
 App.require('libs',
