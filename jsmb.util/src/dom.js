@@ -21,7 +21,7 @@ Ut.Dom.is = function (src) {
 Ut.Dom.isHTML = function (src) {
     if(Ut.Dom.is(src))
         return true;
-    return Ut.Dom.is(Ut.Dom.toNode(src));
+    return typeof src === 'string' ? Ut.Dom.is(Ut.Dom.toNode(src)) : false;
 };
 
 /**

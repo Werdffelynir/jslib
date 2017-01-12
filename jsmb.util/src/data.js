@@ -51,3 +51,21 @@ Ut.Data.getChar = function (event) {
 Ut.Data.ucfirst = function (src){
     return src && src[0].toUpperCase() + src.slice(1);
 };
+
+/**
+ * Return random string
+ * .randomString(10, 'A0')  // > JaZCaS6KRN
+ * .randomString(10, 'A0!') // > ?Aj'6|Vx3D
+ * @param length
+ * @param chars
+ * @returns {string}
+ */
+Ut.Data.randomString = function (length, chars) {
+    var i = length, result = '', mask = ''; chars = chars || 'A0!';
+    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    if (chars.indexOf('0') > -1) mask += '0123456789';
+    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    for (i; i > 0; --i)
+        result += mask[Math.round(Math.random() * (mask.length - 1))];
+    return result
+};

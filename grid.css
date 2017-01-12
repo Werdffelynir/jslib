@@ -67,6 +67,14 @@ a{text-decoration: none}
 .tbl_row{display:table-row}
 .tbl_column{display:table-column}
 .tbl_capt{display:table-caption}
+
+.table{display:table; width:100%}
+.table>*{display:table-cell; vertical-align:middle}
+.table_cell{display:table-cell; vertical-align:middle}
+.table_row{display:table-row}
+.table_column{display:table-column}
+.table_capt{display:table-caption}
+
 .valign_baseline{vertical-align:baseline}
 .valign_bottom{vertical-align:bottom}
 .valign_middle{vertical-align:middle}
