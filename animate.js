@@ -56,7 +56,9 @@
     };
 
     Animate.LOOP_TIMER = 'timer';
+
     Animate.LOOP_ANIMATE = 'animation';
+
     Animate.prototype.internalDrawframe = function () {
         var i, frame;
         var frames = this.frameStorageList[this.frameName];
@@ -85,7 +87,6 @@
             }
         }
     };
-
 
     /**
      * Clear canvas area

@@ -1,0 +1,41 @@
+(function (window) {
+
+    "use strict";
+
+    window.requestAnimationFrame = function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            function (f) {
+                window.setTimeout(f, 1e3 / 60);
+            }
+    }();
+
+    var Animate = [[['constructor']]];
+
+    Animate.prototype = [[['prototype']]];
+
+    Animate.prototype.constructor = Animate;
+
+    /**
+     * Static methods
+     */
+    [[['static']]];
+
+    /**
+     * Utility
+     */
+    [[['utility']]];
+
+    /**
+     * Set script version. Property [read-only]
+     */
+    Object.defineProperty(Animate, 'version', {
+        enumerable: false, configurable: false, writable: false, value: '0.3.0'
+    });
+
+    window.Animate = Animate;
+
+})(window)
