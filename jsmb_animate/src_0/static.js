@@ -12,7 +12,7 @@ Animate.LOOP_ANIMATE = 'animation';
  * Storage of extensions
  * @type {Array}
  */
-Animate._internal_extensions = [];
+Animate.internalExtensions = [];
 
 /**
  * Add extensions in loader
@@ -20,5 +20,5 @@ Animate._internal_extensions = [];
  * @constructor
  */
 Animate.Extension = function (func) {
-    Animate._internal_extensions.push(func);
+    Animate.internalExtensions.push(func);
 };

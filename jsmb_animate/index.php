@@ -17,6 +17,9 @@
             max-height: 500px;
             overflow: auto;
         }
+        #canvas{
+            border: 2px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -24,10 +27,9 @@
 <div class="table">
     <div id="menu" class="valign_top">
         <ul>
+            <li><a href="simple.js">simple.js</a></li>
             <li><a href="demo.js">demo.js</a></li>
             <li><a href="move.js">move.js</a></li>
-
-
         </ul>
     </div>
     <div id="page" class="valign_top">

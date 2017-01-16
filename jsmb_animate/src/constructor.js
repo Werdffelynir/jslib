@@ -1,7 +1,6 @@
 (function () {
-
     /**
-     * Constructor.
+     * Constructor
      *
      * @param _options  options Object or selector
      * @param width
@@ -15,59 +14,72 @@
         if (!(this instanceof Animate))
             return new Animate(_options, width, height, fps);
 
-        if (arguments.length > 2 && arguments[1] > 0)
-            _options = {selector: arguments[0], width: parseInt(arguments[1]), height: parseInt(arguments[2]), fps: arguments[3]};
+        if (arguments.length > 1)
+            _options = {
+                selector: arguments[0],
+                width: parseInt(arguments[1]),
+                height: parseInt(arguments[2]),
+                fps: arguments[3]
+            };
 
         var
             pk,
-            properties = {
+            options = {
                 selector:   null,
                 width:      600,
                 height:     400,
                 fps:        30,
                 loop:       Animate.LOOP_ANIMATE,
                 fullScreen: false,
-                autoStart:  true, //todo: not yet realize
+                autoStart:  true,
                 autoClear:  true,
                 sorting:    true,
-                filtering:  true
+                filtering:  true,
+
+                // events
+                _on_frame:        null, // ones-event
+                _on_mousemove:    null, // ..
+                _on_keyup:        null, // ..
+                _on_keydown:      null, // ..
+                _on_click:        null, // ..
+
+                // internal
+                _canvas:                    null,
+                _context:                   null,
+                _frame_name:                'default',
+                _is_play:                   false,
+                _is_filter:                 false,
+                _loop_timer_id:             null,
+                _loop_animation_frame_id:   null,
+                _frame_iterator:            0,
+                _frames:                    {}
             };
 
-        Animate.Util.defaultObject(properties, _options);
+        // Set options
+        Animate.Util.defaultObject(options, _options);
 
-        for (pk in properties)
-            this[pk] = properties[pk];
+        for (pk in options)
+            this[pk] = options[pk];
 
-        this.isPlay = false;
-        this.isFiltering = false;
-        this.setTimeoutIterator = 0;
-        this.requestAnimationFrameIterator = 0;
-        this.frameCounter = 0;
-        this.frameStorageList = {};
-        this.frameName = 'default';
-        this.onFrame = null;
-        this.canvas = document.querySelector(this.selector);
+        this._canvas = document.querySelector(this.selector);
 
-        if (!(this.canvas instanceof HTMLCanvasElement)) {
+        if (!(this._canvas instanceof HTMLCanvasElement)) {
             console.error('[Error]: Canvas element not find. selector: ' + this.selector);
+            return;
         } else {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            this.context = this.canvas.getContext('2d');
-            if (!(this.context instanceof CanvasRenderingContext2D)) {
-                console.error('[Error]: Canvas context 2d not query from element with selector: ' + this.selector);
-            }
+            this._canvas.width = this.width;
+            this._canvas.height = this.height;
+            this._context = this._canvas.getContext('2d');
         }
-
-        var that = this;
 
         // initialize extensions
-        if (Animate.internalExtensions.length > 0) {
-            for (var ei = 0; ei < Animate.internalExtensions.length; ei++)
-                if (typeof Animate.internalExtensions[ei] === 'function')
-                    Animate.internalExtensions[ei].call(this, this);
+        if (Animate._internal_extensions.length > 0) {
+            for (var ei = 0; ei < Animate._internal_extensions.length; ei++)
+                if (typeof Animate._internal_extensions[ei] === 'function')
+                    Animate._internal_extensions[ei].call(this, this);
         }
 
+        // custom settings
         if (!!this.fullScreen)
             this.resizeCanvas();
 

@@ -182,5 +182,4 @@ Animate.Extension(function (insance) {
     };
 
     insance.Graphic = Graphic;
-
-})
+});

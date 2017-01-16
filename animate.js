@@ -233,6 +233,7 @@
         this.clip.count ++;
         return create;
     };
+
     Animate.prototype.clip.count = 0;
 
 

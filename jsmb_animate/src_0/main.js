@@ -19,23 +19,23 @@
 
     Animate.prototype.constructor = Animate;
 
-    [[['main.functions']]];
-
+    /**
+     * Static methods
+     */
     [[['static']]];
 
+    /**
+     * Utility
+     */
     [[['utility']]];
 
-    [[['extension.text']]];
-
-    [[['extension.graphic']]];
-
-    /** Set script version. Property [read-only]*/
+    /**
+     * Set script version. Property [read-only]
+     */
     Object.defineProperty(Animate, 'version', {
         enumerable: false, configurable: false, writable: false, value: '0.3.0'
     });
 
-
-
     window.Animate = Animate;
 
-})(window);
+})(window)
