@@ -1,12 +1,57 @@
-# 
+# Animate JS
 
 ## Comments
 
-
 ```js
 
+getCanvas ()
+getContext ()
+getIteration ()
+isPlay ()
+
+frame (name, sceneObject)
+clip (properties, callback)
+point (x, y)
+rectangle (x, y, width, height)
+createSceneObject (sceneObject)
+
+start (frameName)
+play (frameName)
+stop ()
+clear ()
+
+hitTest (rectangle, point)
+resizeCanvas ()
+mousePosition (event)
+
+// Static method, add extension
+Extension (function)
 ```
 
+
+## Core extensions
+```js
+Text.
+    font = '12px Arial, sans'
+    textAlign = 'start'
+    textBaseline = 'top'
+    direction = 'inherit'
+    lineWidth = '1'
+    color = 'black'
+    write (x, y, label, color, fill)
+    
+Graphic.
+    shape (points, color, fill, closePath, lineWidth)
+    rect (x, y, width, height, color, fill)
+    rectRound (x, y, width, height, radius, color, fill)
+    circle (x, y, radius, color, fill)
+    line (point1, point2, lineWidth, color)
+    lineVertical (x, y, width, lineWidth, color)
+    lineHorizontal (x, y, height, lineWidth, color)
+    shadow (x, y, blur, color)
+    clearShadow ()
+    ellipse (x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise)
+```
 
 ## How use it
 Simple examples how use `animate.js` script

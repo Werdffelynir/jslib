@@ -27,9 +27,12 @@
 <div class="table">
     <div id="menu" class="valign_top">
         <ul>
-            <li><a href="simple.js">simple.js</a></li>
             <li><a href="demo.js">demo.js</a></li>
-            <li><a href="move.js">move.js</a></li>
+            <li><a href="active-balls.js">active-balls.js</a></li>
+            <li><a href="shape-house.js">shape-house.js</a></li>
+
+            <li><a href="simple.js">simple.js</a></li>
+            <li><a href="mouse-text.js">mouse-text.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
@@ -42,6 +45,7 @@
 
 <script>
     (function () {
+
 
         var
             src,

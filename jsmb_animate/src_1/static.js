@@ -21,4 +21,4 @@ Animate._internal_extensions = [];
  */
 Animate.Extension = function (func) {
     Animate._internal_extensions.push(func);
-}
+};

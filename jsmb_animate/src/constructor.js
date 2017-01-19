@@ -1,4 +1,5 @@
 (function () {
+
     /**
      * Constructor
      *
@@ -15,62 +16,56 @@
             return new Animate(_options, width, height, fps);
 
         if (arguments.length > 1)
-            _options = {
-                selector: arguments[0],
-                width: parseInt(arguments[1]),
-                height: parseInt(arguments[2]),
-                fps: arguments[3]
-            };
+            _options = {selector: arguments[0], width: parseInt(arguments[1]), height: parseInt(arguments[2]), fps: arguments[3]};
 
         var
             pk,
             options = {
-                selector:   null,
-                width:      600,
-                height:     400,
-                fps:        30,
-                loop:       Animate.LOOP_ANIMATE,
+                selector: null,
+                width: 600,
+                height: 400,
+                fps: 30,
+                loop: Animate.LOOP_ANIMATE,
                 fullScreen: false,
-                autoStart:  true,
-                autoClear:  true,
-                sorting:    true,
-                filtering:  true,
+                autoStart: true,
+                autoClear: true,
+                sorting: true,
+                filtering: true,
+
+                //resources
+                canvas: null,
+                context: null,
 
                 // events
-                _on_frame:        null, // ones-event
-                _on_mousemove:    null, // ..
-                _on_keyup:        null, // ..
-                _on_keydown:      null, // ..
-                _on_click:        null, // ..
+                onFrame: null,
+                onMousemove: null,
+                onMousedown: null,
+                onMouseup: null,
+                onKeyup: null,
+                onKeydown: null,
+                onClick: null,
 
                 // internal
-                _canvas:                    null,
-                _context:                   null,
-                _frame_name:                'default',
-                _is_play:                   false,
-                _is_filter:                 false,
-                _loop_timer_id:             null,
-                _loop_animation_frame_id:   null,
-                _frame_iterator:            0,
-                _frames:                    {}
+                _is_playing: false,
+                _is_filtering: false,
+                _iterator: 0,
+                _frames: {},
+                _current_frame_name: 'default',
+                _loop_timer_id: null,
+                _loop_animation_frame_id: null
             };
 
         // Set options
         Animate.Util.defaultObject(options, _options);
-
         for (pk in options)
             this[pk] = options[pk];
 
-        this._canvas = document.querySelector(this.selector);
-
-        if (!(this._canvas instanceof HTMLCanvasElement)) {
-            console.error('[Error]: Canvas element not find. selector: ' + this.selector);
-            return;
-        } else {
-            this._canvas.width = this.width;
-            this._canvas.height = this.height;
-            this._context = this._canvas.getContext('2d');
-        }
+        /** @type {HTMLCanvasElement|Element|null} */
+        this.canvas = document.querySelector(this.selector);
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        /** @type {CanvasRenderingContext2D|null} */
+        this.context = this.canvas.getContext('2d');
 
         // initialize extensions
         if (Animate._internal_extensions.length > 0) {
@@ -82,6 +77,9 @@
         // custom settings
         if (!!this.fullScreen)
             this.resizeCanvas();
+
+        // initialize events
+        this._events_initialize();
 
     }
 })()

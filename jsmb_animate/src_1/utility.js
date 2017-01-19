@@ -24,7 +24,6 @@ Animate.Util.randomColor = function () {
     return color;
 };
 
-//  degrees*Math.PI/180.
 Animate.Util.degreesToRadians = function (deg) {
     return (deg * Math.PI) / 180;
 };
