@@ -323,7 +323,7 @@ Ut.Array.itemByAttr = function (values, attr, attrValue) {
         list = values || [];
 
     for (i = 0; i < list.length; i ++) {
-        if (list[i][attr] !== undefined && list[i][attr] == attrValue) {
+        if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue) {
             tmp = list[i];
         }
     }
