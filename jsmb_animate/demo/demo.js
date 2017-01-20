@@ -8,7 +8,7 @@
     });
 
 
-    var clipBox = an.clip(
+    var clipBox = an.moveclip(
         {
             x: 0,
             y: 0,

@@ -10,7 +10,7 @@ getIteration ()
 isPlay ()
 
 frame (name, sceneObject)
-clip (properties, callback)
+moveclip (properties, callback)
 point (x, y)
 rectangle (x, y, width, height)
 createSceneObject (sceneObject)

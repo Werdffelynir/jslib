@@ -221,14 +221,13 @@
         this.canvas.style.backgroundImage = img;
     };
 
-
     /**
      * Create special object with own properties
      * @param properties
      * @param callback
-     * @returns {_clip}
+     * @returns {_moveclip}
      */
-    prototype.clip = function (properties, callback) {
+    prototype.moveclip = function (properties, callback) {
         var
             key,
             that = this,
@@ -239,7 +238,7 @@
                 height: null,
                 radius: null,
                 rotate: 0,
-                id: 'clip_' + this.clip.count,
+                id: 'clip_' + this.moveclip.count,
             };
 
         if (typeof properties === 'function') {
@@ -248,20 +247,20 @@
         } else
             properties = Animate.Util.defaultObject(props, properties);
 
-        var _clip = function () {
+        var _moveclip = function () {
             //that.context.save();
-            callback.apply(_clip, arguments);
+            callback.apply(_moveclip, arguments);
             //that.context.restore();
         };
 
         for (key in properties)
-            if (!_clip.hasOwnProperty(key)) _clip[key] = properties[key]
+            if (!_moveclip.hasOwnProperty(key)) _moveclip[key] = properties[key]
 
-        this.clip.count ++;
-        return _clip;
+        this.moveclip.count ++;
+        return _moveclip;
     };
 
-    prototype.clip.count = 0;
+    prototype.moveclip.count = 0;
 
     /**
      * Create point object

@@ -6,18 +6,13 @@
         height: '400',
         fps: 30,
         onMousedown: onRunEvent,
-        onMouseup: onRunEvent/*,
-        onClick: onClickEvent,
-        onKeydown: onKeydownEvent,
-        onKeyup: onKeyupEvent*/
+        onMouseup: onRunEvent
     });
 
-    //     background-color: rgba(3, 10, 45, 0.9);
     an.backgroundColor('rgba(3, 10, 45, 0.9)');
 
     var Dm = {};
     Dm.images = {};
-
     Dm.rocketProperties = {
         run: false,
         x: 270,
@@ -27,8 +22,7 @@
         gravity: 0.25,
         acceleration: 0.01
     };
-
-    Dm.rocket = an.clip(Dm.rocketProperties, function (context) {
+    Dm.rocket = an.moveclip(Dm.rocketProperties, function (context) {
         var ctx = context;
 
         if (Dm.rocketProperties.run && this.gravity > 0)
@@ -41,9 +35,6 @@
             this.y = an.height - 100;
 
         ctx.save();
-        //ctx.translate(this.x, this.y);
-        //ctx.rotate(this.rotate * Math.PI/180);
-        //ctx.drawImage(Dm.images.rocket, -this.x/2, -this.y/2);
         ctx.drawImage(Dm.images.rocket, this.x, this.y);
         ctx.restore();
     });
@@ -53,25 +44,13 @@
             Dm.rocketProperties.run = true;
         else
             Dm.rocketProperties.run = false;
-        //console.log('onRunEvent', event);
     }
-/*    function onClickEvent(event){
-        console.log('onKeydown', event);
-    }
-
-
-
-    function onKeyupEvent(event){
-        console.log('onKeyup', event);
-    }*/
 
     an.image.load({
         rocket:'/jsmb_animate/demo/images/rocket.png'
     }, function (images) {
         Dm.images = images;
-        //console.log('images', images);
     });
-
 
     an.frame({
         hide: false,
@@ -79,14 +58,10 @@
         init: function (context, i) {
             /** @type CanvasRenderingContext2D */
             var ctx = context;
-            //ctx.drawImage(Dm.images.rocket, 270, 300);
-            Dm.rocket(context);
 
+            Dm.rocket(context);
         }
     });
-
-
-
 
     an.start();
 })();
