@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ULTree.JS</title>
+    <link rel="stylesheet" href="/grid.css">
+    <link rel="stylesheet" href="ultree.css">
+    <script src="ultree.js"></script>
+</head>
+<body>
+
+<ul class="ultree my-tree">
+    <li><span><a href="">Accounts</a></span>
+        <ul>
+            <li><span><a href="">Global permissions</a></span>
+                <ul>
+                    <li><span><a href="">Profiling</a></span></li>
+                    <li><span><a href="">Groups</a></span></li>
+                    <li><span><a href="">Authentication</a></span></li>
+                    <li><span><a href="">Avatars</a></span></li>
+                    <li><span><a href="">Users</a></span></li>
+                </ul>
+            </li>
+            <li><span><a href="">Mail server</a></span></li>
+            <li><span><a href="">Licensing</a></span></li>
+            <li><span><a href="">Atlassian Support Tools</a></span></li>
+            <li><span><a href="">Logging and Profiling</a></span></li>
+        </ul>
+    </li>
+    <li><span><a href="">User directories</a></span></li>
+    <li><span><a href="">Server settings</a></span></li>
+    <li><span><a href="">Application links</a></span></li>
+    <li><span><a href="">Support</a></span></li>
+</ul>
+
+</body>
+<script>
+    var config = {
+        children_hide: true,
+    };
+    //
+    var tree = ULTree('ul.my-tree', config);
+    console.log(tree.getStructure());
+
+</script>
+</html>
