@@ -458,6 +458,27 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
 };
 
 /**
+ * Create DOM Element with attributes
+ * @param tag
+ * @param attrs
+ * @param inner
+ * @returns {*}
+ */
+NamespaceApplication.createElement = function (tag, attrs, inner) {
+    var elem = document.createElement(tag);
+    if (typeof elem !== 'object') return null;
+    if (typeof attrs === 'object')
+        for (var key in attrs)
+            elem.setAttribute(key, attrs[key]);
+    if (typeof inner === 'string') {
+        elem.innerHTML = inner;
+    } else if (typeof inner === 'object') {
+        elem.appendChild(inner);
+    }
+    return elem;
+};
+
+/**
  * Simple timer realise. Return self-instance
  * timer = new .Timer(function(iterator, repeat){}, 1000, 5)
  *

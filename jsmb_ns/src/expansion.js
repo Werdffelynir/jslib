@@ -43,6 +43,7 @@
     prototype.inject = NamespaceApplication.inject;
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;
+    prototype.createElement = NamespaceApplication.createElement;
     prototype.Timer = NamespaceApplication.Timer;
     prototype.Storage = NamespaceApplication.Storage;
 
