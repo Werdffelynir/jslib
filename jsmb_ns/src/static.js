@@ -417,7 +417,7 @@ NamespaceApplication.format = function(string, formated) {
 NamespaceApplication.ajax = function (config, callback, thisInstance) {
     var kd,
         kh,
-        fd = new FormData(),
+        form_data = new FormData(),
         xhr = new XMLHttpRequest(),
         conf = {
             method: config.method || 'GET',
@@ -426,13 +426,17 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
             action: config.action || config.url || document.location
         };
 
+    if (config.data instanceof FormData) {
+        form_data = config.data;
+        conf.data = {} }
+
     if (conf.method.toUpperCase() !== 'POST') {
         conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
         for (kd in conf.data)
             conf.action += '&' + kd + '=' + encodeURIComponent(conf.data[kd])
     } else
         for (kd in conf.data)
-            fd.append(kd, encodeURIComponent(conf.data[kd]));
+            form_data.append(kd, encodeURIComponent(conf.data[kd]));
 
     xhr.open (conf.method, conf.action, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -448,7 +452,7 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
         if (typeof callback === 'function')
             callback.call(thisInstance, xhr.status, xhr.responseText);
     };
-    xhr.send(fd);
+    xhr.send(form_data);
 
     return xhr;
 };

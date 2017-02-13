@@ -24,7 +24,7 @@
      * Set script version. Property [read-only]
      */
     Object.defineProperty(NamespaceApplication, 'version', {
-        enumerable: false, configurable: false, writable: false, value: '0.2.2'
+        enumerable: false, configurable: false, writable: false, value: '0.2.3'
     });
 
     window.NamespaceApplication = NamespaceApplication;

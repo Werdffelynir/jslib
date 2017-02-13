@@ -215,7 +215,7 @@ Ut.Dom.create = function (tag, attrs, inner) {
 
     if (typeof inner === 'string') {
         elem.innerHTML = inner;
-    } else if (typeof inner === 'object') {
+    } else if (inner && typeof inner === 'object') {
         elem.appendChild(inner);
     }
     return elem;
