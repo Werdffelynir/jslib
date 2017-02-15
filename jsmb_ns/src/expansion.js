@@ -34,10 +34,12 @@
     prototype.uri = NamespaceApplication.uri;
     prototype.redirect = NamespaceApplication.redirect;
     prototype.routePath = NamespaceApplication.routePath;
+    prototype.search = NamespaceApplication.search;
     prototype.query = NamespaceApplication.query;
     prototype.queryAll = NamespaceApplication.queryAll;
     prototype.queryUp = NamespaceApplication.queryUp;
     prototype.each = NamespaceApplication.each;
+    prototype.eachParent = NamespaceApplication.eachParent;
     prototype.on = NamespaceApplication.on;
     prototype.css = NamespaceApplication.css;
     prototype.inject = NamespaceApplication.inject;

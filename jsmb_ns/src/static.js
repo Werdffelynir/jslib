@@ -126,7 +126,10 @@ NamespaceApplication.defined = function (value) {
  * @returns {*|boolean}
  */
 NamespaceApplication.isNode = function (value) {
-    return value && (value.nodeType !== Node.ELEMENT_NODE || value.nodeType === Node.DOCUMENT_NODE)
+    return value && (value.nodeType === Node.TEXT_NODE ||
+        value.nodeType === Node.ELEMENT_NODE ||
+        value.nodeType === Node.DOCUMENT_FRAGMENT_NODE ||
+        value.nodeType === Node.DOCUMENT_NODE)
 };
 
 /**
@@ -188,6 +191,38 @@ NamespaceApplication.routePath = function (hash, query) {
 };
 
 /**
+ * Select and return a object with elements selected by 'attr'
+ * or if 'attr' is false return numeric object
+ * .search('li.num', 'data-id')
+ * .search('li')
+ * .search('li', false, NodeElement)
+ *
+ * @param selector
+ * @param attr
+ * @param from
+ * @returns {{}}
+ */
+NamespaceApplication.search = function (selector, attr, from) {
+    from = NamespaceApplication.isNode(from) ? from : NamespaceApplication.query(from);
+    var i = 0, key, elements = {},
+        queryElements = NamespaceApplication.queryAll(selector, from || document.body);
+    if (queryElements) {
+        while (i < queryElements.length) {
+            if (!attr)
+                elements[i] = queryElements[i];
+            else {
+                if (queryElements[i].hasAttribute(attr)) {
+                    key = queryElements[i].getAttribute(attr);
+                    elements[key] = queryElements[i];
+                }
+            }
+            i ++;
+        }
+    }
+    return elements;
+};
+
+/**
  * Select and return a one (first) element by selector
  *
  * @param selector      String
@@ -209,22 +244,20 @@ NamespaceApplication.query = function (selector, fromCallback, thisInstance) {
  * @returns {*}
  */
 NamespaceApplication.queryAll = function (selector, fromCallback, thisInstance) {
-    var type = typeof fromCallback, // "undefined" "string" "function" "object"
+    var type = typeof fromCallback,
         from = document,
         elements = [],
         callback = null;
 
-    if (selector && selector.nodeType === Node.ELEMENT_NODE)
+    if (NamespaceApplication.isNode(selector))
         return [selector];
 
     if (type == "function")
         callback = fromCallback;
-    else
-        if (type == "string")
-            from = document.querySelector(fromCallback);
-    else
-        if (type == "object" && fromCallback && (fromCallback.nodeType === Node.ELEMENT_NODE || fromCallback.nodeType === Node.DOCUMENT_NODE))
-            from = fromCallback;
+    else if (type == "string")
+        from = document.querySelector(fromCallback);
+    else if (type == "object" && NamespaceApplication.isNode(fromCallback))
+        from = fromCallback;
 
     if (from)
         elements = [].slice.call(from.querySelectorAll(selector));
@@ -238,6 +271,7 @@ NamespaceApplication.queryAll = function (selector, fromCallback, thisInstance) 
 /**
  * Select and return a one element by selector. Search up on a DOM tree
  *
+ * @deprecated
  * @param selector
  * @param from
  * @param loops
@@ -279,6 +313,42 @@ NamespaceApplication.each = function (list, callback, tmp) {
         for (i = 0; i < list.length; i++) callback.call({}, list[i], i, tmp);
     else
         for (i in list) callback.call({}, list[i], i, tmp);
+};
+
+/**
+ * Execute callback for each parent element
+ * and return array with parents elements
+ * .eachParent('.my-class')
+ * .eachParent('.my-class', function filter (parent) {}, 10)
+ *
+ * @param selector          Start selector or element
+ * @param callbackFilter    Each return value it is filter mark, bool true add element to result array
+ * @param loops
+ * @returns {Array}
+ */
+NamespaceApplication.eachParent = function (selector, callbackFilter, loops) {
+    loops = loops === undefined ? 10 : loops;
+    selector = NamespaceApplication.isNode(selector) ? selector : NamespaceApplication.query(selector);
+
+    var result = [],
+        get_parent = function (elem) {
+            return elem && elem.parentNode ? elem.parentNode : false
+        },
+        parent = get_parent(selector);
+
+    while (loops > 0 && parent) {
+        loops--;
+
+        if (typeof callbackFilter === 'function') {
+            if (callbackFilter.call({}, parent))
+                result.push(parent);
+        } else {
+            result.push(parent);
+        }
+
+        parent = get_parent(parent);
+    }
+    return result;
 };
 
 /**
@@ -367,8 +437,8 @@ NamespaceApplication.css = function (selector, properties) {
 NamespaceApplication.inject = function (selector, data, append) {
     if (typeof selector === 'string')
         selector = this.query(selector);
-    if (typeof selector === 'object' && selector.nodeType === Node.ELEMENT_NODE) {
-        if (typeof data === 'object' && data.nodeType === Node.ELEMENT_NODE) {
+    if (NamespaceApplication.isNode(selector)) {
+        if (NamespaceApplication.isNode(data)) {
             if (!append)
                 selector.textContent = '';
             selector.appendChild(data);
@@ -423,7 +493,7 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
             method: config.method || 'GET',
             data:   config.data || {},
             headers:config.headers || {},
-            action: config.action || config.url || document.location
+            action: config.action || config.url || document.location.href
         };
 
     if (config.data instanceof FormData) {
