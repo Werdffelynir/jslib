@@ -137,6 +137,11 @@ NamespaceApplication.Storage (name, value)
     storage.key(index)
     storage.clear()
     storage.remove(name)
+    
+// Common Utilites
+NamespaceApplication.Utils = {}
+    filterArrayObject (values, attr, attrValue)
+    filterArrayObjects (values, attr, attrValue)
 ```
 
 
@@ -300,9 +305,6 @@ Syntax: `App.query(selector:String, callback:Function):HTMLElement`
 
 ### App.queryAll()
 Syntax: `App.queryAll(selector:String, callback:Function):Array`
-
-### App.queryUp()
-Syntax: `App.queryUp(selector:String, callback:Function):HTMLElement`
 ```js
 // example 1
 var nodeContent = App.query('#content');
@@ -317,9 +319,6 @@ var menuLinks = App.queryAll('#menu li>a');
 App.queryAll('#menu li>a', function(menuLinks){
     // do ...
 });
-
-// example 3
-var activeElement = App.queryUp('.active', '#menu', 10);
 ```
 
 

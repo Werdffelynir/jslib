@@ -191,8 +191,8 @@
      */
     NamespaceApplication.extension = function (extensionName, callback) {
         NamespaceApplication.extension.stack[extensionName] = {
-            name:extensionName,
-            callback:callback
+            name: extensionName,
+            callback: callback
         };
     };
     NamespaceApplication.extension.stack = {};
@@ -206,7 +206,9 @@
         if (document.querySelector('body'))
             callback.call();
         else
-            document.addEventListener('DOMContentLoaded', function () {callback.call()}, false);
+            document.addEventListener('DOMContentLoaded', function () {
+                callback.call()
+            }, false);
     };
 
     /**
@@ -218,7 +220,7 @@
      * @returns {string}
      */
     NamespaceApplication.typeOf = function (value, type) {
-        var simpleTypes = ['null','boolean','undefined','function','string','number','date','number','array','object'],
+        var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
             t = NamespaceApplication.typeOfStrict(value).toLowerCase();
         if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
             t = 'object';
@@ -272,7 +274,7 @@
      * @param  {Object} source      The custom options to extend destination by
      * @return {Object}             The desination object
      */
-    NamespaceApplication.extend = function(destination, source) {
+    NamespaceApplication.extend = function (destination, source) {
         var property;
         for (property in source) {
             if (source[property] && source[property].constructor && source[property].constructor === Object) {
@@ -292,8 +294,8 @@
      */
     NamespaceApplication.uri = function (uri) {
         uri = uri || location.pathname;
-        uri = uri.replace(/\/+/ig,'/');
-        return uri.length > 1 && uri.slice(0,1) != '/' ? '/' + uri : uri;
+        uri = uri.replace(/\/+/ig, '/');
+        return uri.length > 1 && uri.slice(0, 1) != '/' ? '/' + uri : uri;
     };
 
     /**
@@ -326,6 +328,7 @@
     /**
      * Return object with elements, selected by selector,
      * with  names keys by 'attr' or numeric
+     *
      * .search('li.num', 'data-id')
      * .search('li')
      * .search('li', false, NodeElement)
@@ -349,7 +352,7 @@
                         elements[key] = queryElements[i];
                     }
                 }
-                i ++;
+                i++;
             }
         }
         return elements;
@@ -361,11 +364,11 @@
      * @param selector      String
      * @param fromCallback  String|HTMLElement|Function
      * @param thisInstance  Object
-     * @returns {Element|null}
+     * @returns {Element|boolean|Node}
      */
     NamespaceApplication.query = function (selector, fromCallback, thisInstance) {
         var elems = NamespaceApplication.queryAll(selector, fromCallback, thisInstance);
-        return elems && elems[0] ? elems[0] : null;
+        return elems && elems[0] ? elems[0] : false;
     };
 
     /**
@@ -399,38 +402,6 @@
             callback.call(thisInstance || {}, elements);
 
         return elements;
-    };
-
-    /**
-     * Select and return a one element by selector. Search up on a DOM tree
-     *
-     * @deprecated
-     * @param selector
-     * @param from
-     * @param loops
-     * @returns {*}
-     */
-    NamespaceApplication.queryUp = function(selector, from, loops) {
-        var item = null;
-
-        if(loops === undefined)
-            loops = 20;
-
-        if(typeof from === 'string')
-            from = document.querySelector(from);
-
-        if(from.nodeType !== Node.ELEMENT_NODE) {
-            from = document;
-            loops = 0;
-        }
-
-        if(typeof selector === 'string')
-            item = from.querySelector(selector);
-
-        if(!item && loops > 0 && from.parentNode)
-            return NamespaceApplication.queryUp(selector, from.parentNode, --loops);
-
-        return item;
     };
 
     /**
@@ -504,7 +475,7 @@
             elements = selector;
 
         if (elements) {
-            for (i = 0; i < elements.length; i ++ )
+            for (i = 0; i < elements.length; i++)
                 if (typeof elements[i] === 'object')
                     elements[i].addEventListener(eventName, callback, !!bubble);
         }
@@ -534,7 +505,7 @@
                     pn = p2[0].trim();
                     ix = pn.indexOf('-');
                     if (ix !== -1)
-                        pn =  pn.substring(0, ix) + pn[ix+1].toUpperCase() + pn.substring(ix + 2);
+                        pn = pn.substring(0, ix) + pn[ix + 1].toUpperCase() + pn.substring(ix + 2);
                     if (p2.length == 2)
                         o[pn] = p2[1].trim()
                 }
@@ -566,16 +537,21 @@
     NamespaceApplication.cssDisplay = {
         hide: function (src) {
             src._display = src.style.display ? src.style.display : getComputedStyle(src).display;
-            NamespaceApplication.css(src, {display:'none'})},
+            NamespaceApplication.css(src, {display: 'none'})
+        },
         show: function (src) {
-            NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})},
+            NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})
+        },
         toggle: function (src) {
             if (src.style.display == 'none') NamespaceApplication.cssDisplay.show(src);
-            else NamespaceApplication.cssDisplay.hide(src)},
+            else NamespaceApplication.cssDisplay.hide(src)
+        },
         last: function (src) {
-            return src._display ? src._display : (src.style.display  ? src.style.display : getComputedStyle(src).display) },
+            return src._display ? src._display : (src.style.display ? src.style.display : getComputedStyle(src).display)
+        },
         isHidden: function (src) {
-            return src.style.display == 'none' || getComputedStyle(src).display == 'none' }
+            return src.style.display == 'none' || getComputedStyle(src).display == 'none'
+        }
     };
 
     /**
@@ -612,14 +588,14 @@
      * @param formated  Array|Object
      * @returns string
      */
-    NamespaceApplication.format = function(string, formated) {
+    NamespaceApplication.format = function (string, formated) {
         var reg;
         if (Array.isArray(formated))
             reg = new RegExp(/{(\d+)}/g);
         else if (formated && typeof formated === 'object')
             reg = new RegExp(/{(\w+)}/g);
 
-        return string.replace(reg, function(match, number) {
+        return string.replace(reg, function (match, number) {
             return typeof formated[number] != 'undefined' ? formated[number] : match;
         });
     };
@@ -643,14 +619,15 @@
             xhr = new XMLHttpRequest(),
             conf = {
                 method: config.method || 'GET',
-                data:   config.data || {},
-                headers:config.headers || {},
+                data: config.data || {},
+                headers: config.headers || {},
                 action: config.action || config.url || document.location.href
             };
 
         if (config.data instanceof FormData) {
             form_data = config.data;
-            conf.data = {} }
+            conf.data = {}
+        }
 
         if (conf.method.toUpperCase() !== 'POST') {
             conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
@@ -660,7 +637,7 @@
             for (kd in conf.data)
                 form_data.append(kd, encodeURIComponent(conf.data[kd]));
 
-        xhr.open (conf.method, conf.action, true);
+        xhr.open(conf.method, conf.action, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         for (kd in conf.headers)
@@ -738,9 +715,15 @@
             this.iterator = config.repeat;
             this.clear();
         };
-        this.pause = function () {this.clear()};
-        this.reset = function () {this.iterator = 0};
-        this.clear = function () {clearInterval(ht)};
+        this.pause = function () {
+            this.clear()
+        };
+        this.reset = function () {
+            this.iterator = 0
+        };
+        this.clear = function () {
+            clearInterval(ht)
+        };
     };
 
     /**
@@ -778,7 +761,10 @@
      * @param value
      */
     NamespaceApplication.Storage.set = function (name, value) {
-        try{value = JSON.stringify(value)}catch(error){}
+        try {
+            value = JSON.stringify(value)
+        } catch (error) {
+        }
         return window.localStorage.setItem(name, value);
     };
 
@@ -788,8 +774,11 @@
      */
     NamespaceApplication.Storage.get = function (name) {
         var value = window.localStorage.getItem(name);
-        if(value)
-            try{value = JSON.parse(value)}catch(error){}
+        if (value)
+            try {
+                value = JSON.parse(value)
+            } catch (error) {
+            }
         return value;
     };
 
@@ -797,25 +786,49 @@
      * Remove item by name
      * @param name
      */
-    NamespaceApplication.Storage.remove = function (name) {return window.localStorage.removeItem(name)};
+    NamespaceApplication.Storage.remove = function (name) {
+        return window.localStorage.removeItem(name)
+    };
 
     /**
      * Get item by index
      * @param index
      * @returns {string}
      */
-    NamespaceApplication.Storage.key = function (index) {return window.localStorage.key(index)};
+    NamespaceApplication.Storage.key = function (index) {
+        return window.localStorage.key(index)
+    };
 
     /**
      * When invoked, will empty all keys out of the storage.
      */
-    NamespaceApplication.Storage.clear = function () {return window.localStorage.clear()};
+    NamespaceApplication.Storage.clear = function () {
+        return window.localStorage.clear()
+    };
 
     /**
      * Returns an integer representing the number of data items stored in the Storage object.
      * @returns {number}
      */
-    NamespaceApplication.Storage.length = function () {return window.localStorage.length};
+    NamespaceApplication.Storage.length = function () {
+        return window.localStorage.length
+    };
+
+    /**
+     * @type {{filterArrayObject: NamespaceApplication.Util.filterArrayObject, filterArrayObjects: NamespaceApplication.Util.filterArrayObjects}}
+     */
+    NamespaceApplication.Util = {};
+    NamespaceApplication.Util.filterArrayObject = function (values, attr, attrValue) {
+        var tmp = NamespaceApplication.Util.filterArrayObjects(values, attr, attrValue);
+        return tmp.length ? tmp[0] : false;
+    };
+    NamespaceApplication.Util.filterArrayObjects = function (values, attr, attrValue) {
+        var i, tmp = [], list = values || [];
+        for (i = 0; i < list.length; i++)
+            if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue)
+                tmp.push(list[i]);
+        return tmp
+    };
 
     /** Expansion Base **/
     (function (prototype) {
@@ -856,7 +869,6 @@
         prototype.search = NamespaceApplication.search;
         prototype.query = NamespaceApplication.query;
         prototype.queryAll = NamespaceApplication.queryAll;
-        prototype.queryUp = NamespaceApplication.queryUp;
         prototype.each = NamespaceApplication.each;
         prototype.eachParent = NamespaceApplication.eachParent;
         prototype.on = NamespaceApplication.on;
@@ -868,6 +880,7 @@
         prototype.createElement = NamespaceApplication.createElement;
         prototype.Timer = NamespaceApplication.Timer;
         prototype.Storage = NamespaceApplication.Storage;
+        prototype.Util = NamespaceApplication.Util;
 
     })(NamespaceApplication.prototype);
 
@@ -876,7 +889,7 @@
      */
     NamespaceApplication.domLoaded(function () {
         var script = NamespaceApplication.query('script[data-init]');
-        if (script && script.getAttribute('data-init').length > 2){
+        if (script && script.getAttribute('data-init').length > 2) {
             NamespaceApplication.loadJS(script.getAttribute('data-init'));
         }
     });

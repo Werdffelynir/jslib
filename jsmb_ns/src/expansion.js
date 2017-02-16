@@ -37,7 +37,6 @@
     prototype.search = NamespaceApplication.search;
     prototype.query = NamespaceApplication.query;
     prototype.queryAll = NamespaceApplication.queryAll;
-    prototype.queryUp = NamespaceApplication.queryUp;
     prototype.each = NamespaceApplication.each;
     prototype.eachParent = NamespaceApplication.eachParent;
     prototype.on = NamespaceApplication.on;

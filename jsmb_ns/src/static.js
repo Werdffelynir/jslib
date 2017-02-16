@@ -229,11 +229,11 @@ NamespaceApplication.search = function (selector, attr, from) {
  * @param selector      String
  * @param fromCallback  String|HTMLElement|Function
  * @param thisInstance  Object
- * @returns {Element|null}
+ * @returns {Element|boolean|Node}
  */
 NamespaceApplication.query = function (selector, fromCallback, thisInstance) {
     var elems = NamespaceApplication.queryAll(selector, fromCallback, thisInstance);
-    return elems && elems[0] ? elems[0] : null;
+    return elems && elems[0] ? elems[0] : false;
 };
 
 /**
@@ -267,38 +267,6 @@ NamespaceApplication.queryAll = function (selector, fromCallback, thisInstance) 
         callback.call(thisInstance || {}, elements);
 
     return elements;
-};
-
-/**
- * Select and return a one element by selector. Search up on a DOM tree
- *
- * @deprecated
- * @param selector
- * @param from
- * @param loops
- * @returns {*}
- */
-NamespaceApplication.queryUp = function(selector, from, loops) {
-    var item = null;
-
-    if(loops === undefined)
-        loops = 20;
-
-    if(typeof from === 'string')
-        from = document.querySelector(from);
-
-    if(from.nodeType !== Node.ELEMENT_NODE) {
-        from = document;
-        loops = 0;
-    }
-
-    if(typeof selector === 'string')
-        item = from.querySelector(selector);
-
-    if(!item && loops > 0 && from.parentNode)
-        return NamespaceApplication.queryUp(selector, from.parentNode, --loops);
-
-    return item;
 };
 
 /**
@@ -685,37 +653,18 @@ NamespaceApplication.Storage.clear = function () {return window.localStorage.cle
  */
 NamespaceApplication.Storage.length = function () {return window.localStorage.length};
 
-
+/**
+ * @type {{filterArrayObject: NamespaceApplication.Util.filterArrayObject, filterArrayObjects: NamespaceApplication.Util.filterArrayObjects}}
+ */
 NamespaceApplication.Util = {};
-
 NamespaceApplication.Util.filterArrayObject = function (values, attr, attrValue) {
-    var tmp = NamespaceApplication.Util.getArrayItems(values, attr, attrValue);
+    var tmp = NamespaceApplication.Util.filterArrayObjects(values, attr, attrValue);
     return tmp.length ? tmp[0] : false;
 };
-
 NamespaceApplication.Util.filterArrayObjects = function (values, attr, attrValue) {
     var i, tmp = [], list = values || [];
-    for (i = 0; i < list.length; i++) {
-        if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue) {
+    for (i = 0; i < list.length; i++)
+        if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue)
             tmp.push(list[i]);
-        }
-    }
     return tmp
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
