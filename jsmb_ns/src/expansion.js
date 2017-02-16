@@ -48,5 +48,6 @@
     prototype.createElement = NamespaceApplication.createElement;
     prototype.Timer = NamespaceApplication.Timer;
     prototype.Storage = NamespaceApplication.Storage;
+    prototype.Util = NamespaceApplication.Util;
 
 })(NamespaceApplication.prototype)

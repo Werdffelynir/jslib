@@ -663,4 +663,39 @@ NamespaceApplication.Storage.clear = function () {return window.localStorage.cle
  * Returns an integer representing the number of data items stored in the Storage object.
  * @returns {number}
  */
-NamespaceApplication.Storage.length = function () {return window.localStorage.length}
+NamespaceApplication.Storage.length = function () {return window.localStorage.length};
+
+
+NamespaceApplication.Util = {};
+
+NamespaceApplication.Util.filterArrayObject = function (values, attr, attrValue) {
+    var tmp = NamespaceApplication.Util.getArrayItems(values, attr, attrValue);
+    return tmp.length ? tmp[0] : false;
+};
+
+NamespaceApplication.Util.filterArrayObjects = function (values, attr, attrValue) {
+    var i, tmp = [], list = values || [];
+    for (i = 0; i < list.length; i++) {
+        if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue) {
+            tmp.push(list[i]);
+        }
+    }
+    return tmp
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
