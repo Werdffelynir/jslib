@@ -191,8 +191,9 @@ NamespaceApplication.routePath = function (hash, query) {
 };
 
 /**
- * Select and return a object with elements selected by 'attr'
- * or if 'attr' is false return numeric object
+ * Return object with elements, selected by selector,
+ * with  names keys by 'attr' or numeric
+ *
  * .search('li.num', 'data-id')
  * .search('li')
  * .search('li', false, NodeElement)
@@ -424,6 +425,25 @@ NamespaceApplication.css = function (selector, properties) {
                 elements[i].style[k] = properties[k];
     }
     return elements
+};
+
+/**
+ * Display Style for element
+ * @type {{hide: Window.NamespaceApplication.cssDisplay.hide, show: Window.NamespaceApplication.cssDisplay.show, toggle: Window.NamespaceApplication.cssDisplay.toggle, last: Window.NamespaceApplication.cssDisplay.last, isHidden: Window.NamespaceApplication.cssDisplay.isHidden}}
+ */
+NamespaceApplication.cssDisplay = {
+    hide: function (src) {
+        src._display = src.style.display ? src.style.display : getComputedStyle(src).display;
+        NamespaceApplication.css(src, {display:'none'})},
+    show: function (src) {
+        NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})},
+    toggle: function (src) {
+        if (src.style.display == 'none') NamespaceApplication.cssDisplay.show(src);
+        else NamespaceApplication.cssDisplay.hide(src)},
+    last: function (src) {
+        return src._display ? src._display : (src.style.display  ? src.style.display : getComputedStyle(src).display) },
+    isHidden: function (src) {
+        return src.style.display == 'none' || getComputedStyle(src).display == 'none' }
 };
 
 /**

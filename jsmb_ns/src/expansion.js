@@ -42,6 +42,7 @@
     prototype.eachParent = NamespaceApplication.eachParent;
     prototype.on = NamespaceApplication.on;
     prototype.css = NamespaceApplication.css;
+    prototype.cssDisplay = NamespaceApplication.cssDisplay;
     prototype.inject = NamespaceApplication.inject;
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;
