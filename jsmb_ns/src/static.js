@@ -191,8 +191,9 @@ NamespaceApplication.routePath = function (hash, query) {
 };
 
 /**
- * Select and return a object with elements selected by 'attr'
- * or if 'attr' is false return numeric object
+ * Return object with elements, selected by selector,
+ * with  names keys by 'attr' or numeric
+ *
  * .search('li.num', 'data-id')
  * .search('li')
  * .search('li', false, NodeElement)
@@ -427,7 +428,7 @@ NamespaceApplication.css = function (selector, properties) {
 };
 
 /**
- *
+ * Display Style for element
  * @type {{hide: Window.NamespaceApplication.cssDisplay.hide, show: Window.NamespaceApplication.cssDisplay.show, toggle: Window.NamespaceApplication.cssDisplay.toggle, last: Window.NamespaceApplication.cssDisplay.last, isHidden: Window.NamespaceApplication.cssDisplay.isHidden}}
  */
 NamespaceApplication.cssDisplay = {

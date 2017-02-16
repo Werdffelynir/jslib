@@ -39,7 +39,7 @@ App.router (uri, callback, hash, query);
 ```
 
 
-## Static methods and aliases it in instance
+## Static methods is aliases in instance
 ```js
 // Loads the script element
 NamespaceApplication.loadJS (src, onload, onerror)
@@ -71,6 +71,10 @@ NamespaceApplication.uri (uri)
 // Simple redirect
 NamespaceApplication.redirect (to)
 
+// Return object with elements, selected by selector,
+// with  names keys by 'attr' or numeric
+NamespaceApplication.search (selector, attr, from)
+
 // Get route - URI Path
 NamespaceApplication.routePath (hash, query)
 
@@ -80,11 +84,14 @@ NamespaceApplication.query (selector, fromCallback, thisInstance)
 // Selects and return an all elements by selector
 NamespaceApplication.queryAll (selector, fromCallback, thisInstance)
 
-// Select and return a one element by selector. Search up on a DOM tree
+// deprecated. Select and return a one element by selector. Search up on a DOM tree
 NamespaceApplication.queryUp (selector, from, loops)
 
 // Execute callback for each element in list
 NamespaceApplication.each (list, callback, tmp)
+
+// Execute callback for each parent element
+NamespaceApplication.eachParent (selector, callbackFilter, loops)
 
 // Simple adding event listener for element|s
 NamespaceApplication.on (selector, eventName, callback, bubble)
@@ -92,14 +99,25 @@ NamespaceApplication.on (selector, eventName, callback, bubble)
 // Add style\s to HTMLElement\s
 NamespaceApplication.css (selector, properties)
 
+// Change style display for element
+NamespaceApplication.cssDisplay.
+    cssDisplay.hide (element)
+    cssDisplay.show (element)
+    cssDisplay.toggle (element)
+    cssDisplay.isHidden (element)
+    cssDisplay.last (element)
+
 // Inject data into HTMLElement
 NamespaceApplication.inject (selector, data, append)
 
 // Formatting of string, maybe template builder
-NamespaceApplication.format;
+NamespaceApplication.format (string, formated);
 
 // Base ajax request
 NamespaceApplication.ajax (config, callback, thisInstance)
+
+// Create DOM Element with attributes
+NamespaceApplication.createElement (tag, attrs, inner)
 
 // Simple timer. Return self-instance
 NamespaceApplication.Timer (callback, delay, repeat, thisInstance)

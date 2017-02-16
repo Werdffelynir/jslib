@@ -191,8 +191,8 @@
      */
     NamespaceApplication.extension = function (extensionName, callback) {
         NamespaceApplication.extension.stack[extensionName] = {
-            name: extensionName,
-            callback: callback
+            name:extensionName,
+            callback:callback
         };
     };
     NamespaceApplication.extension.stack = {};
@@ -206,9 +206,7 @@
         if (document.querySelector('body'))
             callback.call();
         else
-            document.addEventListener('DOMContentLoaded', function () {
-                callback.call()
-            }, false);
+            document.addEventListener('DOMContentLoaded', function () {callback.call()}, false);
     };
 
     /**
@@ -220,7 +218,7 @@
      * @returns {string}
      */
     NamespaceApplication.typeOf = function (value, type) {
-        var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
+        var simpleTypes = ['null','boolean','undefined','function','string','number','date','number','array','object'],
             t = NamespaceApplication.typeOfStrict(value).toLowerCase();
         if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
             t = 'object';
@@ -274,7 +272,7 @@
      * @param  {Object} source      The custom options to extend destination by
      * @return {Object}             The desination object
      */
-    NamespaceApplication.extend = function (destination, source) {
+    NamespaceApplication.extend = function(destination, source) {
         var property;
         for (property in source) {
             if (source[property] && source[property].constructor && source[property].constructor === Object) {
@@ -294,8 +292,8 @@
      */
     NamespaceApplication.uri = function (uri) {
         uri = uri || location.pathname;
-        uri = uri.replace(/\/+/ig, '/');
-        return uri.length > 1 && uri.slice(0, 1) != '/' ? '/' + uri : uri;
+        uri = uri.replace(/\/+/ig,'/');
+        return uri.length > 1 && uri.slice(0,1) != '/' ? '/' + uri : uri;
     };
 
     /**
@@ -326,8 +324,8 @@
     };
 
     /**
-     * Select and return a object with elements selected by 'attr'
-     * or if 'attr' is false return numeric object
+     * Return object with elements, selected by selector,
+     * with  names keys by 'attr' or numeric
      * .search('li.num', 'data-id')
      * .search('li')
      * .search('li', false, NodeElement)
@@ -351,7 +349,7 @@
                         elements[key] = queryElements[i];
                     }
                 }
-                i++;
+                i ++;
             }
         }
         return elements;
@@ -379,19 +377,19 @@
      * @returns {*}
      */
     NamespaceApplication.queryAll = function (selector, fromCallback, thisInstance) {
-        var type = typeof fromCallback, // "undefined" "string" "function" "object"
+        var type = typeof fromCallback,
             from = document,
             elements = [],
             callback = null;
 
-        if (selector && selector.nodeType === Node.ELEMENT_NODE)
+        if (NamespaceApplication.isNode(selector))
             return [selector];
 
         if (type == "function")
             callback = fromCallback;
         else if (type == "string")
             from = document.querySelector(fromCallback);
-        else if (type == "object" && fromCallback && (fromCallback.nodeType === Node.ELEMENT_NODE || fromCallback.nodeType === Node.DOCUMENT_NODE))
+        else if (type == "object" && NamespaceApplication.isNode(fromCallback))
             from = fromCallback;
 
         if (from)
@@ -412,24 +410,24 @@
      * @param loops
      * @returns {*}
      */
-    NamespaceApplication.queryUp = function (selector, from, loops) {
+    NamespaceApplication.queryUp = function(selector, from, loops) {
         var item = null;
 
-        if (loops === undefined)
+        if(loops === undefined)
             loops = 20;
 
-        if (typeof from === 'string')
+        if(typeof from === 'string')
             from = document.querySelector(from);
 
-        if (from.nodeType !== Node.ELEMENT_NODE) {
+        if(from.nodeType !== Node.ELEMENT_NODE) {
             from = document;
             loops = 0;
         }
 
-        if (typeof selector === 'string')
+        if(typeof selector === 'string')
             item = from.querySelector(selector);
 
-        if (!item && loops > 0 && from.parentNode)
+        if(!item && loops > 0 && from.parentNode)
             return NamespaceApplication.queryUp(selector, from.parentNode, --loops);
 
         return item;
@@ -506,7 +504,7 @@
             elements = selector;
 
         if (elements) {
-            for (i = 0; i < elements.length; i++)
+            for (i = 0; i < elements.length; i ++ )
                 if (typeof elements[i] === 'object')
                     elements[i].addEventListener(eventName, callback, !!bubble);
         }
@@ -536,7 +534,7 @@
                     pn = p2[0].trim();
                     ix = pn.indexOf('-');
                     if (ix !== -1)
-                        pn = pn.substring(0, ix) + pn[ix + 1].toUpperCase() + pn.substring(ix + 2);
+                        pn =  pn.substring(0, ix) + pn[ix+1].toUpperCase() + pn.substring(ix + 2);
                     if (p2.length == 2)
                         o[pn] = p2[1].trim()
                 }
@@ -559,6 +557,25 @@
                     elements[i].style[k] = properties[k];
         }
         return elements
+    };
+
+    /**
+     * Display Style for element
+     * @type {{hide: Window.NamespaceApplication.cssDisplay.hide, show: Window.NamespaceApplication.cssDisplay.show, toggle: Window.NamespaceApplication.cssDisplay.toggle, last: Window.NamespaceApplication.cssDisplay.last, isHidden: Window.NamespaceApplication.cssDisplay.isHidden}}
+     */
+    NamespaceApplication.cssDisplay = {
+        hide: function (src) {
+            src._display = src.style.display ? src.style.display : getComputedStyle(src).display;
+            NamespaceApplication.css(src, {display:'none'})},
+        show: function (src) {
+            NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})},
+        toggle: function (src) {
+            if (src.style.display == 'none') NamespaceApplication.cssDisplay.show(src);
+            else NamespaceApplication.cssDisplay.hide(src)},
+        last: function (src) {
+            return src._display ? src._display : (src.style.display  ? src.style.display : getComputedStyle(src).display) },
+        isHidden: function (src) {
+            return src.style.display == 'none' || getComputedStyle(src).display == 'none' }
     };
 
     /**
@@ -595,14 +612,14 @@
      * @param formated  Array|Object
      * @returns string
      */
-    NamespaceApplication.format = function (string, formated) {
+    NamespaceApplication.format = function(string, formated) {
         var reg;
         if (Array.isArray(formated))
             reg = new RegExp(/{(\d+)}/g);
         else if (formated && typeof formated === 'object')
             reg = new RegExp(/{(\w+)}/g);
 
-        return string.replace(reg, function (match, number) {
+        return string.replace(reg, function(match, number) {
             return typeof formated[number] != 'undefined' ? formated[number] : match;
         });
     };
@@ -626,15 +643,14 @@
             xhr = new XMLHttpRequest(),
             conf = {
                 method: config.method || 'GET',
-                data: config.data || {},
-                headers: config.headers || {},
+                data:   config.data || {},
+                headers:config.headers || {},
                 action: config.action || config.url || document.location.href
             };
 
         if (config.data instanceof FormData) {
             form_data = config.data;
-            conf.data = {}
-        }
+            conf.data = {} }
 
         if (conf.method.toUpperCase() !== 'POST') {
             conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
@@ -644,7 +660,7 @@
             for (kd in conf.data)
                 form_data.append(kd, encodeURIComponent(conf.data[kd]));
 
-        xhr.open(conf.method, conf.action, true);
+        xhr.open (conf.method, conf.action, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         for (kd in conf.headers)
@@ -722,15 +738,9 @@
             this.iterator = config.repeat;
             this.clear();
         };
-        this.pause = function () {
-            this.clear()
-        };
-        this.reset = function () {
-            this.iterator = 0
-        };
-        this.clear = function () {
-            clearInterval(ht)
-        };
+        this.pause = function () {this.clear()};
+        this.reset = function () {this.iterator = 0};
+        this.clear = function () {clearInterval(ht)};
     };
 
     /**
@@ -768,10 +778,7 @@
      * @param value
      */
     NamespaceApplication.Storage.set = function (name, value) {
-        try {
-            value = JSON.stringify(value)
-        } catch (error) {
-        }
+        try{value = JSON.stringify(value)}catch(error){}
         return window.localStorage.setItem(name, value);
     };
 
@@ -781,11 +788,8 @@
      */
     NamespaceApplication.Storage.get = function (name) {
         var value = window.localStorage.getItem(name);
-        if (value)
-            try {
-                value = JSON.parse(value)
-            } catch (error) {
-            }
+        if(value)
+            try{value = JSON.parse(value)}catch(error){}
         return value;
     };
 
@@ -793,33 +797,25 @@
      * Remove item by name
      * @param name
      */
-    NamespaceApplication.Storage.remove = function (name) {
-        return window.localStorage.removeItem(name)
-    };
+    NamespaceApplication.Storage.remove = function (name) {return window.localStorage.removeItem(name)};
 
     /**
      * Get item by index
      * @param index
      * @returns {string}
      */
-    NamespaceApplication.Storage.key = function (index) {
-        return window.localStorage.key(index)
-    };
+    NamespaceApplication.Storage.key = function (index) {return window.localStorage.key(index)};
 
     /**
      * When invoked, will empty all keys out of the storage.
      */
-    NamespaceApplication.Storage.clear = function () {
-        return window.localStorage.clear()
-    };
+    NamespaceApplication.Storage.clear = function () {return window.localStorage.clear()};
 
     /**
      * Returns an integer representing the number of data items stored in the Storage object.
      * @returns {number}
      */
-    NamespaceApplication.Storage.length = function () {
-        return window.localStorage.length
-    };
+    NamespaceApplication.Storage.length = function () {return window.localStorage.length};
 
     /** Expansion Base **/
     (function (prototype) {
@@ -865,6 +861,7 @@
         prototype.eachParent = NamespaceApplication.eachParent;
         prototype.on = NamespaceApplication.on;
         prototype.css = NamespaceApplication.css;
+        prototype.cssDisplay = NamespaceApplication.cssDisplay;
         prototype.inject = NamespaceApplication.inject;
         prototype.format = NamespaceApplication.format;
         prototype.ajax = NamespaceApplication.ajax;
@@ -879,7 +876,7 @@
      */
     NamespaceApplication.domLoaded(function () {
         var script = NamespaceApplication.query('script[data-init]');
-        if (script && script.getAttribute('data-init').length > 2) {
+        if (script && script.getAttribute('data-init').length > 2){
             NamespaceApplication.loadJS(script.getAttribute('data-init'));
         }
     });
