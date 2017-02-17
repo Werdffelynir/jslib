@@ -727,6 +727,71 @@
     };
 
     /**
+     * Get, Set or Remove in cookie
+     * @param name
+     * @param value
+     */
+    NamespaceApplication.Cookie = function (name, value) {
+        if (value === undefined)
+            return NamespaceApplication.Cookie.get(name);
+        else if (value === false)
+            NamespaceApplication.Cookie.remove(name);
+        else
+            NamespaceApplication.Cookie.set(name, value);
+    };
+
+    /**
+     * Get Cookie value by key
+     * @param name
+     * @returns {*}
+     */
+    NamespaceApplication.Cookie.get = function (name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    };
+
+    /**
+     * Set Cookie key, value
+     *  expires - ms, Date, -1, 0
+     * @param name
+     * @param value
+     * @param {{}} options   {expires: 0, path: '/', domain: 'site.com', secure: false}
+     */
+    NamespaceApplication.Cookie.set = function (name, value, options) {
+        options = options || {};
+        var expires = options.expires;
+        var updatedCookie = name + "=" + encodeURIComponent(value);
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires * 1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+        for (var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true)
+                updatedCookie += "=" + propValue;
+        }
+        document.cookie = updatedCookie;
+    };
+
+    /**
+     * Remove Cookie by key
+     * @param name
+     * @param option
+     */
+    NamespaceApplication.Cookie.remove = function (name, option) {
+        option = typeof option === 'object' ? option : {};
+        option.expires = -1;
+        NamespaceApplication.Cookie.set(name, "", option);
+    };
+
+    /**
      * LocalStorage wrapper
      *
      * @param name
@@ -879,6 +944,7 @@
         prototype.ajax = NamespaceApplication.ajax;
         prototype.createElement = NamespaceApplication.createElement;
         prototype.Timer = NamespaceApplication.Timer;
+        prototype.Cookie = NamespaceApplication.Cookie;
         prototype.Storage = NamespaceApplication.Storage;
         prototype.Util = NamespaceApplication.Util;
 

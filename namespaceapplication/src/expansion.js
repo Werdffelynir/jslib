@@ -47,6 +47,7 @@
     prototype.ajax = NamespaceApplication.ajax;
     prototype.createElement = NamespaceApplication.createElement;
     prototype.Timer = NamespaceApplication.Timer;
+    prototype.Cookie = NamespaceApplication.Cookie;
     prototype.Storage = NamespaceApplication.Storage;
     prototype.Util = NamespaceApplication.Util;
 
