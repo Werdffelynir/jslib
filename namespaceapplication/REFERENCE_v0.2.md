@@ -71,21 +71,18 @@ NamespaceApplication.uri (uri)
 // Simple redirect
 NamespaceApplication.redirect (to)
 
+// Get route - URI Path
+NamespaceApplication.routePath (hash, query)
+
 // Return object with elements, selected by selector,
 // with  names keys by 'attr' or numeric
 NamespaceApplication.search (selector, attr, from)
-
-// Get route - URI Path
-NamespaceApplication.routePath (hash, query)
 
 // Select and return a one (first) element by selector
 NamespaceApplication.query (selector, fromCallback, thisInstance)
 
 // Selects and return an all elements by selector
 NamespaceApplication.queryAll (selector, fromCallback, thisInstance)
-
-// deprecated. Select and return a one element by selector. Search up on a DOM tree
-NamespaceApplication.queryUp (selector, from, loops)
 
 // Execute callback for each element in list
 NamespaceApplication.each (list, callback, tmp)
@@ -128,12 +125,12 @@ NamespaceApplication.Timer (callback, delay, repeat, thisInstance)
     timer.pause()
     timer.reset()
     timer.clear()
-    
+
 // Cookie
 NamespaceApplication.Cookie (name, value)
-    get (name)
-    set (name, value)
-    remove (name, option)
+    cookie.get (name)
+    cookie.set (name, value)
+    cookie.remove (name, option)
     
 // Storage of local
 NamespaceApplication.Storage (name, value)
@@ -232,7 +229,7 @@ App.domLoaded(function (){
 ```
 
 
-### App.typeOf
+### App.typeOf()
 
 Syntax: `App.typeOf(value, type)`
 ```js
@@ -305,6 +302,15 @@ Syntax: `App.inject(selector:String, data:String|Object):Void`
 App.inject('#content', 'lorem text');
 ```
 
+### App.search()
+Syntax: `App.search(selector:String|HTMLElement, attr:String, from:String|HTMLElement):HTMLElement`
+```js
+var form = App.query('form#form');
+
+// Выберет все 'input' по уникальному атрибуту 'name'. 
+// Вернет Object с елементами 'input' по ключах атрибута 'name'   
+var formObject = App.search('input', 'name', form);
+```
 
 ### App.query()
 Syntax: `App.query(selector:String, callback:Function):HTMLElement`
@@ -340,6 +346,18 @@ function onChange(event) {
 }
 ```
 
+
+### App.eachParent()
+Execute callback for each parent element
+Syntax: `App.eachParent (selector:String, callbackFilter:Function, loops:Integer): `
+```js
+function filter(parent) {
+    return parent.id == 'page'
+}
+
+var filtringParents = App.eachParent ('#button-add', filter, 10);
+// [ :HTMLElement ]
+```
 
 ### App.each()
 Syntax: `App.each(list:Array|Object, callback:Function, tmp:Object):Array|Object`
@@ -410,9 +428,9 @@ var timer = App.Timer(timerIteration, 1000, 10);
 timer.start();
 ```
 ### App.Cookie() 
-Storage of local
+Work with Cookie
  
-Syntax: `App.Storage([name, value]): *`
+Syntax: `App.Cookie([name, value]): *`
 ```js
 App.Cookie.get('num');
 App.Cookie.get('bool');
