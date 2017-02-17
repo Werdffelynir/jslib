@@ -232,6 +232,7 @@ App.domLoaded(function (){
 ### App.typeOf()
 
 Syntax: `App.typeOf(value, type)`
+Поддержуемые значение типов: ` null, boolean, undefined, function, string, number, date, number, array, object `
 ```js
 App.typeOf('hello world');
 // > "string"
@@ -240,6 +241,9 @@ App.typeOf({}, 'array');
 // > false
 ```
 
+### App.typeOfStrict()
+Syntax: `App.typeOfStrict(value, type)`
+Возможные заначения: null, Boolean, undefined, Function, String, Number, Date, Number, Array, Object ...
 
 ### App.loadJS()
 Syntax: `App.loadJS(src: String, onload: Function, onerror: Function): HTMLElement`
@@ -427,6 +431,8 @@ var timer = App.Timer(timerIteration, 1000, 10);
 
 timer.start();
 ```
+
+
 ### App.Cookie() 
 Work with Cookie
  
