@@ -9,61 +9,13 @@
 
 <script>
 
-    NamespaceApplication.extension('SuperExtension', function (App) {
-        return {a: 1}
-    });
-
     var App = new NamespaceApplication({
-        path: '/jsmb_ns/'
+        path: '/namespaceapplication/'
     });
 
-    App.require('base', [
 
-        'js/demo_one',
-        'js/demo_two'
 
-    ], baseLoaded, baseError).requireStart();
 
-    function baseError() {
-        console.log('Error');
-    }
-
-    function baseLoaded(scriptList) {
-        console.log('Application loaded. Version of: ', App.version);
-        console.log('Base scripts loaded: ', scriptList);
-    }
-
-    // simple module
-    App.namespace('SuperModule', function (app) {
-
-        /**
-         * @type {NamespaceApplication|App}
-         */
-        var App = app;
-
-        /**
-         * @namespace App.SuperModule
-         * @type {*}
-         */
-        var smod = {};
-
-        /**
-         * @namespace App.SuperModule.init
-         */
-        smod.init = function () {
-
-            App.Timer(smod.timer, 1000, 5).start();
-
-        };
-
-        smod.timer = function (i, r) {
-            console.log(i, r)
-        };
-
-        return smod;
-    });
-
-    App.SuperModule.init();
 
 
 

@@ -129,6 +129,12 @@ NamespaceApplication.Timer (callback, delay, repeat, thisInstance)
     timer.reset()
     timer.clear()
     
+// Cookie
+NamespaceApplication.Cookie (name, value)
+    get (name)
+    set (name, value)
+    remove (name, option)
+    
 // Storage of local
 NamespaceApplication.Storage (name, value)
     storage.length
@@ -403,7 +409,25 @@ var timer = App.Timer(timerIteration, 1000, 10);
 
 timer.start();
 ```
+### App.Cookie() 
+Storage of local
+ 
+Syntax: `App.Storage([name, value]): *`
+```js
+App.Cookie.get('num');
+App.Cookie.get('bool');
+App.Cookie.get('word');
+App.Cookie.get('object');
 
+App.Cookie.set('num', 1);
+App.Cookie.set('bool', true);
+App.Cookie.set('word', "word");
+App.Cookie.set('object', {a:'a',b:'b'});
+
+var cookie = Cookie();
+cookie.get('num2');
+cookie.set('num2', 15);
+```
 
 ### App.Storage() 
 Storage of local

@@ -191,8 +191,8 @@
      */
     NamespaceApplication.extension = function (extensionName, callback) {
         NamespaceApplication.extension.stack[extensionName] = {
-            name: extensionName,
-            callback: callback
+            name:extensionName,
+            callback:callback
         };
     };
     NamespaceApplication.extension.stack = {};
@@ -206,9 +206,7 @@
         if (document.querySelector('body'))
             callback.call();
         else
-            document.addEventListener('DOMContentLoaded', function () {
-                callback.call()
-            }, false);
+            document.addEventListener('DOMContentLoaded', function () {callback.call()}, false);
     };
 
     /**
@@ -220,7 +218,7 @@
      * @returns {string}
      */
     NamespaceApplication.typeOf = function (value, type) {
-        var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
+        var simpleTypes = ['null','boolean','undefined','function','string','number','date','number','array','object'],
             t = NamespaceApplication.typeOfStrict(value).toLowerCase();
         if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
             t = 'object';
@@ -274,7 +272,7 @@
      * @param  {Object} source      The custom options to extend destination by
      * @return {Object}             The desination object
      */
-    NamespaceApplication.extend = function (destination, source) {
+    NamespaceApplication.extend = function(destination, source) {
         var property;
         for (property in source) {
             if (source[property] && source[property].constructor && source[property].constructor === Object) {
@@ -294,8 +292,8 @@
      */
     NamespaceApplication.uri = function (uri) {
         uri = uri || location.pathname;
-        uri = uri.replace(/\/+/ig, '/');
-        return uri.length > 1 && uri.slice(0, 1) != '/' ? '/' + uri : uri;
+        uri = uri.replace(/\/+/ig,'/');
+        return uri.length > 1 && uri.slice(0,1) != '/' ? '/' + uri : uri;
     };
 
     /**
@@ -352,7 +350,7 @@
                         elements[key] = queryElements[i];
                     }
                 }
-                i++;
+                i ++;
             }
         }
         return elements;
@@ -475,7 +473,7 @@
             elements = selector;
 
         if (elements) {
-            for (i = 0; i < elements.length; i++)
+            for (i = 0; i < elements.length; i ++ )
                 if (typeof elements[i] === 'object')
                     elements[i].addEventListener(eventName, callback, !!bubble);
         }
@@ -505,7 +503,7 @@
                     pn = p2[0].trim();
                     ix = pn.indexOf('-');
                     if (ix !== -1)
-                        pn = pn.substring(0, ix) + pn[ix + 1].toUpperCase() + pn.substring(ix + 2);
+                        pn =  pn.substring(0, ix) + pn[ix+1].toUpperCase() + pn.substring(ix + 2);
                     if (p2.length == 2)
                         o[pn] = p2[1].trim()
                 }
@@ -537,21 +535,16 @@
     NamespaceApplication.cssDisplay = {
         hide: function (src) {
             src._display = src.style.display ? src.style.display : getComputedStyle(src).display;
-            NamespaceApplication.css(src, {display: 'none'})
-        },
+            NamespaceApplication.css(src, {display:'none'})},
         show: function (src) {
-            NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})
-        },
+            NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})},
         toggle: function (src) {
             if (src.style.display == 'none') NamespaceApplication.cssDisplay.show(src);
-            else NamespaceApplication.cssDisplay.hide(src)
-        },
+            else NamespaceApplication.cssDisplay.hide(src)},
         last: function (src) {
-            return src._display ? src._display : (src.style.display ? src.style.display : getComputedStyle(src).display)
-        },
+            return src._display ? src._display : (src.style.display  ? src.style.display : getComputedStyle(src).display) },
         isHidden: function (src) {
-            return src.style.display == 'none' || getComputedStyle(src).display == 'none'
-        }
+            return src.style.display == 'none' || getComputedStyle(src).display == 'none' }
     };
 
     /**
@@ -588,14 +581,14 @@
      * @param formated  Array|Object
      * @returns string
      */
-    NamespaceApplication.format = function (string, formated) {
+    NamespaceApplication.format = function(string, formated) {
         var reg;
         if (Array.isArray(formated))
             reg = new RegExp(/{(\d+)}/g);
         else if (formated && typeof formated === 'object')
             reg = new RegExp(/{(\w+)}/g);
 
-        return string.replace(reg, function (match, number) {
+        return string.replace(reg, function(match, number) {
             return typeof formated[number] != 'undefined' ? formated[number] : match;
         });
     };
@@ -619,15 +612,14 @@
             xhr = new XMLHttpRequest(),
             conf = {
                 method: config.method || 'GET',
-                data: config.data || {},
-                headers: config.headers || {},
+                data:   config.data || {},
+                headers:config.headers || {},
                 action: config.action || config.url || document.location.href
             };
 
         if (config.data instanceof FormData) {
             form_data = config.data;
-            conf.data = {}
-        }
+            conf.data = {} }
 
         if (conf.method.toUpperCase() !== 'POST') {
             conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
@@ -637,7 +629,7 @@
             for (kd in conf.data)
                 form_data.append(kd, encodeURIComponent(conf.data[kd]));
 
-        xhr.open(conf.method, conf.action, true);
+        xhr.open (conf.method, conf.action, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         for (kd in conf.headers)
@@ -715,29 +707,31 @@
             this.iterator = config.repeat;
             this.clear();
         };
-        this.pause = function () {
-            this.clear()
-        };
-        this.reset = function () {
-            this.iterator = 0
-        };
-        this.clear = function () {
-            clearInterval(ht)
-        };
+        this.pause = function () {this.clear()};
+        this.reset = function () {this.iterator = 0};
+        this.clear = function () {clearInterval(ht)};
     };
 
     /**
      * Get, Set or Remove in cookie
+     *
      * @param name
      * @param value
+     * @returns {{set: (NamespaceApplication.Storage.set|*), get: (NamespaceApplication.Storage.get|*), remove: (NamespaceApplication.Storage.remove|*) }}
+     * @constructor
      */
     NamespaceApplication.Cookie = function (name, value) {
-        if (value === undefined)
-            return NamespaceApplication.Cookie.get(name);
-        else if (value === false)
-            NamespaceApplication.Cookie.remove(name);
-        else
-            NamespaceApplication.Cookie.set(name, value);
+        switch (arguments.length) {
+            case 0:
+                return {
+                    set: NamespaceApplication.Cookie.set,
+                    get: NamespaceApplication.Cookie.get,
+                    remove: NamespaceApplication.Cookie.remove}; break;
+            case 1:
+                return NamespaceApplication.Cookie.get(name); break;
+            case 2:
+                return NamespaceApplication.Cookie.set(name, value); break;
+        }
     };
 
     /**
@@ -746,10 +740,15 @@
      * @returns {*}
      */
     NamespaceApplication.Cookie.get = function (name) {
-        var matches = document.cookie.match(new RegExp(
+        var decode, matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
+        decode = matches ? decodeURIComponent(matches[1]) : undefined;
+        if(decode)
+            try{
+                decode = JSON.parse(decode)
+            }catch(error){}
+        return decode
     };
 
     /**
@@ -761,6 +760,9 @@
      */
     NamespaceApplication.Cookie.set = function (name, value, options) {
         options = options || {};
+        try{
+            value = JSON.stringify(value);
+        }catch(error){}
         var expires = options.expires;
         var updatedCookie = name + "=" + encodeURIComponent(value);
         if (typeof expires == "number" && expires) {
@@ -785,7 +787,7 @@
      * @param name
      * @param option
      */
-    NamespaceApplication.Cookie.remove = function (name, option) {
+    NamespaceApplication.Cookie.remove = function (name, option){
         option = typeof option === 'object' ? option : {};
         option.expires = -1;
         NamespaceApplication.Cookie.set(name, "", option);
@@ -826,10 +828,7 @@
      * @param value
      */
     NamespaceApplication.Storage.set = function (name, value) {
-        try {
-            value = JSON.stringify(value)
-        } catch (error) {
-        }
+        try{value = JSON.stringify(value)}catch(error){}
         return window.localStorage.setItem(name, value);
     };
 
@@ -839,11 +838,8 @@
      */
     NamespaceApplication.Storage.get = function (name) {
         var value = window.localStorage.getItem(name);
-        if (value)
-            try {
-                value = JSON.parse(value)
-            } catch (error) {
-            }
+        if(value)
+            try{value = JSON.parse(value)}catch(error){}
         return value;
     };
 
@@ -851,33 +847,25 @@
      * Remove item by name
      * @param name
      */
-    NamespaceApplication.Storage.remove = function (name) {
-        return window.localStorage.removeItem(name)
-    };
+    NamespaceApplication.Storage.remove = function (name) {return window.localStorage.removeItem(name)};
 
     /**
      * Get item by index
      * @param index
      * @returns {string}
      */
-    NamespaceApplication.Storage.key = function (index) {
-        return window.localStorage.key(index)
-    };
+    NamespaceApplication.Storage.key = function (index) {return window.localStorage.key(index)};
 
     /**
      * When invoked, will empty all keys out of the storage.
      */
-    NamespaceApplication.Storage.clear = function () {
-        return window.localStorage.clear()
-    };
+    NamespaceApplication.Storage.clear = function () {return window.localStorage.clear()};
 
     /**
      * Returns an integer representing the number of data items stored in the Storage object.
      * @returns {number}
      */
-    NamespaceApplication.Storage.length = function () {
-        return window.localStorage.length
-    };
+    NamespaceApplication.Storage.length = function () {return window.localStorage.length};
 
     /**
      * @type {{filterArrayObject: NamespaceApplication.Util.filterArrayObject, filterArrayObjects: NamespaceApplication.Util.filterArrayObjects}}
@@ -955,7 +943,7 @@
      */
     NamespaceApplication.domLoaded(function () {
         var script = NamespaceApplication.query('script[data-init]');
-        if (script && script.getAttribute('data-init').length > 2) {
+        if (script && script.getAttribute('data-init').length > 2){
             NamespaceApplication.loadJS(script.getAttribute('data-init'));
         }
     });

@@ -581,16 +581,24 @@ NamespaceApplication.Timer = function (callback, delay, repeat, thisInstance) {
 
 /**
  * Get, Set or Remove in cookie
+ *
  * @param name
  * @param value
+ * @returns {{set: (NamespaceApplication.Storage.set|*), get: (NamespaceApplication.Storage.get|*), remove: (NamespaceApplication.Storage.remove|*) }}
+ * @constructor
  */
 NamespaceApplication.Cookie = function (name, value) {
-    if(value === undefined)
-        return NamespaceApplication.Cookie.get(name);
-    else if (value === false)
-        NamespaceApplication.Cookie.remove(name);
-    else
-        NamespaceApplication.Cookie.set(name, value);
+    switch (arguments.length) {
+        case 0:
+            return {
+                set: NamespaceApplication.Cookie.set,
+                get: NamespaceApplication.Cookie.get,
+                remove: NamespaceApplication.Cookie.remove}; break;
+        case 1:
+            return NamespaceApplication.Cookie.get(name); break;
+        case 2:
+            return NamespaceApplication.Cookie.set(name, value); break;
+    }
 };
 
 /**
@@ -599,10 +607,15 @@ NamespaceApplication.Cookie = function (name, value) {
  * @returns {*}
  */
 NamespaceApplication.Cookie.get = function (name) {
-    var matches = document.cookie.match(new RegExp(
+    var decode, matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
+    decode = matches ? decodeURIComponent(matches[1]) : undefined;
+    if(decode)
+        try{
+            decode = JSON.parse(decode)
+        }catch(error){}
+    return decode
 };
 
 /**
@@ -614,6 +627,9 @@ NamespaceApplication.Cookie.get = function (name) {
  */
 NamespaceApplication.Cookie.set = function (name, value, options) {
     options = options || {};
+    try{
+        value = JSON.stringify(value);
+    }catch(error){}
     var expires = options.expires;
     var updatedCookie = name + "=" + encodeURIComponent(value);
     if (typeof expires == "number" && expires) {
