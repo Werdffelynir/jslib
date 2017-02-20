@@ -517,22 +517,28 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
 
 /**
  * Create DOM Element with attributes
+ * .createElement ( 'div', {class: 'my-class'}, 'inject text')
+ * .createElement ( 'div', {class: 'my-class'}, HTMLElement)
+ * .createElement ( 'span', {class: 'my-class'}, [HTMLElement, HTMLElement])
  * @param tag
  * @param attrs
  * @param inner
  * @returns {*}
  */
 NamespaceApplication.createElement = function (tag, attrs, inner) {
-    var elem = document.createElement(tag);
-    if (typeof elem !== 'object') return null;
-    if (typeof attrs === 'object')
-        for (var key in attrs)
-            elem.setAttribute(key, attrs[key]);
-    if (typeof inner === 'string') {
+    var k, i, elem = document.createElement(tag);
+    if (!elem) return false;
+    if (NamespaceApplication.typeOf(attrs, 'object'))
+        for (k in attrs)
+            elem.setAttribute(k, attrs[k]);
+    if (NamespaceApplication.typeOf(inner, 'string'))
         elem.innerHTML = inner;
-    } else if (typeof inner === 'object') {
+    else if (NamespaceApplication.isNode(inner))
         elem.appendChild(inner);
-    }
+    else if (NamespaceApplication.typeOf(inner, 'array'))
+        for (i = 0; i < inner.length; i++)
+            if (NamespaceApplication.isNode(inner[i]))
+                elem.appendChild(inner[i]);
     return elem;
 };
 

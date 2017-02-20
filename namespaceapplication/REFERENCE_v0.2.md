@@ -384,6 +384,15 @@ App.each(obj, function(item, key){
 ```
 
 
+### App.createElement()
+Create DOM Element with attributes
+Syntax: `App.createElement (tag, attrs, inner)`
+```js
+var div1 = App.createElement ( 'div', {class: 'my-class'}, 'inject text')
+var div2 = App.createElement ( 'div', false, div1)
+var div3 = App.createElement ( 'span', {class: 'my-class'}, [div1, div2])
+```
+
 ### App.extend()
 Syntax: `App.extend(obj: Object, src: Object, callback: Function): Object`
 
