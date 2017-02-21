@@ -287,15 +287,6 @@
     };
 
     /**
-     * Clone an Object
-     * @param source
-     * @returns {Object}
-     */
-    NamespaceApplication.clone = function (source) {
-        return NamespaceApplication.extend({}, source);
-    };
-
-    /**
      * Get rel URI
      *
      * @param uri
@@ -965,7 +956,6 @@
         prototype.defined = NamespaceApplication.defined;
         prototype.isNode = NamespaceApplication.isNode;
         prototype.extend = NamespaceApplication.extend;
-        prototype.clone = NamespaceApplication.clone;
         prototype.uri = NamespaceApplication.uri;
         prototype.redirect = NamespaceApplication.redirect;
         prototype.routePath = NamespaceApplication.routePath;
