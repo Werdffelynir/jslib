@@ -686,7 +686,19 @@
     /**
      * Simple timer realise. Return self-instance
      * timer = new .Timer(function(iterator, repeat){}, 1000, 5)
-     *
+     *  Instance methods
+     *      timer.repeat
+     *      timer.iterator
+     *      timer.start ()
+     *      timer.stop ()
+     *      timer.pause ()
+     *      timer.reset ()
+     *      timer.clear ()
+     *  Static methods
+     *      Timer.timeout (callback, ms, thisInst) : timeoutId
+     *      Timer.interval (callback, ms, thisInst) : intervalId
+     *      Timer.timeoutStop (timeoutId)
+     *      Timer.intervalStop (intervalId)
      * @param callback
      * @param delay
      * @param repeat
@@ -730,6 +742,28 @@
         this.clear = function () {
             clearInterval(ht)
         };
+    };
+    NamespaceApplication.Timer.timeout = function (callback, ms, thisInst) {
+        if (typeof callback === 'function' && !isNaN(ms) && ms > 0) {
+            thisInst = typeof thisInst === 'object' ? thisInst : {};
+            return setTimeout(function () {
+                callback.call(thisInst)
+            }, ms)
+        }
+    };
+    NamespaceApplication.Timer.interval = function (callback, ms, thisInst) {
+        if (typeof callback === 'function' && !isNaN(ms) && ms > 0) {
+            thisInst = typeof thisInst === 'object' ? thisInst : {};
+            return setInterval(function () {
+                callback.call(thisInst)
+            }, ms)
+        }
+    };
+    NamespaceApplication.Timer.timeoutStop = function (id) {
+        clearTimeout(id)
+    };
+    NamespaceApplication.Timer.intervalStop = function (id) {
+        clearInterval(id)
     };
 
     /**

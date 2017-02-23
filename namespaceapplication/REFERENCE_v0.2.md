@@ -125,6 +125,12 @@ NamespaceApplication.Timer (callback, delay, repeat, thisInstance)
     timer.pause()
     timer.reset()
     timer.clear()
+    
+// Static
+NamespaceApplication.Timer.timeout (callback, ms, thisInst) : timeoutId
+NamespaceApplication.Timer.interval (callback, ms, thisInst) : intervalId
+NamespaceApplication.Timer.timeoutStop (timeoutId)
+NamespaceApplication.Timer.intervalStop (intervalId)
 
 // Cookie
 NamespaceApplication.Cookie (name, value)
