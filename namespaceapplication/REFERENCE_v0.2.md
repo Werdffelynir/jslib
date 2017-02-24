@@ -105,7 +105,7 @@ NamespaceApplication.toggle (element)
 NamespaceApplication.attr (element, name, value)
 
 // Inject data into HTMLElement
-NamespaceApplication.inject (selector, data, append)
+NamespaceApplication.inject (selector, data, append, to)
 
 // Formatting of string, maybe template builder
 NamespaceApplication.format (string, formated);
@@ -307,9 +307,15 @@ str = App.format(str, [
 
 
 ### App.inject()
-Syntax: `App.inject(selector:String, data:String|Object):Void`
+Syntax: `App.inject(selector:String, data:String|Object, append:Boolean, to:HTMLElement):Void`
 ```js
 App.inject('#content', 'lorem text');
+
+// append
+App.inject('#content', 'lorem text', true);
+
+// append to
+App.inject('#content', 'lorem text', true, HTMLElement);
 ```
 
 ### App.search()

@@ -441,11 +441,12 @@ NamespaceApplication._set_real_display_style = function (src) {
  * @param selector
  * @param data
  * @param append
+ * @param to
  * @returns {*}
  */
-NamespaceApplication.inject = function (selector, data, append) {
+NamespaceApplication.inject = function (selector, data, append, to) {
     if (typeof selector === 'string')
-        selector = this.query(selector);
+        selector = NamespaceApplication.query(selector, to);
     if (NamespaceApplication.isNode(selector)) {
         if (NamespaceApplication.isNode(data)) {
             if (!append)
