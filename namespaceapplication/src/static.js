@@ -347,6 +347,22 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
 };
 
 /**
+ * Get|Set attribute from|to element
+ *  .attr (HTMLElement, name)
+ *  .attr (HTMLElement, name, value)
+ * @param element
+ * @param name
+ * @param value
+ * @returns {string}
+ */
+NamespaceApplication.attr = function (element, name, value) {
+    if (NamespaceApplication.isNode(element) && arguments.length == 2)
+        return element.getAttribute(name);
+    else if (NamespaceApplication.isNode(element) && arguments.length == 3)
+        element.setAttribute(name, value);
+};
+
+/**
  * App style\s to HTMLElement\s
  *
  * .css('.menuinline', 'background-color: #ffffff')
@@ -395,23 +411,28 @@ NamespaceApplication.css = function (selector, properties) {
     return elements
 };
 
-/**
- * Display Style for element
- * @type {{hide: Window.NamespaceApplication.cssDisplay.hide, show: Window.NamespaceApplication.cssDisplay.show, toggle: Window.NamespaceApplication.cssDisplay.toggle, last: Window.NamespaceApplication.cssDisplay.last, isHidden: Window.NamespaceApplication.cssDisplay.isHidden}}
- */
-NamespaceApplication.cssDisplay = {
-    hide: function (src) {
-        src._display = src.style.display ? src.style.display : getComputedStyle(src).display;
-        NamespaceApplication.css(src, {display:'none'})},
-    show: function (src) {
-        NamespaceApplication.css(src, {display: src._display ? src._display : 'block'})},
-    toggle: function (src) {
-        if (src.style.display == 'none') NamespaceApplication.cssDisplay.show(src);
-        else NamespaceApplication.cssDisplay.hide(src)},
-    last: function (src) {
-        return src._display ? src._display : (src.style.display  ? src.style.display : getComputedStyle(src).display) },
-    isHidden: function (src) {
-        return src.style.display == 'none' || getComputedStyle(src).display == 'none' }
+NamespaceApplication.show = function (src) {
+    NamespaceApplication._set_real_display_style(src);
+    NamespaceApplication.css(src, {display: src['_real_display_style'] ? src['_real_display_style'] : 'block'});
+};
+NamespaceApplication.hide = function (src) {
+    NamespaceApplication._set_real_display_style(src);
+    NamespaceApplication.css(src, {display:'none'});
+};
+NamespaceApplication.toggle = function (src) {
+    if (NamespaceApplication.typeOf(src, 'string')) {
+        NamespaceApplication.queryAll(src).map(NamespaceApplication.toggle);
+    } else if (NamespaceApplication.isNode(src)) {
+        if (src.style.display == 'none') NamespaceApplication.show(src);
+        else NamespaceApplication.hide(src);
+    }
+};
+NamespaceApplication._set_real_display_style = function (src) {
+    if (NamespaceApplication.typeOf(src, 'string')) {
+        NamespaceApplication.queryAll(src).map(NamespaceApplication._set_real_display_style);
+    } else if (NamespaceApplication.isNode(src) && src['_real_display_style'] === undefined) {
+        var style = src.style.display ? src.style.display : getComputedStyle(src).display;
+        src['_real_display_style'] = (!style || style == 'none') ? 'block' : style;}
 };
 
 /**

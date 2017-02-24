@@ -96,13 +96,13 @@ NamespaceApplication.on (selector, eventName, callback, bubble)
 // Add style\s to HTMLElement\s
 NamespaceApplication.css (selector, properties)
 
-// Change style display for element
-NamespaceApplication.cssDisplay.
-    cssDisplay.hide (element)
-    cssDisplay.show (element)
-    cssDisplay.toggle (element)
-    cssDisplay.isHidden (element)
-    cssDisplay.last (element)
+// Change style display for element (0.2.5+)
+NamespaceApplication.hide (element)
+NamespaceApplication.show (element)
+NamespaceApplication.toggle (element)
+
+// Set get attribute
+NamespaceApplication.attr (element, name, value)
 
 // Inject data into HTMLElement
 NamespaceApplication.inject (selector, data, append)
