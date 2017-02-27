@@ -260,7 +260,7 @@
      * @param src
      * @returns {boolean}
      */
-    NamespaceApplication.empty = function (src) {
+    NamespaceApplication.isEmpty = function (src) {
         if (NamespaceApplication.typeOf(src, 'object')) {
             for (var key in src)
                 if (src.hasOwnProperty(key)) return false;
@@ -1022,7 +1022,7 @@
         prototype.typeOf = NamespaceApplication.typeOf;
         prototype.typeOfStrict = NamespaceApplication.typeOfStrict;
         prototype.defined = NamespaceApplication.defined;
-        prototype.empty = NamespaceApplication.empty;
+        prototype.isEmpty = NamespaceApplication.isEmpty;
         prototype.isNode = NamespaceApplication.isNode;
         prototype.extend = NamespaceApplication.extend;
         prototype.uri = NamespaceApplication.uri;

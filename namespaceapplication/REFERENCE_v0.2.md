@@ -60,7 +60,7 @@ NamespaceApplication.typeOfStrict (value, type)
 NamespaceApplication.defined (value)
 
 // Return `true` for '', [], {}, null, false, NaN, undefined, 0
-NamespaceApplication.empty (value)
+NamespaceApplication.isEmpty (value)
 
 // Check type of value on NodeType. Return boolean
 NamespaceApplication.isNode (value)

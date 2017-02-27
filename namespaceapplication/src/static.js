@@ -125,7 +125,7 @@ NamespaceApplication.defined = function (value) {
  * @param src
  * @returns {boolean}
  */
-NamespaceApplication.empty = function (src) {
+NamespaceApplication.isEmpty = function (src) {
     if (NamespaceApplication.typeOf(src, 'object')) {
         for (var key in src)
             if (src.hasOwnProperty(key)) return false;
