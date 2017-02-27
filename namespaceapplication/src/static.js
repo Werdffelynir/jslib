@@ -130,10 +130,12 @@ NamespaceApplication.isEmpty = function (src) {
         for (var key in src)
             if (src.hasOwnProperty(key)) return false;
         return true
+    } else if (NamespaceApplication.typeOf(src, 'string')) {
+        src = src.replace(/\s/g, '');
+        return src === "" || src === "0"
     } else
-        return (src === "" || src === 0 || src === "0" || src === null || src === undefined || src === false || isNaN(src) || (Array.isArray(src) && src.length === 0))
+        return (src === 0 || src === null || src === undefined || src === false || isNaN(src) || (Array.isArray(src) && src.length === 0))
 };
-
 
 /**
  * Checked value on nodeType Node.ELEMENT
