@@ -59,6 +59,9 @@ NamespaceApplication.typeOfStrict (value, type)
 // Is defined a value. Return boolean
 NamespaceApplication.defined (value)
 
+// Return `true` for '', [], {}, null, false, NaN, undefined, 0
+NamespaceApplication.empty (value)
+
 // Check type of value on NodeType. Return boolean
 NamespaceApplication.isNode (value)
 

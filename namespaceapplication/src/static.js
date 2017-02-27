@@ -120,6 +120,22 @@ NamespaceApplication.defined = function (value) {
 };
 
 /**
+ * An empty value check.
+ * Return `true` for '', [], {}, null, false, NaN, undefined, 0
+ * @param src
+ * @returns {boolean}
+ */
+NamespaceApplication.empty = function (src) {
+    if (NamespaceApplication.typeOf(src, 'object')) {
+        for (var key in src)
+            if (src.hasOwnProperty(key)) return false;
+        return true
+    } else
+        return (src === "" || src === 0 || src === "0" || src === null || src === undefined || src === false || isNaN(src) || (Array.isArray(src) && src.length === 0))
+};
+
+
+/**
  * Checked value on nodeType Node.ELEMENT
  *
  * @param value
