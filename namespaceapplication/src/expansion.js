@@ -54,5 +54,6 @@
     prototype.Cookie = NamespaceApplication.Cookie;
     prototype.Storage = NamespaceApplication.Storage;
     prototype.Util = NamespaceApplication.Util;
+    prototype.Datetime = NamespaceApplication.Datetime;
 
 })(NamespaceApplication.prototype)

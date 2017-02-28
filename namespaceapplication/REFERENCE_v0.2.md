@@ -154,6 +154,16 @@ NamespaceApplication.Storage (name, value)
 NamespaceApplication.Utils = {}
     filterArrayObject (values, attr, attrValue)
     filterArrayObjects (values, attr, attrValue)
+    
+// Dates
+NamespaceApplication.Datetime = {}
+    msInDay
+    msInHour
+    msInMinute
+    time (date)
+    addDays (num, date)
+    betweenDates (dateFrom, dateTo)
+    strToDate (date, format, utc)
 ```
 
 
