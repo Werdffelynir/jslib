@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="build/namespaceapplication.js"></script>
+</head>
+<body>
+
+<script>
+
+
+    var App = new NamespaceApplication({
+        path: '/namespaceapplication/'
+    });
+
+
+
+    // test empty: '', [], {}, null, false, NaN, undefined, 0
+    console.log(
+            App.isEmpty(''),
+            App.isEmpty('  '),
+            App.isEmpty(undefined),
+            App.isEmpty(false),
+            App.isEmpty(null),
+            App.isEmpty(NaN),
+            App.isEmpty(0),
+            App.isEmpty('0'),
+            App.isEmpty([]),
+            App.isEmpty({})
+    );
+
+    console.log(
+            App.isEmpty('hello'),
+            App.isEmpty(true),
+            App.isEmpty(10),
+            App.isEmpty('10'),
+            App.isEmpty(['a']),
+            App.isEmpty({a:100})
+    );
+
+</script>
+</body>
+</html>
