@@ -121,20 +121,22 @@ NamespaceApplication.defined = function (value) {
 
 /**
  * An empty value check.
- * Return `true` for '', [], {}, null, false, NaN, undefined, 0
+ * Return `true` for: ('', ' ', [], {}, null, false, NaN, undefined, 0, '0')
  * @param src
  * @returns {boolean}
  */
 NamespaceApplication.isEmpty = function (src) {
-    if (NamespaceApplication.typeOf(src, 'object')) {
-        for (var key in src)
-            if (src.hasOwnProperty(key)) return false;
-        return true
+    if (NamespaceApplication.typeOf(src, 'object') || NamespaceApplication.typeOf(src, 'array')) {
+        for (var key in src) {
+            if (src.hasOwnProperty(key)) {return false}
+        }
+        return true;
     } else if (NamespaceApplication.typeOf(src, 'string')) {
         src = src.replace(/\s/g, '');
-        return src === "" || src === "0"
-    } else
-        return (src === 0 || src === null || src === undefined || src === false || isNaN(src) || (Array.isArray(src) && src.length === 0))
+        return src === "" || src === "0";
+    } else {
+        return (src === 0 || src === null || src === undefined || src === false || isNaN(src));
+    }
 };
 
 /**

@@ -9,14 +9,28 @@
 
 <script>
 
-
     var App = new NamespaceApplication({
         path: '/namespaceapplication/'
     });
 
+    var ar = ['a'];
+    var ob = {a:'a'};
 
+    console.log(
+            App.isEmpty('hello'),
+            App.isEmpty(true),
+            App.isEmpty(10),
+            App.isEmpty('10'),
+            App.isEmpty(['a']),
+            App.isEmpty({a:100}),
+            App.isEmpty(ar),
+            App.isEmpty(ob)
+    );
 
-    // test empty: '', [], {}, null, false, NaN, undefined, 0
+    delete ar[0];
+    delete ob['a'];
+
+    // test empty: '', ' ', [], {}, null, false, NaN, undefined, 0, '0'
     console.log(
             App.isEmpty(''),
             App.isEmpty('  '),
@@ -27,16 +41,9 @@
             App.isEmpty(0),
             App.isEmpty('0'),
             App.isEmpty([]),
-            App.isEmpty({})
-    );
-
-    console.log(
-            App.isEmpty('hello'),
-            App.isEmpty(true),
-            App.isEmpty(10),
-            App.isEmpty('10'),
-            App.isEmpty(['a']),
-            App.isEmpty({a:100})
+            App.isEmpty({}),
+            App.isEmpty(ar),
+            App.isEmpty(ob)
     );
 
 </script>
