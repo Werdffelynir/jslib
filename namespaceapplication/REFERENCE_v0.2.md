@@ -107,6 +107,9 @@ NamespaceApplication.toggle (element)
 // Set get attribute
 NamespaceApplication.attr (element, name, value)
 
+// Common method for clone objects
+NamespaceApplication.copy (src, addProperties)
+
 // Inject data into HTMLElement
 NamespaceApplication.inject (selector, data, append, to)
 
@@ -425,6 +428,35 @@ Syntax: `App.extend(obj: Object, src: Object, callback: Function): Object`
 var baseObjectExtend = App.extend(baseObject, sourceObject)
 ```
 
+### App.copy()
+Syntax: `App.copy(src:any, addProperties:any):any`
+
+```js
+// function
+function foo (a, b) { return a + b; }
+var copy_function = App.copy(foo);
+
+// node
+var copy_node = App.copy(document.querySelector('#elem'));
+
+// array
+var arr = [1,2,3,4,5,6];
+var arr2 = ['a','b'];
+arr2[6] = 7;
+arr2[7] = 8;
+var copy_array = App.copy(arr, arr2);
+
+// object
+var obj = {a:'A',b:'B',c:'C'};
+var obj2 = {c:'C2', d:'D'};
+var copy_object = App.copy(obj, obj2);
+
+// string
+var copy_string = App.copy('string', ' add me ');
+
+// numeric
+var copy_numeric = App.copy(100, 25);
+```
 
 ### App.redirect()
 Syntax: `App.redirect(url: String): Void`

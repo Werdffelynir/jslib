@@ -46,6 +46,7 @@
     prototype.hide = NamespaceApplication.hide;
     prototype.toggle = NamespaceApplication.toggle;
     prototype.attr = NamespaceApplication.attr;
+    prototype.copy = NamespaceApplication.copy;
     prototype.inject = NamespaceApplication.inject;
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;

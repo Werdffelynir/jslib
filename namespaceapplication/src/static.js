@@ -28,7 +28,7 @@ NamespaceApplication.loadJS = function (src, onload, onerror) {
 /**
  * Loads a link element with CSS stylesheet
  *
- * @param url
+ * @param src
  * @param onload
  * @param onerror
  * @returns {Element}
@@ -386,6 +386,33 @@ NamespaceApplication.attr = function (element, name, value) {
     }
     else if (NamespaceApplication.isNode(element) && arguments.length == 3)
         element.setAttribute(name, value);
+};
+
+/**
+ * Common method for clone objects
+ * @param src           'function', 'node', 'array', 'object'
+ * @param addProperties for 'array' and 'object' - add or replace properties by indexes or keys,
+ *                      concatenate for 'string', summarizes for 'number', cloned deep for NodeElements
+ * @returns {*}
+ */
+NamespaceApplication.copy = function (src, addProperties) {
+    var type = NamespaceApplication.typeOf(src);
+
+    if (type === 'object' && NamespaceApplication.isNode(src)) {
+        return src.cloneNode(!!addProperties);
+    }
+    else if (type === 'function') {
+        return src.bind({});
+    }
+    else if (type === 'array' || type === 'object') {
+        var copy = JSON.parse(JSON.stringify(src));
+        if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
+            for (var i in addProperties)
+                copy[i] = addProperties[i];
+        return copy;
+    }
+    else
+        return NamespaceApplication.defined(addProperties) ? src + addProperties : src;
 };
 
 /**

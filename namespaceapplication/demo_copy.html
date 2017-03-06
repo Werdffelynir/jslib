@@ -26,6 +26,12 @@
 
 
     /**
+     * Common method for clone objects
+     * @param src           'function', 'node', 'array', 'object'
+     * @param addProperties for 'array' and 'object' - add or replace properties by indexes or keys,
+     *                      concatenate for 'string', summarizes for 'number', cloned deep for NodeElements
+     * @returns {*}
+     */
     App.copy = function (src, addProperties) {
         var type = NamespaceApplication.typeOf(src);
         if (type === 'object' && NamespaceApplication.isNode(src)) {
@@ -42,7 +48,7 @@
             return copy;
         } else
             return NamespaceApplication.defined(addProperties) ? src + addProperties : src;
-    };     */
+    };
 
 
     // function
