@@ -376,8 +376,14 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
  * @returns {string}
  */
 NamespaceApplication.attr = function (element, name, value) {
-    if (NamespaceApplication.isNode(element) && arguments.length == 2)
-        return element.getAttribute(name);
+    if (NamespaceApplication.isNode(element) && arguments.length == 2) {
+        if (NamespaceApplication.typeOf(name, 'object')) {
+            for (var key in name)
+                NamespaceApplication.attr(element, key, name[key]);
+        }
+        else
+            return element.getAttribute(name);
+    }
     else if (NamespaceApplication.isNode(element) && arguments.length == 3)
         element.setAttribute(name, value);
 };
