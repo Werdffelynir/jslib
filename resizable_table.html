@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="grid_css/grid2.css">
+    <style>
+        #resizer {
+            width: 3px;
+            /*height: 10px;*/
+            background: #675e89;
+            /*position:absolute;*/
+            /*right: 0;*/
+            /*bottom: 0;*/
+            cursor: col-resize;
+        }
+        #menu {
+            border-right: 1px solid #9d8fd0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="table">
+    <div id="menu" class="width-15">
+        <ul>
+            <li>item-1</li>
+            <li>item-2</li>
+            <li>item-3</li>
+            <li>item-4</li>
+            <li>item-5</li>
+            <li>item-6</li>
+            <li>item-7</li>
+            <li>item-8</li>
+            <li>item-9</li>
+            <li>item-10</li>
+            <li>item-11</li>
+            <li>item-12</li>
+            <li>item-13</li>
+            <li>item-14</li>
+            <li>item-15</li>
+        </ul>
+    </div>
+    <div id="resizer">&nbsp;</div>
+    <div id="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias assumenda aut autem blanditiis cumque dolorem, eius eligendi harum laboriosam magnam minus necessitatibus neque obcaecati praesentium quidem saepe ut veritatis!</div>
+</div>
+
+
+<script>
+
+    (function () {
+
+        var Resizer = function (resizer, resized) {
+
+            if (!(this instanceof Resizer)) return new Resizer(resizer, resized);
+
+            var startX, startY, startWidth, startHeight;
+
+            resizer.addEventListener('mousedown', initDrag, false);
+
+            function initDrag(e) {
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = parseInt(document.defaultView.getComputedStyle(resized).width, 10);
+                startHeight = parseInt(document.defaultView.getComputedStyle(resized).height, 10);
+                document.documentElement.addEventListener('mousemove', doDrag, false);
+                document.documentElement.addEventListener('mouseup', stopDrag, false);
+            }
+
+            function doDrag(e) {
+                resized.style.width = (startWidth + e.clientX - startX) + 'px';
+                resized.style.height = (startHeight + e.clientY - startY) + 'px';
+            }
+
+            function stopDrag(e) {
+                document.documentElement.removeEventListener('mousemove', doDrag, false);
+                document.documentElement.removeEventListener('mouseup', stopDrag, false);
+            }
+        };
+
+        window.Resizer = Resizer;
+    })();
+
+
+    //var resizer = document.getElementById('resizer');
+    //var resized = document.getElementById('menu');
+
+    Resizer(document.getElementById('resizer'), document.getElementById('menu'));
+
+</script>
+</body>
+</html>

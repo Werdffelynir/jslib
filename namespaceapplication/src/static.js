@@ -466,7 +466,7 @@ NamespaceApplication.css = function (selector, properties) {
 
 NamespaceApplication.show = function (src) {
     NamespaceApplication._set_real_display_style(src);
-    NamespaceApplication.css(src, {display: src['_real_display_style'] ? src['_real_display_style'] : 'block'});
+    NamespaceApplication.css(src, {display: src && src['_real_display_style'] ? src['_real_display_style'] : 'block'});
 };
 NamespaceApplication.hide = function (src) {
     NamespaceApplication._set_real_display_style(src);
