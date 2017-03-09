@@ -161,7 +161,7 @@
     /**
      * Loads a link element with CSS stylesheet
      *
-     * @param url
+     * @param src
      * @param onload
      * @param onerror
      * @returns {Element}
@@ -509,10 +509,43 @@
      * @returns {string}
      */
     NamespaceApplication.attr = function (element, name, value) {
-        if (NamespaceApplication.isNode(element) && arguments.length == 2)
-            return element.getAttribute(name);
+        if (NamespaceApplication.isNode(element) && arguments.length == 2) {
+            if (NamespaceApplication.typeOf(name, 'object')) {
+                for (var key in name)
+                    NamespaceApplication.attr(element, key, name[key]);
+            }
+            else
+                return element.getAttribute(name);
+        }
         else if (NamespaceApplication.isNode(element) && arguments.length == 3)
             element.setAttribute(name, value);
+    };
+
+    /**
+     * Common method for clone objects
+     * @param src           'function', 'node', 'array', 'object'
+     * @param addProperties for 'array' and 'object' - add or replace properties by indexes or keys,
+     *                      concatenate for 'string', summarizes for 'number', cloned deep for NodeElements
+     * @returns {*}
+     */
+    NamespaceApplication.copy = function (src, addProperties) {
+        var type = NamespaceApplication.typeOf(src);
+
+        if (type === 'object' && NamespaceApplication.isNode(src)) {
+            return src.cloneNode(!!addProperties);
+        }
+        else if (type === 'function') {
+            return src.bind({});
+        }
+        else if (type === 'array' || type === 'object') {
+            var copy = JSON.parse(JSON.stringify(src));
+            if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
+                for (var i in addProperties)
+                    copy[i] = addProperties[i];
+            return copy;
+        }
+        else
+            return NamespaceApplication.defined(addProperties) ? src + addProperties : src;
     };
 
     /**
@@ -566,7 +599,7 @@
 
     NamespaceApplication.show = function (src) {
         NamespaceApplication._set_real_display_style(src);
-        NamespaceApplication.css(src, {display: src['_real_display_style'] ? src['_real_display_style'] : 'block'});
+        NamespaceApplication.css(src, {display: src && src['_real_display_style'] ? src['_real_display_style'] : 'block'});
     };
     NamespaceApplication.hide = function (src) {
         NamespaceApplication._set_real_display_style(src);
@@ -616,8 +649,8 @@
      * Formatting of string, or maybe template builder
      *
      * Examples:
-     * .format("Hello {0}, your code is {1}!", ['Ivan', 'Prefect']);
-     * .format("Hello {name}, your code is {mean}!", {name:'Ivan', mean: 'Prefect'});
+     * .format("Hello {0}, your code is {1}!", ['Jade', 'Prefect']);
+     * .format("Hello {name}, your code is {mean}!", {name:'Jade', mean: 'Prefect'});
      *
      * @param string    String
      * @param formated  Array|Object
@@ -695,6 +728,7 @@
      * .createElement ( 'div', {class: 'my-class'}, 'inject text')
      * .createElement ( 'div', {class: 'my-class'}, HTMLElement)
      * .createElement ( 'span', {class: 'my-class'}, [HTMLElement, HTMLElement])
+     * .createElement ( 'span', {class: 'my-class'}, ['<h1>header</h1>', '<p>paragraph</p>'])
      * @param tag
      * @param attrs
      * @param inner
@@ -702,18 +736,33 @@
      */
     NamespaceApplication.createElement = function (tag, attrs, inner) {
         var k, i, elem = document.createElement(tag);
-        if (!elem) return false;
-        if (NamespaceApplication.typeOf(attrs, 'object'))
-            for (k in attrs)
+
+        if (!elem) {
+            return false;
+        }
+
+        if (NamespaceApplication.typeOf(attrs, 'object')) {
+            for (k in attrs) {
                 elem.setAttribute(k, attrs[k]);
-        if (NamespaceApplication.typeOf(inner, 'string'))
+            }
+        }
+
+        if (NamespaceApplication.typeOf(inner, 'string')) {
             elem.innerHTML = inner;
-        else if (NamespaceApplication.isNode(inner))
+        }
+        else if (NamespaceApplication.isNode(inner)) {
             elem.appendChild(inner);
-        else if (NamespaceApplication.typeOf(inner, 'array'))
-            for (i = 0; i < inner.length; i++)
-                if (NamespaceApplication.isNode(inner[i]))
+        }
+        else if (NamespaceApplication.typeOf(inner, 'array')) {
+            for (i = 0; i < inner.length; i++) {
+                if (NamespaceApplication.isNode(inner[i])){
                     elem.appendChild(inner[i]);
+                }
+                else if (NamespaceApplication.typeOf(inner[i], 'string')) {
+                    elem.innerHTML += inner[i];
+                }
+            }
+        }
         return elem;
     };
 
@@ -1020,6 +1069,7 @@
      * @param utc
      * @returns {Date}
      */
+
     NamespaceApplication.Datetime.strToDate =  function (date, format, utc) {
         var set = [0, 0, 1, 0, 0, 0];
         var temp = date.match(/[a-zA-Z]+|[0-9]+/g);
@@ -1109,6 +1159,7 @@
         prototype.hide = NamespaceApplication.hide;
         prototype.toggle = NamespaceApplication.toggle;
         prototype.attr = NamespaceApplication.attr;
+        prototype.copy = NamespaceApplication.copy;
         prototype.inject = NamespaceApplication.inject;
         prototype.format = NamespaceApplication.format;
         prototype.ajax = NamespaceApplication.ajax;

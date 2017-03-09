@@ -516,8 +516,8 @@ NamespaceApplication.inject = function (selector, data, append, to) {
  * Formatting of string, or maybe template builder
  *
  * Examples:
- * .format("Hello {0}, your code is {1}!", ['Ivan', 'Prefect']);
- * .format("Hello {name}, your code is {mean}!", {name:'Ivan', mean: 'Prefect'});
+ * .format("Hello {0}, your code is {1}!", ['Jade', 'Prefect']);
+ * .format("Hello {name}, your code is {mean}!", {name:'Jade', mean: 'Prefect'});
  *
  * @param string    String
  * @param formated  Array|Object
@@ -595,6 +595,7 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
  * .createElement ( 'div', {class: 'my-class'}, 'inject text')
  * .createElement ( 'div', {class: 'my-class'}, HTMLElement)
  * .createElement ( 'span', {class: 'my-class'}, [HTMLElement, HTMLElement])
+ * .createElement ( 'span', {class: 'my-class'}, ['<h1>header</h1>', '<p>paragraph</p>'])
  * @param tag
  * @param attrs
  * @param inner
@@ -602,18 +603,33 @@ NamespaceApplication.ajax = function (config, callback, thisInstance) {
  */
 NamespaceApplication.createElement = function (tag, attrs, inner) {
     var k, i, elem = document.createElement(tag);
-    if (!elem) return false;
-    if (NamespaceApplication.typeOf(attrs, 'object'))
-        for (k in attrs)
+
+    if (!elem) {
+        return false;
+    }
+
+    if (NamespaceApplication.typeOf(attrs, 'object')) {
+        for (k in attrs) {
             elem.setAttribute(k, attrs[k]);
-    if (NamespaceApplication.typeOf(inner, 'string'))
+        }
+    }
+
+    if (NamespaceApplication.typeOf(inner, 'string')) {
         elem.innerHTML = inner;
-    else if (NamespaceApplication.isNode(inner))
+    }
+    else if (NamespaceApplication.isNode(inner)) {
         elem.appendChild(inner);
-    else if (NamespaceApplication.typeOf(inner, 'array'))
-        for (i = 0; i < inner.length; i++)
-            if (NamespaceApplication.isNode(inner[i]))
+    }
+    else if (NamespaceApplication.typeOf(inner, 'array')) {
+        for (i = 0; i < inner.length; i++) {
+            if (NamespaceApplication.isNode(inner[i])){
                 elem.appendChild(inner[i]);
+            }
+            else if (NamespaceApplication.typeOf(inner[i], 'string')) {
+                elem.innerHTML += inner[i];
+            }
+        }
+    }
     return elem;
 };
 
