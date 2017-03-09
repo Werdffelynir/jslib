@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ns.resizer.js</title>
+
+    <link rel="stylesheet" href="../grid_css/grid2.css">
+
+    <script src="../namespaceapplication/build/namespaceapplication.js"></script>
+    <script src="ns.resizer.js"></script>
+
+    <style>
+        #resizer {
+            width: 3px;
+            background: #675e89;
+            cursor: col-resize;
+        }
+        #menu {
+            border-right: 1px solid #9d8fd0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="table">
+    <div id="menu" class="width-15">
+        <ul>
+            <li>item-1</li>
+            <li>item-2</li>
+            <li>item-3</li>
+            <li>item-4</li>
+            <li>item-5</li>
+            <li>item-6</li>
+            <li>item-7</li>
+            <li>item-8</li>
+            <li>item-9</li>
+            <li>item-10</li>
+            <li>item-11</li>
+            <li>item-12</li>
+            <li>item-13</li>
+            <li>item-14</li>
+            <li>item-15</li>
+        </ul>
+    </div>
+    <div id="resizer">&nbsp;</div>
+    <div id="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut commodi, consectetur consequuntur debitis
+            distinctio eligendi et, incidunt officia porro quo reprehenderit, voluptates? Animi aspernatur debitis
+            delectus, ipsa obcaecati optio ullam!</p>
+        <p>Excepturi iusto maiores quia? A delectus distinctio eius enim facilis perferendis placeat possimus sint
+            temporibus vel! Cupiditate et eveniet ex fuga laboriosam magnam nobis quaerat quod, tempora? Accusamus, est,
+            sit!</p>
+        <p>At consectetur culpa delectus dolore earum eius enim eum ex expedita in laborum maiores, nam, nobis optio
+            placeat quod sequi unde vel! Ad pariatur perferendis porro? Deserunt illum tempora veniam.</p>
+        <p>Enim fugit illo laboriosam repellat! Amet assumenda debitis dignissimos dolorem doloribus ea earum eos
+            excepturi explicabo in libero minima, odit perspiciatis praesentium, quis tempore tenetur unde ut voluptate
+            voluptates voluptatum.</p>
+        <p>A architecto delectus ipsa iusto maiores modi neque nisi nulla, numquam perferendis quasi quibusdam quo
+            rerum? Aliquam cum cumque ea eaque eveniet, ipsum maiores, nostrum omnis quod reiciendis sit voluptates!</p>
+    </div>
+</div>
+
+
+
+<script>
+    var App = new NamespaceApplication();
+
+    var resizer = document.getElementById('resizer');
+    var menu = document.getElementById('menu');
+
+    function onChange (size) {
+        console.log('onChange', size);
+    }
+
+    function onStopChange (size) {
+        console.log('onStopChange', size);
+    }
+
+    App.Resizer(resizer, menu, onChange, onStopChange);
+
+
+</script>
+</body>
+</html>

@@ -568,3 +568,11 @@ NamespaceApplication.extension('ExtensionName', function (App) {
     return extension;
 }); 
 ```
+
+__Uses__
+Инициализация расширений происходит поле создания экземпляра `NamespaceApplication`
+```js
+var App = new NamespaceApplication();
+
+App.ExtensionName.method();
+```
