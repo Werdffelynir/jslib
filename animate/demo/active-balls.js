@@ -23,7 +23,7 @@
         }
     });
 
-    for (var i = 0; i < 500; i++) {
+    for (var i = 0; i < 1500; i++) {
 
         var x = Animate.Util.random(0, an.width);
         var y = Animate.Util.random(0, an.height);

@@ -78,8 +78,5 @@
         if (!!this.fullScreen)
             this.resizeCanvas();
 
-        // initialize events
-        this._events_initialize();
-
     }
 })()

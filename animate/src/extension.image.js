@@ -1,12 +1,12 @@
-Animate.Extension(function (insance) {
+Animate.Extension(function (instance) {
 
-    if (!(insance instanceof Animate))
+    if (!(instance instanceof Animate))
         return;
 
     /**
      * @type {{images: {}, load: load, get: get}}
      */
-    insance.Image = {
+    instance.Image = {
         images: {},
         load: function (imgs, callback) {},
         get: function (name) {}
@@ -21,7 +21,7 @@ Animate.Extension(function (insance) {
      * @param imgs
      * @param callback
      */
-    insance.Image.load = function (imgs, callback) {
+    instance.Image.load = function (imgs, callback) {
         if (imgs && typeof imgs === 'object') {
 
             var length = Object.keys(imgs).length;
@@ -36,8 +36,8 @@ Animate.Extension(function (insance) {
                     images[this.name] = this;
                     iterator ++;
                     if (iterator == length) {
-                        insance.Image.images = Animate.Util.defaultObject(insance.Image.images, images);
-                        callback.call(insance, images);
+                        instance.Image.images = Animate.Util.defaultObject(instance.Image.images, images);
+                        callback.call(instance, images);
                     }
                 };
             }
@@ -49,13 +49,13 @@ Animate.Extension(function (insance) {
      * @param name
      * @returns {*}
      */
-    insance.Image.get = function (name) {
+    instance.Image.get = function (name) {
         if (typeof name === 'string')
-            return insance.Image.images[name] ? insance.Image.images[name] : false;
+            return instance.Image.images[name] ? instance.Image.images[name] : false;
         if (Array.isArray(name)) {
             var i, imgs = [];
             for (i = 0; i < name.length; i ++)
-                if (insance.Image.images[i]) imgs.push(insance.Image.images[i]);
+                if (instance.Image.images[i]) imgs.push(instance.Image.images[i]);
             return imgs;
         }
     };

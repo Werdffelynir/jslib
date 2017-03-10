@@ -52,6 +52,10 @@ aminate.onKeydown = function (event) {};
 ```js
 var aminate = new Animate();
 
+aminate.width;
+aminate.height;
+aminate.fps;
+
 // return current Canvas element
 aminate.getCanvas ();
 aminate.getContext ();
@@ -152,19 +156,27 @@ aminate.frame (function (ctx, i) {
 
 ## Extensions
 ```js
-Animate.Extension(function (insance) {
+// instance is Animate.prototype
+Animate.Extension(function (instance) {
 
-    if (!(insance instanceof Animate))
+    if (!(instance instanceof Animate))
         return;
     
     /**
-     * @type Animate.prototype
+     * @type CanvasRenderingContext2D
      */
-    var that = insance;
-    
-    var extension = {};
+    var context = instance.getContext();
         
-    insance.extension = extension;
+    instance.Extension = {
+        
+        add: function() {
+          
+        },
+        
+        get: function() {
+          
+        }
+    };
 })
 ```
 

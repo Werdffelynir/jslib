@@ -6,7 +6,7 @@
         move: NamespaceApplication.query('#move')
     };
 
-    var an = new Animate({
+    var animate = new Animate({
         selector: '#canvas',
         width: 600,
         height: 400,
@@ -14,56 +14,97 @@
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
+    var Game = {
+        mc:{}
+    };
+    //Game.mc.
 
-    an.mc.timeText = an.moveclip({
-        label: 'Iteration: ',
-        text: ''
-    }, function (ctx, i) {
-        this.text = this.label + i;
+    // * * * * * * * * * * * * * * * * * * * * * * * * *
+    Game.Player = function (ctx) {
 
-        an.Graphic.rect(10, 10);
-        an.Text.font = '16px/18px sans';
-        an.Text.write(100, 100, this.text);
-        an.Graphic.rect(100, 100, 110, 18, '#dddddd');
-    });
-
-    an.frame('one', function(ctx, i) {
-
-        if (i == 25) {
-            console.log('one');
-            an.start('two');
+        if (Game.Player.stats.up) {
+            Game.Player.stats.y -= Game.Player.stats.speed;
         }
-    });
-
-    an.frame('two', function(ctx, i) {
-        if (i == 50) {
-            console.log('two');
-            an.start('three');
+        if (Game.Player.stats.down) {
+            Game.Player.stats.y += Game.Player.stats.speed;
         }
-    });
-
-    an.frame('three', function(ctx, i) {
-        if (i == 75) {
-            console.log('three');
-            an.start('fore');
+        if (Game.Player.stats.left) {
+            Game.Player.stats.x -= Game.Player.stats.speed;
         }
-    });
-
-    an.frame('fore', function(ctx, i) {
-        if (i > 100) {
-            console.log('fore');
-            an.stop();
+        if (Game.Player.stats.right) {
+            Game.Player.stats.x += Game.Player.stats.speed;
         }
-    });
 
-    //console.log(ctx, i);
-    an.onFrame = function (ctx, i) {
-        //console.log('iter: ', i, ctx);
-        //an.mc.timeText(ctx, i);
-        an.mc.timeText.bind(null, ctx, i)();
+        animate.Graphic.rectRound(
+            Game.Player.stats.x,
+            Game.Player.stats.y,
+            10, 10, 5, '#675e89', true
+        );
+
     };
 
+    Game.Player.stats = {
+        x: 100,
+        y: 100,
+        speed: 2,
+        move: { up: false, down: false, left: false, right: false }
+    };
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * *
+    Game.Gold = function (ctx, i) {
+
+        // generate gold map
+        if (!Game.Gold.level_1) {
+            Game.Gold.level_1 = [];
+
+            for (i = 0; i < 100; i++ ) {
+                animate.Graphic.rectRound(
+                    Animate.Util.random(0, animate.width),
+                    Animate.Util.random(0, animate.height),
+                    10, 10, 5, '#feff94', true
+                );
+                // Game.Gold.level_1.push({
+                //     x: Animate.Util.random(0, animate.width)
+                // });
+            }
+            Game.Gold.level_1_init = true;
+        }
+
+
+
+
+    };
+    Game.Gold.level_1_init = false;
+
+
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * *
+    animate.frame('start', {
+        init: function (ctx, i) {
+            //
+            Game.Gold(ctx);
+            Game.Player(ctx);
+        }
+    });
+
+
+
+
+    animate.onKeydown = function (event) {
+        // up 87 down 83 left 65 right 68
+        if (event.keyCode == 87) {Game.Player.stats.up = true}
+        if (event.keyCode == 83) {Game.Player.stats.down = true}
+        if (event.keyCode == 65) {Game.Player.stats.left = true}
+        if (event.keyCode == 68) {Game.Player.stats.right = true}
+    };
+    animate.onKeyup = function (event) {
+        // up 87 down 83 left 65 right 68
+        if (event.keyCode == 87) {Game.Player.stats.up = false}
+        if (event.keyCode == 83) {Game.Player.stats.down = false}
+        if (event.keyCode == 65) {Game.Player.stats.left = false}
+        if (event.keyCode == 68) {Game.Player.stats.right = false}
+    };
 
     // start
-    an.start('one');
+    animate.start('start');
 })();
