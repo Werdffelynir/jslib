@@ -2,55 +2,55 @@ Animate.Extension(function (insance) {
 
     if (!(insance instanceof Animate))
         return;
-    var
+
+    /**
+     * Global text options
+     * @type {{font: string, textAlign: string, textBaseline: string, direction: string, lineWidth: number, color: string, write: function}}
+     */
+    insance.Text = {
+        font: '12px Arial, sans',
+        textAlign: 'start',
+        textBaseline: 'top',
+        direction: 'inherit',
+        lineWidth: 1,
+        color: '#000000',
 
         /**
-         * @type Animate.prototype
+         * Create text block
+         * @param x
+         * @param y
+         * @param label
+         * @param color
+         * @param fill
          */
-        that = insance,
+        write: function (x, y, label, color, fill) {
+            var context = insance.getContext();
 
-        /**
-         * @type CanvasRenderingContext2D
-         */
-        context = insance.getContext(),
+            if (insance.Text.font)          context.font = insance.Text.font;
+            if (insance.Text.textAlign)     context.textAlign = insance.Text.textAlign;
+            if (insance.Text.textBaseline)  context.textBaseline = insance.Text.textBaseline;
+            if (insance.Text.direction)     context.direction = insance.Text.direction;
+            if (insance.Text.lineWidth)     context.lineWidth = insance.Text.lineWidth;
+            if (insance.Text.color)         color = insance.Text.color;
 
-        text = {
-            font: '12px Arial, sans',
-            textAlign: 'start',
-            textBaseline: 'top',
-            direction: 'inherit',
-            lineWidth: 1,
-            color: '#000000'
-        };
+            context.beginPath();
 
+            if (fill === true || fill === undefined) {
+                context.fillStyle = color || '#dddddd';
+                context.fillText(label, x, y);
 
-    text.write = function (x, y, label, color, fill) {
-
-        if (text.font)          context.font = text.font;
-        if (text.textAlign)     context.textAlign = text.textAlign;
-        if (text.textBaseline)  context.textBaseline = text.textBaseline;
-        if (text.direction)     context.direction = text.direction;
-        if (text.lineWidth)     context.lineWidth = text.lineWidth;
-        if (text.color)         color = text.color;
-
-        context.beginPath();
-
-        if (fill === true || fill === undefined) {
-            context.fillStyle = color || '#dddddd';
-            context.fillText(label, x, y);
-
-            if (typeof fill === 'string') {
-                context.strokeStyle = fill || '#000000';
+                if (typeof fill === 'string') {
+                    context.strokeStyle = fill || '#000000';
+                    context.strokeText(label, x, y);
+                }
+            }
+            else {
+                context.strokeStyle = color || '#000000';
                 context.strokeText(label, x, y);
             }
-        }
-        else {
-            context.strokeStyle = color || '#000000';
-            context.strokeText(label, x, y);
-        }
 
-        context.closePath();
+            context.closePath();
+        }
     };
 
-    insance.text = text;
 })

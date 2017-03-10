@@ -5,6 +5,13 @@
     var prototype = {};
 
     /**
+     * Empty objects
+     * @type {{}}
+     */
+    prototype.mc = {};
+    prototype.data = {};
+
+    /**
      * Return HTMLCanvasElement
      * @type HTMLCanvasElement
      */

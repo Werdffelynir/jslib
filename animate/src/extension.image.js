@@ -2,21 +2,15 @@ Animate.Extension(function (insance) {
 
     if (!(insance instanceof Animate))
         return;
-    var
 
-        /**
-         * @type Animate.prototype
-         */
-        that = insance,
-
-        /**
-         * @type CanvasRenderingContext2D
-         */
-        context = insance.getContext(),
-
-        image = {
-            images: {}
-        };
+    /**
+     * @type {{images: {}, load: load, get: get}}
+     */
+    insance.Image = {
+        images: {},
+        load: function (imgs, callback) {},
+        get: function (name) {}
+    };
 
     /**
      * Load Image Resource
@@ -27,7 +21,7 @@ Animate.Extension(function (insance) {
      * @param imgs
      * @param callback
      */
-    image.load = function (imgs, callback) {
+    insance.Image.load = function (imgs, callback) {
         if (imgs && typeof imgs === 'object') {
 
             var length = Object.keys(imgs).length;
@@ -42,30 +36,28 @@ Animate.Extension(function (insance) {
                     images[this.name] = this;
                     iterator ++;
                     if (iterator == length) {
-                        image.images = Animate.Util.defaultObject(image.images, images);
-                        callback.call(that, images);
+                        insance.Image.images = Animate.Util.defaultObject(insance.Image.images, images);
+                        callback.call(insance, images);
                     }
                 };
             }
         }
     };
-
+    
     /**
      * Get image`s
      * @param name
      * @returns {*}
      */
-    image.get = function (name) {
+    insance.Image.get = function (name) {
         if (typeof name === 'string')
-            return image.images[name] ? image.images[name] : false;
+            return insance.Image.images[name] ? insance.Image.images[name] : false;
         if (Array.isArray(name)) {
             var i, imgs = [];
             for (i = 0; i < name.length; i ++)
-                if (image.images[i]) imgs.push(image.images[i]);
+                if (insance.Image.images[i]) imgs.push(insance.Image.images[i]);
             return imgs;
         }
     };
 
-
-    insance.image = image;
 })

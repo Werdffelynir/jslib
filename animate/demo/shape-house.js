@@ -29,9 +29,9 @@
         ctx = ctx;
 
         an.backgroundColor(Dm.bgColor);
-        an.graphic.shape(Dm.house, Dm.houseColor, Dm.borderColor, true, 15);
+        an.Graphic.shape(Dm.house, Dm.houseColor, Dm.borderColor, true, 15);
 
-        an.graphic.shape(Dm.window, Dm.windowColor, Dm.borderColor, true, 5);
+        an.Graphic.shape(Dm.window, Dm.windowColor, Dm.borderColor, true, 5);
         if (ctx.isPointInPath(Dm.mouse.x, Dm.mouse.y)){
             Dm.windowColor = Dm.windowActiveColor;
         } else {

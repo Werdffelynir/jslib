@@ -46,8 +46,8 @@
             Dm.rocketProperties.run = false;
     }
 
-    an.image.load({
-        rocket:'/jsmb_animate/demo/images/rocket.png'
+    an.Image.load({
+        rocket:'/animate/demo/images/rocket.png'
     }, function (images) {
         Dm.images = images;
     });
