@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="../grid.css">
 
-    <script src="../jsmb_ns/ns_v0.2.2.js"></script>
+    <script src="../namespaceapplication/ns_v0.2.5.js"></script>
     <script src="build/animate.js"></script>
 
     <style>
@@ -33,6 +33,7 @@
             <li><a href="text.js">text.js</a></li>
             <li><a href="rocket.js">rocket.js</a></li>
             <li><a href="active-balls.js">active-balls.js</a></li>
+            <li><a href="mmm.js">mmm.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
@@ -56,7 +57,7 @@
 
             NamespaceApplication.inject(desc, '<h4>' + src + '</h4>');
 
-            NamespaceApplication.loadJS('/jsmb_animate/demo/' + src, function() {
+            NamespaceApplication.loadJS('/animate/demo/' + src, function() {
                 console.log('Loaded: ' + src);
             });
         }

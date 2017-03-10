@@ -5,6 +5,7 @@
     var prototype = {};
 
     /**
+     * Return HTMLCanvasElement
      * @type HTMLCanvasElement
      */
     prototype.getCanvas = function () {
@@ -12,14 +13,16 @@
     };
 
     /**
+     * Return CanvasRenderingContext2D
      * @type CanvasRenderingContext2D
      */
     prototype.getContext = function () {
         return this.context;
     };
 
+
     /**
-     *
+     * Return current iteration
      * @returns {number}
      */
     prototype.getIteration = function () {
@@ -27,7 +30,7 @@
     };
 
     /**
-     *
+     * Return `true` if move is playing, or `false`
      * @returns {boolean}
      */
     prototype.isPlay = function () {
@@ -35,30 +38,39 @@
     };
 
     /**
-     * Add frame
-     * @param name
+     * Add frame in to each iteration.
+     * Return instance index
+     * .frame (name, sceneObject)
+     * .frame (sceneObject)
+     * .frame (function (ctx, i) {})
+     * @param frameName
      * @param sceneObject
      * @returns {{index: number, hide: boolean, name: string, init: null}|*}
      */
-    prototype.frame = function (name, sceneObject) {
+    prototype.frame = function (frameName, sceneObject) {
         if (arguments.length === 1) {
-            if (name && (typeof name === 'function' || typeof name === 'object')) {
-                sceneObject = name;
-                name = this._frame_name;
+            if (frameName && (typeof frameName === 'function' || typeof frameName === 'object')) {
+                sceneObject = frameName;
+                frameName = this._frame_name;
             }
         }
         sceneObject = this.createSceneObject(sceneObject);
 
-        if (!Array.isArray(this._frames[name]))
-            this._frames[name] = [];
+        if (!Array.isArray(this._frames[frameName]))
+            this._frames[frameName] = [];
 
-        this._frames[name].push(sceneObject);
+        this._frames[frameName].push(sceneObject);
         return sceneObject;
     };
 
-    prototype.frameRemove = function (index) {
-        if (this._frames[this._frame_name][index])
-            delete this._frames[this._frame_name][index];
+    /**
+     * Remove frame by frame name
+     * @param frameName
+     */
+    prototype.frameRemove = function (frameName) {
+        if (this._frames[frameName]) {
+            this._frames[frameName] = [];
+        }
     };
 
     /**
@@ -199,6 +211,11 @@
         this.context.clearRect(0, 0, this.width, this.height);
     };
 
+    /**
+     * Set resize canvas
+     * @param width
+     * @param height
+     */
     prototype.resizeCanvas = function (width, height) {
         this.canvas.style.position = 'absolute';
         this.canvas.width = this.width = width || window.innerWidth;
@@ -263,7 +280,7 @@
     prototype.moveclip.count = 0;
 
     /**
-     * Create point object
+     * Create special object to indicate a point
      * @param x
      * @param y
      * @returns {{x: *, y: *}}
@@ -271,7 +288,7 @@
     prototype.point = function (x, y) { return {x: x, y: y} };
 
     /**
-     * Create rectangle object
+     * Create special object to indicate a rectangle
      * @param x
      * @param y
      * @param width

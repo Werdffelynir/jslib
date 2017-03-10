@@ -15,7 +15,6 @@
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
     an.frame(function(ctx, i){
 
         console.log(ctx, i);
@@ -23,8 +22,6 @@
         if (i > 100)
             an.stop();
     });
-
-
 
     // start
     an.start();

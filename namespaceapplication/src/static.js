@@ -500,13 +500,20 @@ NamespaceApplication._set_real_display_style = function (src) {
 NamespaceApplication.inject = function (selector, data, append, to) {
     if (typeof selector === 'string')
         selector = NamespaceApplication.query(selector, to);
+
+    if (!append)
+        selector.textContent = '';
+
     if (NamespaceApplication.isNode(selector)) {
         if (NamespaceApplication.isNode(data)) {
-            if (!append)
-                selector.textContent = '';
             selector.appendChild(data);
-        } else
+        } else if (NamespaceApplication.typeOf(data, 'array')) {
+            var i;
+            for (i = 0; i < data.length; i ++)
+                NamespaceApplication.inject(selector, data[i], true, to);
+        } else {
             selector.innerHTML = (!append) ? data : selector.innerHTML + data;
+        }
         return selector;
     }
     return null;
