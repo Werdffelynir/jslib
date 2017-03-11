@@ -6,6 +6,7 @@ var Animate = window.Animate || {}; // THIS-LINE-WILL-DELETED
  * @type {string}
  */
 Animate.LOOP_TIMER = 'timer';
+
 Animate.LOOP_ANIMATE = 'animation';
 
 /**

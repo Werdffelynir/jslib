@@ -17,7 +17,16 @@
     var Game = {
         mc:{}
     };
-    //Game.mc.
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * *
+    Game.Panel = function (ctx, i) {
+        animate.Graphic.rect(0, 0, animate.width, 26, 'black', true);
+        animate.Text.font = 'bold 14px/30px sans';
+        animate.Text.color = '#ffffff';
+        animate.Text.lineWidth = 2;
+        var text = 'Health ' + (Game.Player.stats.health) + '  Gold ' + (Game.Player.stats.gold);
+        animate.Text.write(10, 5, text);
+    };
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     Game.Player = function (ctx) {
@@ -35,46 +44,56 @@
             Game.Player.stats.x += Game.Player.stats.speed;
         }
 
-        animate.Graphic.rectRound(
-            Game.Player.stats.x,
-            Game.Player.stats.y,
-            10, 10, 5, '#675e89', true
-        );
-
+        animate.Graphic.circle(Game.Player.stats.x, Game.Player.stats.y, 10, '#675e89', true);
     };
 
     Game.Player.stats = {
         x: 100,
         y: 100,
         speed: 2,
-        move: { up: false, down: false, left: false, right: false }
+        move: { up: false, down: false, left: false, right: false },
+        gold: 0,
+        health: 100
     };
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     Game.Gold = function (ctx, i) {
 
         // generate gold map
-        if (!Game.Gold.level_1) {
-            Game.Gold.level_1 = [];
-
-            for (i = 0; i < 100; i++ ) {
-                animate.Graphic.rectRound(
-                    Animate.Util.random(0, animate.width),
-                    Animate.Util.random(0, animate.height),
-                    10, 10, 5, '#feff94', true
-                );
-                // Game.Gold.level_1.push({
-                //     x: Animate.Util.random(0, animate.width)
-                // });
+        if (!Game.Gold.map) {
+            Game.Gold.map = [];
+            for (i = 0; i < 50; i++ ) {
+                Game.Gold.map.push({
+                    x: Animate.Util.random(10, animate.width - 10),
+                    y: Animate.Util.random(35, animate.height - 10),
+                    color: '#f7e642'
+                });
             }
-            Game.Gold.level_1_init = true;
+        }
+        // add golds
+        for (i = 0; i < 50; i++ ) {
+            var g = Game.Gold.map[i];
+            if (NSA.typeOf(g, 'object')) {
+
+                ctx.lineWidth = 3;
+                animate.Graphic.circle(g.x, g.y, 20, g.color, true);
+
+                if (ctx.isPointInPath(Game.Player.stats.x, Game.Player.stats.y)){
+
+                    animate.Graphic.circle(g.x, g.y, 23, '#f00', false);
+                    delete Game.Gold.map[i];
+                    Game.Gold.chatched ++;
+                    Game.Player.stats.gold += 10;
+                }
+            }
         }
 
 
 
 
     };
-    Game.Gold.level_1_init = false;
+    Game.Gold.map = false;
+    Game.Gold.chatched = 0;
 
 
 
@@ -84,6 +103,7 @@
             //
             Game.Gold(ctx);
             Game.Player(ctx);
+            Game.Panel(ctx);
         }
     });
 
