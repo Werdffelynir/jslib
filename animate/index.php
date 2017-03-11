@@ -33,7 +33,9 @@
             <li><a href="text.js">text.js</a></li>
             <li><a href="rocket.js">rocket.js</a></li>
             <li><a href="active-balls.js">active-balls.js</a></li>
-            <li><a href="mmm.js">mmm.js</a></li>
+            <li><a href="move.js">move.js</a></li>
+            <li><a href="move_gold.js">move_gold.js</a></li>
+            <li><a href="move_bet.js">move_bet.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
