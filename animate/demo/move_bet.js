@@ -10,7 +10,7 @@
         selector: '#canvas',
         width: 600,
         height: 400,
-        fps: 30
+        fps: 12
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -50,58 +50,80 @@
     Game.Player.stats = {
         x: 100,
         y: 100,
-        speed: 2,
+        speed: 2.8,
         move: { up: false, down: false, left: false, right: false },
         gold: 0,
         health: 100
     };
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
-    Game.Gold = function (ctx, i) {
-
-        // generate gold map
-        if (!Game.Gold.map) {
-            Game.Gold.map = [];
-            for (i = 0; i < 50; i++ ) {
-                Game.Gold.map.push({
-                    x: Animate.Util.random(10, animate.width - 10),
-                    y: Animate.Util.random(35, animate.height - 10),
-                    color: '#f7e642'
-                });
-            }
-        }
-        // add golds
-        for (i = 0; i < 50; i++ ) {
-            var g = Game.Gold.map[i];
-            if (NSA.typeOf(g, 'object')) {
-
-                ctx.lineWidth = 3;
-                animate.Graphic.circle(g.x, g.y, 20, g.color, true);
-
-                if (ctx.isPointInPath(Game.Player.stats.x, Game.Player.stats.y)){
-
-                    animate.Graphic.circle(g.x, g.y, 23, '#f00', false);
-                    delete Game.Gold.map[i];
-                    Game.Gold.chatched ++;
-                    Game.Player.stats.gold += 10;
-                }
-            }
-        }
+    Game.Enemy = function (ctx) {
 
 
 
 
     };
-    Game.Gold.map = false;
-    Game.Gold.chatched = 0;
 
+    Game.Enemy.mc = animate.moveclip({
+        x: false,
+        y: false,
+        speed: 1.1,
+        distance: 0
+    }, function (ctx, x, y) {
 
+        if (this.x === false) this.x = x || 0;
+        if (this.y === false) this.y = y || 0;
+
+        //console.log(x);
+
+        var pu = {x: Game.Player.stats.x, y: Game.Player.stats.y};
+        var pe = {x: this.x, y: this.y};
+
+        this.distance = Animate.Util.distanceBetween(pu, pe);
+
+        if (this.distance < 50) {
+            if (pe.x < pu.x) {
+                this.x += this.speed;
+            } else {
+                //if (this.x - this.speed < this.x)
+                this.x -= this.speed;
+            }
+
+            if (pe.y < pu.y) {
+                this.y += this.speed;
+            } else {
+                this.y -= this.speed;
+            }
+        }
+
+        //ctx.beginPath();
+        animate.Graphic.circle(this.x, this.y, 13, '#ff0011', true);
+        //ctx.closePath();
+
+    });
+    Game.Enemy.scope = [];
+    Game.box = animate.moveclip({
+        x: false,
+        y: false,
+    }, function (ctx, x, y) {
+        if (this.x === false) this.x = x || 0;
+        if (this.y === false) this.y = y || 0;
+
+        animate.Graphic.rect(this.x, this.y, 10, 10, '#ff0011', true);
+    });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     animate.frame('start', {
         init: function (ctx, i) {
             //
-            Game.Gold(ctx);
+            //Game.Enemy(ctx);
+            //Game.Enemy(ctx);
+            Game.box(ctx, 200, 100);
+            Game.box(ctx, 250, 100);
+            Game.box(ctx, 300, 100);
+            //Game.Enemy.mc(ctx, 200, 100);
+            //Game.Enemy.mc(ctx, 250, 100);
+
             Game.Player(ctx);
             Game.Panel(ctx);
         }
