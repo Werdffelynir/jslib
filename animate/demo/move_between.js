@@ -26,8 +26,8 @@ var Game = {
     },
     // Game.hero.x
     hero: {
-        x: 100,
-        y: 100,
+        x: 160,
+        y: 150,
         color: '#ffd65f',
         jumpReady: false,
         radius: 16,
@@ -45,13 +45,11 @@ var Game = {
 Game.CreateHero = animate.moveclip(Game.hero, function (ctx, i) {
 
     if (Game.key.up && this.jumpReady) {
-        this.accelerateSpeed = -this.accelerateMax; // -Math.abs(this.accelerateSpeed);
+        this.accelerateSpeed = -this.accelerateMax;
         this.horizontal = animate.height;
         this.jumpReady = false;
     }
 
-    //console.log('horizontal', this.horizontal);
-    //console.log('hitGround', this.hitGround);
     if (!this.hitGround) {
         this.horizontal = animate.height;
         this.jumpReady = false;
@@ -59,12 +57,7 @@ Game.CreateHero = animate.moveclip(Game.hero, function (ctx, i) {
 
     if (this.y > this.horizontal) {
         this.y = this.horizontal;
-
         Game.hero.jumpReady = true;
-
-        NSA.Timer.timeout(function () {
-
-        }, 1000)
 
     } else if (!this.jumpReady) {
         if (this.accelerateSpeed > this.accelerateMax) this.accelerateSpeed = this.accelerateMax;
@@ -79,7 +72,6 @@ Game.CreateHero = animate.moveclip(Game.hero, function (ctx, i) {
         this.x += this.speed;
     }
 
-
     ctx.save();
     ctx.translate(0, -(this.radius/2));
     animate.Graphic.circle(this.x, this.y, this.radius, this.color, true);
@@ -93,22 +85,14 @@ Game.CreateGround = function () {
 
     ground(0,  19, animate.width);
     ground(11, 18, 100);
-    ground(0,  11, 50);
-    ground(0,  07, 20);
-    ground(3,  04, 40);
-    ground(10, 03, 30);
-    ground(10, 04, 100);
-
-    ground(22, 04, 100);
-    ground(23, 05, 100);
-    ground(35, 05, 30);
-    ground(40, 04, 20);
-    ground(44, 04, 20);
-
-    ground(11, 09, 30);
+    ground(1, 9,  30);
+    ground(7, 9,  30);
+    ground(3, 10,  10);
+    ground(3, 11,  10);
+    ground(3, 12,  10);
+    ground(3, 13,  40);
     ground(15, 10, 100);
     ground(28, 12, 140);
-
     ground(40, 18, 200);
     ground(41, 17, 200);
     ground(42, 16, 200);
@@ -116,14 +100,6 @@ Game.CreateGround = function () {
     ground(44, 14, 200);
     ground(45, 13, 200);
     ground(46, 12, 200);
-
-    ground(50, 03, 10);
-    ground(50, 04, 10);
-    ground(50, 05, 40);
-    ground(53, 03, 10);
-    ground(53, 04, 10);
-    //ground(40, 05, 100);
-    //ground(44, 05, 100);
 
     function ground(x, y, width) {
         x *= 10;
@@ -133,7 +109,6 @@ Game.CreateGround = function () {
             Game.hero.horizontal = y;
             Game.hero.hitGround = true;
         }
-        animate.getContext().closePath();
     }
 };
 

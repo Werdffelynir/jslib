@@ -10,7 +10,7 @@
         selector: '#canvas',
         width: 600,
         height: 400,
-        fps: 30
+        fps: 60
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -29,7 +29,12 @@
     };
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
+
     Game.Player = function (ctx) {
+        if (Game.Player.dead) {
+            animate.start('end');
+            return;
+        }
 
         if (Game.Player.stats.up) {
             Game.Player.stats.y -= Game.Player.stats.speed;
@@ -55,6 +60,7 @@
         gold: 0,
         health: 100
     };
+    Game.Player.dead = false;
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     Game.Gold = function (ctx, i) {
@@ -87,28 +93,79 @@
                 }
             }
         }
-
-
-
-
     };
+
     Game.Gold.map = false;
     Game.Gold.credits = 0;
 
 
+    Game.Enemies = function (ctx) {
+        var i,
+            speed = 0.35,
+            distance = 100,
+            limit = 10;
+        if (!Game.Enemies.map) {
+            Game.Enemies.map = [];
+            for (i = 0; i < limit; i++ ) {
+                Game.Enemies.map.push({
+                    x: Animate.Util.random(10, animate.width - 10),
+                    y: Animate.Util.random(35, animate.height - 10),
+                    color: '#f70001'
+                });
+            }
+        }
+
+        for (i = 0; i < limit; i++ ) {
+            var _distance, enm = Game.Enemies.map[i];
+            if (NSA.typeOf(enm, 'object')) {
+
+                ctx.lineWidth = 3;
+                animate.Graphic.circle(enm.x, enm.y, 10, enm.color, true);
+                _distance = Animate.Util.distanceBetween(enm, {x:Game.Player.stats.x, y:Game.Player.stats.y});
+                if (_distance < distance) {
+
+                    if (Game.Player.stats.x < enm.x) enm.x -= speed;
+                    else enm.x += speed;
+                    if (Game.Player.stats.y < enm.y) enm.y -= speed;
+                    else enm.y += speed;
+
+
+
+                }
+
+                if (ctx.isPointInPath(Game.Player.stats.x, Game.Player.stats.y)){
+                    console.log('player die');
+                    Game.Player.dead = true;
+                }
+            }
+        }
+    };
+    Game.Enemies.map = false;
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     animate.frame('start', {
         init: function (ctx, i) {
             //
             Game.Gold(ctx);
+            Game.Enemies(ctx);
             Game.Player(ctx);
             Game.Panel(ctx);
         }
     });
 
+    animate.frame('end', {
+        init: function (ctx, i) {
 
+            animate.Text.font = '64px sans, sans-serif';
+            animate.Text.color = '#000000';
+            animate.Text.lineWidth = 5;
+            animate.Text.textAlign = 'left';
+            animate.Text.textBaseline = 'top';
+            animate.Graphic.rect(30, 100, 100, 100, '#ff1133', '#000000');
+            animate.Text.write(160, 120, 'the end');
 
+        }
+    });
 
     animate.onKeydown = function (event) {
         // up 87 down 83 left 65 right 68
