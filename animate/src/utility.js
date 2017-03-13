@@ -10,6 +10,14 @@ Animate.Util.defaultObject = function (defaultObject, object) {
     return defaultObject;
 };
 
+Animate.Util.copy = function (src, addProperties) {
+    var copy_object = JSON.parse(JSON.stringify(src));
+    if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
+        for (var i in addProperties)
+            copy_object[i] = addProperties[i];
+    return copy_object;
+};
+
 Animate.Util.random = function (min, max) {
     min = min || 0;
     max = max || 100;

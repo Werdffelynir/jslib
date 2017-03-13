@@ -255,39 +255,30 @@
      * @returns {_moveclip}
      */
     prototype.moveclip = function (properties, callback) {
-        var
-            key,
-            that = this,
-            props = {
-                x: 0,
-                y: 0,
-                width: null,
-                height: null,
-                radius: null,
-                rotate: 0,
-                id: 'clip_' + this.moveclip.count,
-            };
+        var key;
+        var defaultProperties = JSON.parse(JSON.stringify(prototype.moveclip.properties));
 
         if (typeof properties === 'function') {
             callback = properties;
-            properties = props;
-        } else
-            properties = Animate.Util.defaultObject(props, properties);
+            properties = {};
+        }
 
-        var _moveclip = function () {
-            //that.context.save();
-            callback.apply(_moveclip, arguments);
-            //that.context.restore();
-        };
+        for (key in defaultProperties) {
+            if (properties[key] === undefined)
+                properties[key] = defaultProperties[key];
+            properties.id = 'clip_' + this.moveclip.count;
+        }
 
-        for (key in properties)
-            if (!_moveclip.hasOwnProperty(key)) _moveclip[key] = properties[key]
+        function _moveclip () {
+            callback.apply(properties, arguments)
+        }
 
         this.moveclip.count ++;
         return _moveclip;
     };
 
     prototype.moveclip.count = 0;
+    prototype.moveclip.properties = {x: 0, y: 0, width: null, height: null, radius: null, rotate: null};
 
     /**
      * Create special object to indicate a point
@@ -320,6 +311,17 @@
                 y > rectangle[1] &&
                 x < rectangle[0]+rectangle[2] &&
                 y < rectangle[1]+rectangle[3];
+    };
+
+    /**
+     * isPointInPath
+     * @param point
+     * @param y
+     * @returns {boolean}
+     */
+    prototype.hitTestPoint = function (point, y) {
+        if (arguments.length == 2) point = {x:point,y:y};
+        return this.context.isPointInPath(point.x, point.y);
     };
 
     /**

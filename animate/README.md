@@ -80,7 +80,7 @@ aminate.createSceneObject (sceneObject);
 // delete frame by frame name
 aminate.frameRemove (frameName);
 
-// create moveclip
+// create moveclip. create function based on `callback` and have prototype a `properties` one for all instances
 aminate.moveclip (properties, callback);
 
 // create special object to indicate a point
@@ -150,6 +150,33 @@ var mc = aminate.moveclip (
 
 aminate.frame (function (ctx, i) {
     mc(ctx, i, 'hello');
+});
+```
+
+Объект `mcContext` будет проинициализирован в область видимости `this` для порожденной функции `aminate.moveclip`
+Изменять его возможно как внутри функции (this.label = 'some text') так и во-вне (mcContext.label = 'some text')
+Объект `mcContext` после инициализации будет дополнен свойствами по умолчанию и специальными свойствами
+
+```js
+var mcContext = {
+    x: 0,
+    y: 0,
+    label: 'Hello canvas'
+}
+
+var mc = aminate.moveclip (mcContext, function (ctx) {
+    ctx.font = '18px sans, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(this.label, 80, 5);
+});
+
+aminate.frame (function (ctx, i) {
+    
+    mc(ctx);
+    if (i == 100) mcContext.label = 'Hello JavaScript';
+    if (i == 200) mcContext.label = 'Hello HTML';
+    
 });
 ```
 

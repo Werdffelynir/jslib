@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="../grid.css">
 
-    <script src="../namespaceapplication/ns_v0.2.5.js"></script>
+    <script src="../namespaceapplication/build/namespaceapplication.js"></script>
     <script src="build/animate.js"></script>
 
     <style>
@@ -35,7 +35,7 @@
             <li><a href="active-balls.js">active-balls.js</a></li>
             <li><a href="move.js">move.js</a></li>
             <li><a href="move_gold.js">move_gold.js</a></li>
-            <li><a href="move_bet.js">move_bet.js</a></li>
+            <li><a href="move_between.js">move_between.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">

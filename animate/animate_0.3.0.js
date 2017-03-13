@@ -93,9 +93,6 @@
             if (!!this.fullScreen)
                 this.resizeCanvas();
 
-            // initialize events
-            this._events_initialize();
-
         }
     })();
 
@@ -217,6 +214,9 @@
          * @param frameName
          */
         prototype.play = function (frameName) {
+
+            // initialize events
+            this._events_initialize();
 
             if (!this._is_playing && this.context) {
 
@@ -355,39 +355,30 @@
          * @returns {_moveclip}
          */
         prototype.moveclip = function (properties, callback) {
-            var
-                key,
-                that = this,
-                props = {
-                    x: 0,
-                    y: 0,
-                    width: null,
-                    height: null,
-                    radius: null,
-                    rotate: 0,
-                    id: 'clip_' + this.moveclip.count,
-                };
+            var key;
+            var defaultProperties = JSON.parse(JSON.stringify(prototype.moveclip.properties));
 
             if (typeof properties === 'function') {
                 callback = properties;
-                properties = props;
-            } else
-                properties = Animate.Util.defaultObject(props, properties);
+                properties = {};
+            }
 
-            var _moveclip = function () {
-                //that.context.save();
-                callback.apply(_moveclip, arguments);
-                //that.context.restore();
-            };
+            for (key in defaultProperties) {
+                if (properties[key] === undefined)
+                    properties[key] = defaultProperties[key];
+                properties.id = 'clip_' + this.moveclip.count;
+            }
 
-            for (key in properties)
-                if (!_moveclip.hasOwnProperty(key)) _moveclip[key] = properties[key]
+            function _moveclip() {
+                callback.apply(properties, arguments)
+            }
 
             this.moveclip.count++;
             return _moveclip;
         };
 
         prototype.moveclip.count = 0;
+        prototype.moveclip.properties = {x: 0, y: 0, width: null, height: null, radius: null, rotate: null};
 
         /**
          * Create special object to indicate a point
@@ -427,6 +418,17 @@
         };
 
         /**
+         * isPointInPath
+         * @param point
+         * @param y
+         * @returns {boolean}
+         */
+        prototype.hitTestPoint = function (point, y) {
+            if (arguments.length == 2) point = {x: point, y: y};
+            return this.context.isPointInPath(point.x, point.y);
+        };
+
+        /**
          * Return point object
          * @param event
          * @returns {{x: number, y: number}}
@@ -442,6 +444,7 @@
         prototype._events_initialize = function () {
             var that = this;
 
+            // onclick event
             if (typeof this.onClick === 'function' && !this._on_click_init) {
                 this.canvas.addEventListener('click', function (event) {
                     that.onClick.call(that, event, that.mousePosition(event))
@@ -449,6 +452,7 @@
                 this._on_click_init = true;
             }
 
+            // onmousemove event
             if (typeof this.onMousemove === 'function' && !this._on_mousemove_init) {
                 this.canvas.addEventListener('mousemove', function (event) {
                     that.onMousemove.call(that, event, that.mousePosition(event))
@@ -456,6 +460,7 @@
                 this._on_mousemove_init = true;
             }
 
+            // onmousedown event
             if (typeof this.onMousedown === 'function' && !this._on_mousedown_init) {
                 this.canvas.addEventListener('mousedown', function (event) {
                     that.onMousedown.call(that, event, that.mousePosition(event))
@@ -463,6 +468,7 @@
                 this._on_mousedown_init = true;
             }
 
+            // onmouseup event
             if (typeof this.onMouseup === 'function' && !this._on_mouseup_init) {
                 this.canvas.addEventListener('mouseup', function (event) {
                     that.onMouseup.call(that, event, that.mousePosition(event))
@@ -470,6 +476,7 @@
                 this._on_mouseup_init = true;
             }
 
+            // onkeydown event
             if (typeof this.onKeydown === 'function' && !this._on_keydown_init) {
                 window.addEventListener('keydown', function (event) {
                     that.onKeydown.call(that, event)
@@ -477,6 +484,7 @@
                 this._on_keydown_init = true;
             }
 
+            // onkeyup event
             if (typeof this.onKeyup === 'function' && !this._on_keyup_init) {
                 window.addEventListener('keyup', function (event) {
                     that.onKeyup.call(that, event)
@@ -501,6 +509,7 @@
      * @type {string}
      */
     Animate.LOOP_TIMER = 'timer';
+
     Animate.LOOP_ANIMATE = 'animation';
 
     /**
@@ -527,6 +536,14 @@
             defaultObject[key] = object[key];
         }
         return defaultObject;
+    };
+
+    Animate.Util.copy = function (src, addProperties) {
+        var copy_object = JSON.parse(JSON.stringify(src));
+        if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
+            for (var i in addProperties)
+                copy_object[i] = addProperties[i];
+        return copy_object;
     };
 
     Animate.Util.random = function (min, max) {
@@ -630,7 +647,6 @@
          * @type {{shape: function, rect: function, rectRound: function, circle: function, line: function, lineVertical: function, lineHorizontal: function, shadow: function, clearShadow: function, ellipse: function}}
          */
         instance.Graphic = {};
-
 
         /**
          * @namespace Animate.prototype.Graphic.shape
