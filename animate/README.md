@@ -209,7 +209,25 @@ Animate.Extension(function (instance) {
 })
 ```
 
+## Core extension `keyPress`
+```js
+// (out loop use) return info about this method and keys-codes list
+keyPress();
+keyPress.info();
 
+// (in loop use) return bool. true - when press 'ArrowUp'
+keyPress('ArrowUp');
+
+// (in loop use) execute function `onUp` when press 'ArrowUp'
+keyPress('ArrowUp', onUp);  
+
+// (out loop use) execute function `onKeyDown` every time when press any key
+keyPress(onKeyDown);
+
+// (out loop use) execute `onKeyDown` for keyDown and `onKeyUp` for keyUp
+keyPress(onKeyDown, onKeyUp);
+
+```
 
 ## Core extension `Text`
 ```js
@@ -285,4 +303,72 @@ __example 3__
 animate.frame(function (ctx, i) {
     // code...
 });
+```
+
+### animate.keyPress()
+```js
+// in loop
+if (animate.keyPress('ArrowUp') || animate.keyPress('w')) {
+    moveclip.y -= speed;
+}
+if (animate.keyPress('ArrowDown') || animate.keyPress('s')) {
+    moveclip.y += speed;
+}
+if (animate.keyPress('ArrowLeft') || animate.keyPress('a')) {
+    moveclip.x -= speed;
+}
+if (animate.keyPress('ArrowRight') || animate.keyPress('d')) {
+    moveclip.x += speed;
+}
+```
+
+```js
+// out loop
+function onArrowUp(eve){
+    // do...
+}
+
+// in loop
+animate.keyPress('ArrowUp', onArrowUp)
+```
+
+```js
+// out loop
+function onKeyUp(eve){
+    // do...
+}
+function onKeyDown(eve){
+    // do...
+}
+    
+// out loop
+animate.keyPress(onKeyDown, onKeyUp);
+```
+
+__Wrong!__. Don't do like it
+```js
+// in loop
+animate.keyPress('ArrowUp', function (eve){
+    // do...
+});
+
+// in loop
+animate.keyPress(function (eve){}, function (eve){});
+```
+
+
+### animate.mousePress()
+```js
+// in loop
+var clickPoint = animate.mousePress();
+// if mouse clicked clickPoint = {x: y: }, else return false
+```
+
+```js
+// out loop
+function onMouseMovie(point){
+    // do...
+}
+// in loop
+animate.mousePress(onMouseMovie);
 ```

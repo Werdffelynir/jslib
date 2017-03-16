@@ -22,6 +22,10 @@
 
     [[['extension.image']]];
 
+    [[['extension.keypress']]];
+
+    [[['extension.mousepress']]];
+
     /** Set script version. Property [read-only]*/
     Object.defineProperty(Animate, 'version', {
         enumerable: false, configurable: false, writable: false, value: '0.3.0'
