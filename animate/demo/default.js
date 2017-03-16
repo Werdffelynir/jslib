@@ -1,9 +1,10 @@
 (function () {
     var node = {
-        menu: NamespaceApplication.queryAll('#menu'),
-        page: NamespaceApplication.query('#page'),
-        desc: NamespaceApplication.query('#desc'),
-        move: NamespaceApplication.query('#move')
+        menu: NSA.queryAll('#menu'),
+        page: NSA.query('#page'),
+        desc: NSA.query('#desc'),
+        move: NSA.query('#move'),
+        after: NSA.query('#after')
     };
 
     var an = new Animate({

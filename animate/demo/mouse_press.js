@@ -24,6 +24,8 @@
         animate.Text.textBaseline = 'top';
         animate.Graphic.rect(5, 5, 360, 30, '#FFE5BE', '#000000');
         animate.Text.write(10, 10, 'MOUSE POSITION x:' + point.x + ' y:' + point.y);
+
+        animate.Graphic.circle(point.x, point.y, 10, '#FFE5BE');
     };
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *

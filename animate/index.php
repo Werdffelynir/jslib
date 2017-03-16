@@ -38,6 +38,8 @@
             <li><a href="move_survive.js">move_survive.js</a></li>
             <li><a href="move_between.js">move_between.js</a></li>
             <li><a href="mouse_press.js">mouse_press.js</a></li>
+            <li><a href="generator_shape.js">generator_shape.js</a></li>
+            <li><a href="line_draw_animation.js">line_draw_animation.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
@@ -45,6 +47,7 @@
         <div id="move">
             <canvas id="canvas"></canvas>
         </div>
+        <div id="after"></div>
     </div>
 </div>
 
