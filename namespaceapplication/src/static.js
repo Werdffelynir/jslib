@@ -641,6 +641,33 @@ NamespaceApplication.createElement = function (tag, attrs, inner) {
 };
 
 /**
+ * Convert HTML string to DOMElement
+ * @param string
+ * @returns {*}
+ */
+NamespaceApplication.str2node = function (string){
+    var i, fragment = document.createDocumentFragment(),
+        container = document.createElement("div");
+    container.innerHTML = string;
+
+    while( i = container.firstChild )
+        fragment.appendChild(i);
+
+    return fragment.childNodes.length === 1 ? fragment.firstChild : fragment;
+};
+
+/**
+ * Convert DOMElement to HTML string
+ * @param element
+ * @returns {*}
+ */
+NamespaceApplication.node2str = function (element){
+    var container = document.createElement("div");
+    container.appendChild(element.cloneNode(true));
+    return container.innerHTML;
+};
+
+/**
  * Simple timer realise. Return self-instance
  * timer = new .Timer(function(iterator, repeat){}, 1000, 5)
  *  Instance methods

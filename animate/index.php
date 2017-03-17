@@ -36,6 +36,7 @@
             <li><a href="move.js">move.js</a></li>
             <li><a href="move_survive.js">move_survive.js</a></li>
             <li><a href="move_between.js">move_between.js</a></li>
+            <li><a href="keys.js">keys.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">

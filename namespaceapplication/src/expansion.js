@@ -51,6 +51,8 @@
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;
     prototype.createElement = NamespaceApplication.createElement;
+    prototype.node2str = NamespaceApplication.node2str;
+    prototype.str2node = NamespaceApplication.str2node;
     prototype.Timer = NamespaceApplication.Timer;
     prototype.Cookie = NamespaceApplication.Cookie;
     prototype.Storage = NamespaceApplication.Storage;

@@ -1,0 +1,21 @@
+.header{
+    background-color: #efefef;
+    color: #2e3445;
+    border-bottom: 5px solid #675e89;
+}
+.header>div{
+    padding: 10px;
+}
+.header>div:first-child{
+    font-size: 20px;
+    font-weight: bold;
+}
+.task{
+    border-bottom: 1px solid #675e89;
+}
+.task>div{
+    padding: 5px;
+}
+.button{
+    cursor: pointer;
+}
