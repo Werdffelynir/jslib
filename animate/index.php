@@ -41,12 +41,13 @@
             <li><a href="generator_shape.js">generator_shape.js</a></li>
             <li><a href="line_draw_animation.js">line_draw_animation.js</a></li>
             <li><a href="move_to_click.js">move_to_click.js</a></li>
+            <li><a href="sprite.js">sprite.js</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
         <div id="desc"></div>
         <div id="move">
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas"></canvas><svg id="svg1"></svg>
         </div>
         <div id="after"></div>
     </div>
