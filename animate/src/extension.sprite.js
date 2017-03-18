@@ -135,4 +135,73 @@ Animate.Extension(function (instance) {
         return _func;
     };
 
+    instance.createSprite = function (options) {
+        var key, movieclip, ctx = instance.context, default_options = {
+            // parameters
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            image: null,
+            grid: [4, 2],
+            indexes: [0],
+            delay: 0,
+            point: {x:0, y:0},
+            // internal
+            _cursor_x: 0,
+            _cursor_y: 0,
+            _image_width: 0,
+            _image_height: 0,
+            _sprite_width: 100,
+            _sprite_height: 100,
+            _real_index: 0,
+            _current_index: 0,
+            _max_index: 0
+        };
+
+        for (key in default_options) {
+            if (options[key] === undefined)
+                options[key] = default_options[key];
+        }
+
+        movieclip = instance.createMovieClip(options, function () {
+            var grid_row = movieclip.grid[1];
+            var grid_col = movieclip.grid[0];
+            //
+            // console.log(this);
+            // console.dir(movieclip);
+
+            if (movieclip._image_width === 0 && movieclip._image_height === 0) {
+                movieclip._image_width = movieclip.image.naturalWidth || movieclip.image.width;
+                movieclip._image_height = movieclip.image.naturalHeight || movieclip.image.height;
+                movieclip._sprite_width = movieclip._image_width / grid_col;
+                movieclip._sprite_height = movieclip._image_height / grid_row;
+                movieclip._max_index = grid_col * grid_row - 1;
+            }
+
+            instance.context.drawImage(movieclip.image,
+                // source
+                movieclip._cursor_x, movieclip._cursor_y, movieclip._sprite_width, movieclip._sprite_height,
+                // draw
+                movieclip.point.x, movieclip.point.y, movieclip.width, movieclip.height
+            );
+
+            // change - current_index cursor_x cursor_y
+            if (movieclip.indexes.length > 1 && movieclip.delay > 0) {
+                if (instance._iterator % movieclip.delay === 0) {
+
+                    if (movieclip.indexes[movieclip._real_index + 1]) {
+                        movieclip._real_index = movieclip._real_index + 1;
+                        movieclip._current_index = movieclip.indexes[movieclip._real_index];
+                    } else {
+                        movieclip._real_index = 0;
+                        movieclip._current_index = movieclip.indexes[0];
+                    }
+                }
+            }
+        });
+
+        return movieclip;
+    };
+
 })

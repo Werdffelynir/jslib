@@ -43,6 +43,7 @@
             <li><a href="line_draw_animation.js">line_draw_animation.js</a></li>
             <li><a href="move_to_click.js">move_to_click.js</a></li>
             <li><a href="sprite.js">sprite.js</a></li>
+            <li><a href="sprite2.js">sprite2.js</a></li>
             <li><a href="shape.js">shape.js</a></li>
             <li><a href="moveclip2.js">MoveClip</a></li>
             <li><a href="moveclip2b.js">MoveClip B</a></li>

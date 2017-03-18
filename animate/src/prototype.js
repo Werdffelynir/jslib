@@ -369,7 +369,7 @@
      * @returns {(function(this:T))|*}
      * @constructor
      */
-    prototype.Clip = function (options, callback, thisInstance) {
+    prototype.createClip = prototype.Clip = function (options, callback, thisInstance) {
         var key;
         if (thisInstance === true || thisInstance === undefined) {
             thisInstance = options;
@@ -394,7 +394,7 @@
      * @returns {clip}
      * @constructor
      */
-    prototype.MovieClip = function (options, callback, thisInstance) {
+    prototype.createMovieClip = prototype.MovieClip = function (options, callback, thisInstance) {
         var clip, key, ctx = this.context;
 
         var default_options = {
@@ -430,7 +430,7 @@
             ctx.restore();
         };
 
-        clip = this.Clip(options, func, thisInstance);
+        clip = this.createClip(options, func, thisInstance);
 
         return clip;
     };
