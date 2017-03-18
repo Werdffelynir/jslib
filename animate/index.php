@@ -45,6 +45,7 @@
             <li><a href="sprite.js">sprite.js</a></li>
             <li><a href="shape.js">shape.js</a></li>
             <li><a href="moveclip2.js">MoveClip</a></li>
+            <li><a href="moveclip2b.js">MoveClip B</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">

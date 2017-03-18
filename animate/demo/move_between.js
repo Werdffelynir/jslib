@@ -44,12 +44,12 @@ var Game = {
 
 Game.CreateHero = animate.moveclip(Game.hero, function (ctx, i) {
 
+
     if (Game.key.up && this.jumpReady) {
         this.accelerateSpeed = -this.accelerateMax;
         this.horizontal = animate.height;
         this.jumpReady = false;
     }
-
     if (!this.hitGround) {
         this.horizontal = animate.height;
         this.jumpReady = false;
