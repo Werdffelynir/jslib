@@ -67,27 +67,27 @@ aminate.isPlay ();
 ## Base methods
 
 ```js
-var aminate = new Animate();
+var aminate = new Animate()
 
 // frame - Add frame in to each iteration
-aminate.frame (frameName, sceneObject);
-aminate.frame (sceneObject);
-aminate.frame (function (ctx, i) {});
+aminate.frame (frameName, sceneObject)
+aminate.frame (sceneObject)
+aminate.frame (function (ctx, i) {})
 
 // object for `aminate.frame`, basically for internal used
-aminate.createSceneObject (sceneObject);
+aminate.createSceneObject (sceneObject)
 
 // delete frame by frame name
-aminate.frameRemove (frameName);
+aminate.frameRemove (frameName)
 
 // create moveclip. create function based on `callback` and have prototype a `properties` one for all instances
-aminate.moveclip (properties, callback);
+aminate.moveclip (properties, callback)
 
 // create special object to indicate a point
 aminate.point (x, y);
 
 // create special object to indicate a rectangle
-aminate.rectangle (x, y, width, height);
+aminate.rectangle (x, y, width, height)
 
 // hit point inside rectangle
 aminate.hitTest (rectangle, point)
@@ -104,13 +104,26 @@ aminate.clear ()
 aminate.resizeCanvas ()
 
 // click point, return object {{x: number, y: number}}
-aminate.mousePosition (event);
+aminate.mousePosition (event)
 
 // set background for canvas
-aminate.backgroundColor (color);
-aminate.backgroundImage (img);
-```
+aminate.backgroundColor (color)
+aminate.backgroundImage (img)
 
+// return info
+aminate.keyPress()
+// return bool if key 'ArrowUp' is pressed
+aminate.keyPress('ArrowUp')
+// execute callback `onKeyArrowLeft` if key 'ArrowLeft' is pressed
+aminate.keyPress('ArrowLeft', onKeyArrowLeft)
+// execute callback `onAnyKeyDown` if any key pressed, and `onAnyKeyUp` if any key is up
+aminate.keyPress(onAnyKeyDown, onAnyKeyUp)
+
+// return object {{x: number, y: number}} or false
+aminate.mousePress() 
+// execute callback if mouse clicked down
+aminate.mousePress(callback)
+```
 
 ## Static method, add extension
 ```js
@@ -210,6 +223,44 @@ Animate.Extension(function (instance) {
 ```
 
 
+## Core extension `mousePress()`
+
+```js
+animate.frame(function (ctx, i) {
+    var point = animate.mousePress();
+    // do...
+});
+```
+
+```js
+var onMouseMove = function (point) {
+    // do...
+};
+animate.frame(function (ctx, i) {
+    animate.mousePress(onMouseMove);
+});
+```
+
+
+## Core extension `keyPress`
+```js
+// (out loop use) return info about this method and keys-codes list
+keyPress();
+keyPress.info();
+
+// (in loop use) return bool. true - when press 'ArrowUp'
+keyPress('ArrowUp');
+
+// (in loop use) execute function `onUp` when press 'ArrowUp'
+keyPress('ArrowUp', onUp);  
+
+// (out loop use) execute function `onKeyDown` every time when press any key
+keyPress(onKeyDown);
+
+// (out loop use) execute `onKeyDown` for keyDown and `onKeyUp` for keyUp
+keyPress(onKeyDown, onKeyUp);
+
+```
 
 ## Core extension `Text`
 ```js
@@ -285,4 +336,72 @@ __example 3__
 animate.frame(function (ctx, i) {
     // code...
 });
+```
+
+### animate.keyPress()
+```js
+// in loop
+if (animate.keyPress('ArrowUp') || animate.keyPress('w')) {
+    moveclip.y -= speed;
+}
+if (animate.keyPress('ArrowDown') || animate.keyPress('s')) {
+    moveclip.y += speed;
+}
+if (animate.keyPress('ArrowLeft') || animate.keyPress('a')) {
+    moveclip.x -= speed;
+}
+if (animate.keyPress('ArrowRight') || animate.keyPress('d')) {
+    moveclip.x += speed;
+}
+```
+
+```js
+// out loop
+function onArrowUp(eve){
+    // do...
+}
+
+// in loop
+animate.keyPress('ArrowUp', onArrowUp)
+```
+
+```js
+// out loop
+function onKeyUp(eve){
+    // do...
+}
+function onKeyDown(eve){
+    // do...
+}
+    
+// out loop
+animate.keyPress(onKeyDown, onKeyUp);
+```
+
+__Wrong!__. Don't do like it
+```js
+// in loop
+animate.keyPress('ArrowUp', function (eve){
+    // do...
+});
+
+// in loop
+animate.keyPress(function (eve){}, function (eve){});
+```
+
+
+### animate.mousePress()
+```js
+// in loop
+var clickPoint = animate.mousePress();
+// if mouse clicked clickPoint = {x: y: }, else return false
+```
+
+```js
+// out loop
+function onMouseMovie(point){
+    // do...
+}
+// in loop
+animate.mousePress(onMouseMovie);
 ```

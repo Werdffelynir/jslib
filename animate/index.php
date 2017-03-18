@@ -34,16 +34,25 @@
             <li><a href="rocket.js">rocket.js</a></li>
             <li><a href="active-balls.js">active-balls.js</a></li>
             <li><a href="move.js">move.js</a></li>
+            <li><a href="move_keys.js">move_keys.js</a></li>
             <li><a href="move_survive.js">move_survive.js</a></li>
             <li><a href="move_between.js">move_between.js</a></li>
             <li><a href="keys.js">keys.js</a></li>
+            <li><a href="mouse_press.js">mouse_press.js</a></li>
+            <li><a href="generator_shape.js">generator_shape.js</a></li>
+            <li><a href="line_draw_animation.js">line_draw_animation.js</a></li>
+            <li><a href="move_to_click.js">move_to_click.js</a></li>
+            <li><a href="sprite.js">sprite.js</a></li>
+            <li><a href="shape.js">shape.js</a></li>
+            <li><a href="moveclip2.js">MoveClip</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
         <div id="desc"></div>
         <div id="move">
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas"></canvas><svg id="svg1"></svg>
         </div>
+        <div id="after"></div>
     </div>
 </div>
 

@@ -249,6 +249,47 @@
     };
 
     /**
+     * Hit point inside rectangle
+     * @param rectangle
+     * @param point
+     * @returns {boolean}
+     */
+    prototype.hitTest = function (rectangle, point) {
+        var x = parseInt(point.x),
+            y = parseInt(point.y);
+        return  x > rectangle[0] &&
+                y > rectangle[1] &&
+                x < rectangle[0]+rectangle[2] &&
+                y < rectangle[1]+rectangle[3];
+    };
+
+    /**
+     * isPointInPath
+     * @param point
+     * @param y
+     * @returns {boolean}
+     */
+    prototype.hitTestPoint = function (point, y) {
+        if (arguments.length == 2) point = {x:point,y:y};
+        return this.context.isPointInPath(point.x, point.y);
+    };
+
+    /**
+     * Return point object
+     * @param event
+     * @returns {{x: number, y: number}}
+     */
+    prototype.mousePosition = function (event) {
+        var rect = this.canvas.getBoundingClientRect();
+        return {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top
+        };
+    };
+
+    // SUPER OBJECTS
+
+    /**
      * Create special object with own properties
      * @param properties
      * @param callback
@@ -287,6 +328,12 @@
      * @returns {{x: *, y: *}}
      */
     prototype.point = function (x, y) { return {x: x, y: y} };
+    prototype.Point = function (x, y) {
+        var point = [x, y];
+        point.x = x;
+        point.y = y;
+        return point;
+    };
 
     /**
      * Create special object to indicate a rectangle
@@ -298,43 +345,80 @@
      */
     prototype.rectangle = function (x, y, width, height) { return [x, y, width, height] };
 
-    /**
-     * Hit point inside rectangle
-     * @param rectangle
-     * @param point
-     * @returns {boolean}
-     */
-    prototype.hitTest = function (rectangle, point) {
-        var x = parseInt(point.x),
-            y = parseInt(point.y);
-        return  x > rectangle[0] &&
-                y > rectangle[1] &&
-                x < rectangle[0]+rectangle[2] &&
-                y < rectangle[1]+rectangle[3];
+    prototype.Rectangle = function (x, y, width, height) {
+        var rect = [x, y, width, height];
+        rect.x = x;
+        rect.y = y;
+        rect.width = width;
+        rect.height = height;
+        return rect;
+    };
+
+    prototype.Shape = function (options, callback) {
+        callback = callback.bind({});
+
+        for (var key in options) {
+            callback[key] = options[key];
+        }
+
+        return callback;
     };
 
     /**
-     * isPointInPath
-     * @param point
-     * @param y
-     * @returns {boolean}
+     *
+     * @param options
+     * @param callback
+     * @param thisInstance      if `true` prototype = options
+     * @returns {_func}
+     * @constructor
      */
-    prototype.hitTestPoint = function (point, y) {
-        if (arguments.length == 2) point = {x:point,y:y};
-        return this.context.isPointInPath(point.x, point.y);
-    };
+    prototype.MovieClip = function (options, callback, thisInstance) {
+        var key, ctx = this.context;
 
-    /**
-     * Return point object
-     * @param event
-     * @returns {{x: number, y: number}}
-     */
-    prototype.mousePosition = function (event) {
-        var rect = this.canvas.getBoundingClientRect();
-        return {
-            x: event.clientX - rect.left,
-            y: event.clientY - rect.top
+        var _options = {
+            x: 0,
+            y: 0,
+            transform: false,
+            rotate: false,
+            scale: false
         };
+
+        for (key in options) {
+            _options[key] = options[key];
+        }
+
+        if (thisInstance === true || thisInstance === undefined) {
+            thisInstance = options;
+        } else if (typeof thisInstance === 'object') {} else {
+            thisInstance = {};
+        }
+
+        var _func = function () {
+
+            // draw image
+            ctx.save();
+            ctx.translate(_func.x, _func.y);
+
+            if (_func.transform) {
+                CanvasRenderingContext2D.prototype.setTransform.apply(ctx, _func.transform);
+            }
+            if (_func.rotate) {
+                ctx.rotate(_func.rotate);
+            }
+            if (_func.scale) {
+                CanvasRenderingContext2D.prototype.scale.apply(ctx, _func.scale);
+            }
+
+            callback.apply(thisInstance, arguments);
+
+            ctx.restore();
+        };
+
+        for (key in _options) {
+            _func[key] = _options[key];
+        }
+
+        return _func;
     };
 
     prototype._events_initialize = function () {
