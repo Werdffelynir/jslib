@@ -354,10 +354,25 @@
         return rect;
     };
 
-    prototype.Shape = function (options, callback) {
-        callback = callback.bind({});
+    /**
+     *
+     * @param options       Object with properties
+     * @param callback      Inside callback
+     * @param thisInstance  Default or True copy all properties to `this` context
+     * @returns {(function(this:T))|*}
+     * @constructor
+     */
+    prototype.Clip = function (options, callback, thisInstance) {
+        var key;
+        if (thisInstance === true || thisInstance === undefined) {
+            thisInstance = options;
+        } else if (typeof thisInstance === 'object') {} else {
+            thisInstance = {};
+        }
 
-        for (var key in options) {
+        callback = callback.bind(thisInstance);
+
+        for (key in options) {
             callback[key] = options[key];
         }
 
@@ -383,9 +398,11 @@
             scale: false
         };
 
-        for (key in options) {
-            _options[key] = options[key];
-        }
+        for (key in options) {_options[key] = options[key];}
+        /*for (key in _options) {
+            if (options[key] === undefined)
+                options[key] = _options[key];
+        }*/
 
         if (thisInstance === true || thisInstance === undefined) {
             thisInstance = options;
