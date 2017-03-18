@@ -294,6 +294,7 @@
      * @param properties
      * @param callback
      * @returns {_moveclip}
+     * @deprecated
      */
     prototype.moveclip = function (properties, callback) {
         var key;
@@ -317,9 +318,13 @@
         this.moveclip.count ++;
         return _moveclip;
     };
-
     prototype.moveclip.count = 0;
     prototype.moveclip.properties = {x: 0, y: 0, width: null, height: null, radius: null, rotate: null};
+
+    /**
+     * @deprecated
+     */
+    prototype.point = function (x, y) { return {x: x, y: y} };
 
     /**
      * Create special object to indicate a point
@@ -327,7 +332,6 @@
      * @param y
      * @returns {{x: *, y: *}}
      */
-    prototype.point = function (x, y) { return {x: x, y: y} };
     prototype.Point = function (x, y) {
         var point = [x, y];
         point.x = x;
@@ -336,15 +340,18 @@
     };
 
     /**
+     * @deprecated
+     */
+    prototype.rectangle = function (x, y, width, height) { return [x, y, width, height] };
+
+    /**
      * Create special object to indicate a rectangle
      * @param x
      * @param y
      * @param width
      * @param height
-     * @returns {*[]}
+     * @returns {[*,*,*,*]}
      */
-    prototype.rectangle = function (x, y, width, height) { return [x, y, width, height] };
-
     prototype.Rectangle = function (x, y, width, height) {
         var rect = [x, y, width, height];
         rect.x = x;
@@ -384,58 +391,48 @@
      * @param options
      * @param callback
      * @param thisInstance      if `true` prototype = options
-     * @returns {_func}
+     * @returns {clip}
      * @constructor
      */
     prototype.MovieClip = function (options, callback, thisInstance) {
-        var key, ctx = this.context;
+        var clip, key, ctx = this.context;
 
-        var _options = {
+        var default_options = {
             x: 0,
             y: 0,
             transform: false,
+            composite: false,
             rotate: false,
-            scale: false
+            scale: false,
+            alpha: false
         };
 
-        for (key in options) {_options[key] = options[key];}
-        /*for (key in _options) {
+        for (key in default_options) {
             if (options[key] === undefined)
-                options[key] = _options[key];
-        }*/
-
-        if (thisInstance === true || thisInstance === undefined) {
-            thisInstance = options;
-        } else if (typeof thisInstance === 'object') {} else {
-            thisInstance = {};
+                options[key] = default_options[key];
         }
 
-        var _func = function () {
-
+        var func = function () {
             // draw image
             ctx.save();
-            ctx.translate(_func.x, _func.y);
-
-            if (_func.transform) {
-                CanvasRenderingContext2D.prototype.setTransform.apply(ctx, _func.transform);
-            }
-            if (_func.rotate) {
-                ctx.rotate(_func.rotate);
-            }
-            if (_func.scale) {
-                CanvasRenderingContext2D.prototype.scale.apply(ctx, _func.scale);
-            }
-
-            callback.apply(thisInstance, arguments);
-
+            ctx.translate(this.x, this.y);
+            if (this.transform) {
+                CanvasRenderingContext2D.prototype.setTransform.apply(ctx, this.transform);}
+            if (this.rotate) {
+                ctx.rotate(this.rotate);}
+            if (this.scale) {
+                CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);}
+            if (this.alpha) {
+                ctx.globalAlpha = this.alpha;}
+            if (this.composite) {
+                ctx.globalCompositeOperation = this.composite;}
+            callback.apply(this, arguments);
             ctx.restore();
         };
 
-        for (key in _options) {
-            _func[key] = _options[key];
-        }
+        clip = this.Clip(options, func, thisInstance);
 
-        return _func;
+        return clip;
     };
 
     prototype._events_initialize = function () {

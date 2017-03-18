@@ -42,8 +42,7 @@ var Game = {
 };
 
 
-Game.CreateHero = animate.MovieClip(Game.hero, function (ctx, i) {
-
+Game.CreateHero = animate.Clip(Game.hero, function (ctx, i) {
 
     if (Game.key.up && this.jumpReady) {
         this.accelerateSpeed = -this.accelerateMax;
@@ -169,10 +168,6 @@ animate.onKeyup = function (event) {
 };
 
 animate.start('move');
-
-
-
-
 
 //acceleration ()
 //console.log('jump now');
