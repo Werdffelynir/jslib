@@ -42,7 +42,7 @@ var Game = {
 };
 
 
-Game.CreateHero = animate.moveclip(Game.hero, function (ctx, i) {
+Game.CreateHero = animate.MovieClip(Game.hero, function (ctx, i) {
 
 
     if (Game.key.up && this.jumpReady) {

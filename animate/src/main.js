@@ -30,7 +30,7 @@
 
     /** Set script version. Property [read-only]*/
     Object.defineProperty(Animate, 'version', {
-        enumerable: false, configurable: false, writable: false, value: '0.3.1'
+        enumerable: false, configurable: false, writable: false, value: '0.4.0'
     });
 
     window.Animate = Animate;

@@ -45,7 +45,7 @@
                 this.pointMove = point;
             },
 
-            drawMouseclickObject: an.moveclip(function (ctx, point) {
+            drawMouseclickObject: an.Clip({},function (ctx, point) {
                 /** @type CanvasRenderingContext2D */
                 ctx = ctx;
                 this.x = point.x;
