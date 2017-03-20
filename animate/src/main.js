@@ -7,9 +7,7 @@
     }();
 
     var Animate = [[['constructor']]];
-
     Animate.prototype = [[['prototype']]];
-
     Animate.prototype.constructor = Animate;
 
     [[['prototype.super']]];

@@ -27,28 +27,8 @@
 <div class="table">
     <div id="menu" class="valign_top">
         <ul>
-            <li><a href="_test_recode.js">Test Recode</a></li>
-            <li><a href="_gravity.js">Gravity</a></li>
-            <li><a href="demo.js">demo.js</a></li>
-            <li><a href="shape-house.js">shape-house.js</a></li>
-            <li><a href="mouse-events.js">mouse-events.js</a></li>
-            <li><a href="text.js">text.js</a></li>
-            <li><a href="rocket.js">rocket.js</a></li>
-            <li><a href="active-balls.js">active-balls.js</a></li>
-            <li><a href="move.js">move.js</a></li>
-            <li><a href="move_keys.js">move_keys.js</a></li>
-            <li><a href="move_survive.js">move_survive.js</a></li>
-            <li><a href="move_between.js">move_between.js</a></li>
-            <li><a href="keys.js">keys.js</a></li>
-            <li><a href="mouse_press.js">mouse_press.js</a></li>
-            <li><a href="generator_shape.js">generator_shape.js</a></li>
-            <li><a href="line_draw_animation.js">line_draw_animation.js</a></li>
-            <li><a href="move_to_click.js">move_to_click.js</a></li>
-            <li><a href="sprite.js">sprite.js</a></li>
-            <li><a href="sprite2.js">sprite2.js</a></li>
-            <li><a href="shape.js">shape.js</a></li>
-            <li><a href="moveclip2.js">MoveClip</a></li>
-            <li><a href="moveclip2b.js">MoveClip B</a></li>
+            <li><a href="_shape_generator.js">Shape Generator</a></li>
+            <li><a href="_graphic.shapes.js">Graphic Shape</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
