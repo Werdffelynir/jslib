@@ -137,7 +137,7 @@ Animate.Extension(function (instance) {
     };
 
 /*    instance.createSprite = function (options) {
-        var key, movieclip, ctx = instance.context, default_options = {
+        var key, movieclip, ctx = instance._context, default_options = {
             // parameters
             x: 0,
             y: 0,
@@ -181,7 +181,7 @@ Animate.Extension(function (instance) {
                 this._max_index = grid_col * grid_row - 1;
             }
 
-            instance.context.drawImage(this.image,
+            instance._context.drawImage(this.image,
                 // source
                 this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
                 // draw

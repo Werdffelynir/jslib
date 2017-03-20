@@ -26,8 +26,6 @@
 
     [[['extension.mousepress']]];
 
-    [[['extension.sprite']]];
-
     /** Set script version. Property [read-only]*/
     Object.defineProperty(Animate, 'version', {
         enumerable: false, configurable: false, writable: false, value: '0.4.0'

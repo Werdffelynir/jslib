@@ -16,7 +16,7 @@
      * @type HTMLCanvasElement
      */
     prototype.getCanvas = function () {
-        return this.canvas;
+        return this._canvas;
     };
 
     /**
@@ -24,7 +24,7 @@
      * @type CanvasRenderingContext2D
      */
     prototype.getContext = function () {
-        return this.context;
+        return this._context;
     };
 
     /**
@@ -126,7 +126,7 @@
         // initialize events
         this._events_initialize();
 
-        if (!this._is_playing && this.context) {
+        if (!this._is_playing && this._context) {
 
             // set current frame name
             this._frame_name = frameName;
@@ -170,7 +170,7 @@
 
         // call onFrame
         if (typeof this.onFrame === 'function')
-            this.onFrame.call(this, this.context, this._iterator);
+            this.onFrame.call(this, this._context, this._iterator);
 
         if (Array.isArray(frames)) {
             if (!this._is_filtering && frames.length > 0) {
@@ -187,7 +187,7 @@
 
                 // call frames
                 if (typeof frame.init === 'function')
-                    frame.init.call(frame, this.context, this._iterator);
+                    frame.init.call(frame, this._context, this._iterator);
             }
         }
     };
@@ -224,7 +224,7 @@
      * Clear canvas workspace
      */
     prototype.clear = function () {
-        this.context.clearRect(0, 0, this.width, this.height);
+        this._context.clearRect(0, 0, this.width, this.height);
     };
 
     /**
@@ -233,9 +233,9 @@
      * @param height
      */
     prototype.resizeCanvas = function (width, height) {
-        this.canvas.style.position = 'absolute';
-        this.canvas.width = this.width = width || window.innerWidth;
-        this.canvas.height = this.height = height || window.innerHeight;
+        this._canvas.style.position = 'absolute';
+        this._canvas.width = this.width = width || window.innerWidth;
+        this._canvas.height = this.height = height || window.innerHeight;
     };
 
     /**
@@ -243,7 +243,7 @@
      * @param color
      */
     prototype.backgroundColor = function (color) {
-        this.canvas.style.backgroundColor = color;
+        this._canvas.style.backgroundColor = color;
     };
 
     /**
@@ -251,7 +251,7 @@
      * @param img
      */
     prototype.backgroundImage = function (img) {
-        this.canvas.style.backgroundImage = img;
+        this._canvas.style.backgroundImage = img;
     };
 
     /**
@@ -277,7 +277,7 @@
      */
     prototype.hitTestPoint = function (point, y) {
         if (arguments.length == 2) point = {x:point,y:y};
-        return this.context.isPointInPath(point.x, point.y);
+        return this._context.isPointInPath(point.x, point.y);
     };
 
     /**
@@ -286,7 +286,7 @@
      * @returns {{x: number, y: number}}
      */
     prototype.mousePosition = function (event) {
-        var rect = this.canvas.getBoundingClientRect();
+        var rect = this._canvas.getBoundingClientRect();
         return {
             x: event.clientX - rect.left,
             y: event.clientY - rect.top
@@ -401,7 +401,7 @@
      * @constructor
      */
     prototype.createMovieClip = prototype.MovieClip = function (options, callback, thisInstance) {
-        var clip, key, ctx = this.context;
+        var clip, key, ctx = this._context;
 
         var default_options = {
             x: 0,
@@ -440,8 +440,8 @@
         return clip;
     };
 
-    prototype.createSprite = function (options) {
-        var key, movieclip, ctx = this.context, iterator = this._iterator, default_options = {
+    prototype.createSprite = prototype.Sprite = function (options) {
+        var key, movieclip, ctx = this._context, iterator = this._iterator, default_options = {
             // parameters
             x: 0,
             y: 0,
@@ -514,7 +514,7 @@
 
         // onclick event
         if (typeof this.onClick === 'function' && !this._on_click_init) {
-            this.canvas.addEventListener('click', function (event) {
+            this._canvas.addEventListener('click', function (event) {
                 that.onClick.call(that, event, that.mousePosition(event))
             });
             this._on_click_init = true;
@@ -522,7 +522,7 @@
 
         // onmousemove event
         if (typeof this.onMousemove === 'function' && !this._on_mousemove_init) {
-            this.canvas.addEventListener('mousemove', function (event) {
+            this._canvas.addEventListener('mousemove', function (event) {
                 that.onMousemove.call(that, event, that.mousePosition(event))
             });
             this._on_mousemove_init = true;
@@ -530,7 +530,7 @@
 
         // onmousedown event
         if (typeof this.onMousedown === 'function' && !this._on_mousedown_init) {
-            this.canvas.addEventListener('mousedown', function (event) {
+            this._canvas.addEventListener('mousedown', function (event) {
                 that.onMousedown.call(that, event, that.mousePosition(event))
             });
             this._on_mousedown_init = true;
@@ -538,7 +538,7 @@
 
         // onmouseup event
         if (typeof this.onMouseup === 'function' && !this._on_mouseup_init) {
-            this.canvas.addEventListener('mouseup', function (event) {
+            this._canvas.addEventListener('mouseup', function (event) {
                 that.onMouseup.call(that, event, that.mousePosition(event))
             });
             this._on_mouseup_init = true;

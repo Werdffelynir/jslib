@@ -77,7 +77,7 @@
         an.mc.heroColor = '#3a363f';
         if (i > 200) {
             an.mc.title = "STOP";
-            if (i > 201)
+            if (i > 249)
                 an.stop();
         }
     });

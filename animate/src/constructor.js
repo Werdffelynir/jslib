@@ -33,8 +33,8 @@
                 filtering: true,
 
                 //resources
-                canvas: null,
-                context: null,
+                _canvas: null,
+                _context: null,
 
                 // events
                 onFrame: null,
@@ -61,11 +61,11 @@
             this[pk] = options[pk];
 
         /** @type {HTMLCanvasElement|Element|null} */
-        this.canvas = document.querySelector(this.selector);
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this._canvas = document.querySelector(this.selector);
+        this._canvas.width = this.width;
+        this._canvas.height = this.height;
         /** @type {CanvasRenderingContext2D|null} */
-        this.context = this.canvas.getContext('2d');
+        this._context = this._canvas.getContext('2d');
 
         // initialize extensions
         if (Animate._internal_extensions.length > 0) {

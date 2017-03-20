@@ -9,7 +9,11 @@ Animate.Util.defaultObject = function (defaultObject, object) {
     }
     return defaultObject;
 };
-
+/**
+ * Clone an Array or Objects
+ * @param src
+ * @param addProperties
+ */
 Animate.Util.copy = function (src, addProperties) {
     var copy_object = JSON.parse(JSON.stringify(src));
     if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
