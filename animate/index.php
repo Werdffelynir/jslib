@@ -27,8 +27,9 @@
 <div class="table">
     <div id="menu" class="valign_top">
         <ul>
-            <li><a href="_shape_generator.js">Shape Generator</a></li>
-            <li><a href="_graphic.shapes.js">Graphic Shape</a></li>
+            <li><a href="shape-generator.js">Shape Generator</a></li>
+            <li><a href="graphic-shapes.js">Graphic Shape</a></li>
+            <li><a href="background-circle.js">Background Circle</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
