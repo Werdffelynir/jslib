@@ -27,13 +27,19 @@
         return this.context;
     };
 
-
     /**
      * Return current iteration
      * @returns {number}
      */
     prototype.getIteration = function () {
         return this._iterator;
+    };
+
+    /**
+     * Clear a number of iterations
+     */
+    prototype.clearIteration = function () {
+        this._iterator = 0;
     };
 
     /**
@@ -371,7 +377,7 @@
      */
     prototype.createClip = prototype.Clip = function (options, callback, thisInstance) {
         var key;
-        if (thisInstance === true || thisInstance === undefined) {
+        if (thisInstance === undefined || thisInstance === true) {
             thisInstance = options;
         } else if (typeof thisInstance === 'object') {} else {
             thisInstance = {};
@@ -431,8 +437,76 @@
         };
 
         clip = this.createClip(options, func, thisInstance);
-
         return clip;
+    };
+
+    prototype.createSprite = function (options) {
+        var key, movieclip, ctx = this.context, iterator = this._iterator, default_options = {
+            // parameters
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            image: null,
+            grid: [4, 2],
+            indexes: [0],
+            delay: 0,
+            point: {x:0, y:0},
+            // internal
+            _cursor_x: 0,
+            _cursor_y: 0,
+            _image_width: 0,
+            _image_height: 0,
+            _sprite_width: 100,
+            _sprite_height: 100,
+            _real_index: 0,
+            _current_index: 0,
+            _max_index: 0
+        };
+
+        for (key in default_options) {
+            if (options[key] === undefined)
+                options[key] = default_options[key];
+        }
+
+
+        movieclip = this.createMovieClip(options, function () {
+            var grid_row = this.grid[1];
+            var grid_col = this.grid[0];
+            //
+            // console.log(this);
+            // console.log(this.x, movieclip.x, options.x);
+
+            if (this._image_width === 0 && this._image_height === 0) {
+                this._image_width = this.image.naturalWidth || this.image.width;
+                this._image_height = this.image.naturalHeight || this.image.height;
+                this._sprite_width = this._image_width / grid_col;
+                this._sprite_height = this._image_height / grid_row;
+                this._max_index = grid_col * grid_row - 1;
+            }
+
+            ctx.drawImage(this.image,
+                // source
+                this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
+                // draw
+                this.point.x, this.point.y, this.width, this.height
+            );
+
+            // change - current_index cursor_x cursor_y
+            if (this.indexes.length > 1 && this.delay > 0) {
+                if (iterator % this.delay === 0) {
+                    if (this.indexes[this._real_index + 1]) {
+                        this._real_index = this._real_index + 1;
+                        this._current_index = this.indexes[this._real_index];
+                    } else {
+                        this._real_index = 0;
+                        this._current_index = this.indexes[0];
+                    }
+                }
+            }
+        }, true);
+
+        return movieclip;
     };
 
     prototype._events_initialize = function () {

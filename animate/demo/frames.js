@@ -15,7 +15,13 @@
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    an.mc.timeText = an.Clip({
+    an.mc.heroColor = '#dbdc80';
+    an.mc.heroPoint = an.Point(0, 160);
+    an.mc.heroObject = an.createClip({},function (ctx, i) {
+        an.Graphic.rect(an.mc.heroPoint.x, an.mc.heroPoint.y, 100, 100, an.mc.heroColor, true);
+    });
+
+    an.mc.timeText = an.createClip({
         position: an.Point(an.width - 110, 0)
     }, function (ctx, i) {
 
@@ -76,13 +82,10 @@
         }
     });
 
-    //console.log(ctx, i);
-    an.mc.heroColor = '#dbdc80';
-    an.mc.heroPoint = an.Point(0, 160);
     an.onFrame = function (ctx, i) {
 
         an.mc.heroPoint.x += 2;
-        an.Graphic.rect(an.mc.heroPoint.x, an.mc.heroPoint.y, 100, 100, an.mc.heroColor, true);
+        an.mc.heroObject();
 
         an.mc.timeText(ctx, i);
         an.mc.titleText(ctx, i);

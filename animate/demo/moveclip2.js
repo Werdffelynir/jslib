@@ -182,7 +182,7 @@
         }, thisInstance);
 
         console.dir(_clip);
-        
+
         //for (_key in options) {
             //_clip[_key] = _options[_key] = options[_key];}
 

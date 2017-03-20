@@ -4,7 +4,7 @@ Animate.Extension(function (instance) {
         return;
 
     /**
-     * mc = MoveClip({
+     * mc = createSprite({
      *      image: Image,                   // Image resource
      *      grid_columns: 4,                // columns in Grid Map
      *      grid_rows: 2,
@@ -26,6 +26,7 @@ Animate.Extension(function (instance) {
      *  [ 8, 9, 10, 11]
      * @param options
      * @returns {_func}
+     * @deprecated
      * @constructor
      */
     instance.Sprite = function (options) {
@@ -135,7 +136,7 @@ Animate.Extension(function (instance) {
         return _func;
     };
 
-    instance.createSprite = function (options) {
+/*    instance.createSprite = function (options) {
         var key, movieclip, ctx = instance.context, default_options = {
             // parameters
             x: 0,
@@ -164,44 +165,44 @@ Animate.Extension(function (instance) {
                 options[key] = default_options[key];
         }
 
+
         movieclip = instance.createMovieClip(options, function () {
-            var grid_row = movieclip.grid[1];
-            var grid_col = movieclip.grid[0];
+            var grid_row = this.grid[1];
+            var grid_col = this.grid[0];
             //
             // console.log(this);
-            // console.dir(movieclip);
+            // console.log(this.x, movieclip.x, options.x);
 
-            if (movieclip._image_width === 0 && movieclip._image_height === 0) {
-                movieclip._image_width = movieclip.image.naturalWidth || movieclip.image.width;
-                movieclip._image_height = movieclip.image.naturalHeight || movieclip.image.height;
-                movieclip._sprite_width = movieclip._image_width / grid_col;
-                movieclip._sprite_height = movieclip._image_height / grid_row;
-                movieclip._max_index = grid_col * grid_row - 1;
+            if (this._image_width === 0 && this._image_height === 0) {
+                this._image_width = this.image.naturalWidth || this.image.width;
+                this._image_height = this.image.naturalHeight || this.image.height;
+                this._sprite_width = this._image_width / grid_col;
+                this._sprite_height = this._image_height / grid_row;
+                this._max_index = grid_col * grid_row - 1;
             }
 
-            instance.context.drawImage(movieclip.image,
+            instance.context.drawImage(this.image,
                 // source
-                movieclip._cursor_x, movieclip._cursor_y, movieclip._sprite_width, movieclip._sprite_height,
+                this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
                 // draw
-                movieclip.point.x, movieclip.point.y, movieclip.width, movieclip.height
+                this.point.x, this.point.y, this.width, this.height
             );
 
             // change - current_index cursor_x cursor_y
-            if (movieclip.indexes.length > 1 && movieclip.delay > 0) {
-                if (instance._iterator % movieclip.delay === 0) {
-
-                    if (movieclip.indexes[movieclip._real_index + 1]) {
-                        movieclip._real_index = movieclip._real_index + 1;
-                        movieclip._current_index = movieclip.indexes[movieclip._real_index];
+            if (this.indexes.length > 1 && this.delay > 0) {
+                if (instance._iterator % this.delay === 0) {
+                    if (this.indexes[this._real_index + 1]) {
+                        this._real_index = this._real_index + 1;
+                        this._current_index = this.indexes[this._real_index];
                     } else {
-                        movieclip._real_index = 0;
-                        movieclip._current_index = movieclip.indexes[0];
+                        this._real_index = 0;
+                        this._current_index = this.indexes[0];
                     }
                 }
             }
-        });
+        }, true);
 
         return movieclip;
-    };
+    };*/
 
 })
