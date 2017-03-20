@@ -18,12 +18,9 @@
         if (arguments.length > 1)
             _options = {selector: arguments[0], width: parseInt(arguments[1]), height: parseInt(arguments[2]), fps: arguments[3]};
 
-        var pk,
-
-            /** @type Animate */
+        var
+            pk,
             options = {
-
-                // parameters
                 selector: null,
                 width: 600,
                 height: 400,
@@ -35,6 +32,10 @@
                 sorting: true,
                 filtering: true,
 
+                //resources
+                _canvas: null,
+                _context: null,
+
                 // events
                 onFrame: null,
                 onMousemove: null,
@@ -45,8 +46,6 @@
                 onClick: null,
 
                 // internal
-                _canvas: null,
-                _context: null,
                 _is_playing: false,
                 _is_filtering: false,
                 _iterator: 0,
@@ -57,8 +56,7 @@
             };
 
         // Set options
-        Animate.defaultObject(options, _options);
-
+        Animate.Util.defaultObject(options, _options);
         for (pk in options)
             this[pk] = options[pk];
 
@@ -70,13 +68,15 @@
         this._context = this._canvas.getContext('2d');
 
         // initialize extensions
-        if (Animate._internal_extensions.length > 0)
+        if (Animate._internal_extensions.length > 0) {
             for (var ei = 0; ei < Animate._internal_extensions.length; ei++)
                 if (typeof Animate._internal_extensions[ei] === 'function')
                     Animate._internal_extensions[ei].call(this, this);
+        }
 
         // custom settings
-        if (this.fullScreen) this.resizeCanvas();
+        if (!!this.fullScreen)
+            this.resizeCanvas();
 
     }
 })()

@@ -4,51 +4,13 @@ Animate.Extension(function (instance) {
         return;
 
     /**
-     * Global text options
-     * @type {{font: string, textAlign: string, textBaseline: string, direction: string, lineWidth: number, color: string, write: function}}
+     * @type CanvasRenderingContext2D
+     */
+    var context = instance.getContext();
 
-    instance.Text = {
-        font: '12px Arial, sans',
-        textAlign: 'start',
-        textBaseline: 'top',
-        direction: 'inherit',
-        lineWidth: 1,
-        color: '#000000',
-
-
-        write: function (x, y, label, color, fill) {
-            var context = instance.getContext();
-
-            if (instance.Text.font)          context.font = instance.Text.font;
-            if (instance.Text.textAlign)     context.textAlign = instance.Text.textAlign;
-            if (instance.Text.textBaseline)  context.textBaseline = instance.Text.textBaseline;
-            if (instance.Text.direction)     context.direction = instance.Text.direction;
-            if (instance.Text.lineWidth)     context.lineWidth = instance.Text.lineWidth;
-            if (instance.Text.color)         color = instance.Text.color;
-
-            context.beginPath();
-
-            if (fill === true || fill === undefined) {
-                context.fillStyle = color || '#dddddd';
-                context.fillText(label, x, y);
-
-                if (typeof fill === 'string') {
-                    context.strokeStyle = fill || '#000000';
-                    context.strokeText(label, x, y);
-                }
-            }
-            else {
-                context.strokeStyle = color || '#000000';
-                context.strokeText(label, x, y);
-            }
-
-            context.closePath();
-        }
+    instance.text = {
+        _parameters: false
     };
-*/
-
-    instance.Text = {};
-    instance.Text._text_parameters = false;
 
     /**
      * Create text block
@@ -58,54 +20,54 @@ Animate.Extension(function (instance) {
      * @param color
      * @param fill
      */
-    instance.Text.write = function (x, y, label, color, fill) {
+    instance.text.write = function (x, y, label, color, fill) {
+
         if (arguments.length === 1) {
             label = x;
-            x = instance.Text._text_parameters.x;
-            y = instance.Text._text_parameters.y;
+            x = instance.text._parameters.x;
+            y = instance.text._parameters.y;
         }
-        fill = fill === undefined ? instance.Text._text_parameters.fill : fill;
-        color = color === undefined ? instance.Text._text_parameters.color : color;
 
-        var ctx = instance.getContext();
-        var _point = instance.Text._text_parameters.point;
-        var _alpha = instance.Text._text_parameters.alpha;
-        var _scale = instance.Text._text_parameters.scale;
-        var _rotate = instance.Text._text_parameters.rotate;
-        var _transform = instance.Text._text_parameters.transform;
+        fill = fill === undefined ? instance.text._parameters.fill : fill;
+        color = color === undefined ? instance.text._parameters.color : color;
 
+        var _point = instance.text._parameters.point;
+        var _alpha = instance.text._parameters.alpha;
+        var _scale = instance.text._parameters.scale;
+        var _rotate = instance.text._parameters.rotate;
+        var _transform = instance.text._parameters.transform;
 
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.font = instance.Text._text_parameters.font;
-        ctx.textAlign = instance.Text._text_parameters.textAlign;
-        ctx.textBaseline = instance.Text._text_parameters.textBaseline;
-        ctx.direction = instance.Text._text_parameters.direction;
-        ctx.lineWidth = instance.Text._text_parameters.lineWidth;
-        ctx.globalAlpha = instance.Text._text_parameters.alpha;
+        context.save();
+        context.translate(x, y);
+        context.font = instance.text._parameters.font;
+        context.textAlign = instance.text._parameters.textAlign;
+        context.textBaseline = instance.text._parameters.textBaseline;
+        context.direction = instance.text._parameters.direction;
+        context.lineWidth = instance.text._parameters.lineWidth;
+        context.globalAlpha = instance.text._parameters.alpha;
 
-        //ctx.lineWidth = instance.Text._text_parameters.lineWidth;
+        //context.lineWidth = instance.text._parameters.lineWidth;
         if (_transform) {
             CanvasRenderingContext2D.prototype.setTransform.apply(ctx, _transform);}
         if (_rotate) {
-            ctx.rotate(_rotate);}
+            context.rotate(_rotate);}
         if (_scale) {
             CanvasRenderingContext2D.prototype.scale.apply(ctx, _scale);}
         if (_alpha) {
-            ctx.globalAlpha = _alpha;}
+            context.globalAlpha = _alpha;}
 
         if (fill === true || fill === undefined) {
-            ctx.fillStyle = color;
-            ctx.fillText(label, _point.x, _point.y);
+            context.fillStyle = color;
+            context.fillText(label, _point.x, _point.y);
         }
         else {
-            ctx.strokeStyle = color;
-            ctx.strokeText(label, _point.x, _point.y);
+            context.strokeStyle = color;
+            context.strokeText(label, _point.x, _point.y);
         }
-        ctx.restore();
+        context.restore();
     };
 
-    instance.Text.defaultStyle = {
+    instance.text.defaultStyle = {
         font: '12px Arial, sans',
         textAlign: 'start',
         textBaseline: 'top',
@@ -114,9 +76,10 @@ Animate.Extension(function (instance) {
         color: '#000000'
     };
 
-    instance.Text.reset = function () {
-        if (instance.Text._text_parameters === false)
-            instance.Text._text_parameters = {};
+    instance.text.reset = function () {
+
+        if (instance.text._parameters === false)
+            instance.text._parameters = {};
 
         var key, default_parameters = {
             globalAlpha: false,
@@ -127,30 +90,44 @@ Animate.Extension(function (instance) {
             x: 0,
             y: 0
         };
+
         for (key in default_parameters) {
-            instance.Text._text_parameters[key] = default_parameters[key];
+            instance.text._parameters[key] = default_parameters[key];
         }
-        for (key in instance.Text.defaultStyle) {
-            instance.Text._text_parameters[key] = instance.Text.defaultStyle[key];
+
+        for (key in instance.text.defaultStyle) {
+            instance.text._parameters[key] = instance.text.defaultStyle[key];
         }
     };
 
-    instance.Text.font = function (value) {instance.Text._text_parameters.font = value};
-    instance.Text.textAlign = function (value) {instance.Text._text_parameters.textAlign = value};
-    instance.Text.textBaseline = function (value) {instance.Text._text_parameters.textBaseline = value};
-    instance.Text.direction = function (value) {instance.Text._text_parameters.direction = value};
-    instance.Text.lineWidth = function (value) {instance.Text._text_parameters.lineWidth = value};
-    instance.Text.color = function (value) {instance.Text._text_parameters.color = value};
-    instance.Text.alpha = function (value) {instance.Text._text_parameters.globalAlpha = value};
-    instance.Text.rotate = function (value) {instance.Text._text_parameters.rotate = value};
-    instance.Text.point = function (value) {instance.Text._text_parameters.point = value};
-    instance.Text.x = function (value) {instance.Text._text_parameters.x = value};
-    instance.Text.y = function (value) {instance.Text._text_parameters.y = value};
-    instance.Text.transform = function (value) {instance.Text._text_parameters.transform = value};
-    instance.Text.rotate = function (value) {instance.Text._text_parameters.rotate = value};
-    instance.Text.scale = function (value) {instance.Text._text_parameters.scale = value};
+    instance.text.font = function (value) {instance.text._parameters.font = value};
+    instance.text.textAlign = function (value) {instance.text._parameters.textAlign = value};
+    instance.text.textBaseline = function (value) {instance.text._parameters.textBaseline = value};
+    instance.text.direction = function (value) {instance.text._parameters.direction = value};
+    instance.text.lineWidth = function (value) {instance.text._parameters.lineWidth = value};
+    instance.text.color = function (value) {instance.text._parameters.color = value};
+    instance.text.alpha = function (value) {instance.text._parameters.globalAlpha = value};
+    instance.text.rotate = function (value) {instance.text._parameters.rotate = value};
+    instance.text.point = function (value) {instance.text._parameters.point = value};
+    instance.text.x = function (value) {instance.text._parameters.x = value};
+    instance.text.y = function (value) {instance.text._parameters.y = value};
+    instance.text.transform = function (value) {instance.text._parameters.transform = value};
+    instance.text.rotate = function (value) {instance.text._parameters.rotate = value};
+    instance.text.scale = function (value) {instance.text._parameters.scale = value};
 
-    if (instance.Text._text_parameters === false) {
-        instance.Text.reset();
+    instance.text.position = function (x, y) {
+        if (arguments.length === 1 && arguments[0] && typeof arguments[0] === 'object') {
+            instance.text._parameters.x = arguments[0].x;
+            instance.text._parameters.y = arguments[0].y;
+        } else {
+            instance.text._parameters.x = x;
+            instance.text._parameters.y = y;
+        }
+    };
+
+    // init
+    if (instance.text._parameters === false) {
+        instance.text.reset();
     }
+
 })

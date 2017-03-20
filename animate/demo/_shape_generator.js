@@ -50,22 +50,22 @@ Pin.drawGrid = function (ctx, frameCounter) {
         for (i = 0; i < an.width/5; i ++) {
             var i5 = i * 5;
             if (i5 % 100 === 0) {
-                an.Graphic.line({x:0,y:i5}, {x:an.width,y:i5}, 2, '#C6FFFD');
-                an.Graphic.line({x:i5,y:0}, {x:i5,y:an.height}, 2, '#C6FFFD');
+                an.graphic.line({x:0,y:i5}, {x:an.width,y:i5}, 2, '#C6FFFD');
+                an.graphic.line({x:i5,y:0}, {x:i5,y:an.height}, 2, '#C6FFFD');
             }
             else if (i5 % 10 === 0) {
-                an.Graphic.line({x:0,y:i5}, {x:an.width,y:i5}, 1, '#E2FFFD');
-                an.Graphic.line({x:i5,y:0}, {x:i5,y:an.height}, 1, '#E2FFFD');
+                an.graphic.line({x:0,y:i5}, {x:an.width,y:i5}, 1, '#E2FFFD');
+                an.graphic.line({x:i5,y:0}, {x:i5,y:an.height}, 1, '#E2FFFD');
             }
         }
     }
 
-    an.Text.font = 'bold 12px/15px Arial';
-    an.Text.write(an.width - 90, 10, 'Arrows - Movie','#000', true);
-    an.Text.write(an.width - 90, 25, '1 - Edit', '#000', true);
-    an.Text.write(an.width - 90, 40, '2 - Back', '#000', true);
-    an.Text.write(an.width - 90, 55, '3 - Save', '#000', true);
-    an.Text.write(an.width - 90, 70, '5 - Clear','#000', true);
+    an.text.font('bold 12px/15px Arial');
+    an.text.write(an.width - 90, 10, 'Arrows - Movie','#000', true);
+    an.text.write(an.width - 90, 25, '1 - Edit', '#000', true);
+    an.text.write(an.width - 90, 40, '2 - Back', '#000', true);
+    an.text.write(an.width - 90, 55, '3 - Save', '#000', true);
+    an.text.write(an.width - 90, 70, '5 - Clear','#000', true);
 
     ctx.textBaseline = 'middle';
     ctx.font = 'normal 11px Arial';
@@ -113,12 +113,12 @@ Pin.onFrame = function (ctx, frameCounter) {
         Pin.list[Pin.moveIndex].x = Pin.mousePoint.x;
         Pin.list[Pin.moveIndex].y = Pin.mousePoint.y;
 
-        an.Graphic.line(
+        an.graphic.line(
             {x: Pin.mousePoint.x-17, y: Pin.mousePoint.y},
             {x: Pin.mousePoint.x+17, y: Pin.mousePoint.y},
             3
         );
-        an.Graphic.line(
+        an.graphic.line(
             {x: Pin.mousePoint.x, y: Pin.mousePoint.y-17},
             {x: Pin.mousePoint.x, y: Pin.mousePoint.y+17},
             3
@@ -153,11 +153,11 @@ Pin.generateMapPoints = function(){
 Pin.renderPoints = function(ctx, fc){
     Pin.generateMapPoints();
 
-    an.Graphic.shape(Pin.mapPoints, Pin.colorPointsLine, false, false, 1);
+    an.graphic.shape(Pin.mapPoints, Pin.colorPointsLine, false, false, 1);
 
     Pin.list.map(function(point){
-        an.Graphic.circle(point.x, point.y, 15, Pin.colorPointCircleOuter, true);
-        an.Graphic.circle(point.x, point.y, 5, Pin.colorPointCircleInner, true);
+        an.graphic.circle(point.x, point.y, 15, Pin.colorPointCircleOuter, true);
+        an.graphic.circle(point.x, point.y, 5, Pin.colorPointCircleInner, true);
 
         var label = parseInt(point.x) + ' x ' +  parseInt(point.y);
         ctx.fillText(label, point.x + 20, point.y);
@@ -184,6 +184,7 @@ Pin.onMousemove = function (event) {
     Pin.mousePoint = an.mousePosition(event);
 };
 Pin.onKeydown = function (event) {
+    var step = 1;
     if (event.code === 'Digit1') {
         console.log('Edit!');
         if (Pin.isEditable)
@@ -220,19 +221,19 @@ Pin.onKeydown = function (event) {
     }
     else
     if (event.code == 'ArrowRight') {
-        Pin.list.map(function(item){item.x += 5});
+        Pin.list.map(function(item){item.x += step});
     }
     else
     if (event.code == 'ArrowLeft') {
-        Pin.list.map(function(item){item.x -= 5});
+        Pin.list.map(function(item){item.x -= step});
     }
     else
     if (event.code == 'ArrowUp') {
-        Pin.list.map(function(item){item.y -= 5});
+        Pin.list.map(function(item){item.y -= step});
     }
     else
     if (event.code == 'ArrowDown') {
-        Pin.list.map(function(item){item.y += 5});
+        Pin.list.map(function(item){item.y += step});
     }
 
 }

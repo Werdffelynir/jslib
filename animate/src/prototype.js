@@ -1,16 +1,7 @@
 (function () {
-    /**
-     * @namespace Animate.prototype
-     */
+
+    /** @type Animate.prototype */
     var prototype = {};
-
-    /**
-     * Empty objects
-     * @type {{}}
-     */
-    prototype.mc = {};
-    prototype.data = {};
-
     /**
      * Return HTMLCanvasElement
      * @type HTMLCanvasElement
@@ -84,28 +75,6 @@
         if (this._frames[frameName]) {
             this._frames[frameName] = [];
         }
-    };
-
-    /**
-     * Special object for method frame
-     * @param sceneObject
-     * @returns {{index: number, hide: boolean, name: string, init: null}}
-     */
-    prototype.createSceneObject = function (sceneObject) {
-
-        var sceneObjectDefault = {
-            index: 100,
-            hide: false,
-            name: 'scene',
-            init: null
-        };
-
-        if (typeof sceneObject === 'function')
-            sceneObject = {init: sceneObject};
-
-        Animate.Util.defaultObject(sceneObjectDefault, sceneObject);
-
-        return sceneObjectDefault;
     };
 
     /**
@@ -220,6 +189,7 @@
             }
         }(0));
     };
+
     /**
      * Clear canvas workspace
      */
@@ -229,11 +199,12 @@
 
     /**
      * Set resize canvas
-     * @param width
-     * @param height
+     * @param width     default: fullscreen 'window.innerWidth'
+     * @param height    default: fullscreen 'window.innerHeight'
+     * @param position  default: 'absolute'
      */
-    prototype.resizeCanvas = function (width, height) {
-        this._canvas.style.position = 'absolute';
+    prototype.resizeCanvas = function (width, height, position) {
+        this._canvas.style.position = position || 'absolute';
         this._canvas.width = this.width = width || window.innerWidth;
         this._canvas.height = this.height = height || window.innerHeight;
     };
@@ -261,8 +232,7 @@
      * @returns {boolean}
      */
     prototype.hitTest = function (rectangle, point) {
-        var x = parseInt(point.x),
-            y = parseInt(point.y);
+        var x = parseInt(point.x), y = parseInt(point.y);
         return  x > rectangle[0] &&
                 y > rectangle[1] &&
                 x < rectangle[0]+rectangle[2] &&
@@ -282,299 +252,19 @@
 
     /**
      * Return point object
-     * @param event
+     * @param event     MouseEvent
      * @returns {{x: number, y: number}}
      */
     prototype.mousePosition = function (event) {
+        if (!(event instanceof MouseEvent)) {
+            console.error('Error: argument is not type the MouseEvent!');
+            return;
+        }
         var rect = this._canvas.getBoundingClientRect();
         return {
             x: event.clientX - rect.left,
             y: event.clientY - rect.top
         };
-    };
-
-    // SUPER OBJECTS
-
-    /**
-     * Create special object with own properties
-     * @param properties
-     * @param callback
-     * @returns {_moveclip}
-     * @deprecated
-     */
-    prototype.moveclip = function (properties, callback) {
-        var key;
-        var defaultProperties = JSON.parse(JSON.stringify(prototype.moveclip.properties));
-
-        if (typeof properties === 'function') {
-            callback = properties;
-            properties = {};
-        }
-
-        for (key in defaultProperties) {
-            if (properties[key] === undefined)
-                properties[key] = defaultProperties[key];
-            properties.id = 'clip_' + this.moveclip.count;
-        }
-
-        function _moveclip () {
-            callback.apply(properties, arguments)
-        }
-
-        this.moveclip.count ++;
-        return _moveclip;
-    };
-    prototype.moveclip.count = 0;
-    prototype.moveclip.properties = {x: 0, y: 0, width: null, height: null, radius: null, rotate: null};
-
-    /**
-     * @deprecated
-     */
-    prototype.point = function (x, y) { return {x: x, y: y} };
-
-    /**
-     * Create special object to indicate a point
-     * @param x
-     * @param y
-     * @returns {{x: *, y: *}}
-     */
-    prototype.Point = function (x, y) {
-        var point = [x, y];
-        point.x = x;
-        point.y = y;
-        return point;
-    };
-
-    /**
-     * @deprecated
-     */
-    prototype.rectangle = function (x, y, width, height) { return [x, y, width, height] };
-
-    /**
-     * Create special object to indicate a rectangle
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @returns {[*,*,*,*]}
-     */
-    prototype.Rectangle = function (x, y, width, height) {
-        var rect = [x, y, width, height];
-        rect.x = x;
-        rect.y = y;
-        rect.width = width;
-        rect.height = height;
-        return rect;
-    };
-
-    /**
-     *
-     * @param options       Object with properties
-     * @param callback      Inside callback
-     * @param thisInstance  Default or True copy all properties to `this` context
-     * @returns {(function(this:T))|*}
-     * @constructor
-     */
-    prototype.createClip = prototype.Clip = function (options, callback, thisInstance) {
-        var key;
-        if (thisInstance === undefined || thisInstance === true) {
-            thisInstance = options;
-        } else if (typeof thisInstance === 'object') {} else {
-            thisInstance = {};
-        }
-
-        callback = callback.bind(thisInstance);
-
-        for (key in options) {
-            callback[key] = options[key];
-        }
-
-        return callback;
-    };
-
-    /**
-     *
-     * @param options
-     * @param callback
-     * @param thisInstance      if `true` prototype = options
-     * @returns {clip}
-     * @constructor
-     */
-    prototype.createMovieClip = prototype.MovieClip = function (options, callback, thisInstance) {
-        var clip, key, ctx = this._context;
-
-        var default_options = {
-            x: 0,
-            y: 0,
-            transform: false,
-            composite: false,
-            rotate: false,
-            scale: false,
-            alpha: false
-        };
-
-        for (key in default_options) {
-            if (options[key] === undefined)
-                options[key] = default_options[key];
-        }
-
-        var func = function () {
-            // draw image
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            if (this.transform) {
-                CanvasRenderingContext2D.prototype.setTransform.apply(ctx, this.transform);}
-            if (this.rotate) {
-                ctx.rotate(this.rotate);}
-            if (this.scale) {
-                CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);}
-            if (this.alpha) {
-                ctx.globalAlpha = this.alpha;}
-            if (this.composite) {
-                ctx.globalCompositeOperation = this.composite;}
-            callback.apply(this, arguments);
-            ctx.restore();
-            //return this;
-        };
-
-        clip = this.createClip(options, func, thisInstance);
-        return clip;
-    };
-
-    prototype.createSprite = prototype.Sprite = function (options) {
-        var key, movieclip, ctx = this._context, iterator = this._iterator, default_options = {
-            // parameters
-            x: 0,
-            y: 0,
-            width: 100,
-            height: 100,
-            image: null,
-            grid: [4, 2],
-            indexes: [0],
-            delay: 0,
-            point: {x:0, y:0},
-            // internal
-            _cursor_x: 0,
-            _cursor_y: 0,
-            _image_width: 0,
-            _image_height: 0,
-            _sprite_width: 100,
-            _sprite_height: 100,
-            _real_index: 0,
-            _current_index: 0,
-            _max_index: 0
-        };
-
-        for (key in default_options) {
-            if (options[key] === undefined)
-                options[key] = default_options[key];
-        }
-
-
-        movieclip = this.createMovieClip(options, function () {
-            var grid_row = this.grid[1];
-            var grid_col = this.grid[0];
-            // console.log(this._cursor_x);
-            // console.log(this.x, movieclip.x, options.x);
-
-            if (this._image_width === 0 && this._image_height === 0) {
-                this._image_width = this.image.naturalWidth || this.image.width;
-                this._image_height = this.image.naturalHeight || this.image.height;
-                this._sprite_width = this._image_width / grid_col;
-                this._sprite_height = this._image_height / grid_row;
-                this._max_index = grid_col * grid_row - 1;
-                this._current_index = this.indexes[0];
-            }
-
-            // cursor reload positions
-            if (this.indexes.length > 1 && this.delay > 0) {
-                if (this._current_index >= grid_col - 1) {
-                    var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
-                    if (next_step > this._cursor_y)
-                        this._cursor_x = 0;
-                    else
-                        this._cursor_x = this._current_index % grid_col * this._sprite_width;
-                    this._cursor_y = next_step;
-                } else {
-                    this._cursor_x = this._current_index * this._sprite_width;
-                }
-            }
-
-            ctx.drawImage(this.image,
-                // source
-                this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
-                // draw
-                this.point.x, this.point.y, this.width, this.height
-            );
-
-            // change - current_index cursor_x cursor_y
-            if (this.indexes.length > 1 && this.delay > 0) {
-                if (iterator % this.delay === 0) {
-                    if (this.indexes[this._real_index + 1]) {
-                        this._real_index = this._real_index + 1;
-                        this._current_index = this.indexes[this._real_index];
-                    } else {
-                        this._real_index = 0;
-                        this._current_index = this.indexes[0];
-                    }
-                }
-            }
-            return this;
-        }, true);
-
-        return movieclip;
-    };
-
-    prototype._events_initialize = function () {
-        var that = this;
-
-        // onclick event
-        if (typeof this.onClick === 'function' && !this._on_click_init) {
-            this._canvas.addEventListener('click', function (event) {
-                that.onClick.call(that, event, that.mousePosition(event))
-            });
-            this._on_click_init = true;
-        }
-
-        // onmousemove event
-        if (typeof this.onMousemove === 'function' && !this._on_mousemove_init) {
-            this._canvas.addEventListener('mousemove', function (event) {
-                that.onMousemove.call(that, event, that.mousePosition(event))
-            });
-            this._on_mousemove_init = true;
-        }
-
-        // onmousedown event
-        if (typeof this.onMousedown === 'function' && !this._on_mousedown_init) {
-            this._canvas.addEventListener('mousedown', function (event) {
-                that.onMousedown.call(that, event, that.mousePosition(event))
-            });
-            this._on_mousedown_init = true;
-        }
-
-        // onmouseup event
-        if (typeof this.onMouseup === 'function' && !this._on_mouseup_init) {
-            this._canvas.addEventListener('mouseup', function (event) {
-                that.onMouseup.call(that, event, that.mousePosition(event))
-            });
-            this._on_mouseup_init = true;
-        }
-
-        // onkeydown event
-        if (typeof this.onKeydown === 'function' && !this._on_keydown_init) {
-            window.addEventListener('keydown', function (event) {
-                that.onKeydown.call(that, event)
-            });
-            this._on_keydown_init = true;
-        }
-
-        // onkeyup event
-        if (typeof this.onKeyup === 'function' && !this._on_keyup_init) {
-            window.addEventListener('keyup', function (event) {
-                that.onKeyup.call(that, event)
-            });
-            this._on_keyup_init = true;
-        }
     };
 
     prototype.toString = function () {
