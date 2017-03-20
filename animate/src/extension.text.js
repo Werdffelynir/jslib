@@ -59,10 +59,6 @@ Animate.Extension(function (instance) {
      * @param fill
      */
     instance.Text.write = function (x, y, label, color, fill) {
-        if (instance.Text._text_parameters === false) {
-            instance.Text.reset();
-        }
-
         if (arguments.length === 1) {
             label = x;
             x = instance.Text._text_parameters.x;
@@ -154,4 +150,7 @@ Animate.Extension(function (instance) {
     instance.Text.rotate = function (value) {instance.Text._text_parameters.rotate = value};
     instance.Text.scale = function (value) {instance.Text._text_parameters.scale = value};
 
+    if (instance.Text._text_parameters === false) {
+        instance.Text.reset();
+    }
 })

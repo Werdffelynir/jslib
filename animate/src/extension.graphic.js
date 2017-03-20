@@ -67,7 +67,6 @@ Animate.Extension(function (instance) {
     };
 
     /**
-     *
      * @param x
      * @param y
      * @param width
@@ -79,7 +78,7 @@ Animate.Extension(function (instance) {
         context.beginPath();
         context.rect(x || 0, y || 0, width || 100, height || 100);
 
-        if (fill) {
+        if (fill === undefined || fill === true || fill === 'string') {
             context.fillStyle = color || '#000';
             context.fill();
             if (typeof fill === 'string') {

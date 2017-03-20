@@ -16,7 +16,9 @@
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    an.frame(function(ctx, i){
+    an.frame(function(ctx, i) {
+        /** @type CanvasRenderingContext2D */
+        ctx = ctx;
 
         console.log(ctx, i);
 

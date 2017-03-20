@@ -434,6 +434,7 @@
                 ctx.globalCompositeOperation = this.composite;}
             callback.apply(this, arguments);
             ctx.restore();
+            //return this;
         };
 
         clip = this.createClip(options, func, thisInstance);
@@ -473,8 +474,7 @@
         movieclip = this.createMovieClip(options, function () {
             var grid_row = this.grid[1];
             var grid_col = this.grid[0];
-            //
-            // console.log(this);
+            // console.log(this._cursor_x);
             // console.log(this.x, movieclip.x, options.x);
 
             if (this._image_width === 0 && this._image_height === 0) {
@@ -483,6 +483,21 @@
                 this._sprite_width = this._image_width / grid_col;
                 this._sprite_height = this._image_height / grid_row;
                 this._max_index = grid_col * grid_row - 1;
+                this._current_index = this.indexes[0];
+            }
+
+            // cursor reload positions
+            if (this.indexes.length > 1 && this.delay > 0) {
+                if (this._current_index >= grid_col - 1) {
+                    var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
+                    if (next_step > this._cursor_y)
+                        this._cursor_x = 0;
+                    else
+                        this._cursor_x = this._current_index % grid_col * this._sprite_width;
+                    this._cursor_y = next_step;
+                } else {
+                    this._cursor_x = this._current_index * this._sprite_width;
+                }
             }
 
             ctx.drawImage(this.image,
@@ -504,6 +519,7 @@
                     }
                 }
             }
+            return this;
         }, true);
 
         return movieclip;

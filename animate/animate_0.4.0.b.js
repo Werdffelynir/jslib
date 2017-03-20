@@ -525,6 +525,7 @@
                     ctx.globalCompositeOperation = this.composite;}
                 callback.apply(this, arguments);
                 ctx.restore();
+                //return this;
             };
 
             clip = this.createClip(options, func, thisInstance);
@@ -564,8 +565,7 @@
             movieclip = this.createMovieClip(options, function () {
                 var grid_row = this.grid[1];
                 var grid_col = this.grid[0];
-                //
-                // console.log(this);
+                // console.log(this._cursor_x);
                 // console.log(this.x, movieclip.x, options.x);
 
                 if (this._image_width === 0 && this._image_height === 0) {
@@ -574,6 +574,21 @@
                     this._sprite_width = this._image_width / grid_col;
                     this._sprite_height = this._image_height / grid_row;
                     this._max_index = grid_col * grid_row - 1;
+                    this._current_index = this.indexes[0];
+                }
+
+                // cursor reload positions
+                if (this.indexes.length > 1 && this.delay > 0) {
+                    if (this._current_index >= grid_col - 1) {
+                        var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
+                        if (next_step > this._cursor_y)
+                            this._cursor_x = 0;
+                        else
+                            this._cursor_x = this._current_index % grid_col * this._sprite_width;
+                        this._cursor_y = next_step;
+                    } else {
+                        this._cursor_x = this._current_index * this._sprite_width;
+                    }
                 }
 
                 ctx.drawImage(this.image,
@@ -582,7 +597,6 @@
                     // draw
                     this.point.x, this.point.y, this.width, this.height
                 );
-
                 // change - current_index cursor_x cursor_y
                 if (this.indexes.length > 1 && this.delay > 0) {
                     if (iterator % this.delay === 0) {
@@ -595,6 +609,7 @@
                         }
                     }
                 }
+                return this;
             }, true);
 
             return movieclip;
@@ -696,7 +711,11 @@
         }
         return defaultObject;
     };
-
+    /**
+     * Clone an Array or Objects
+     * @param src
+     * @param addProperties
+     */
     Animate.Util.copy = function (src, addProperties) {
         var copy_object = JSON.parse(JSON.stringify(src));
         if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
@@ -739,6 +758,50 @@
         if (!(instance instanceof Animate))
             return;
 
+        /**
+         * Global text options
+         * @type {{font: string, textAlign: string, textBaseline: string, direction: string, lineWidth: number, color: string, write: function}}
+
+         instance.Text = {
+        font: '12px Arial, sans',
+        textAlign: 'start',
+        textBaseline: 'top',
+        direction: 'inherit',
+        lineWidth: 1,
+        color: '#000000',
+
+
+        write: function (x, y, label, color, fill) {
+            var context = instance.getContext();
+
+            if (instance.Text.font)          context.font = instance.Text.font;
+            if (instance.Text.textAlign)     context.textAlign = instance.Text.textAlign;
+            if (instance.Text.textBaseline)  context.textBaseline = instance.Text.textBaseline;
+            if (instance.Text.direction)     context.direction = instance.Text.direction;
+            if (instance.Text.lineWidth)     context.lineWidth = instance.Text.lineWidth;
+            if (instance.Text.color)         color = instance.Text.color;
+
+            context.beginPath();
+
+            if (fill === true || fill === undefined) {
+                context.fillStyle = color || '#dddddd';
+                context.fillText(label, x, y);
+
+                if (typeof fill === 'string') {
+                    context.strokeStyle = fill || '#000000';
+                    context.strokeText(label, x, y);
+                }
+            }
+            else {
+                context.strokeStyle = color || '#000000';
+                context.strokeText(label, x, y);
+            }
+
+            context.closePath();
+        }
+    };
+         */
+
         instance.Text = {};
         instance.Text._text_parameters = false;
 
@@ -751,10 +814,6 @@
          * @param fill
          */
         instance.Text.write = function (x, y, label, color, fill) {
-            if (instance.Text._text_parameters === false) {
-                instance.Text.reset();
-            }
-
             if (arguments.length === 1) {
                 label = x;
                 x = instance.Text._text_parameters.x;
@@ -846,6 +905,9 @@
         instance.Text.rotate = function (value) {instance.Text._text_parameters.rotate = value};
         instance.Text.scale = function (value) {instance.Text._text_parameters.scale = value};
 
+        if (instance.Text._text_parameters === false) {
+            instance.Text.reset();
+        }
     });
 
     Animate.Extension(function (instance) {
@@ -917,7 +979,6 @@
         };
 
         /**
-         *
          * @param x
          * @param y
          * @param width
@@ -929,7 +990,7 @@
             context.beginPath();
             context.rect(x || 0, y || 0, width || 100, height || 100);
 
-            if (fill) {
+            if (fill === undefined || fill === true || fill === 'string') {
                 context.fillStyle = color || '#000';
                 context.fill();
                 if (typeof fill === 'string') {
