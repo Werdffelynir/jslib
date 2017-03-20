@@ -27,6 +27,7 @@
 <div class="table">
     <div id="menu" class="valign_top">
         <ul>
+            <li><a href="_test_recode.js">Test Recode</a></li>
             <li><a href="_gravity.js">Gravity</a></li>
             <li><a href="demo.js">demo.js</a></li>
             <li><a href="shape-house.js">shape-house.js</a></li>

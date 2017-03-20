@@ -9,19 +9,20 @@ Animate.Extension(function (instance) {
     var context = instance.getContext();
 
     /**
+     *
      * @type {{shape: function, rect: function, rectRound: function, circle: function, line: function, lineVertical: function, lineHorizontal: function, shadow: function, clearShadow: function, ellipse: function}}
      */
-    instance.graphic = {};
+    instance.Graphic = {};
 
     /**
-     * @namespace Animate.prototype.graphic.shape
+     * @namespace Animate.prototype.Graphic.shape
      * @param points
      * @param color
      * @param fill
      * @param closePath
      * @param lineWidth
      */
-    instance.graphic.shape = function (points, color, fill, closePath, lineWidth) {
+    instance.Graphic.shape = function (points, color, fill, closePath, lineWidth) {
         var i, temp = {}, positions = [];
 
         points.map(function (p) {
@@ -45,8 +46,8 @@ Animate.Extension(function (instance) {
 
         if (fill) {
             if (typeof fill === 'string') {
-                instance.graphic.shape(points, color, true);
-                instance.graphic.shape(points, fill, false, closePath, lineWidth);
+                instance.Graphic.shape(points, color, true);
+                instance.Graphic.shape(points, fill, false, closePath, lineWidth);
             } else {
                 context.closePath();
                 context.fillStyle = color || '#000';
@@ -73,22 +74,20 @@ Animate.Extension(function (instance) {
      * @param color
      * @param fill
      */
-    instance.graphic.rect = function (x, y, width, height, color, fill) {
+    instance.Graphic.rect = function (x, y, width, height, color, fill) {
         context.beginPath();
         context.rect(x || 0, y || 0, width || 100, height || 100);
 
         if (fill === undefined || fill === true || fill === 'string') {
-
-            context.fillStyle = color || '#000000';
+            context.fillStyle = color || '#000';
             context.fill();
-
             if (typeof fill === 'string') {
-                context.strokeStyle = fill || '#000000';
+                context.strokeStyle = fill || '#000';
                 context.stroke();
             }
         }
         else {
-            context.strokeStyle = color || '#000000';
+            context.strokeStyle = color || '#000';
             context.stroke();
         }
         context.closePath();
@@ -104,7 +103,7 @@ Animate.Extension(function (instance) {
      * @param color
      * @param fill
      */
-    instance.graphic.rectRound = function (x, y, width, height, radius, color, fill) {
+    instance.Graphic.rectRound = function (x, y, width, height, radius, color, fill) {
         x = x || 0;
         y = y || 0;
         width  = width || 100;
@@ -142,8 +141,8 @@ Animate.Extension(function (instance) {
      * @param color
      * @param fill
      */
-    instance.graphic.circle = function (x, y, radius, color, fill) {
-        instance.graphic.rectRound(x - (radius / 2), y - (radius / 2), radius, radius, radius / 2, color, fill);
+    instance.Graphic.circle = function (x, y, radius, color, fill) {
+        instance.Graphic.rectRound(x - (radius / 2), y - (radius / 2), radius, radius, radius / 2, color, fill);
     };
 
     /**
@@ -153,7 +152,7 @@ Animate.Extension(function (instance) {
      * @param lineWidth
      * @param color
      */
-    instance.graphic.line = function (point1, point2, lineWidth, color) {
+    instance.Graphic.line = function (point1, point2, lineWidth, color) {
         context.beginPath();
         context.lineWidth = lineWidth || 1;
         context.strokeStyle = color;
@@ -172,12 +171,12 @@ Animate.Extension(function (instance) {
      * @param lineWidth
      * @param color
      */
-    instance.graphic.lineVertical = function (x, y, width, lineWidth, color) {
+    instance.Graphic.lineVertical = function (x, y, width, lineWidth, color) {
         if (width < 0) {
             x -= Math.abs(width);
             width = Math.abs(width);
         }
-        instance.graphic.line(instance.point(x, y), instance.point(x + width, y), lineWidth, color);
+        instance.Graphic.line(instance.point(x, y), instance.point(x + width, y), lineWidth, color);
     };
 
     /**
@@ -188,12 +187,12 @@ Animate.Extension(function (instance) {
      * @param lineWidth
      * @param color
      */
-    instance.graphic.lineHorizontal = function (x, y, height, lineWidth, color) {
+    instance.Graphic.lineHorizontal = function (x, y, height, lineWidth, color) {
         if (height < 0) {
             y -= Math.abs(height);
             height = Math.abs(height);
         }
-        instance.graphic.line(instance.point(x, y), instance.point(x, y + height), lineWidth, color);
+        instance.Graphic.line(instance.point(x, y), instance.point(x, y + height), lineWidth, color);
     };
 
     /**
@@ -203,7 +202,7 @@ Animate.Extension(function (instance) {
      * @param blur
      * @param color
      */
-    instance.graphic.shadow = function (x, y, blur, color) {
+    instance.Graphic.shadow = function (x, y, blur, color) {
         context.shadowOffsetX = x;
         context.shadowOffsetY = y;
         context.shadowBlur = blur;
@@ -213,7 +212,7 @@ Animate.Extension(function (instance) {
     /**
      * Clear global shadow
      */
-    instance.graphic.clearShadow = function () {
+    instance.Graphic.clearShadow = function () {
         context.shadowOffsetX = context.shadowOffsetY = context.shadowBlur = 0;
     };
 
@@ -228,7 +227,7 @@ Animate.Extension(function (instance) {
      * @param endAngle
      * @param anticlockwise
      */
-    instance.graphic.ellipse = function (x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
+    instance.Graphic.ellipse = function (x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
         context.save();
         context.beginPath();
         context.translate(x, y);

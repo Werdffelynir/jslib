@@ -12,19 +12,23 @@
 
     Animate.prototype.constructor = Animate;
 
-    [[['prototype.super']]];
-    [[['prototype.events']]];
     [[['static']]];
-    [[['expansion']]];
+
+    [[['utility']]];
+
     [[['extension.text']]];
+
     [[['extension.graphic']]];
-    [[['extension.resource']]];
+
+    [[['extension.image']]];
+
     [[['extension.keypress']]];
+
     [[['extension.mousepress']]];
 
     /** Set script version. Property [read-only]*/
     Object.defineProperty(Animate, 'version', {
-        enumerable: false, configurable: false, writable: false, value: '0.5.0'
+        enumerable: false, configurable: false, writable: false, value: '0.4.0'
     });
 
     window.Animate = Animate;
