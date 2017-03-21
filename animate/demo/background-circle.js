@@ -10,7 +10,7 @@
     var an = new Animate({
         selector: '#canvas',
         width: 600,
-        height: 400,
+        height: 280,
         fps: 24
     });
 
@@ -18,28 +18,28 @@
     Game = {img:{}};
     /*
     Game.movieBg = an.createClip({
+        source: null,
         speed: 1.5,
         img1_x: 0,
         img1_y: 0,
         img2_x: false,
-        img2_y: 0,
-        correct_x: 0
-    }, function (ctx, i) {
-        ctx = ctx;
-        var img = Game.img[Game.bgFileName];
-        if (!img) return;
+        img2_y: 0
+    }, function (source, ctx, i) {
+        if (!source) return;
+        this.source = source;
+
         if (this.img2_x === false) {
-            this.img2_x = img.width + this.correct_x ;
+            this.img2_x = img.width ;
         }
 
-        ctx.drawImage(img, this.img1_x, this.img1_y);
-        ctx.drawImage(img, this.img2_x, this.img2_y);
+        ctx.drawImage(this.source, this.img1_x, this.img1_y);
+        ctx.drawImage(this.source, this.img2_x, this.img2_y);
 
         this.img1_x -= this.speed;
         this.img2_x -= this.speed;
 
-        if (this.img1_x < -img.width + this.correct_x ) this.img1_x = img.width + this.correct_x ;
-        if (this.img2_x < -img.width + this.correct_x ) this.img2_x = img.width + this.correct_x ;
+        if (this.img1_x < -img.width ) this.img1_x = img.width ;
+        if (this.img2_x < -img.width ) this.img2_x = img.width ;
     });*/
 
     Game.createBgClip = function (image, x, y, speed, correct) {
@@ -62,8 +62,8 @@
             this.img1_x -= this.speed;
             this.img2_x -= this.speed;
 
-            if (this.img1_x < -image.width + this.correct_x ) this.img1_x = image.width + this.correct_x ;
-            if (this.img2_x < -image.width + this.correct_x ) this.img2_x = image.width + this.correct_x ;
+            if (this.img1_x < -image.width + this.correct_x ) this.img1_x = image.width + this.correct_x;
+            if (this.img2_x < -image.width + this.correct_x ) this.img2_x = image.width + this.correct_x;
                              
             return this;
         });
@@ -91,7 +91,7 @@
 
             console.log(imgs);
             
-            Game.bg1 = Game.createBgClip(imgs['bg1'], 0, 150, 5, -5);
+            Game.bg1 = Game.createBgClip(imgs['bg1'], 0, 150, 5, 0);
             Game.bg2 = Game.createBgClip(imgs['bg2'], 0, 50, 3, 0);
             Game.bg3 = Game.createBgClip(imgs['bg3'], 0, 0, 1, 0);
             
