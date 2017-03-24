@@ -633,13 +633,20 @@
     NamespaceApplication.inject = function (selector, data, append, to) {
         if (typeof selector === 'string')
             selector = NamespaceApplication.query(selector, to);
+
+        if (!append)
+            selector.textContent = '';
+
         if (NamespaceApplication.isNode(selector)) {
             if (NamespaceApplication.isNode(data)) {
-                if (!append)
-                    selector.textContent = '';
                 selector.appendChild(data);
-            } else
+            } else if (NamespaceApplication.typeOf(data, 'array')) {
+                var i;
+                for (i = 0; i < data.length; i ++)
+                    NamespaceApplication.inject(selector, data[i], true, to);
+            } else {
                 selector.innerHTML = (!append) ? data : selector.innerHTML + data;
+            }
             return selector;
         }
         return null;
@@ -764,6 +771,109 @@
             }
         }
         return elem;
+    };
+
+    /**
+     * Convert HTML string to DOMElement
+     * @param string
+     * @returns {*}
+     */
+    NamespaceApplication.str2node = function (string){
+        var i, fragment = document.createDocumentFragment(),
+            container = document.createElement("div");
+        container.innerHTML = string;
+
+        while( i = container.firstChild )
+            fragment.appendChild(i);
+
+        return fragment.childNodes.length === 1 ? fragment.firstChild : fragment;
+    };
+
+    /**
+     * Convert DOMElement to HTML string
+     * @param element
+     * @returns {*}
+     */
+    NamespaceApplication.node2str = function (element){
+        var container = document.createElement("div");
+        container.appendChild(element.cloneNode(true));
+        return container.innerHTML;
+    };
+
+
+    /**
+     * Calculates the position and size of elements.
+     *
+     * @param elem
+     * @returns {{y: number, x: number, width: number, height: number}}
+     */
+    NamespaceApplication.position = function (elem) {
+        var data = {x: 0, y: 0, width: 0, height: 0};
+
+        if (typeof elem === 'string')
+            elem = document.querySelector(elem);
+
+        if (elem === undefined || elem === window || elem === document) {
+            data.width = window.innerWidth;
+            data.height = window.innerHeight;
+            data.element = window;
+        }
+        else
+        if (elem && elem.nodeType === Node.ELEMENT_NODE) {
+            if (elem.getBoundingClientRect) {
+                var rect = elem.getBoundingClientRect(),
+                    scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
+                    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+                    clientTop = document.documentElement.clientTop || document.body.clientTop || 0,
+                    clientLeft = document.documentElement.clientLeft || document.body.clientLeft || 0;
+
+                data.y = Math.round(rect.top + scrollTop - clientTop);
+                data.x = Math.round(rect.left + scrollLeft - clientLeft);
+                data.width = elem.offsetWidth;
+                data.height = elem.offsetHeight;
+            }
+            else {
+                var top = 0, left = 0;
+                while (elem) {
+                    top += parseInt(elem.offsetTop, 10);
+                    left += parseInt(elem.offsetLeft, 10);
+                    elem = elem.offsetParent;
+                }
+                data.y = top;
+                data.x = left;
+                data.width = elem.offsetWidth;
+                data.height = elem.offsetHeight;
+            }
+            data.element = elem;
+        }
+        return data;
+    };
+
+    /**
+     * Search all objects in array with key `attr` and value `attrValue`
+     * @param values    Source array with objects
+     * @param attr      Object search key
+     * @param attrValue Object search value in key
+     * @returns {Array}
+     */
+    NamespaceApplication.findObjects = function (values, attr, attrValue) {
+        var i, tmp = [], list = values || [];
+        for (i = 0; i < list.length; i++)
+            if (list[i] && list[i][attr] !== undefined && list[i][attr] == attrValue)
+                tmp.push(list[i]);
+        return tmp;
+    };
+
+    /**
+     * Search one object in array with key `attr` and value `attrValue`
+     * @param values    Source array with objects
+     * @param attr      Object search key
+     * @param attrValue Object search value in key
+     * @returns {boolean}
+     */
+    NamespaceApplication.findObject = function (values, attr, attrValue) {
+        var tmp = NamespaceApplication.findObjects(values, attr, attrValue);
+        return tmp.length ? tmp[0] : false;
     };
 
     /**
@@ -988,14 +1098,14 @@
      */
     NamespaceApplication.Storage.length = function () {return window.localStorage.length};
 
-    /**
-     * @type {{filterArrayObject: NamespaceApplication.Util.filterArrayObject, filterArrayObjects: NamespaceApplication.Util.filterArrayObjects}}
-     */
+    /** @deprecated */
     NamespaceApplication.Util = {};
+    /** @deprecated */
     NamespaceApplication.Util.filterArrayObject = function (values, attr, attrValue) {
         var tmp = NamespaceApplication.Util.filterArrayObjects(values, attr, attrValue);
         return tmp.length ? tmp[0] : false;
     };
+    /** @deprecated */
     NamespaceApplication.Util.filterArrayObjects = function (values, attr, attrValue) {
         var i, tmp = [], list = values || [];
         for (i = 0; i < list.length; i++)
@@ -1003,6 +1113,9 @@
                 tmp.push(list[i]);
         return tmp
     };
+
+
+
     NamespaceApplication.Datetime = {};
     NamespaceApplication.Datetime.msInDay = 864e5;
     NamespaceApplication.Datetime.msInHour = 36e5;
@@ -1069,7 +1182,6 @@
      * @param utc
      * @returns {Date}
      */
-
     NamespaceApplication.Datetime.strToDate =  function (date, format, utc) {
         var set = [0, 0, 1, 0, 0, 0];
         var temp = date.match(/[a-zA-Z]+|[0-9]+/g);
@@ -1164,6 +1276,11 @@
         prototype.format = NamespaceApplication.format;
         prototype.ajax = NamespaceApplication.ajax;
         prototype.createElement = NamespaceApplication.createElement;
+        prototype.node2str = NamespaceApplication.node2str;
+        prototype.str2node = NamespaceApplication.str2node;
+        prototype.position = NamespaceApplication.position;
+        prototype.findObjects = NamespaceApplication.findObjects;
+        prototype.findObject = NamespaceApplication.findObject;
         prototype.Timer = NamespaceApplication.Timer;
         prototype.Cookie = NamespaceApplication.Cookie;
         prototype.Storage = NamespaceApplication.Storage;
