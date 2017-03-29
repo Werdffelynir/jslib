@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>WorkTasks</title>
     <link rel="stylesheet" href="../grid_css/grid2.css">
     <link rel="stylesheet" href="style.css">
 <!--    <script src="https://use.fontawesome.com/d221e5e5b6.js"></script>-->
@@ -12,10 +12,11 @@
 
 <div class="table header">
 
+
     <div>WorkTasks</div>
     <div>
         <form name="task" class="table text-right">
-            <input name="task_name" type="text" class="width-50" required="required">
+            <input name="task_name" type="text" class="width-90" required="required" autocomplete="off">
             <div class="button" data-action="add"><i class="fa fa-plus"></i> Add task</div>
         </form>
     </div>

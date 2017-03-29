@@ -1,33 +1,5 @@
-var demo_data = [
-    {
-        name: 'Task name',
-        create_date: '10.03.2017',
-        status: 'close'
-    },{
-        name: 'Task name',
-        create_date: '11.03.2017',
-        status: 'open'
-    },{
-        name: 'Task name',
-        create_date: '12.03.2017',
-        status: 'close'
-    },{
-        name: 'Task name',
-        create_date: '13.03.2017',
-        status: 'open'
-    },{
-        name: 'Task name',
-        create_date: '14.03.2017',
-        status: 'open'
-    },{
-        name: 'Task name',
-        create_date: '15.03.2017',
-        status: 'open'
-    }
-];
 
 var App = new NamespaceApplication();
-
 
 App.namespace('Template', function () {
     var template = App.query('template');

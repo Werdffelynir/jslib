@@ -198,6 +198,35 @@
     };
 
     /**
+     * Set camera position and scales
+     * @param x         camera position y
+     * @param y         camera position x
+     * @param wight     camera wight
+     * @param callback  function a clip
+     */
+    prototype.camera = function (x, y, wight, callback) {
+        /** @type CanvasRenderingContext2D */
+        var ctx = this.getContext();
+        var i = this.getIteration();
+        var scale = this.width / wight;
+        ctx.save();
+        ctx.translate(-x - this.camera.position.x, -y - this.camera.position.y);
+        ctx.scale(scale, scale);
+        callback(ctx, i);
+        ctx.restore();
+        return this.camera.position;
+    };
+    prototype.camera.position = {x: 0, y: 0};
+
+    /**
+     * Restore camera position and scales
+     */
+    prototype.cameraRestore = function () {
+        this.getContext().translate(0, 0);
+        this.getContext().scale(scale, scale);
+    };
+
+    /**
      * Set resize canvas
      * @param width     default: fullscreen 'window.innerWidth'
      * @param height    default: fullscreen 'window.innerHeight'
