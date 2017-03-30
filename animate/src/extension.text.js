@@ -48,11 +48,11 @@ Animate.Extension(function (instance) {
 
         //context.lineWidth = instance.text._parameters.lineWidth;
         if (_transform) {
-            CanvasRenderingContext2D.prototype.setTransform.apply(ctx, _transform);}
+            CanvasRenderingContext2D.prototype.setTransform.apply(context, _transform);}
         if (_rotate) {
             context.rotate(_rotate);}
         if (_scale) {
-            CanvasRenderingContext2D.prototype.scale.apply(ctx, _scale);}
+            CanvasRenderingContext2D.prototype.scale.apply(context, _scale);}
         if (_alpha) {
             context.globalAlpha = _alpha;}
 
