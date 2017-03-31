@@ -12,11 +12,11 @@
 
 <div class="table header">
 
-
     <div>WorkTasks</div>
     <div>
         <form name="task" class="table text-right">
-            <input name="task_name" type="text" class="width-90" required="required" autocomplete="off">
+            <input name="task_priority" type="number" class="width-5" autocomplete="off">
+            <input name="task_name" type="text" class="width-80" required="required" autocomplete="off">
             <div class="button" data-action="add"><i class="fa fa-plus"></i> Add task</div>
         </form>
     </div>
@@ -27,6 +27,7 @@
 
 <template>
     <div data-template="task" class="table task" data-taskindex="{taskindex}">
+        <div>{taskpriority}</div>
         <div>{taskname}</div>
         <div class="width-5">{taskupdate}</div>
         <div class="width-10 text-right">

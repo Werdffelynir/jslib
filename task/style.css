@@ -16,6 +16,15 @@
 .task>div{
     padding: 5px;
 }
+.task>div:first-child{
+    width: 70px;
+}
+.task>div:nth-child(2){
+    text-align: left;
+}
 .button{
     cursor: pointer;
+}
+.priority{
+    width: 50px;
 }
