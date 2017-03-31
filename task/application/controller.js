@@ -92,7 +92,7 @@ App.namespace('Tasks', function () {
                     html_status = '<div class="button" data-action="open" data-taskindex="'+i+'">Open</div>';
                 if (item['status'] === 'close') {
                     html_status = '<div class="button" data-action="delete" data-taskindex="'+i+'">Delete</div>';
-                    html_status+= '<div class="button" data-action="close" data-taskindex="'+i+'">Close</div>';
+                    html_status+= ' <div class="button" data-action="close" data-taskindex="'+i+'">Close</div>';
                 }
                 input_priority = App.node2str(App.createElement('input', {
                     'class':'priority',
@@ -110,7 +110,10 @@ App.namespace('Tasks', function () {
                 });
                 var node = App.str2node(html_string);
                 if (item['status'] === 'close')
-                    node.style.backgroundColor = '#f6f6f6';
+                    node.classList.add('task-close');
+                else
+                    node.classList.add('task-open');
+
                 html_fragment.appendChild(node);
             }
             return html_fragment;

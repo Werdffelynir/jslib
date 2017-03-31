@@ -22,6 +22,14 @@
 .task>div:nth-child(2){
     text-align: left;
 }
+.task-open{
+    background-color: #ffffff;
+    color: #000000;
+}
+.task-close{
+    background-color: #2e3445;
+    color: #ffffff;
+}
 .button{
     cursor: pointer;
 }
