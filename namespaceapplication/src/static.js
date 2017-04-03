@@ -11,18 +11,24 @@ var NamespaceApplication = window.NamespaceApplication || {}; // THIS-LINE-WILL-
  */
 NamespaceApplication.loadJS = function (src, onload, onerror) {
     if (!src) return null;
+    if (NamespaceApplication.typeOf(src,'array')) {
+        var i;
+        for (i = 0; i < src.length; i ++) {
+            NamespaceApplication.loadJS( src[i], onload, onerror );
+        }
+    } else {
+        var script = document.createElement('script'),
+            id = "src-" + Math.random().toString(32).slice(2);
 
-    var script = document.createElement('script'),
-        id = "src-" + Math.random().toString(32).slice(2);
+        script.src = (src.substr(-3) === '.js') ? src : src + '.js';
+        script.type = 'application/javascript';
+        script.id = id;
+        script.onload = onload;
+        script.onerror = onerror;
 
-    script.src = (src.substr(-3) === '.js') ? src : src + '.js';
-    script.type = 'application/javascript';
-    script.id = id;
-    script.onload = onload;
-    script.onerror = onerror;
-
-    document.head.appendChild(script);
-    return script
+        document.head.appendChild(script);
+        return script
+    }
 };
 
 /**
@@ -35,18 +41,24 @@ NamespaceApplication.loadJS = function (src, onload, onerror) {
  */
 NamespaceApplication.loadCSS = function (src, onload, onerror) {
     if (!src) return null;
+    if (NamespaceApplication.typeOf(src, 'array')) {
+        var i;
+        for (i = 0; i < src.length; i ++) {
+            NamespaceApplication.loadCSS( src[i], onload, onerror );
+        }
+    } else {
+        var link = document.createElement('link'),
+            id = "src-" + Math.random().toString(32).slice(2);
 
-    var link = document.createElement('link'),
-        id = "src-" + Math.random().toString(32).slice(2);
+        link.href = (src.substr(-4) === '.css') ? src : src + '.css';
+        link.rel = 'stylesheet';
+        link.id = id;
+        link.onload = onload;
+        link.onerror = onerror;
 
-    link.href = (src.substr(-4) === '.css') ? src : src + '.css';
-    link.rel = 'stylesheet';
-    link.id = id;
-    link.onload = onload;
-    link.onerror = onerror;
-
-    document.head.appendChild(link);
-    return link
+        document.head.appendChild(link);
+        return link
+    }
 };
 
 /**

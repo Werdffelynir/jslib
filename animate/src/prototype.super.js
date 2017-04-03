@@ -95,6 +95,7 @@
             indexes: [0],
             delay: 0,
             point: {x:0, y:0},
+            loop: true,
 
             // internal
             _cursor_x: 0,
@@ -154,7 +155,8 @@
                     if (this.indexes[this._real_index + 1]) {
                         this._real_index = this._real_index + 1;
                         this._current_index = this.indexes[this._real_index];
-                    } else {
+
+                    } else if (this.loop) {
                         this._real_index = 0;
                         this._current_index = this.indexes[0];
                     }
@@ -162,6 +164,14 @@
             }
 
             // return self context
+            this.getCurrentIndex = this._current_index;
+            this.getRealIndex = this._real_index;
+            this.getMaxIndex = this._max_index;
+            this.reset = function () {
+                this._real_index = 0;
+                this._current_index = this.indexes[0];
+            };
+
             return this;
         }, true);
 

@@ -33,6 +33,7 @@
             <li><a href="fox-gardener.js">Game Fox Gardener</a></li>
             <li><a href="camera.js">Camera</a></li>
             <li><a href="mouse-cursor.js">Mouse-Cursor</a></li>
+            <li><a href="space-runner.js">Space Runner</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">

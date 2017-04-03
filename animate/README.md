@@ -2,8 +2,8 @@
 
 ## SuperObject Clip()
 
-createClip - является базовой консрукцией, оберткой для отдельтных частей программы.
-По сравнении с супер-объектами MovieClip или Sprite не возвращает собственные контекст.
+`createClip` - является базовой консрукцией, "контейнером" для отдельтных частей.
+По сравнении с супер-объектами `MovieClip` или `Sprite` не возвращает собственные "контекст", но его можно передать намерено `this`.
 
 ```js
 var heroClip = an.createClip({
@@ -28,8 +28,6 @@ an.frame('game', function(ctx, i){
 
 
 ## SuperObject MovieClip()
-
-
 
 ```js
 var heroClip = an.createMovieClip({

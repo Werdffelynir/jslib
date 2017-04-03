@@ -243,7 +243,8 @@
      * @param color
      */
     prototype.backgroundColor = function (color) {
-        this._canvas.style.backgroundColor = color;
+        if (this._canvas.style.backgroundColor !== color)
+            this._canvas.style.backgroundColor = color;
     };
 
     /**
@@ -251,7 +252,8 @@
      * @param img
      */
     prototype.backgroundImage = function (img) {
-        this._canvas.style.backgroundImage = img;
+        if (this._canvas.style.backgroundImage !== img)
+            this._canvas.style.backgroundImage = img;
     };
 
     /**
