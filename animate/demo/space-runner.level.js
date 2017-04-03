@@ -50,9 +50,9 @@ Animate.Extension(function (instance) {
                     this.setting.start.push({
                         x: instance.random(0, instance.width),
                         y: instance.random(0, instance.height),
-                        speed: instance.random(1, 6),
-                        radius: instance.random(1, 5),
-                        color: 'hsla(50, 100%, '+instance.random(40, 50)+'%, 1)'
+                        speed: instance.random(6, 16),
+                        radius: instance.random(1, 3),
+                        color: 'hsla(50, 100%, '+instance.random(35, 50)+'%, 1)'
                     });
                 }
             }

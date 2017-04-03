@@ -34,12 +34,13 @@
             <li><a href="camera.js">Camera</a></li>
             <li><a href="mouse-cursor.js">Mouse-Cursor</a></li>
             <li><a href="space-runner.js">Space Runner</a></li>
+            <li><a href="attacker.js">Attacker demo</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
         <div id="desc"></div>
         <div id="move">
-            <canvas id="canvas"></canvas><svg id="svg1"></svg>
+            <canvas id="canvas" class="select_off"></canvas><svg id="svg1"></svg>
         </div>
         <div id="after"></div>
     </div>

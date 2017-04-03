@@ -24,9 +24,9 @@
 
         var animate = new Animate({
             selector: '#canvas',
-            width: 600,
-            height: 200,
-            fps: 60
+            width: 800,
+            height: 400,
+            fps: 30
         });
         animate.Game = Game;
 

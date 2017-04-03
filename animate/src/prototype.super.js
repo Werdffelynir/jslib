@@ -119,6 +119,12 @@
             var grid_row = this.grid[1];
             var grid_col = this.grid[0];
 
+            if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
+                for (var ik in arguments[0]) {
+                    this[ik] = arguments[0][ik];
+                }
+            }
+
             if (this._image_width === 0 && this._image_height === 0) {
                 this._image_width = this.image.naturalWidth || this.image.width;
                 this._image_height = this.image.naturalHeight || this.image.height;

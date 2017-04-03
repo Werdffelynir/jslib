@@ -18,8 +18,8 @@ Animate.Extension(function (instance) {
             y: 100,
             sizeWidth: 100,
             sizeHeight: 32,
-            speed: 1.8,
-            life: 100,
+            speed: 4.8,
+            life: 10,
             color: '#000000',
             rotateRadians: instance.degreesToRadians(90)
         },
@@ -54,14 +54,14 @@ Animate.Extension(function (instance) {
             if (this.moveEnable) {
 
                 if (instance.keyPress('ArrowUp') || instance.keyPress('w')) {
-                    this.setting.y -= this.setting.speed;
+                    this.setting.y -= this.setting.speed/2;
                     // restore
-                    this.moveSin = -2.4;
+                    this.moveSin = -1.25;
                     this.moveSinDeviation = -this.moveSinDeviationDefault;
                 } else  if (instance.keyPress('ArrowDown') || instance.keyPress('s')) {
-                    this.setting.y += this.setting.speed;
+                    this.setting.y += this.setting.speed/2;
                     // restore
-                    this.moveSin = 2;
+                    this.moveSin = 1.25;
                     this.moveSinDeviation = this.moveSinDeviationDefault;
                 } else {
                     // set distance of deviation
