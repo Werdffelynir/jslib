@@ -116,6 +116,20 @@
         };
 
         /**
+         * @returns {number}
+         */
+        prototype.getWidth = function () {
+            return this._canvas.width;
+        };
+
+        /**
+         * @returns {number}
+         */
+        prototype.getHeight = function () {
+            return this._canvas.height;
+        };
+
+        /**
          * Return current iteration
          * @returns {number}
          */
@@ -332,9 +346,10 @@
          * @param position  default: 'absolute'
          */
         prototype.resizeCanvas = function (width, height, position) {
-            this._canvas.style.position = position || 'absolute';
-            this._canvas.width = this.width = width || window.innerWidth;
-            this._canvas.height = this.height = height || window.innerHeight;
+            if (position !== undefined)
+                this._canvas.style.position = position || 'absolute';
+            this._canvas.width = this.width = parseInt(width) || window.innerWidth;
+            this._canvas.height = this.height = parseInt(height) || window.innerHeight;
         };
 
         /**
@@ -1500,14 +1515,32 @@
                 instance._canvas.addEventListener('mouseup', function (event) {
                     instance.mousePress._position = false;
                 });
-                instance._canvas.addEventListener('mousemove', function (event) {
-                    if (instance.mousePress._position)
-                        instance.mousePress._position = instance.mousePosition(event);
-                });
+
             }
         };
         instance.mousePress._position = false;
         instance.mousePress._is_init = false;
+
+
+        instance.mouseMove = function (callback) {
+
+            if (callback && typeof callback === 'function' && instance.mouseMove.listeners.indexOf(callback) === -1)
+                instance.mouseMove.listeners.push(callback);
+
+            if (!instance.mouseMove.is_init) {
+                instance.mouseMove.is_init = true;
+                instance._canvas.addEventListener('mousemove', function (event) {
+                    var i, position = instance.mousePosition(event);
+                    for (i = 0; i < instance.mouseMove.listeners.length; i ++)
+                        if (instance.mouseMove.listeners[i] && typeof instance.mouseMove.listeners[i] === 'function')
+                            instance.mouseMove.listeners[i].call(instance, position);
+                });
+            }
+        };
+
+        instance.mouseMove.is_init = false;
+        instance.mouseMove.listeners = [];
+
     });
 
     /** Set script version. Property [read-only]*/

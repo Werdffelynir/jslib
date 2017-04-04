@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shape point Editor</title>
+    <link rel="stylesheet" href="css/grid2.css">
+    <link rel="stylesheet" href="css/base.css">
+    <script src="js/resizer.js"></script>
+    <script src="js/animate-v0.5.1.js"></script>
+    <script data-init="app/init.js" src="js/ns_v0.2.5.js"></script>
+</head>
+<body>
+
+<div id="page">
+
+    <div id="header"><p>Shape point Editor</p></div>
+
+    <div id="wrapper" class="table">
+        <div id="sidebar">
+
+            <div class="sidebar-box">
+                <div class="sidebar-label">Canvas size</div>
+                <div><input name="set-width" type="number" value="600"> x <input name="set-height" type="number" value="400"></div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="table">
+                    <span><input name="set-grid" type="checkbox" checked="checked"></span>
+                    <span class="">Show grid</span>
+                </div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="table">
+                    <span><input name="set-cling" type="checkbox"></span>
+                    <span class="">Point clinging</span>
+                </div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="table">
+                    <span><input name="set-fill" type="checkbox"></span>
+                    <span class="">Fill shape</span>
+                </div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="sidebar-label">Fill color</div>
+                <div><input name="set-fillcolor" type="text" value="#ff0000"></div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="sidebar-label">Line Width</div>
+                <div><input name="set-linewidth" min="1" max="10" type="range" value="1"></div>
+            </div>
+
+            <div class="sidebar-box">
+                <div class="sidebar-label">Line color</div>
+                <div><input name="set-linecolor" type="text" value="#c7d1ff"></div>
+            </div>
+
+        </div>
+        <div id="resizer"></div>
+        <div id="content">
+            <div id="tools">
+                <div class="button" data-btn="back">Back</div>
+                <div class="button" data-btn="pointprev">Prev point</div>
+                <div class="button" data-btn="pointnext">Next point</div>
+                <div class="button" data-btn="moveall">Move Point</div>
+                &nbsp;&nbsp;
+                <div class="button" data-btn="lock">Lock</div>
+                <div class="button" data-btn="clear">Clear canvas</div>
+                &nbsp;&nbsp;
+                <div class="button" data-btn="addtolist">Add to list</div>
+            </div>
+            <div id="canvas">
+                <canvas></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="codepoints"></div>
+    <div id="history"></div>
+
+</div>
+
+<template>
+
+    <div id="tp-ligthbox">
+
+    </div>
+
+</template>
+
+</body>
+</html>

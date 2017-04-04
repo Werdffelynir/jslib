@@ -12,9 +12,9 @@
 
     var Game = {
         scripts: [
-            '/animate/demo/space-runner.level.js',
-            '/animate/demo/space-runner.player.js',
-            '/animate/demo/space-runner.asteroid.js',
+            '/animate/demo/space-runner/level.js',
+            '/animate/demo/space-runner/player.js',
+            '/animate/demo/space-runner/asteroid.js'
         ],
         scriptsLoaded: 0,
         name: 'Space Runner'
@@ -35,6 +35,7 @@
             asteroid: '/animate/demo/images/asteroid-32x32.png',
             explosion: '/animate/demo/images/explosion.png'
         }, function (images) {
+
             Game.images = images;
 
             Game.Level = animate.Level;
@@ -73,40 +74,4 @@
 
     });
 
-
-
-
-
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Game.animate.frame(function(ctx, i) {
-//     /** @type CanvasRenderingContext2D */
-//     ctx = ctx;
-//
-//     console.log(ctx, i);
-//
-//     if (i > 100)
-//         Game.animate.stop();
-// });

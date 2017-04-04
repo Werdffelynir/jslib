@@ -19,6 +19,20 @@
     };
 
     /**
+     * @returns {number}
+     */
+    prototype.getWidth = function () {
+        return this._canvas.width;
+    };
+
+    /**
+     * @returns {number}
+     */
+    prototype.getHeight = function () {
+        return this._canvas.height;
+    };
+
+    /**
      * Return current iteration
      * @returns {number}
      */
@@ -233,9 +247,10 @@
      * @param position  default: 'absolute'
      */
     prototype.resizeCanvas = function (width, height, position) {
-        this._canvas.style.position = position || 'absolute';
-        this._canvas.width = this.width = width || window.innerWidth;
-        this._canvas.height = this.height = height || window.innerHeight;
+        if (position !== undefined)
+            this._canvas.style.position = position || 'absolute';
+        this._canvas.width = this.width = parseInt(width) || window.innerWidth;
+        this._canvas.height = this.height = parseInt(height) || window.innerHeight;
     };
 
     /**

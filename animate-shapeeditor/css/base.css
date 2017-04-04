@@ -1,0 +1,53 @@
+/*GLOBAL*/
+.button{
+    cursor: pointer;
+}
+
+
+/*PAGE ELEMENTS*/
+#page{}
+#header{
+    background-color: #4c4c4c;
+    color: #e4e4e4;
+}
+#wrapper{
+    padding: 0px;
+}
+#sidebar{
+    width: 190px;
+    min-width: 190px;
+    vertical-align: top;
+    padding: 5px;
+}
+
+
+#resizer{
+    background-color: #4c4c4c;
+    width: 3px;
+    cursor: col-resize;
+}
+#content{
+    vertical-align: top;
+    padding: 0px;
+}
+#tools{
+    padding: 5px;
+    border-bottom: 1px solid  #4c4c4c;
+}
+#canvas{}
+
+#history{}
+
+/*sidebar*/
+
+input[name="set-height"],
+input[name="set-width"] {
+    width: 80px;
+}
+
+.sidebar-box{
+    margin-bottom: 10px;
+}
+.sidebar-box>.table>span:first-child{
+    width: 20px;
+ }

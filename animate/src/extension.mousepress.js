@@ -19,6 +19,7 @@ Animate.Extension(function (instance) {
 
         return instance.mousePress._position;
     };
+
     instance.mousePress._init_once_click_listener = function () {
         if (instance.mousePress._is_init === false) {
             instance.mousePress._is_init = true;
@@ -29,12 +30,34 @@ Animate.Extension(function (instance) {
             instance._canvas.addEventListener('mouseup', function (event) {
                 instance.mousePress._position = false;
             });
+
+        }
+    };
+
+    instance.mousePress._position = false;
+    instance.mousePress._is_init = false;
+
+    /**
+     * (out loop use)
+     * @param callback
+     */
+    instance.mouseMove = function (callback) {
+
+        if (callback && typeof callback === 'function' && instance.mouseMove.listeners.indexOf(callback) === -1)
+            instance.mouseMove.listeners.push(callback);
+
+        if (!instance.mouseMove.is_init) {
+            instance.mouseMove.is_init = true;
             instance._canvas.addEventListener('mousemove', function (event) {
-                if (instance.mousePress._position)
-                    instance.mousePress._position = instance.mousePosition(event);
+                var i, position = instance.mousePosition(event);
+                for (i = 0; i < instance.mouseMove.listeners.length; i ++)
+                    if (instance.mouseMove.listeners[i] && typeof instance.mouseMove.listeners[i] === 'function')
+                        instance.mouseMove.listeners[i].call(instance, position);
             });
         }
     };
-    instance.mousePress._position = false;
-    instance.mousePress._is_init = false;
+
+    instance.mouseMove.is_init = false;
+    instance.mouseMove.listeners = [];
+
 })
