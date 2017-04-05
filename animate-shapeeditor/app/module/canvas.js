@@ -16,6 +16,7 @@ if(App.namespace){App.namespace('Canvas', function(App){
         fill_color: false,
 
         is_lock: false,
+        is_cling: false,
 
         style: {
             color_line: '#c7d1ff',
@@ -32,14 +33,7 @@ if(App.namespace){App.namespace('Canvas', function(App){
     __.init = function (animate) {
         __.animate = animate;
 
-        if (App.Storage('shapeeditor-database')) {
-            __.setData = App.Storage('shapeeditor-database');
-        }
-    };
 
-    /** @namespace App.Canvas.saveData */
-    __.saveData = function(){
-        App.Storage('shapeeditor-database', __.data);
     };
 
     /** @namespace App.Canvas.getData */
@@ -49,14 +43,18 @@ if(App.namespace){App.namespace('Canvas', function(App){
 
     /** @namespace App.Canvas.setData */
     __.setData = function(data){
-        __.data = data;
+        if (App.typeOf(data, 'array')) {
+            __.edit_point_indexs['x'] = 0;
+            __.edit_point_indexs['y'] = 1;
+            __.data = data;
+        }
     };
 
-    /** @namespace App.Canvas.addPoint */
+    /** @namespace App.Canvas.addPoint
     __.addPoint = function(point){
         __.data.push(point);
         __.data_lest = [];
-    };
+    };*/
 
     __.back = function () {
         __.data = __.data.slice(0, -2);
@@ -68,7 +66,19 @@ if(App.namespace){App.namespace('Canvas', function(App){
     };
 
     __.render = function () {
+
         var i, point, points = __.data;
+
+        if (!App.typeOf(points, 'array')) {
+            return;
+        }
+
+        if (__.data_lest !== __.data) {
+            __.data_lest = __.data;
+            __.showCurrentData(__.data);
+
+            App.History.saveLastData(__.data);
+        }
 
         if (__.fill_lines) {
             __.animate.graphic.shape(points, __.fill_color, true, false, 1);
@@ -80,7 +90,6 @@ if(App.namespace){App.namespace('Canvas', function(App){
             point = __.animate.point(points[i], points[i+1]);
             __.animate.graphic.circle(point.x, point.y, __.style.radius_outer, __.style.color_outer, true);
             __.animate.graphic.circle(point.x, point.y, __.style.radius_inner, __.style.color_inner, true);
-
 
             if (i === __.edit_point_indexs.x) {
                 __.animate.graphic.circle(point.x, point.y, __.style.radius_outer + 5, __.style.color_edit, false);
@@ -105,60 +114,129 @@ if(App.namespace){App.namespace('Canvas', function(App){
                 return;
             }
 
-            if (__.animate.keyPress('ArrowLeft')) {
-                __.data[__.edit_point_indexs.x] -= 1;
+            if (__.animate.keyPress('ArrowLeft') || __.animate.keyPress('KeyA')) {
+                if (App.Canvas.is_cling) {
+                    __.data[__.edit_point_indexs.x] -= 5;
+                } else
+                    __.data[__.edit_point_indexs.x] -= 1;
             }
-            if (__.animate.keyPress('ArrowRight')) {
-                __.data[__.edit_point_indexs.x] += 1;
+            if (__.animate.keyPress('ArrowRight') || __.animate.keyPress('KeyD')) {
+                if (App.Canvas.is_cling) {
+                    __.data[__.edit_point_indexs.x] += 5;
+                } else
+                    __.data[__.edit_point_indexs.x] += 1;
             }
-            if (__.animate.keyPress('ArrowUp')) {
-                __.data[__.edit_point_indexs.y] -= 1;
+            if (__.animate.keyPress('ArrowUp') || __.animate.keyPress('KeyW')) {
+                if (App.Canvas.is_cling) {
+                    __.data[__.edit_point_indexs.y] -= 5;
+                } else
+                    __.data[__.edit_point_indexs.y] -= 1;
             }
-            if (__.animate.keyPress('ArrowDown')) {
-                __.data[__.edit_point_indexs.y] += 1;
+            if (__.animate.keyPress('ArrowDown') || __.animate.keyPress('KeyS')) {
+                if (App.Canvas.is_cling) {
+                    __.data[__.edit_point_indexs.y] += 5;
+                } else
+                    __.data[__.edit_point_indexs.y] += 1;
             }
         }
         else if (__.edit_mode === 'all') {
             var i;
-            if (__.animate.keyPress('ArrowLeft')) {
+            if (__.animate.keyPress('ArrowLeft') || __.animate.keyPress('KeyA')) {
                 for (i = 0; i < __.data.length; i += 2) {
-                    __.data[i] -= 1;
+                    if (App.Canvas.is_cling)
+                        __.data[i] -= 5;
+                    else
+                        __.data[i] -= 1;
                 }
             }
-            else if (__.animate.keyPress('ArrowRight')) {
+            else if (__.animate.keyPress('ArrowRight') || __.animate.keyPress('KeyD')) {
                 for (i = 0; i < __.data.length; i += 2) {
-                    __.data[i] += 1;
+                    if (App.Canvas.is_cling)
+                        __.data[i] += 5;
+                    else
+                        __.data[i] += 1;
                 }
             }
-            else if (__.animate.keyPress('ArrowUp')) {
+            else if (__.animate.keyPress('ArrowUp') || __.animate.keyPress('KeyW')) {
                 for (i = 1; i < __.data.length; i += 2) {
-                    __.data[i] -= 1;
+                    if (App.Canvas.is_cling)
+                        __.data[i] -= 5;
+                    else
+                        __.data[i] -= 1;
                 }
             }
-            else if (__.animate.keyPress('ArrowDown')) {
+            else if (__.animate.keyPress('ArrowDown') || __.animate.keyPress('KeyS')) {
                 for (i = 1; i < __.data.length; i += 2) {
-                    __.data[i] += 1;
+                    if (App.Canvas.is_cling)
+                        __.data[i] += 5;
+                    else
+                        __.data[i] += 1;
                 }
             }
         }
 
-
     };
 
-    __.listenerMousemove = function (event) {
-        // var point = __.animate.mousePosition(event);
-        // __.data.push(point);
-        // console.log('listenerMousemove',point);
+    __.showCurrentData = function (event) {
+        App.inject(App.node['currentdata'], App.createElement('textarea',{'class':''}, JSON.stringify(__.data)));
     };
+
+    __.listenerMousemove = function (event) {};
 
     __.listenerClick = function (event) {
 
         var point = __.animate.mousePosition(event);
 
+        if (__.is_cling) {
+            point.x = __.toClingNumber(point.x);
+            point.y = __.toClingNumber(point.y);
+        }
+
         if (!__.is_lock) {
             __.edit_point_indexs['x'] = __.data.push(point.x) - 1;
             __.edit_point_indexs['y'] = __.data.push(point.y) - 1;
+            __.showCurrentData();
         }
+    };
+
+
+    __.listenerKeyup = function (event) {
+
+        // Prev point
+        if (event.code === 'KeyQ') {
+            App.Tools.on_pointprev()
+        }
+
+        // Next point
+        if (event.code === 'KeyE') {
+            App.Tools.on_pointnext()
+        }
+
+        // Back
+        if (event.code === 'KeyZ') {
+            App.Tools.on_back()
+        }
+
+        // Move Point
+        if (event.code === 'KeyX') {
+            App.Tools.on_move_all()
+        }
+
+        // Lock
+        if (event.code === 'KeyL') {
+            App.Tools.on_lock()
+        }
+
+        // Clear canvas
+        if (event.code === 'KeyC') {
+            App.Tools.on_clear()
+        }
+
+    };
+
+    __.toClingNumber = function (v) {
+        var _z = 5; var _v = (v % _z);
+        return _v < (_z/2) ? v - _v : v - _v + _z;
     };
 
     return __;

@@ -9,6 +9,9 @@
 #header{
     background-color: #4c4c4c;
     color: #e4e4e4;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 2px;
 }
 #wrapper{
     padding: 0px;
@@ -19,9 +22,16 @@
     vertical-align: top;
     padding: 5px;
 }
+#sidebar2{
+      vertical-align: top;
+      padding: 5px;
+  }
+#currentdata textarea{
+    width: 100%;
+    min-height: 100px;
+}
 
-
-#resizer{
+#resizer, #resizer2{
     background-color: #4c4c4c;
     width: 3px;
     cursor: col-resize;
@@ -37,11 +47,19 @@
 #canvas{}
 
 #history{}
+#history ul>li{
+    padding: 2px;
+    border-bottom: 1px solid #e0e0e0;
+}
+#history ul>li:hover{
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
 
 /*sidebar*/
 
-input[name="set-height"],
-input[name="set-width"] {
+input[name="setting-height"],
+input[name="setting-width"] {
     width: 80px;
 }
 
@@ -51,3 +69,6 @@ input[name="set-width"] {
 .sidebar-box>.table>span:first-child{
     width: 20px;
  }
+.sidebar-label{
+
+}

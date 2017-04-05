@@ -38,7 +38,7 @@ if(App.namespace){App.namespace('Grid', function(App){
         var width = an.getWidth();
         var height = an.getHeight();
 
-        if (!__.image_data) {
+        if (context && !__.image_data) {
             var i, j;
             for (i = 0; i < width / 5; i++) {
                 var i5 = i * 5;
@@ -52,7 +52,7 @@ if(App.namespace){App.namespace('Grid', function(App){
                 }
             }
             __.image_data = context.getImageData(0, 0, width, height);
-        } else {
+        } else if (context) {
             context.putImageData(__.image_data, 0, 0);
         }
 

@@ -1115,8 +1115,7 @@
         if (value)
             try {
                 value = JSON.parse(value)
-            } catch (error) {
-            }
+            } catch (error) {}
         return value;
     };
 

@@ -11,26 +11,22 @@ if(App.namespace){App.namespace('Controller', function(App){
     __.start = function(){
 
         __.animate = new Animate({
-            selector: '#canvas>canvas',
-            width: App.Sidebar.element('set-width').value,
-            height: App.Sidebar.element('set-height').value,
+            selector: '#canvas > canvas',
+            width: App.Sidebar.getAction('setting-width').value || 300,
+            height: App.Sidebar.getAction('setting-height').value || 150,
             fps: 24
         });
 
         // init
         App.Tools.init();
+        App.History.init(__.animate);
         App.Sidebar.init(__.animate);
         App.Canvas.init(__.animate);
         App.Grid.init(__.animate);
 
-        App.Sidebar.setListenerChangeCanvasSize();
-        App.Sidebar.setListenerChangeShowGrid();
-        App.Sidebar.setListenerChangeFillLines();
-        App.Sidebar.setListenerChangeLineWidth();
-        App.Sidebar.setListenerChangeLineColor();
-
         __.animate.onClick = App.Canvas.listenerClick;
         __.animate.onMousemove = App.Canvas.listenerMousemove;
+        __.animate.onKeyup = App.Canvas.listenerKeyup;
 
         __.animate.onFrame = function (ctx, i) {
 

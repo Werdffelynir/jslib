@@ -3,7 +3,8 @@ if(App.namespace){App.namespace('Tools', function(App){
      * @namespace App.Tools
      */
     var __ = {
-        node: null
+        node: null,
+        buttons: false
     };
 
     /**
@@ -15,6 +16,7 @@ if(App.namespace){App.namespace('Tools', function(App){
         __.buttonsHandler();
     };
 
+    /** @namespace App.Tools.buttonsHandler */
     __.buttonsHandler = function(){
         var btn = App.search('.button', 'data-btn', __.node);
 
@@ -25,7 +27,16 @@ if(App.namespace){App.namespace('Tools', function(App){
         App.on(btn['lock'], 'click', __.on_lock);
         App.on(btn['clear'], 'click', __.on_clear);
         App.on(btn['addtolist'], 'click', __.on_addtolist);
+        App.on(btn['deletefromlist'], 'click', __.on_deletefromlist);
 
+    };
+
+    /** @namespace App.Tools.getButton */
+    __.getButton = function(name){
+        if (!__.buttons)
+            __.buttons = App.search('.button', 'data-btn', __.node);
+
+        return __.buttons[name] ? __.buttons[name] : {};
     };
 
     __.on_back = function (eve) {
@@ -85,27 +96,23 @@ if(App.namespace){App.namespace('Tools', function(App){
         App.Canvas.clear();
     };
 
+    __.on_deletefromlist = function (eve) {
+
+        App.History.removeFromList();
+    };
+
     __.shapes_list = [];
+
     __.on_addtolist = function (eve) {
         var json = JSON.stringify(App.Canvas.data);
-        if (__.shapes_list.indexOf(json) === -1) {
-            __.shapes_list.push(json);
-        }
 
-        __.renderShapesList ();
+
+
+        App.History.addToList(App.Canvas.data);
+
+        //__.renderShapesList ();
     };
 
-    __.renderShapesList = function (eve) {
-        var i, li, ul = App.createElement('ul');
-        for (i = 0; i < __.shapes_list.length; i ++) {
-            li = App.createElement('li', {}, __.shapes_list[i]);
-            ul.appendChild(li);
-        }
-        App.inject(App.node['codepoints'], ul);
-
-        //App.Canvas.clear();
-        //App.node['codepoints'].textContent = ;
-    };
 
 
     return __;
