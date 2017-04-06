@@ -16,6 +16,9 @@
             '/animate/demo/space-runner/player.js',
             '/animate/demo/space-runner/asteroid.js'
         ],
+        full_screen: false,
+        size_width: false,
+        size_height: false,
         scriptsLoaded: 0,
         name: 'Space Runner'
     };
@@ -29,6 +32,17 @@
             fps: 30
         });
         animate.Game = Game;
+        Game.size_width = animate.getWidth();
+        Game.size_height = animate.getHeight();
+        NSA.on(animate.getCanvas(), 'dblclick', function (event) {
+            if (!Game.full_screen) {
+                Game.full_screen = true;
+                animate.resizeCanvas();
+            } else {
+                Game.full_screen = false;
+                animate.resizeCanvas(Game.size_width, Game.size_height);
+            }
+        });
 
         animate.resource.loadImage({
             rocket: '/animate/demo/images/rocket-icon-32x100.png',

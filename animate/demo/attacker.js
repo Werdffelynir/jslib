@@ -11,7 +11,7 @@
         selector: '#canvas',
         width: 600,
         height: 400,
-        fps: 1
+        fps: 24
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -92,26 +92,43 @@
         var prop = {
             x: x || 100,
             y: y || 100,
+            rwx: an.random(100, 1000)/200,
+            rwy: an.random(100, 1000)/200,
             radius: r || 25
         };
 
+        if (prop.rwx > 2.5) prop.rwx *= -1;
+        if (prop.rwy > 2.5) prop.rwy *= -1;
+
+        //console.log(prop.rwx );
         var mc = an.createClip(prop, function (ctx, i) {
+
+            this.x += this.rwx;
+            this.y += this.rwy;
+
+            if (this.x+this.radius/2 > an.width || this.x-this.radius/2 < 0)
+                this.rwx *= -1;
+            if (this.y+this.radius/2 > an.height || this.y-this.radius/2 < 0)
+                this.rwy *= -1;
+
             an.graphic.circle(this.x, this.y, this.radius, c || '#ff0000', true);
             return this;
         });
 
         return mc
     };
-    Game.butterDark = Game.createButter(100, 100, 10, '#7f7f7f');
-    Game.butterYellow = Game.createButter(100, 200, 15, '#eee400');
+    Game.butterDark = Game.createButter(100, 100, 25, '#7f7f7f');
+    Game.butterYellow = Game.createButter(100, 200, 30, '#eee400');
+    Game.butterBlue = Game.createButter(100, 200, 30, '#c7d1ff');
 
     Game.addBall = function () {
 
         var butD = Game.butterDark();
         var butY = Game.butterYellow();
+        var butB = Game.butterBlue();
 
-        butD.x += 5;
-        butY.x += 7;
+        // butD.x += 5;
+        // butY.x += 7;
 
 
 
