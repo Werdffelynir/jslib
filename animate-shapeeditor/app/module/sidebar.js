@@ -77,7 +77,7 @@ if(App.namespace){App.namespace('Sidebar', function(App){
         App.Canvas.fill_lines = eve.target.checked;
     };
     __.on_fillcolor = function(eve){
-        App.Canvas.style.fill_color = '#'+eve.target.value;
+        App.Canvas.fill_color = '#'+eve.target.value;
     };
     __.on_linewidth = function(eve){
         App.Canvas.style.width_line = parseInt(eve.target.value);

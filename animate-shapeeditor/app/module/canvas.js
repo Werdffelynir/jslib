@@ -32,8 +32,8 @@ if(App.namespace){App.namespace('Canvas', function(App){
     /** @namespace App.Canvas.init */
     __.init = function (animate) {
         __.animate = animate;
-
-
+        __.fill_color = '#'+App.Sidebar.getAction('setting-fillcolor').value;
+        __.style.color_line = '#'+App.Sidebar.getAction('setting-linecolor').value;
     };
 
     /** @namespace App.Canvas.getData */
@@ -50,12 +50,7 @@ if(App.namespace){App.namespace('Canvas', function(App){
         }
     };
 
-    /** @namespace App.Canvas.addPoint
-    __.addPoint = function(point){
-        __.data.push(point);
-        __.data_lest = [];
-    };*/
-
+    /** @namespace App.Canvas.back */
     __.back = function () {
         __.data = __.data.slice(0, -2);
     };
@@ -80,23 +75,35 @@ if(App.namespace){App.namespace('Canvas', function(App){
             App.History.saveLastData(__.data);
         }
 
+        // заливка в объекте
         if (__.fill_lines) {
             __.animate.graphic.shape(points, __.fill_color, true, false, 1);
         }
 
+        // рес. линий
         __.animate.graphic.shape(points, __.style.color_line, false, false, __.style.width_line);
+
+        // сброс толщены лини для точек
+        __.animate.getContext().lineWidth = 1;
 
         for (i = 0; i < points.length; i += 2) {
             point = __.animate.point(points[i], points[i+1]);
+
+            // рес. точек ломаных
             __.animate.graphic.circle(point.x, point.y, __.style.radius_outer, __.style.color_outer, true);
             __.animate.graphic.circle(point.x, point.y, __.style.radius_inner, __.style.color_inner, true);
 
+            // рес. точи под редактрованием
             if (i === __.edit_point_indexs.x) {
                 __.animate.graphic.circle(point.x, point.y, __.style.radius_outer + 5, __.style.color_edit, false);
             }
+
+            // текст координат
             __.animate.text.font('9px/9px sans');
-            __.animate.text.color('#89888b');
-            __.animate.text.write(point.x+8, point.y-5, point.x+'x'+point.y);
+            __.animate.text.color('#333333');
+            //__.animate.text.color('#ffffff');
+            //__.animate.graphic.rectRound(point.x+5, point.y-6, 50, 12, 6, 'rgba(100,100,100,0.8)', true);
+            __.animate.text.write(point.x+10, point.y-5, point.x+'x'+point.y);
         }
 
     };
