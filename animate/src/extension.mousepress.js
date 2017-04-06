@@ -19,7 +19,8 @@ Animate.Extension(function (instance) {
 
         return instance.mousePress._position;
     };
-
+    instance.mousePress._position = false;
+    instance.mousePress._is_init = false;
     instance.mousePress._init_once_click_listener = function () {
         if (instance.mousePress._is_init === false) {
             instance.mousePress._is_init = true;
@@ -34,30 +35,26 @@ Animate.Extension(function (instance) {
         }
     };
 
-    instance.mousePress._position = false;
-    instance.mousePress._is_init = false;
 
     /**
-     * (out loop use)
+     * .mouseMove()         (in loop use) return position point object when mouse move
+     * .mouseMove(callback) (in loop use) execute function when mouse move with argument point object
+     *
      * @param callback
+     * @returns {*}
      */
     instance.mouseMove = function (callback) {
-
-        if (callback && typeof callback === 'function' && instance.mouseMove.listeners.indexOf(callback) === -1)
-            instance.mouseMove.listeners.push(callback);
-
-        if (!instance.mouseMove.is_init) {
-            instance.mouseMove.is_init = true;
+        if (instance.mouseMove._is_init === false) {
+            instance.mouseMove._is_init = true;
             instance._canvas.addEventListener('mousemove', function (event) {
-                var i, position = instance.mousePosition(event);
-                for (i = 0; i < instance.mouseMove.listeners.length; i ++)
-                    if (instance.mouseMove.listeners[i] && typeof instance.mouseMove.listeners[i] === 'function')
-                        instance.mouseMove.listeners[i].call(instance, position);
+                instance.mouseMove._position = instance.mousePosition(event);
             });
         }
+        if (instance.mouseMove._position && typeof callback === 'function')
+            callback.call(null, instance.mouseMove._position);
+        return instance.mouseMove._position;
     };
-
-    instance.mouseMove.is_init = false;
-    instance.mouseMove.listeners = [];
+    instance.mouseMove._position = false;
+    instance.mouseMove._is_init = false;
 
 })

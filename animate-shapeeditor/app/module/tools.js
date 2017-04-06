@@ -70,10 +70,10 @@ if(App.namespace){App.namespace('Tools', function(App){
         var btn = App.search('.button', 'data-btn', __.node);
         if (App.Canvas.edit_mode == 'point') {
             App.Canvas.edit_mode = 'all';
-            btn['moveall'].textContent = 'Move ALL'
+            btn['moveall'].innerHTML = 'Move ALL <strong>(x)</strong>'
         } else {
             App.Canvas.edit_mode = 'point';
-            btn['moveall'].textContent = 'Move Point'
+            btn['moveall'].innerHTML = 'Move Point <strong>(x)</strong>'
         }
     };
 
@@ -83,12 +83,12 @@ if(App.namespace){App.namespace('Tools', function(App){
             App.Canvas.is_lock = false;
             btn['lock'].style.backgroundColor = '#ececec';
             btn['lock'].style.color = '#3a3a3a';
-            btn['lock'].textContent = 'Lock'
+            btn['lock'].innerHTML = 'Lock <strong>(l)</strong>'
         } else {
             App.Canvas.is_lock = true;
-            btn['lock'].style.backgroundColor = '#ee0f00';
+            btn['lock'].style.backgroundColor = '#b40c00';
             btn['lock'].style.color = '#ffffff';
-            btn['lock'].textContent = 'UnLock'
+            btn['lock'].innerHTML = 'UnLock <strong>(l)</strong>'
         }
     };
 
