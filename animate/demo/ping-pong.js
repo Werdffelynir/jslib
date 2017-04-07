@@ -130,46 +130,95 @@
         return this;
     });
 
+
+    Game.enemy_stat = {
+        x: an.width / 2 - 50,
+        y: 10,
+        speed: 1,
+        width: 100,
+        height: 10,
+        balls: 10,
+        score: 0
+    };
+
+    Game.enemy = an.createClip(Game.enemy_stat, function (ctx, i) {
+
+        an.graphic.rect(this.x, this.y, this.width, this.height);
+
+        return this;
+    });
+
     Game.renderInform = function () {
         an.text.color('#7f7f7f');
         an.text.textAlign('left');
         an.text.textBaseline('top');
         an.text.font('bold 16px/16px sans');
-        var balls = 'Score: ' + Game.player_stat.balls;
-        var score = ' Balls: ' + Game.player_stat.score;
+        var balls = 'Score: ' + Game.player_stat.score;
+        var score = ' Balls: ' + Game.player_stat.balls;
         an.text.write(5, 5, balls + score);
     };
 
     Game.renderPlayer = function () {
 
         var ball = Game.ball();
+        var enemy = Game.enemy();
         var player = Game.player();
 
         if (an.keyPress('a')) {player.x -= player.speed;}
         if (an.keyPress('d')) {player.x += player.speed;}
 
+        if (enemy.x+50 > ball.x) enemy.x -= enemy.speed;
+        else enemy.x += enemy.speed;
+
+        //if (enemy.x+100 < ball.x) enemy.x += enemy.speed;
+        //else if (enemy.x+100 > ball.x) enemy.x += enemy.speed;
+        //else if (enemy.x+100 > ball.x) enemy.x += enemy.speed;
+
+        // enemy - hit'
+        if (ball.y - ball.radius/2 < enemy.y + 10 && ball.x > enemy.x && ball.x < enemy.x + 100) {
+            ball.dy *= -1;
+            console.log('enemy - hit');
+        }
+
         // player - hit'
-        if (ball.y + ball.radius/2 >= player.y && ball.x >= player.x && ball.x <= player.x + 100) {
+        else if (ball.y + ball.radius/2 >= player.y && ball.x >= player.x && ball.x <= player.x + 100) {
             ball.y = player.y - ball.radius/2;
             ball.dy *= -1;
-            player.score += 100;
             console.log('player - hit');
         }
 
         else if (ball.y < ball.radius/2) {
             ball.dy *= -1;
+            player.score += 100;
+            // restart ();
+            // ball.dx = 0;
+            // ball.dy = 0;
+            // NSA.Timer.timeout(restart, 1000);
             console.log('enemy - lost');
         }
 
         else if (ball.y > an.height - ball.radius/2) {
             ball.dy *= -1;
             player.balls -= 1;
-
+            //NSA.Timer.timeout(restart, 1000);
             console.log('player - lost');
+        }
+
+        function restart () {
+            ball.x = an.width / 2;
+            ball.y = an.height / 2;
+            ball.dx = 2;
+            ball.dy = 3;
         }
 
     };
 
+    /*
+        x: an.width / 2,
+        y: an.height / 2,
+        dx: 2,
+        dy: 5,
+    */
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
     an.frame('start', function(ctx, i) {
@@ -194,5 +243,6 @@
     });
 
     // start
-    an.start();
+    //an.start();
+    an.start('start');
 })();
