@@ -235,7 +235,7 @@ if(App.namespace){App.namespace('Canvas', function(App){
         }
 
         // Clear canvas
-        if (event.code === 'KeyC') {
+        if (event.code === 'KeyR') {
             App.Tools.on_clear()
         }
 

@@ -26,6 +26,13 @@
     };
 
     /**
+     * @returns {string}
+     */
+    prototype.getFrameName = function () {
+        return this._frame_name;
+    };
+
+    /**
      * @returns {number}
      */
     prototype.getHeight = function () {

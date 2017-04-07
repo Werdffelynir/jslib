@@ -35,6 +35,7 @@
             <li><a href="mouse-cursor.js">Mouse-Cursor</a></li>
             <li><a href="space-runner.js">Space Runner</a></li>
             <li><a href="attacker.js">Attacker demo</a></li>
+            <li><a href="ping-pong.js">Ping-Pong</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
