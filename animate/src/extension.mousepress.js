@@ -2,6 +2,7 @@ Animate.Extension(function (instance) {
 
     if (!(instance instanceof Animate))
         return;
+
     /**
      * .mousePress()         (in loop use) return position point object if mouse click, or false
      * .mousePress(callback) (in loop use) execute function if mouse click with argument point object

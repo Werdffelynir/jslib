@@ -134,7 +134,7 @@
     Game.enemy_stat = {
         x: an.width / 2 - 50,
         y: 10,
-        speed: 1,
+        speed: 1.785,
         width: 100,
         height: 10,
         balls: 10,
@@ -243,6 +243,6 @@
     });
 
     // start
-    //an.start();
-    an.start('start');
+    an.start();
+    //an.start('start');
 })();

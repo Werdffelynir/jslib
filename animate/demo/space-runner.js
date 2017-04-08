@@ -78,6 +78,7 @@
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
     // Installer
+    console.log(Game.scripts);
     NSA.loadJS(Game.scripts, function (loader) {
         Game.scriptsLoaded ++;
         if (Game.scriptsLoaded == Game.scripts.length) {
