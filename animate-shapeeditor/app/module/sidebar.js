@@ -35,6 +35,12 @@ if(App.namespace){App.namespace('Sidebar', function(App){
 
         App.on(btn['loadmap'], 'click', __.on_loadmap);
 
+        // Saved
+        if (App.Storage('animate-shapeeditor-size-width') && App.Storage('animate-shapeeditor-size-height')) {
+            __.getAction('setting-width').value = App.Storage('animate-shapeeditor-size-width');
+            __.getAction('setting-height').value = App.Storage('animate-shapeeditor-size-height');
+            __.on_change_size();
+        }
     };
 
     /** @namespace App.Sidebar.getAction */
@@ -58,6 +64,10 @@ if(App.namespace){App.namespace('Sidebar', function(App){
             __.getAction('setting-width').value,
             __.getAction('setting-height').value
         );
+
+        App.Storage('animate-shapeeditor-size-width', __.getAction('setting-width').value);
+        App.Storage('animate-shapeeditor-size-height', __.getAction('setting-height').value);
+        
         App.Grid.clearDataImage();
     };
     __.on_show_grid = function(eve){

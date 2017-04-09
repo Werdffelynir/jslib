@@ -36,12 +36,18 @@
             <li><a href="space-runner.js">Space Runner</a></li>
             <li><a href="attacker.js">Attacker demo</a></li>
             <li><a href="ping-pong.js">Ping-Pong</a></li>
+            <li><a href="tank_defender.js">Tank Defender</a></li>
+            <li><a href="noise.js">NOISE</a></li>
+            <li><a href="planet.js">Planet</a></li>
+            <li><a href="rocket-station.js">Rocket Station</a></li>
+            <li><a href="space-game.js">Space Game</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
         <div id="desc"></div>
         <div id="move">
-            <canvas id="canvas" class="select_off"></canvas><svg id="svg1"></svg>
+            <canvas id="canvas" class="select_off"></canvas>
+<!--            <svg id="svg1"></svg>-->
         </div>
         <div id="after"></div>
     </div>

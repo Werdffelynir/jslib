@@ -28,6 +28,7 @@ if(App.namespace){App.namespace('Tools', function(App){
         App.on(btn['clear'], 'click', __.on_clear);
         App.on(btn['addtolist'], 'click', __.on_addtolist);
         App.on(btn['deletefromlist'], 'click', __.on_deletefromlist);
+        App.on(btn['delpoint'], 'click', __.on_deletepoint);
 
     };
 
@@ -105,14 +106,20 @@ if(App.namespace){App.namespace('Tools', function(App){
 
     __.on_addtolist = function (eve) {
         var json = JSON.stringify(App.Canvas.data);
-
-
-
         App.History.addToList(App.Canvas.data);
-
-        //__.renderShapesList ();
     };
 
+    __.on_deletepoint = function (eve) {
+        var indexs = App.Canvas.edit_point_indexs;
+        delete App.Canvas.data[indexs.x];
+        delete App.Canvas.data[indexs.y];
+        var i, arr = [];
+        for (i = 0; i < App.Canvas.data.length; i ++) {
+            if ([indexs.x, indexs.y].indexOf(i) === -1 )
+                arr.push(App.Canvas.data[i]);
+        }
+        App.Canvas.data = arr;
+    };
 
 
     return __;

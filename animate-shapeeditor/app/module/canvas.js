@@ -62,6 +62,10 @@ if(App.namespace){App.namespace('Canvas', function(App){
 
     __.render = function () {
 
+        // __.data = __.data.filter(function (it) {
+        //     return !!it
+        // });
+
         var i, point, points = __.data;
 
         if (!App.typeOf(points, 'array')) {
@@ -107,79 +111,64 @@ if(App.namespace){App.namespace('Canvas', function(App){
         }
 
     };
-
+    __.set_step = function () {
+        return App.Canvas.is_cling ? 5 : 1;
+    };
     __.edit_mode = 'point';
     __.edit_point_indexs = {x:false,y:false};
-
     __.editPoint = function () {
 
         if (__.edit_mode === 'point') {
 
             if (__.edit_point_indexs.x === false || __.edit_point_indexs.y === false ||
                 !__.data[__.edit_point_indexs.x] || !__.data[__.edit_point_indexs.y] ) {
-
                 return;
             }
 
             if (__.animate.keyPress('ArrowLeft') || __.animate.keyPress('KeyA')) {
-                if (App.Canvas.is_cling) {
-                    __.data[__.edit_point_indexs.x] -= 5;
-                } else
-                    __.data[__.edit_point_indexs.x] -= 1;
+                __.data[__.edit_point_indexs.x] -= __.set_step(); //App.Canvas.is_cling ? 5 : 1;
+                __.showCurrentData();
             }
             if (__.animate.keyPress('ArrowRight') || __.animate.keyPress('KeyD')) {
-                if (App.Canvas.is_cling) {
-                    __.data[__.edit_point_indexs.x] += 5;
-                } else
-                    __.data[__.edit_point_indexs.x] += 1;
+                __.data[__.edit_point_indexs.x] += __.set_step();
+                __.showCurrentData();
             }
             if (__.animate.keyPress('ArrowUp') || __.animate.keyPress('KeyW')) {
-                if (App.Canvas.is_cling) {
-                    __.data[__.edit_point_indexs.y] -= 5;
-                } else
-                    __.data[__.edit_point_indexs.y] -= 1;
+                __.data[__.edit_point_indexs.y] -= __.set_step();
+                __.showCurrentData();
             }
             if (__.animate.keyPress('ArrowDown') || __.animate.keyPress('KeyS')) {
-                if (App.Canvas.is_cling) {
-                    __.data[__.edit_point_indexs.y] += 5;
-                } else
-                    __.data[__.edit_point_indexs.y] += 1;
+                __.data[__.edit_point_indexs.y] += __.set_step();
+                __.showCurrentData();
             }
         }
         else if (__.edit_mode === 'all') {
             var i;
             if (__.animate.keyPress('ArrowLeft') || __.animate.keyPress('KeyA')) {
                 for (i = 0; i < __.data.length; i += 2) {
-                    if (App.Canvas.is_cling)
-                        __.data[i] -= 5;
-                    else
-                        __.data[i] -= 1;
+                    __.data[i] -= __.set_step();
                 }
+                __.showCurrentData();
             }
             else if (__.animate.keyPress('ArrowRight') || __.animate.keyPress('KeyD')) {
                 for (i = 0; i < __.data.length; i += 2) {
-                    if (App.Canvas.is_cling)
-                        __.data[i] += 5;
-                    else
-                        __.data[i] += 1;
+                    __.data[i] += App.Canvas.is_cling ? 5 : 1;
                 }
+                __.showCurrentData();
             }
             else if (__.animate.keyPress('ArrowUp') || __.animate.keyPress('KeyW')) {
                 for (i = 1; i < __.data.length; i += 2) {
-                    if (App.Canvas.is_cling)
-                        __.data[i] -= 5;
-                    else
-                        __.data[i] -= 1;
+                    __.data[i] -= __.set_step();
                 }
+                __.showCurrentData();
             }
             else if (__.animate.keyPress('ArrowDown') || __.animate.keyPress('KeyS')) {
                 for (i = 1; i < __.data.length; i += 2) {
-                    if (App.Canvas.is_cling)
-                        __.data[i] += 5;
-                    else
-                        __.data[i] += 1;
+                    __.data[i] += __.set_step();
                 }
+                __.showCurrentData();
             }
+
         }
 
     };
@@ -238,12 +227,18 @@ if(App.namespace){App.namespace('Canvas', function(App){
         if (event.code === 'KeyR') {
             App.Tools.on_clear()
         }
+        // Clear canvas
+        if (event.code === 'KeyF') {
+            App.Tools.on_deletepoint()
+        }
 
     };
 
     __.toClingNumber = function (v) {
-        var _z = 5; var _v = (v % _z);
-        return _v < (_z/2) ? v - _v : v - _v + _z;
+        var _z = 5;
+        var _v = (v % _z);
+        var _r = _v < (_z/2) ? v - _v : v - _v + _z;
+        return _r
     };
 
     return __;

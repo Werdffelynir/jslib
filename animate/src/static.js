@@ -159,4 +159,22 @@ Animate.distanceBetween = function (p1, p2) {
     var dx = p2.x - p1.x;
     var dy = p2.y - p1.y;
     return Math.sqrt(dx * dx + dy * dy);
+};
+
+/**
+ * Calculate angle between two points. return object:
+ *  {angle:, x:, y:}
+ * @param p1
+ * @param p2
+ * @returns {{angle: number, x: number, y: number}}
+ */
+Animate.calculateAngle = function (p1, p2) {
+    var dx = p2.x - p1.x;
+    var dy = p2.y - p1.y;
+    var angle = Math.atan2(dy, dx);
+    return {
+        angle: angle,
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    };
 }

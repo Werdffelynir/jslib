@@ -15,5 +15,6 @@
     prototype.degreesToRadians = Animate.degreesToRadians;
     prototype.radiansToDegrees = Animate.radiansToDegrees;
     prototype.distanceBetween = Animate.distanceBetween;
+    prototype.calculateAngle = Animate.calculateAngle;
 
 })(Animate.prototype)

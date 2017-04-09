@@ -87,7 +87,7 @@ if(App.namespace){App.namespace('History', function(App){
 
     /** @namespace App.History.addToList */
     __.addToList = function (data) {
-        if (App.typeOf(data) === 'array' && __.list.indexOf(data) === -1) {
+        if (App.typeOf(data) === 'array' /*&& __.list.indexOf(data) === -1*/) {
             __.list.push(data);
 
             __.save();
