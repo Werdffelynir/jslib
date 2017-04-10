@@ -209,7 +209,7 @@
     });
 
     // start
-    an.start();
+    //an.start();
 
 
 

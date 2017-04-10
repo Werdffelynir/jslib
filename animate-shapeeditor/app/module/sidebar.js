@@ -67,7 +67,7 @@ if(App.namespace){App.namespace('Sidebar', function(App){
 
         App.Storage('animate-shapeeditor-size-width', __.getAction('setting-width').value);
         App.Storage('animate-shapeeditor-size-height', __.getAction('setting-height').value);
-        
+
         App.Grid.clearDataImage();
     };
     __.on_show_grid = function(eve){

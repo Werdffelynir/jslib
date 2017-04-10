@@ -40,7 +40,7 @@
             <li><a href="noise.js">NOISE</a></li>
             <li><a href="planet.js">Planet</a></li>
             <li><a href="rocket-station.js">Rocket Station</a></li>
-            <li><a href="space-game.js">Space Game</a></li>
+            <li><a href="spacewalker.js">SpaceWalker Game</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
