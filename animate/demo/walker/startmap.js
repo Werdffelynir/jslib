@@ -8,7 +8,7 @@ if(App.namespace){App.namespace('Startmap', function(app){
         /**@namespace App.Game.An*/
         An: null,
 
-        starts_limit: 5,
+        starts_limit: 300,
         starts: []
     };
 
@@ -19,8 +19,7 @@ if(App.namespace){App.namespace('Startmap', function(app){
         __.An = An;
 
         if (__.starts.length === 0) {
-            //__.create_starts(App.Game.sceneWidth, App.Game.sceneHeight);
-            __.create_starts(__.An.width - 100, __.An.height - 100);
+            __.create_starts(App.Game.sceneWidth, App.Game.sceneHeight);
         }
     };
 
@@ -30,20 +29,9 @@ if(App.namespace){App.namespace('Startmap', function(app){
     };
 
     __.create_starts = function (sceneWidth, sceneHeight) {
-        var i, conf;
+        var i;
 
         for (i = 0; i < __.starts_limit; i ++) {
-
-            conf = {
-                x: __.An.random(0, sceneWidth),
-                y: __.An.random(0, sceneHeight),
-                s: 1,
-                w: __.An.random(10, 100),
-                h: __.An.random(10, 100),
-                color: __.randomItem(['#ff3a11','#FF997F','#FFD85B'])
-            };
-
-            //console.dir(i);
 
             __.starts.push(__.An.createClip({
                 x: __.An.random(0, sceneWidth),
@@ -51,7 +39,7 @@ if(App.namespace){App.namespace('Startmap', function(app){
                 s: 1,
                 w: __.An.random(10, 100),
                 h: __.An.random(10, 100),
-                color: __.randomItem(['#ff3a11','#FF997F','#FFD85B'])
+                color: __.randomItem(['#FFBD43','#FF997F','#FFD85B'])
             }, function () {
 
                 var context = __.An.getContext();
@@ -64,8 +52,27 @@ if(App.namespace){App.namespace('Startmap', function(app){
                 // context.fill();
                 // context.stroke();
 
-                if (context.isPointInPath(App.Player.stat.x, App.Player.stat.y)) {
-                    this.color = '#000'
+               // __.An.text.write(this.x, this.y,
+               //      'Player:'+parseInt(App.Player.stat.x)+'x'+parseInt(App.Player.stat.y));
+               // __.An.text.write(this.x, this.y + 15,
+               //      'Object:'+parseInt(this.x)+'x'+parseInt(this.y));
+               //  __.An.text.write(this.x, this.y + 30, 'HIT:' + this.x+'x'+this.y);
+
+                /**/
+                var dx = 0;
+                var dy = 0;
+                var z = 11;
+                if (App.Control.press['left'])   dx = -z;
+                if (App.Control.press['right'])  dx = z;
+                if (App.Control.press['up'])     dy = -z;
+                if (App.Control.press['down'])   dy = z;
+                var point_player = __.An.point(App.Player.stat.x + dx, App.Player.stat.y + dy);
+
+                //if (context.isPointInPath(App.Player.stat.x + dx, App.Player.stat.y + dy)) {
+                if (__.An.hitTest([this.x, this.y, this.w, this.h], point_player)) {
+                    //this.color = '#000';
+                    App.Control.hitPlayerStartmap();
+                    __.An.graphic.rect(this.x, this.y, this.w, this.h, '#000', false);
                 }
                 return this;
             }));
@@ -77,6 +84,9 @@ if(App.namespace){App.namespace('Startmap', function(app){
      * @namespace App.Startmap.add
      */
     __.add = function () {
+
+        __.An.graphic.rect(0, 0, App.Game.sceneWidth, App.Game.sceneHeight, 'rgba(0,0,0,0.4)');
+
         App.each(__.starts, function (item, i) {
             //console.dir(item);
             item();

@@ -65,7 +65,6 @@
 
 
             an.graphic.shape(pp, 'rgba(75,85,115,0.1)', 'rgba(75,85,115,1)', true, 4);
-            
             //console.log(Game.changeAngle(this.rotate, 90));
 
             //[-35,-25,25,0,-35,25,-25,0];//

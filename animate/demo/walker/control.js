@@ -64,19 +64,30 @@ if(App.namespace){App.namespace('Control', function(app){
      */
     __.startmap = function (mc) {
 
-        if (__.An.keyPress('KeyW')) {
+        if (__.press['up']) {
             mc.y -= mc.s;
         }
-        if (__.An.keyPress('KeyS')) {
+        if (__.press['down']) {
             mc.y += mc.s;
         }
-        if (__.An.keyPress('KeyA')) {
+        if (__.press['left']) {
             mc.x -= mc.s;
         }
-        if (__.An.keyPress('KeyD')) {
+        if (__.press['right']) {
             mc.x += mc.s;
         }
 
+    };
+
+    /**
+     * @namespace App.Control.hitPlayerStartmap
+     */
+    __.hitPlayerStartmap = function () {
+        //var player = App.Player.stat
+        if (__.press['left']) App.Player.stat.x += App.Player.stat.speed;
+        if (__.press['right']) App.Player.stat.x -= App.Player.stat.speed;
+        if (__.press['up']) App.Player.stat.y += App.Player.stat.speed;
+        if (__.press['down']) App.Player.stat.y -= App.Player.stat.speed;
     };
 
     return  __;
