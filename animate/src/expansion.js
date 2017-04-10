@@ -12,6 +12,7 @@
     prototype.copy = Animate.copy;
     prototype.random = Animate.random;
     prototype.randomColor = Animate.randomColor;
+    prototype.randomItem = Animate.randomItem;
     prototype.degreesToRadians = Animate.degreesToRadians;
     prototype.radiansToDegrees = Animate.radiansToDegrees;
     prototype.distanceBetween = Animate.distanceBetween;

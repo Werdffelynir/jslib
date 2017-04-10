@@ -130,6 +130,16 @@ Animate.randomColor = function () {
 };
 
 /**
+ * Return random item from array
+ * @param arr
+ * @returns {*}
+ */
+Animate.randomItem = function (arr) {
+    var i = Animate.random(0, arr.length-1);
+    return arr[i];
+};
+
+/**
  * Convert degrees to radians
  * Formula: degrees * Math.PI / 180
  * @param deg
