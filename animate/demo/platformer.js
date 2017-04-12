@@ -7,11 +7,13 @@
         after: NSA.query('#after')
     };
 
+    Animate.loadJS('/animate/extensions/animate.extantions.grid.js');
+
     var an = new Animate({
         selector: '#canvas',
         width: 800,
         height: 400,
-        fps: 60
+        fps: 24
     });
 
     // * Game
@@ -51,33 +53,31 @@
 
     // * Default
     // * * * * * * * * * * * * * * * * * * * * * * * *
-    an.backgroundColor('#03020f');
+    //an.backgroundColor('#03020f');
     an.text.font('bold 18px/18px sans');
     an.text.color('#FFFFFF');
 
 
     // * Frames
     // * * * * * * * * * * * * * * * * * * * * * * * *
-    an.frame(function(ctx, i) {
+    an.frame('start', function(ctx, i) {
         /** @type CanvasRenderingContext2D */
         ctx = ctx;
         Game.mouse = an.mouseMove();
 
-        //Game.grid(50, 0.1, '#FFF');
-        //Game.space(ctx, i);
+        Game.space(ctx, i);
     });
 
     // * Load resources and game start
     // * * * * * * * * * * * * * * * * * * * * * * * *
-    NSA.loadJS([], function () {
 
+    an.resource.loadImage({
+        cursor : 'demo/images/ppw.png'
+    }, function () {
+
+        // * Start Game
+        an.start('start');
     });
 
-    an.loadImage({}, function () {
-
-    });
-
-    // * Start Game
-    an.start();
 })();
 

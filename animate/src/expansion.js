@@ -7,7 +7,7 @@
     prototype.createClip = Animate.Clip;
     prototype.point = Animate.Point;
     prototype.rectangle = Animate.Rectangle;
-
+    prototype.loadJS = Animate.loadJS;
     prototype.defaultObject = Animate.defaultObject;
     prototype.copy = Animate.copy;
     prototype.random = Animate.random;

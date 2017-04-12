@@ -81,12 +81,16 @@
     // start
     an.start();
 
+    // * Оперделения нажатие кнопок мыши
+    // * Отключения контекстного меню
+    // * * * * * * * * * * * * * * * * * * * * * * * *
     document.addEventListener('mousedown', function(event) {
-        var whichs = [];
-        whichs[1] = 'Left Mouse button pressed.';
-        whichs[2] = 'Middle Mouse button pressed.';
-        whichs[3] = 'Right Mouse button pressed.';
-        console.log('Which: ' + (whichs[event.which] ? whichs[event.which] : 'You have a strange Mouse!'), event);
+        var which = [];
+        which[1] = 'Left Mouse button pressed.';
+        which[2] = 'Middle Mouse button pressed.';
+        which[3] = 'Right Mouse button pressed.';
+
+        console.log('Which: ' + (which[event.which] ? which[event.which] : 'You have a strange Mouse!'), event);
         return false;
     });
     document.addEventListener('contextmenu', function(event) {
