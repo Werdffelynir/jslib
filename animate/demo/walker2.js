@@ -6,7 +6,6 @@ var App = new NamespaceApplication({
 
 App.require('modules', [
     App.path + 'walker/game.js',
-    App.path + 'walker/item.js',
     App.path + 'walker/player.js',
     App.path + 'walker/camera.js',
     App.path + 'walker/control.js',

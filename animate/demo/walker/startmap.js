@@ -8,7 +8,7 @@ if(App.namespace){App.namespace('Startmap', function(app){
         /**@namespace App.Game.An*/
         An: null,
 
-        starts_limit: 300,
+        starts_limit: 50,
         starts: []
     };
 
@@ -32,47 +32,32 @@ if(App.namespace){App.namespace('Startmap', function(app){
         var i;
 
         for (i = 0; i < __.starts_limit; i ++) {
-
             __.starts.push(__.An.createClip({
+
                 x: __.An.random(0, sceneWidth),
                 y: __.An.random(0, sceneHeight),
                 s: 1,
                 w: __.An.random(10, 100),
                 h: __.An.random(10, 100),
                 color: __.randomItem(['#FFBD43','#FF997F','#FFD85B'])
+
             }, function () {
-
-                var context = __.An.getContext();
-
-                __.An.graphic.rect(this.x, this.y, this.w, this.h, this.color);
-
-                // context.beginPath();
-                // context.fillStyle = this.color;
-                // context.rect(this.x, this.y, this.w, this.h);
-                // context.fill();
-                // context.stroke();
-
-               // __.An.text.write(this.x, this.y,
-               //      'Player:'+parseInt(App.Player.stat.x)+'x'+parseInt(App.Player.stat.y));
-               // __.An.text.write(this.x, this.y + 15,
-               //      'Object:'+parseInt(this.x)+'x'+parseInt(this.y));
-               //  __.An.text.write(this.x, this.y + 30, 'HIT:' + this.x+'x'+this.y);
-
-                /**/
                 var dx = 0;
                 var dy = 0;
                 var z = 11;
+
+                __.An.graphic.rect(this.x, this.y, this.w, this.h, this.color);
+
                 if (App.Control.press['left'])   dx = -z;
                 if (App.Control.press['right'])  dx = z;
                 if (App.Control.press['up'])     dy = -z;
                 if (App.Control.press['down'])   dy = z;
+
                 var point_player = __.An.point(App.Player.stat.x + dx, App.Player.stat.y + dy);
 
-                //if (context.isPointInPath(App.Player.stat.x + dx, App.Player.stat.y + dy)) {
                 if (__.An.hitTest([this.x, this.y, this.w, this.h], point_player)) {
-                    //this.color = '#000';
-                    App.Control.hitPlayerStartmap();
                     __.An.graphic.rect(this.x, this.y, this.w, this.h, '#000', false);
+                    App.Control.hitPlayerStartmap();
                 }
                 return this;
             }));
@@ -80,7 +65,8 @@ if(App.namespace){App.namespace('Startmap', function(app){
     };
 
 
-    /**
+
+        /**
      * @namespace App.Startmap.add
      */
     __.add = function () {

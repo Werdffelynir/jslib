@@ -90,5 +90,13 @@ if(App.namespace){App.namespace('Control', function(app){
         if (__.press['down']) App.Player.stat.y -= App.Player.stat.speed;
     };
 
+    /**
+     * @namespace App.Control.isFinish
+     * @returns {boolean}
+     */
+    __.isFinish = function () {
+       return App.Item.removeCount >= 5; //App.Item.limit;
+    };
+
     return  __;
 })}

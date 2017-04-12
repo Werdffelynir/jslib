@@ -8,9 +8,9 @@ if(App.namespace){App.namespace('Game', function(app){
         /**@namespace App.Game.An*/
         An: null,
         /**@namespace App.Game.sceneWidth*/
-        sceneWidth: 3000,
+        sceneWidth: 1000,
         /**@namespace App.Game.sceneHeight*/
-        sceneHeight: 3000,
+        sceneHeight: 1000,
 
         /**@namespace App.Game.camera*/
         camera: null,
@@ -30,8 +30,11 @@ if(App.namespace){App.namespace('Game', function(app){
             height: 400,
             fps: 30
         });
+        __.An.text.font('bold 14px/14px sans');
+        __.An.text.color('#000000');
 
         // modules start
+        App.Item.init(__.An);
         App.Player.init(__.An);
         App.Camera.init(__.An);
         App.Control.init(__.An);
@@ -45,55 +48,47 @@ if(App.namespace){App.namespace('Game', function(app){
     };
 
     __.scene = function (ctx, i) {
+
         __.moveCamera();
+
         __.camera = __.An.camera(__.cameraX, __.cameraY, __.cameraWidth, function () {
 
             App.Control.pressKeysWatcher();
             App.Player.add();
+            App.Item.add();
             App.Startmap.add();
 
         });
 
+        __.displayInfoPanel();
+
     };
 
     __.moveCamera = function () {
-        var camera_point = __.An.point(App.Game.cameraX,App.Game.cameraY);
-        var player_point = __.An.point(App.Player.stat.x,App.Player.stat.y);
-
         var dist_x = App.Player.stat.x - App.Game.cameraX;
         var dist_y = App.Player.stat.y - App.Game.cameraY;
-        //console.log(dist_x, dist_y);
-        var calc = Animate.calculateAngle(camera_point, player_point);
-        var mert = 150;
-        if (dist_x < mert) {
+        var dist = 150;
+
+        if (dist_x < dist) {
             App.Game.cameraX -= App.Player.stat.speed;
         }
 
-        if (dist_y < mert) {
+        if (dist_y < dist) {
             App.Game.cameraY -= App.Player.stat.speed;
         }
 
-        if (dist_x > __.An.width - mert) {
+        if (dist_x > __.An.width - dist) {
             App.Game.cameraX += App.Player.stat.speed;
         }
 
-        if (dist_y > __.An.height - mert) {
+        if (dist_y > __.An.height - dist) {
             App.Game.cameraY += App.Player.stat.speed;
         }
 
-        /*var distance = __.An.distanceBetween(camera_point, player_point);
-        if (distance > 400) {
-            var calc = Animate.calculateAngle(camera_point, player_point);
-            App.Game.cameraX += calc.x;
-            App.Game.cameraY += calc.y;
-        }
-        else if (distance < 200) {
-            var calc = Animate.calculateAngle(camera_point, player_point);
-            App.Game.cameraX -= calc.x;
-            App.Game.cameraY -= calc.y;
-        }*/
+    };
 
-        //App.Game.camera
+    __.displayInfoPanel = function () {
+        __.An.text.write(0, 0, 'Find: '+App.Item.removeCount+'/'+App.Item.limit);
     };
 
     return __;
