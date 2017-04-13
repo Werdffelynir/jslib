@@ -42,6 +42,7 @@
             <li><a href="rocket-station.js">Rocket Station</a></li>
             <li><a href="spacewalker.js">SpaceWalker Game</a></li>
             <li><a href="walker.js">Walker Game</a></li>
+            <li><a href="platformer.js">Platformer Game</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
