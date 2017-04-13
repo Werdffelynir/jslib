@@ -23,47 +23,61 @@
         mouse:false
     };
 
-    Game.mc.car = an.createMovieClip({x:50,y:100}, function () {
-        an.graphic.rect(0,0,30,10,'#3d2a6b')
+    Game.mc.car = an.createMovieClip({
+        x: 100,
+        y: 100,
+        xmov: 0,
+        ymov: 0,
+        width: 60,
+        height: 20,
+        speed: 1.5
+    }, function (ctx, box) {
+        /** @type CanvasRenderingContext2D */
+        ctx = ctx;
+        if (Game.mouse)
+            box = Game.mouse;
+
+        an.graphic.rect(-(this.width/2), -(this.height/2), this.width, this.height, '#626e91');
+        an.graphic.rect(this.width/3, -(this.height/2), this.width/5, this.height, '#524a67');
+
+        this.rotate = Math.atan2(box.y-this.y, box.x-this.x);
+        this.xmov = Math.cos(this.rotate);
+        this.ymov = Math.sin(this.rotate);
+        if (an.distanceBetween(this, box) > 5) {
+            this.x += this.xmov * this.speed;
+            this.y += this.ymov * this.speed;
+        }
     });
-    Game.mc.city = an.createMovieClip({x:750,y:300}, function () {
-        an.graphic.rect(0,0,30,30,'#f7e304')
+
+    Game.mc.box = an.createMovieClip({
+        x: 750,
+        y: 350,
+        r: 20,
+        c: '#abb5da'
+    }, function (ctx) {
+        if (Game.mouse) {
+            this.x = Game.mouse.x;
+            this.y = Game.mouse.y;
+        }
+        an.graphic.circle(0, 0, this.r-10, this.c);
+        an.graphic.circle(0, 0, this.r, this.c, false);
+        an.graphic.circle(0, 0, this.r+10, this.c, false);
+        an.graphic.circle(0, 0, this.r+20, this.c, false);
     });
 
     Game.space = function (ctx, frame) {
         an.addGrid(100, '#61587a');
 
-        var car = Game.mc.car();
-        var city = Game.mc.city();
-/*
-        var xmove = 0.6;
-        var ymove = 0.3;
-        car.x += xmove;
-        car.y += ymove;
-        car.setRotate(Math.atan2(ymove, xmove));
-*/
-        var xmove = city.x - car.x;
-        var ymove = city.y - car.y;
-        car.x += xmove/500;
-        car.y += ymove/500;
+        if (Game.mcCar &&  Game.mcBox) {
+            ctx.strokeStyle = '#abb5da';
+            ctx.beginPath();
+            ctx.moveTo(Game.mcBox.x, Game.mcBox.y);
+            ctx.lineTo(Game.mcCar.x, Game.mcCar.y);
+            ctx.stroke();
+        }
 
-        car.setRotate(Math.atan2(ymove, xmove));
-
-        //car.setRotate(Math.atan2(car.y-city.y,car.x-city.x));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        Game.mcBox = Game.mc.box(ctx);
+        Game.mcCar = Game.mc.car(ctx, Game.mcBox);
 
 
         an.text.write(10, 10, 'Frame: ' + frame, '#000000');
@@ -98,11 +112,6 @@
     an.frame('start', function(ctx, i) {
         /** @type CanvasRenderingContext2D */
         ctx = ctx;
-
-        Game.space(ctx, i);
-    });
-
-    an.onFrame = function (ctx, i) {
         var mouse = an.mousePress();
         if (mouse && mouse !== Game.mouse)
             Game.mouse = mouse;
@@ -114,7 +123,10 @@
             right: an.keyPress('KeyD') || an.keyPress('ArrowRight'),
             space: an.keyPress('Space')
         };
-    };
+
+        Game.space(ctx, i);
+    });
+
     // * Load resources and game start
     // * * * * * * * * * * * * * * * * * * * * * * * *
 

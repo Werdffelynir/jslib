@@ -111,6 +111,7 @@ Animate.Extension(function (instance) {
         height = height || 100;
         radius = radius || 5;
         color  = color || '#000';
+        fill = fill === undefined ? true : !!fill;
 
         context.beginPath();
         context.moveTo(x + radius, y);

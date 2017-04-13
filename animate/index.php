@@ -8,6 +8,7 @@
 
     <script src="../namespaceapplication/build/namespaceapplication.js"></script>
     <script src="build/animate.js"></script>
+    <script src="extensions/animate.extensions.grid.js"></script>
 
     <style>
         #menu{
@@ -43,6 +44,7 @@
             <li><a href="spacewalker.js">SpaceWalker Game</a></li>
             <li><a href="walker.js">Walker Game</a></li>
             <li><a href="platformer.js">Platformer Game</a></li>
+            <li><a href="carmove.js">Car move Game</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">

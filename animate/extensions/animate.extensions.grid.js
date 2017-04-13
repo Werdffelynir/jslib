@@ -19,7 +19,9 @@ Animate.Extension(function (instance) {
 
         if (instance.addGridCache) {
 
+            //context.beginPath();
             context.putImageData(instance.addGridCache, 0, 0);
+            //context.closePath();
 
         } else {
 
@@ -27,6 +29,7 @@ Animate.Extension(function (instance) {
                 w = instance.getWidth(),
                 h = instance.getHeight();
 
+            size = size || 50;
             context.beginPath();
 
             for (i = 0; i < w; i += size) {
