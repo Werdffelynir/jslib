@@ -1,11 +1,18 @@
 /*GLOBAL*/
+*{
+    font-family: "Verdana", "Arial", "Consolas", "sans-serif", "sans", "Ubuntu Condensed", "Ubuntu";
+    /*"Verdana", "Arial", "Consolas",*/;
+    font-size: 95%
+}
 .button{
     cursor: pointer;
 }
 
 
 /*PAGE ELEMENTS*/
-#page{}
+#page{
+
+}
 #header{
     background-color: #4c4c4c;
     color: #e4e4e4;

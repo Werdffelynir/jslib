@@ -103,7 +103,7 @@ if(App.namespace){App.namespace('Canvas', function(App){
             }
 
             // текст координат
-            __.animate.text.font('9px/9px sans');
+            __.animate.text.font('10px/10px sans');
             __.animate.text.color('#333333');
             //__.animate.text.color('#ffffff');
             //__.animate.graphic.rectRound(point.x+5, point.y-6, 50, 12, 6, 'rgba(100,100,100,0.8)', true);
