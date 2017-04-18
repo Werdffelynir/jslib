@@ -45,6 +45,7 @@
             <li><a href="walker.js">Walker Game</a></li>
             <li><a href="platformer.js">Platformer Game</a></li>
             <li><a href="carmove.js">Car move Game</a></li>
+            <li><a href="map-mask.js">Map Mask</a></li>
         </ul>
     </div>
     <div id="page" class="valign_top">
