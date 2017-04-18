@@ -9,8 +9,8 @@
 
     var an = new Animate({
         selector: '#canvas',
-        width: 600,
-        height: 600,
+        width: 800,
+        height: 400,
         fps: 24
     });
 
@@ -21,71 +21,17 @@
         mouse:false
     };
 
+
     Game.panel = function (ctx, frame) {
         an.text.write(5, 5, 'Frame: ' + frame);
-        an.text.write(200, 5, 'Planets: ' + Game.planets.length);
-        an.text.write(300, 5, 'Asteroids: ' + Game.asteroids.length);
-    };
-
-    Game.addStar = an.createMovieClip({x:an.width/2,y:an.height/2,r:30}, function () {
-        an.graphic.circle(0, 0, this.r, '#eee400');
-    });
-
-    Game.createPlanet = function (d, r, s, c) {
-        return an.createMovieClip({x:an.width/2, y:an.height/2, r:r, s:s, d:d, c:c}, function () {
-            an.graphic.circle(this.d, 0, this.r, this.c || '#cadad8');
-            this.rotate += this.s;
-        })
-    };
-    Game.planets = false;
-    Game.addPlanets = function () {
-        var i, c = '#fcecff';
-        if (!Game.planets) {
-            Game.planets = [
-                Game.createPlanet(30,  4,  -0.015, c),
-                Game.createPlanet(60,  6,  -0.010, c),
-                Game.createPlanet(100, 8,  -0.008, c),
-                Game.createPlanet(120, 6,  -0.007, c),
-                Game.createPlanet(160, 8,  -0.006, c),
-                Game.createPlanet(180, 10, -0.005, c),
-                Game.createPlanet(240, 16, -0.004, c),
-                Game.createPlanet(280, 12, -0.003, c)
-            ];
-        }
-        for (i = 0; i < Game.planets.length; i++) {
-            if (NSA.typeOf(Game.planets[i], 'function')) {
-                Game.planets[i]();
-            }
-        }
-    };
-
-    Game.asteroids = false;
-    Game.addAsteroids = function () {
-        var i;
-        if (!Game.asteroids) {
-            Game.asteroids = [];
-            for (i = 0; i < 500; i++) {
-                var _d = an.random(200,220);
-                var _r = an.random(2,5);
-                var _s = -(1.1 / an.random(200, 500));
-                var _c = '#5d585f';
-                Game.asteroids.push(Game.createPlanet(_d,  _r,  _s, _c));
-            }
-        }
-        for (i = 0; i < Game.asteroids.length; i++) {
-            if (NSA.typeOf(Game.asteroids[i], 'function')) {
-                Game.asteroids[i]();
-            }
-        }
     };
 
 
     Game.space = function (ctx, frame) {
 
-        Game.addStar();
-        Game.addPlanets();
-        Game.addAsteroids();
     };
+
+
 
     an.backgroundColor('#03020f');
     an.text.color('#FFFFFF');
