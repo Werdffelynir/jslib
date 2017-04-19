@@ -61,8 +61,47 @@
         Game.key.c = an.keyPress('KeyC');
     };
 
+    var createSprite = function (prop) {
+        
+    };
 
+    //58x210
+    Game.ufo = an.createSprite({
+        x: 100,
+        y: 100,
+        image: Game.images.ufo,
+        width: 58,
+        height: 210,
+        grid: [12, 1],
+        indexes: [0,1,2,3,4,5,6,7,8,9,10,11],
+        delay: 2
+    });
+
+    Game.sp = an.createSprite({
+        x: 100,
+        y: 100,
+        image: Game.images.sprite,
+        width: 100,
+        height: 100,
+        grid: [3, 3],
+        indexes: [0,1,2,3,4,5,6,7,8],
+        delay: 1
+    });
+
+    Game.sp = an.createSprite({
+        x: 100,
+        y: 100,
+        image: Game.images.sprite,
+        width: 100,
+        height: 100,
+        grid: [3, 3],
+        delay: 1,
+        loop: false
+    });
+    
     an.resource.loadImage({
+        ufo: '/animate/demo/images/ufo.gif',
+        sprite: '/animate/demo/images/sprite-3x3.png',
         rocket: '/animate/demo/images/rocket_28x50.png'
     }, function (images) {
         Game.images = images;
