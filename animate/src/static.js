@@ -11,6 +11,20 @@ Animate.LOOP_TIMER = 'timer';
 Animate.LOOP_ANIMATE = 'animation';
 
 /**
+ * Radians as degrees
+ * @type {number}
+ */
+Animate.DEGREES_0   = 0;
+Animate.DEGREES_45  = 0.7853981633974483;
+Animate.DEGREES_90  = 1.5707963267948966;
+Animate.DEGREES_135 = 2.3561944901923450;
+Animate.DEGREES_180 = 3.1415926535897930;
+Animate.DEGREES_225 = 3.9269908169872414;
+Animate.DEGREES_270 = 4.7123889803846900;
+Animate.DEGREES_315 = 5.4977871437821380;
+Animate.DEGREES_360 = 6.2831853071795860;
+
+/**
  * Storage of extensions
  * @type {Array}
  */

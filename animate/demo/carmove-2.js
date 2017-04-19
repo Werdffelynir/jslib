@@ -20,51 +20,36 @@
     var Game = {
         mc: {},
         key: {},
-        mouse:false,
-        images: {}
+        mouse:false
     };
 
-    Game.map = {};
-    Game.map.create = function (mask_array, cols, rect_size) {
-        mask_array['cols'] = cols;
-        mask_array['rows'] = cols;
-        mask_array['size'] = rect_size;
-        return mask_array;
-    };
-    Game.map.render = function (map, callback) {
-        var i, x, y;
-        for (i = 0; i < map.length; i++) {
-            x = parseInt(i % map['cols']) * map['size'];
-            y = parseInt(i / map['cols']) * map['size'];
-            callback.call(null, x, y, map[i], i, map);
-        }
-    };
-
-    var mapSimpleCache = false;
-    var mapSimple = Game.map.create([
-        0, 0, 0, 0, 0, 0, 1, 1, 1, 0,
-        0, 1, 1, 1, 0, 1, 1, 0, 1, 1,
-        1, 1, 0, 1, 1, 1, 0, 0, 0, 1,
-        1, 0, 0, 0, 1, 0, 0, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0
-    ], 10, 25);
+    Game.mc.car = an.createMovieClip({x:50,y:100}, function () {
+        an.graphic.rect(-25,-5,50,10,'#3d2a6b')
+    });
+    Game.mc.city = an.createMovieClip({x:750,y:300,s:2}, function () {
+        an.graphic.rect(-15,-15,30,30,'#f7e304')
+    });
 
     Game.space = function (ctx, frame) {
         an.addGrid(100, '#61587a');
 
-        if (!mapSimpleCache) {
-            Game.map.render(mapSimple, function (x, y, item, i, map) {
-                if (item == 1)
-                    an.graphic.rect(x, y, map['size'], map['size']);
-            });
-            mapSimpleCache = ctx.getImageData(0,0,an.width,an.height);
-        } else {
-            ctx.putImageData(mapSimpleCache, 0, 0);
-        }
+        var car = Game.mc.car();
+        var city = Game.mc.city();
 
+        if (Game.key.up) city.y -= city.s;
+        if (Game.key.down) city.y += city.s;
+        if (Game.key.left) city.x -= city.s;
+        if (Game.key.right) city.x += city.s;
 
+        var xmove = (city.x - car.x) / 400;
+        var ymove = (city.y - car.y) / 400;
 
-        an.text.write(10, 10, 'Frame: ' + frame, '#61587a');
+        car.x += xmove;
+        car.y += ymove;
+
+        car.setRotate(Math.atan2(ymove, xmove));
+
+        an.text.write(10, 10, 'Frame: ' + frame, '#000000');
     };
 
     // * Оперделения нажатие кнопок мыши
@@ -88,7 +73,7 @@
     // * Default
     // * * * * * * * * * * * * * * * * * * * * * * * *
     //an.backgroundColor('#03020f');
-    an.text.font('bold 16px/16px sans');
+    an.text.font('bold 18px/18px sans');
     an.text.color('#FFFFFF');
 
     // * Frames

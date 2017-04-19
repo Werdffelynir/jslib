@@ -17,8 +17,10 @@
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
     var Game = {
+        mc: {},
         key: {up:false,down:false,left:false,right:false,space:false,z:false,x:false,c:false},
-        mouse:false
+        mouse:false,
+        images: {}
     };
 
 
