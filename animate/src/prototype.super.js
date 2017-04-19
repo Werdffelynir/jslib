@@ -95,6 +95,21 @@
         return clip;
     };
 
+    /**
+     * var sprite = an.createSprite({
+     *      x: 0,
+     *      y: 0,
+     *      width: 50,
+     *      height: 50,
+     *      image: Images,
+     *      grid: [3, 2],
+     *      indexes: [5],
+     *      loop: false
+     * });
+     * sprite();
+     * @param options
+     * @returns {clip|*}
+     */
     prototype.createSprite = function (options) {
         var key,
             movieclip,
@@ -131,10 +146,9 @@
                 options[key] = default_options[key];
         }
 
-
         movieclip = this.createMovieClip(options, function () {
-            var grid_row = this.grid[1];
             var grid_col = this.grid[0];
+            var grid_row = this.grid[1];
 
             if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
                 for (var ik in arguments[0]) {
@@ -152,17 +166,18 @@
             }
 
             // cursor reload positions
-            if (this.indexes.length > 1 && this.delay > 0) {
-                if (this._current_index >= grid_col - 1) {
-                    var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
-                    if (next_step > this._cursor_y)
-                        this._cursor_x = 0;
-                    else
-                        this._cursor_x = this._current_index % grid_col * this._sprite_width;
-                    this._cursor_y = next_step;
-                } else {
-                    this._cursor_x = this._current_index * this._sprite_width;
-                }
+            // removed condition
+            // if (this.indexes.length > 1 && this.delay > 0) {}
+            if (this._current_index >= grid_col - 1) {
+                var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
+                // removed condition
+                // if (this.loop && next_step > this._cursor_y)
+                //     this._cursor_x = 0;
+                // else
+                this._cursor_x = this._current_index % grid_col * this._sprite_width;
+                this._cursor_y = next_step;
+            } else {
+                this._cursor_x = this._current_index * this._sprite_width;
             }
 
             ctx.drawImage(this.image,
@@ -200,6 +215,5 @@
 
         return movieclip;
     };
-
 
 })(Animate.prototype)
