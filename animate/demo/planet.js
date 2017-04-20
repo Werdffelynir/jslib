@@ -31,24 +31,26 @@
         an.graphic.circle(0, 0, this.r, '#eee400');
     });
 
-    Game.createPlanet = function (d, r, s, c) {
-        return an.createMovieClip({x:an.width/2, y:an.height/2, r:r, s:s, d:d, c:c}, function () {
+    Game.createPlanet = function (d, r, s, c, rt) {
+        return an.createMovieClip({x:an.width/2, y:an.height/2, r:r, s:s, d:d, c:c, rt:rt}, function () {
             an.graphic.circle(this.d, 0, this.r, this.c || '#cadad8');
+            if (!this.rotate && rt) this.rotate = rt;
             this.rotate += this.s;
         })
     };
+
     Game.planets = false;
     Game.addPlanets = function () {
         var i, c = '#fcecff';
         if (!Game.planets) {
             Game.planets = [
-                Game.createPlanet(30,  4,  -0.015, c),
-                Game.createPlanet(60,  6,  -0.010, c),
-                Game.createPlanet(100, 8,  -0.008, c),
-                Game.createPlanet(120, 6,  -0.007, c),
-                Game.createPlanet(160, 8,  -0.006, c),
-                Game.createPlanet(180, 10, -0.005, c),
-                Game.createPlanet(240, 16, -0.004, c),
+                Game.createPlanet(30,  4,  -0.065, c),
+                Game.createPlanet(60,  6,  -0.040, c),
+                Game.createPlanet(100, 8,  -0.038, c),
+                Game.createPlanet(120, 6,  -0.027, c),
+                Game.createPlanet(160, 8,  -0.016, c),
+                Game.createPlanet(180, 10, -0.008, c),
+                Game.createPlanet(240, 16, -0.012, c),
                 Game.createPlanet(280, 12, -0.003, c)
             ];
         }
@@ -69,7 +71,8 @@
                 var _r = an.random(2,5);
                 var _s = -(1.1 / an.random(200, 500));
                 var _c = '#5d585f';
-                Game.asteroids.push(Game.createPlanet(_d,  _r,  _s, _c));
+                var _rt = Math.random() * 6.2;
+                Game.asteroids.push(Game.createPlanet(_d,  _r,  _s, _c, _rt));
             }
         }
         for (i = 0; i < Game.asteroids.length; i++) {
@@ -81,6 +84,8 @@
 
 
     Game.space = function (ctx, frame) {
+        /** @type CanvasRenderingContext2D */
+        ctx = ctx;
 
         Game.addStar();
         Game.addPlanets();
@@ -99,6 +104,7 @@
 
         Game.space(ctx, i);
         Game.panel(ctx, i);
+
     });
 
     an.onFrame = function (ctx, i) {
@@ -112,9 +118,6 @@
         Game.key.x = an.keyPress('KeyX');
         Game.key.c = an.keyPress('KeyC');
     };
-
-    // start
-    an.start();
 
     // * Оперделения нажатие кнопок мыши
     // * Отключения контекстного меню
@@ -132,5 +135,14 @@
         console.log('Context menu is disabled');
         event.preventDefault();
     }, false);
+
+    an.resource.loadImage({
+        rocket: '/animate/demo/images/rocket_28x50.png'
+    }, function (images) {
+        Game.images = images;
+
+        // start
+        an.start();
+    });
 
 })();

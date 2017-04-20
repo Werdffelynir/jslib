@@ -46,7 +46,8 @@
             rotate: false,
             rotation: false,
             scale: false,
-            alpha: false
+            alpha: false,
+            instance: this
         };
 
         for (key in default_options) {
@@ -113,8 +114,7 @@
     prototype.createSprite = function (options) {
         var key,
             movieclip,
-            ctx = this._context,
-            iterator = this._iterator;
+            ctx = this._context;
 
         var default_options = {
             // parameters
@@ -147,6 +147,7 @@
         }
 
         movieclip = this.createMovieClip(options, function () {
+            var iterator = this.instance._iterator;
             var grid_col = this.grid[0];
             var grid_row = this.grid[1];
 
