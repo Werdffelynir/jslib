@@ -29,9 +29,9 @@ Animate.Extension(function (instance) {
                 height: 128,
                 image: Game.images['explosion'],
                 grid: [4, 4],
-                delay: 2,
+                delay: 1,
                 loop: true,
-                indexes: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+                indexes: []
             });
 
 
@@ -44,13 +44,20 @@ Animate.Extension(function (instance) {
 
             if (hitAsteroid) {
 
-                var explode = this.explodeSprite();
-                explode.x = this.setting.x - 64;
-                explode.y = this.setting.y - 64;
+                var explode = this.explodeSprite({
+                    x: this.setting.x - 64,
+                    y: this.setting.y - 64
+                });
+
+                // explode.x = this.setting.x - 64;
+                // explode.y = this.setting.y - 64;
 
                 Game.Player.moveEnable = false;
 
-                if (explode.getRealIndex >= explode.getMaxIndex) {
+                if (explode.getIndex >= explode.getIndexsCount) {
+                    explode.reset();
+                    explode.x = - 128;
+                    explode.y = - 128;
                     Game.Player.moveEnable = true;
                     Game.Player.setting.life -= 1;
                     this.setting.speed_d = 0;

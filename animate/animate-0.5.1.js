@@ -3,9 +3,7 @@
     "use strict";
 
     window.requestAnimationFrame = function () {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (f) {
-                window.setTimeout(f, 1e3 / 60);
-            }
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (f) {window.setTimeout(f, 1e3 / 60);}
     }();
 
     var Animate = (function () {
@@ -26,12 +24,7 @@
                 return new Animate(_options, width, height, fps);
 
             if (arguments.length > 1)
-                _options = {
-                    selector: arguments[0],
-                    width: parseInt(arguments[1]),
-                    height: parseInt(arguments[2]),
-                    fps: arguments[3]
-                };
+                _options = {selector: arguments[0], width: parseInt(arguments[1]), height: parseInt(arguments[2]), fps: arguments[3]};
 
             var pk,
 
@@ -250,7 +243,7 @@
                 frame,
                 frames = this._frames[this._frame_name];
 
-            this._iterator++;
+            this._iterator ++;
 
             if (this.autoClear === true)
                 this.clear();
@@ -263,12 +256,10 @@
                 if (!this._is_filtering && frames.length > 0) {
                     if (!!this.sorting)
                         frames = frames.sort(function (one, two) {
-                            return one['index'] > two['index']
-                        });
+                            return one['index'] > two['index']});
                     if (!!this.filtering)
                         frames = frames.filter(function (val) {
-                            return !val['hide']
-                        });
+                            return !val['hide']});
                     this._is_filtering = true;
                 }
                 for (i = 0; i < frames.length; i++) {
@@ -385,10 +376,10 @@
          */
         prototype.hitTest = function (rectangle, point) {
             var x = parseInt(point.x), y = parseInt(point.y);
-            return x > rectangle[0] &&
-                y > rectangle[1] &&
-                x < rectangle[0] + rectangle[2] &&
-                y < rectangle[1] + rectangle[3];
+            return  x > rectangle[0] &&
+                    y > rectangle[1] &&
+                    x < rectangle[0]+rectangle[2] &&
+                    y < rectangle[1]+rectangle[3];
         };
 
         /**
@@ -398,7 +389,7 @@
          * @returns {boolean}
          */
         prototype.hitTestPoint = function (point, y) {
-            if (arguments.length == 2) point = {x: point, y: y};
+            if (arguments.length == 2) point = {x:point,y:y};
             return this._context.isPointInPath(point.x, point.y);
         };
 
@@ -427,7 +418,7 @@
     })();
     Animate.prototype.constructor = Animate;
 
-    (/** @type Animate.prototype */ function (prototype) {
+    ( /** @type Animate.prototype */ function (prototype) {
 
         /**
          * Prototype of Super Objects
@@ -475,7 +466,8 @@
                 rotate: false,
                 rotation: false,
                 scale: false,
-                alpha: false
+                alpha: false,
+                instance: this
             };
 
             for (key in default_options) {
@@ -509,24 +501,12 @@
                 callback.apply(this, arguments);
                 ctx.restore();
 
-                this.setTransform = function () {
-                    this.transform = arguments
-                };
-                this.setScale = function () {
-                    this.scale = arguments
-                };
-                this.setRotate = function () {
-                    this.rotate = arguments[0]
-                };
-                this.setRotation = function () {
-                    this.rotation = arguments[0]
-                };
-                this.setAlpha = function () {
-                    this.alpha = arguments[0]
-                };
-                this.setComposite = function () {
-                    this.composite = arguments[0]
-                };
+                this.setTransform = function () {this.transform = arguments};
+                this.setScale = function () {this.scale = arguments};
+                this.setRotate = function () {this.rotate = arguments[0]};
+                this.setRotation = function () {this.rotation = arguments[0]};
+                this.setAlpha = function () {this.alpha = arguments[0]};
+                this.setComposite = function () {this.composite = arguments[0]};
 
                 // return self context
                 return this;
@@ -537,118 +517,128 @@
         };
 
         /**
-         *
+         * var sprite = an.createSprite({
+         *      x: 0,
+         *      y: 0,
+         *      width: 50,
+         *      height: 50,
+         *      image: HTMLImageElement,
+         *      grid: [3, 2],
+         *      indexes: [0,1,2,3,4,5],
+         *      delay: 1,
+         *      loop: false
+         * });
+         * sprite();
          * @param options
          * @returns {clip|*}
          */
         prototype.createSprite = function (options) {
-            var key,
-                movieclip,
-                ctx = this._context,
-                iterator = this._iterator;
+            var i, key, movieclip, default_options = {
 
-            var default_options = {
                 // parameters
                 x: 0,
                 y: 0,
                 width: 100,
                 height: 100,
                 image: null,
-                grid: [4, 2],
-                indexes: [0],
+                grid: [1, 1],
+                indexes: [],
                 delay: 0,
-                point: {x: 0, y: 0},
                 loop: true,
+                point: {x: 0, y: 0},
 
                 // internal
-                _cursor_x: 0,
-                _cursor_y: 0,
+                _map: [],
                 _image_width: 0,
                 _image_height: 0,
-                _sprite_width: 100,
-                _sprite_height: 100,
-                _real_index: 0,
-                _current_index: 0,
-                _max_index: 0
+                _sprite_width: 0,
+                _sprite_height: 0,
+                _map_index: false,
+                _rea_index: false
             };
 
+            // to default
             for (key in default_options) {
                 if (options[key] === undefined)
                     options[key] = default_options[key];
             }
 
+            var grid_count = options['grid'][0] * options['grid'][1];
+
+            // verify the 'image'
+            if (!(options['image'] instanceof HTMLImageElement) && !(options['image'] instanceof Image))
+                throw Error('The source image is not instanceof of [Image]');
+
+            // set default indexes
+            if (options['indexes'].length == 0) {
+                for (i = 0; i < grid_count; i++)
+                    options['indexes'][i] = i;
+            }
+
+            // create maps
+            for (i = 0; i < grid_count; i++) {
+                options['_map'][i] = {
+                    index: i,
+                    sx: parseInt(i % options['grid'][0]) * options['width'],
+                    sy: parseInt(i / options['grid'][0]) * options['width']
+                };
+            }
+
+            // Sprite based on MovieClip
             movieclip = this.createMovieClip(options, function () {
-                var grid_col = this.grid[0];
-                var grid_row = this.grid[1];
+                var i, k,
+                    ctx = this['instance']._context,
+                    iterator = this['instance']._iterator;
 
-                if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
-                    for (var ik in arguments[0]) {
-                        this[ik] = arguments[0][ik];
-                    }
+                if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object')
+                    for (k in arguments[0]) this[k] = arguments[0][k];
+
+                if (this['_image_width'] === 0 && this['_image_height'] === 0) {
+                    this['_image_width']   = this['image'].naturalWidth || this['image'].width;
+                    this['_image_height']  = this['image'].naturalHeight || this['image'].height;
+                    this['_sprite_width']  = this['_image_width'] / this['grid'][0];
+                    this['_sprite_height'] = this['_image_height'] / this['grid'][1];
+                    this['_rea_index'] = 0;
                 }
 
-                if (this._image_width === 0 && this._image_height === 0) {
-                    this._image_width = this.image.naturalWidth || this.image.width;
-                    this._image_height = this.image.naturalHeight || this.image.height;
-                    this._sprite_width = this._image_width / grid_col;
-                    this._sprite_height = this._image_height / grid_row;
-                    this._max_index = grid_col * grid_row - 1;
-                    this._current_index = this.indexes[0];
-                }
+                // calc index in map
+                this['_map_index'] = this['indexes'][this['_rea_index']];
 
-                // cursor reload positions
-                // removed condition
-                // if (this.indexes.length > 1 && this.delay > 0) {}
-                if (this._current_index >= grid_col - 1) {
-                    var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
-                    // removed condition
-                    // if (this.loop && next_step > this._cursor_y)
-                    //     this._cursor_x = 0;
-                    // else
-                    this._cursor_x = this._current_index % grid_col * this._sprite_width;
-                    this._cursor_y = next_step;
-                } else {
-                    this._cursor_x = this._current_index * this._sprite_width;
-                }
+                // get map part, sprite part
+                var source = this['_map'][this['_map_index']];
 
-                ctx.drawImage(this.image,
+                // base draw
+                ctx.drawImage(this['image'],
                     // source
-                    this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
+                    source.sx, source.sy, this['_sprite_width'], this['_sprite_height'],
                     // draw
-                    this.point.x, this.point.y, this.width, this.height
+                    this['point'].x, this['point'].y, this['width'], this['height']
                 );
 
-                // change - current_index cursor_x cursor_y
-                if (this.indexes.length > 1 && this.delay > 0) {
-                    if (iterator % this.delay === 0) {
-                        if (this.indexes[this._real_index + 1]) {
-                            this._real_index = this._real_index + 1;
-                            this._current_index = this.indexes[this._real_index];
-
-                        } else if (this.loop) {
-                            this._real_index = 0;
-                            this._current_index = this.indexes[0];
-                        }
-                    }
+                // steps in map
+                if (this['indexes'].length > 1 && iterator % this['delay'] === 0) {
+                    if (this['indexes'][this['_rea_index'] + 1] !== undefined) {
+                        this['_rea_index'] += 1;
+                    } else
+                    if (this['loop'])
+                        this['_rea_index'] = 0;
                 }
 
                 // return self context
-                this.getCurrentIndex = this._current_index;
-                this.getRealIndex = this._real_index;
-                this.getMaxIndex = this._max_index;
+                this.getIndex = this['_map_index'];
+                this.getIndexsCount = this['_map'].length - 1;
                 this.reset = function () {
-                    this._real_index = 0;
-                    this._current_index = this.indexes[0];
+                    this['_rea_index'] = 0;
                 };
 
                 return this;
             }, true);
 
-            return movieclip;
+            return movieclip
         };
 
     })(Animate.prototype);
-    (/** @type Animate.prototype */ function (prototype) {
+    ( /** @type Animate.prototype */ function (prototype) {
 
         prototype._events_initialize = function () {
 
@@ -719,9 +709,9 @@
      * Radians as degrees
      * @type {number}
      */
-    Animate.DEGREES_0 = 0;
-    Animate.DEGREES_45 = 0.7853981633974483;
-    Animate.DEGREES_90 = 1.5707963267948966;
+    Animate.DEGREES_0   = 0;
+    Animate.DEGREES_45  = 0.7853981633974483;
+    Animate.DEGREES_90  = 1.5707963267948966;
     Animate.DEGREES_135 = 2.3561944901923450;
     Animate.DEGREES_180 = 3.1415926535897930;
     Animate.DEGREES_225 = 3.9269908169872414;
@@ -776,8 +766,7 @@
         var key;
         if (thisInstance === undefined || thisInstance === true) {
             thisInstance = options;
-        } else if (typeof thisInstance === 'object') {
-        } else {
+        } else if (typeof thisInstance === 'object') {} else {
             thisInstance = {};
         }
 
@@ -812,8 +801,8 @@
         if (!src) return null;
         if (Array.isArray(src)) {
             var i;
-            for (i = 0; i < src.length; i++) {
-                Animate.loadJS(src[i], onload, onerror);
+            for (i = 0; i < src.length; i ++) {
+                Animate.loadJS( src[i], onload, onerror );
             }
         } else {
             var script = document.createElement('script'),
@@ -886,7 +875,7 @@
      * @returns {*}
      */
     Animate.randomItem = function (arr) {
-        var i = Animate.random(0, arr.length - 1);
+        var i = Animate.random(0, arr.length-1);
         return arr[i];
     };
 
@@ -1010,17 +999,13 @@
 
             //context.lineWidth = instance.text._parameters.lineWidth;
             if (_transform) {
-                CanvasRenderingContext2D.prototype.setTransform.apply(context, _transform);
-            }
+                CanvasRenderingContext2D.prototype.setTransform.apply(context, _transform);}
             if (_rotate) {
-                context.rotate(_rotate);
-            }
+                context.rotate(_rotate);}
             if (_scale) {
-                CanvasRenderingContext2D.prototype.scale.apply(context, _scale);
-            }
+                CanvasRenderingContext2D.prototype.scale.apply(context, _scale);}
             if (_alpha) {
-                context.globalAlpha = _alpha;
-            }
+                context.globalAlpha = _alpha;}
 
             if (fill === true || fill === undefined) {
                 context.fillStyle = color;
@@ -1052,7 +1037,7 @@
                 transform: false,
                 rotate: false,
                 scale: false,
-                point: {x: 0, y: 0},
+                point: {x:0, y:0},
                 x: 0,
                 y: 0
             };
@@ -1066,48 +1051,20 @@
             }
         };
 
-        instance.text.font = function (value) {
-            instance.text._parameters.font = value
-        };
-        instance.text.textAlign = function (value) {
-            instance.text._parameters.textAlign = value
-        };
-        instance.text.textBaseline = function (value) {
-            instance.text._parameters.textBaseline = value
-        };
-        instance.text.direction = function (value) {
-            instance.text._parameters.direction = value
-        };
-        instance.text.lineWidth = function (value) {
-            instance.text._parameters.lineWidth = value
-        };
-        instance.text.color = function (value) {
-            instance.text._parameters.color = value
-        };
-        instance.text.alpha = function (value) {
-            instance.text._parameters.globalAlpha = value
-        };
-        instance.text.rotate = function (value) {
-            instance.text._parameters.rotate = value
-        };
-        instance.text.point = function (value) {
-            instance.text._parameters.point = value
-        };
-        instance.text.x = function (value) {
-            instance.text._parameters.x = value
-        };
-        instance.text.y = function (value) {
-            instance.text._parameters.y = value
-        };
-        instance.text.transform = function (value) {
-            instance.text._parameters.transform = value
-        };
-        instance.text.rotate = function (value) {
-            instance.text._parameters.rotate = value
-        };
-        instance.text.scale = function (value) {
-            instance.text._parameters.scale = value
-        };
+        instance.text.font = function (value) {instance.text._parameters.font = value};
+        instance.text.textAlign = function (value) {instance.text._parameters.textAlign = value};
+        instance.text.textBaseline = function (value) {instance.text._parameters.textBaseline = value};
+        instance.text.direction = function (value) {instance.text._parameters.direction = value};
+        instance.text.lineWidth = function (value) {instance.text._parameters.lineWidth = value};
+        instance.text.color = function (value) {instance.text._parameters.color = value};
+        instance.text.alpha = function (value) {instance.text._parameters.globalAlpha = value};
+        instance.text.rotate = function (value) {instance.text._parameters.rotate = value};
+        instance.text.point = function (value) {instance.text._parameters.point = value};
+        instance.text.x = function (value) {instance.text._parameters.x = value};
+        instance.text.y = function (value) {instance.text._parameters.y = value};
+        instance.text.transform = function (value) {instance.text._parameters.transform = value};
+        instance.text.rotate = function (value) {instance.text._parameters.rotate = value};
+        instance.text.scale = function (value) {instance.text._parameters.scale = value};
 
         instance.text.position = function (x, y) {
             if (arguments.length === 1 && arguments[0] && typeof arguments[0] === 'object') {
@@ -1234,10 +1191,10 @@
         instance.graphic.rectRound = function (x, y, width, height, radius, color, fill) {
             x = x || 0;
             y = y || 0;
-            width = width || 100;
+            width  = width || 100;
             height = height || 100;
             radius = radius || 5;
-            color = color || '#000';
+            color  = color || '#000';
             fill = fill === undefined ? true : !!fill;
 
             context.beginPath();
@@ -1396,7 +1353,7 @@
                     img.name = name;
                     img.onload = function (e) {
                         images[this.name] = this;
-                        iterator++;
+                        iterator ++;
                         if (iterator == length) {
                             instance.resource._images = Animate.defaultObject(instance.resource._images, images);
                             callback.call(instance, images);
@@ -1412,12 +1369,12 @@
                 var audios = {};
                 var iterator = 0;
                 for (var name in srcs) {
-                    var audio = document.createElement('audio');
+                    var audio =  document.createElement('audio');
                     audio.src = srcs[name];
                     audio.name = name;
                     audio.preload = 'auto';
                     audios[name] = audio;
-                    iterator++;
+                    iterator ++;
                     if (iterator == length) {
                         instance.resource._audios = Animate.defaultObject(instance.resource._audios, audios);
                         callback.call(instance, audios);
@@ -1432,12 +1389,12 @@
                 var videos = {};
                 var iterator = 0;
                 for (var name in srcs) {
-                    var video = document.createElement('video');
+                    var video =  document.createElement('video');
                     video.src = srcs[name];
                     video.name = name;
                     video.preload = 'auto';
                     videos[name] = video;
-                    iterator++;
+                    iterator ++;
                     if (iterator == length) {
                         instance.resource._videos = Animate.defaultObject(instance.resource._videos, videos);
                         callback.call(instance, videos);
@@ -1451,7 +1408,7 @@
                 return instance.resource._images[name] ? instance.resource._images[name] : false;
             if (Array.isArray(name)) {
                 var i, imgs = [];
-                for (i = 0; i < name.length; i++)
+                for (i = 0; i < name.length; i ++)
                     if (instance.resource._images[i]) imgs.push(instance.resource._images[i]);
                 return imgs;
             }
@@ -1462,7 +1419,7 @@
                 return instance.resource._audios[name] ? instance.resource._audios[name] : false;
             if (Array.isArray(name)) {
                 var i, result = [];
-                for (i = 0; i < name.length; i++)
+                for (i = 0; i < name.length; i ++)
                     if (instance.resource._audios[i]) result.push(instance.resource._audios[i]);
                 return result;
             }
@@ -1473,11 +1430,12 @@
                 return instance.resource._videos[name] ? instance.resource._videos[name] : false;
             if (Array.isArray(name)) {
                 var i, result = [];
-                for (i = 0; i < name.length; i++)
+                for (i = 0; i < name.length; i ++)
                     if (instance.resource._videos[i]) result.push(instance.resource._videos[i]);
                 return result;
             }
         };
+
 
 
     });
@@ -1503,13 +1461,15 @@
 
             if (arguments.length == 0) {
                 return instance.keyPress.info();
-            } else if (typeof arguments[0] === 'string') {
+            } else
+            if (typeof arguments[0] === 'string') {
                 if (typeof arguments[1] === 'function') {
                     if (instance.keyPress._keys[arguments[0]])
                         arguments[1].call(null, instance.keyPress._keys[arguments[0]]);
                 }
                 return !!instance.keyPress._keys[arguments[0]];
-            } else if (typeof arguments[0] === 'function') {
+            } else
+            if (typeof arguments[0] === 'function') {
                 instance.keyPress._keydown_callbacks.push(arguments[0]);
                 if (typeof arguments[1] === 'function')
                     instance.keyPress._keyup_callbacks.push(arguments[1]);
@@ -1525,7 +1485,7 @@
                         return; // Do nothing if the event was already processed
                     }
 
-                    for (var i = 0; i < instance.keyPress._keydown_callbacks.length; i++)
+                    for (var i = 0; i < instance.keyPress._keydown_callbacks.length; i ++)
                         if (typeof instance.keyPress._keydown_callbacks[i] === 'function')
                             instance.keyPress._keydown_callbacks[i].call(null, event);
 
@@ -1539,7 +1499,7 @@
                         return; // Do nothing if the event was already processed
                     }
 
-                    for (var i = 0; i < instance.keyPress._keyup_callbacks.length; i++)
+                    for (var i = 0; i < instance.keyPress._keyup_callbacks.length; i ++)
                         if (typeof instance.keyPress._keyup_callbacks[i] === 'function')
                             instance.keyPress._keyup_callbacks[i].call(null, event);
 
@@ -1579,7 +1539,7 @@
                 "                        45          Insert\n" +
                 "                        46          Delete\n" +
                 "1           Digit1      48-57       0 to 9\n" +
-                "a-z         KeyA        65-90       A to Z\n" +
+                "a           KeyA        65-90       A to Z\n" +
                 "                        91          WIN Key (Start)\n" +
                 "                        93          WIN Menu\n" +
                 "                        112-123     F1 to F12\n" +
@@ -1657,7 +1617,8 @@
         instance.mouseMove._position = false;
         instance.mouseMove._is_init = false;
 
-    });
+    })
+    ;
 
     /** Set script version. Property [read-only]*/
     Object.defineProperty(Animate, 'version', {

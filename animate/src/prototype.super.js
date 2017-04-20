@@ -102,9 +102,10 @@
      *      y: 0,
      *      width: 50,
      *      height: 50,
-     *      image: Images,
+     *      image: HTMLImageElement,
      *      grid: [3, 2],
-     *      indexes: [5],
+     *      indexes: [0,1,2,3,4,5],
+     *      delay: 1,
      *      loop: false
      * });
      * sprite();
@@ -112,109 +113,108 @@
      * @returns {clip|*}
      */
     prototype.createSprite = function (options) {
-        var key,
-            movieclip,
-            ctx = this._context;
+        var i, key, movieclip, default_options = {
 
-        var default_options = {
             // parameters
             x: 0,
             y: 0,
             width: 100,
             height: 100,
             image: null,
-            grid: [4, 2],
-            indexes: [0],
+            grid: [1, 1],
+            indexes: [],
             delay: 0,
-            point: {x:0, y:0},
             loop: true,
+            point: {x: 0, y: 0},
 
             // internal
-            _cursor_x: 0,
-            _cursor_y: 0,
+            _map: [],
             _image_width: 0,
             _image_height: 0,
-            _sprite_width: 100,
-            _sprite_height: 100,
-            _real_index: 0,
-            _current_index: 0,
-            _max_index: 0
+            _sprite_width: 0,
+            _sprite_height: 0,
+            _map_index: false,
+            _rea_index: false
         };
 
+        // to default
         for (key in default_options) {
             if (options[key] === undefined)
                 options[key] = default_options[key];
         }
 
+        var grid_count = options['grid'][0] * options['grid'][1];
+
+        // verify the 'image'
+        if (!(options['image'] instanceof HTMLImageElement) && !(options['image'] instanceof Image))
+            throw Error('The source image is not instanceof of [Image]');
+
+        // set default indexes
+        if (options['indexes'].length == 0) {
+            for (i = 0; i < grid_count; i++)
+                options['indexes'][i] = i;
+        }
+
+        // create maps
+        for (i = 0; i < grid_count; i++) {
+            options['_map'][i] = {
+                index: i,
+                sx: parseInt(i % options['grid'][0]) * options['width'],
+                sy: parseInt(i / options['grid'][0]) * options['width']
+            };
+        }
+
+        // Sprite based on MovieClip
         movieclip = this.createMovieClip(options, function () {
-            var iterator = this.instance._iterator;
-            var grid_col = this.grid[0];
-            var grid_row = this.grid[1];
+            var i, k,
+                ctx = this['instance']._context,
+                iterator = this['instance']._iterator;
 
-            if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
-                for (var ik in arguments[0]) {
-                    this[ik] = arguments[0][ik];
-                }
+            if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object')
+                for (k in arguments[0]) this[k] = arguments[0][k];
+
+            if (this['_image_width'] === 0 && this['_image_height'] === 0) {
+                this['_image_width']   = this['image'].naturalWidth || this['image'].width;
+                this['_image_height']  = this['image'].naturalHeight || this['image'].height;
+                this['_sprite_width']  = this['_image_width'] / this['grid'][0];
+                this['_sprite_height'] = this['_image_height'] / this['grid'][1];
+                this['_rea_index'] = 0;
             }
 
-            if (this._image_width === 0 && this._image_height === 0) {
-                this._image_width = this.image.naturalWidth || this.image.width;
-                this._image_height = this.image.naturalHeight || this.image.height;
-                this._sprite_width = this._image_width / grid_col;
-                this._sprite_height = this._image_height / grid_row;
-                this._max_index = grid_col * grid_row - 1;
-                this._current_index = this.indexes[0];
-            }
+            // calc index in map
+            this['_map_index'] = this['indexes'][this['_rea_index']];
 
-            // cursor reload positions
-            // removed condition
-            // if (this.indexes.length > 1 && this.delay > 0) {}
-            if (this._current_index >= grid_col - 1) {
-                var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
-                // removed condition
-                // if (this.loop && next_step > this._cursor_y)
-                //     this._cursor_x = 0;
-                // else
-                this._cursor_x = this._current_index % grid_col * this._sprite_width;
-                this._cursor_y = next_step;
-            } else {
-                this._cursor_x = this._current_index * this._sprite_width;
-            }
+            // get map part, sprite part
+            var source = this['_map'][this['_map_index']];
 
-            ctx.drawImage(this.image,
+            // base draw
+            ctx.drawImage(this['image'],
                 // source
-                this._cursor_x, this._cursor_y, this._sprite_width, this._sprite_height,
+                source.sx, source.sy, this['_sprite_width'], this['_sprite_height'],
                 // draw
-                this.point.x, this.point.y, this.width, this.height
+                this['point'].x, this['point'].y, this['width'], this['height']
             );
 
-            // change - current_index cursor_x cursor_y
-            if (this.indexes.length > 1 && this.delay > 0) {
-                if (iterator % this.delay === 0) {
-                    if (this.indexes[this._real_index + 1]) {
-                        this._real_index = this._real_index + 1;
-                        this._current_index = this.indexes[this._real_index];
-
-                    } else if (this.loop) {
-                        this._real_index = 0;
-                        this._current_index = this.indexes[0];
-                    }
-                }
+            // steps in map
+            if (this['indexes'].length > 1 && iterator % this['delay'] === 0) {
+                if (this['indexes'][this['_rea_index'] + 1] !== undefined) {
+                    this['_rea_index'] += 1;
+                } else
+                if (this['loop'])
+                    this['_rea_index'] = 0;
             }
 
             // return self context
-            this.getCurrentIndex = this._current_index;
-            this.getRealIndex = this._real_index;
-            this.getMaxIndex = this._max_index;
+            this.getIndex = this['_map_index'];
+            this.getIndexsCount = this['_map'].length - 1;
             this.reset = function () {
-                this._real_index = 0;
-                this._current_index = this.indexes[0];
+                this['_rea_index'] = 0;
             };
 
             return this;
         }, true);
 
-        return movieclip;
+        return movieclip
     };
 
 })(Animate.prototype)
