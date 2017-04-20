@@ -116,6 +116,27 @@
         };
 
         /**
+         * @returns {number}
+         */
+        prototype.getWidth = function () {
+            return this._canvas.width;
+        };
+
+        /**
+         * @returns {string}
+         */
+        prototype.getFrameName = function () {
+            return this._frame_name;
+        };
+
+        /**
+         * @returns {number}
+         */
+        prototype.getHeight = function () {
+            return this._canvas.height;
+        };
+
+        /**
          * Return current iteration
          * @returns {number}
          */
@@ -332,9 +353,10 @@
          * @param position  default: 'absolute'
          */
         prototype.resizeCanvas = function (width, height, position) {
-            this._canvas.style.position = position || 'absolute';
-            this._canvas.width = this.width = width || window.innerWidth;
-            this._canvas.height = this.height = height || window.innerHeight;
+            if (position !== undefined)
+                this._canvas.style.position = position || 'absolute';
+            this._canvas.width = this.width = parseInt(width) || window.innerWidth;
+            this._canvas.height = this.height = parseInt(height) || window.innerHeight;
         };
 
         /**
@@ -371,13 +393,13 @@
 
         /**
          * isPointInPath
-         * @param x_point   X or if argument is one, point most be Point object {x:,y:}.
-         * @param y         Y
+         * @param point
+         * @param y
          * @returns {boolean}
          */
-        prototype.hitTestPoint = function (x_point, y) {
-            if (arguments.length == 2) x_point = {x: x_point, y: y};
-            return this._context.isPointInPath(x_point.x, x_point.y);
+        prototype.hitTestPoint = function (point, y) {
+            if (arguments.length == 2) point = {x: point, y: y};
+            return this._context.isPointInPath(point.x, point.y);
         };
 
         /**
@@ -451,6 +473,7 @@
                 transform: false,
                 composite: false,
                 rotate: false,
+                rotation: false,
                 scale: false,
                 alpha: false
             };
@@ -464,14 +487,18 @@
                 // draw image
                 ctx.save();
                 ctx.translate(this.x, this.y);
+
                 if (this.transform) {
                     CanvasRenderingContext2D.prototype.setTransform.apply(ctx, this.transform);
+                }
+                if (this.scale) {
+                    CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);
                 }
                 if (this.rotate) {
                     ctx.rotate(this.rotate);
                 }
-                if (this.scale) {
-                    CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);
+                if (this.rotation) {
+                    ctx.rotate(Animate.degreesToRadians(this.rotation));
                 }
                 if (this.alpha) {
                     ctx.globalAlpha = this.alpha;
@@ -482,6 +509,25 @@
                 callback.apply(this, arguments);
                 ctx.restore();
 
+                this.setTransform = function () {
+                    this.transform = arguments
+                };
+                this.setScale = function () {
+                    this.scale = arguments
+                };
+                this.setRotate = function () {
+                    this.rotate = arguments[0]
+                };
+                this.setRotation = function () {
+                    this.rotation = arguments[0]
+                };
+                this.setAlpha = function () {
+                    this.alpha = arguments[0]
+                };
+                this.setComposite = function () {
+                    this.composite = arguments[0]
+                };
+
                 // return self context
                 return this;
             };
@@ -490,6 +536,11 @@
             return clip;
         };
 
+        /**
+         *
+         * @param options
+         * @returns {clip|*}
+         */
         prototype.createSprite = function (options) {
             var key,
                 movieclip,
@@ -526,10 +577,9 @@
                     options[key] = default_options[key];
             }
 
-
             movieclip = this.createMovieClip(options, function () {
-                var grid_row = this.grid[1];
                 var grid_col = this.grid[0];
+                var grid_row = this.grid[1];
 
                 if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
                     for (var ik in arguments[0]) {
@@ -547,17 +597,18 @@
                 }
 
                 // cursor reload positions
-                if (this.indexes.length > 1 && this.delay > 0) {
-                    if (this._current_index >= grid_col - 1) {
-                        var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
-                        if (next_step > this._cursor_y)
-                            this._cursor_x = 0;
-                        else
-                            this._cursor_x = this._current_index % grid_col * this._sprite_width;
-                        this._cursor_y = next_step;
-                    } else {
-                        this._cursor_x = this._current_index * this._sprite_width;
-                    }
+                // removed condition
+                // if (this.indexes.length > 1 && this.delay > 0) {}
+                if (this._current_index >= grid_col - 1) {
+                    var next_step = parseInt(this._current_index / grid_col) * this._sprite_height;
+                    // removed condition
+                    // if (this.loop && next_step > this._cursor_y)
+                    //     this._cursor_x = 0;
+                    // else
+                    this._cursor_x = this._current_index % grid_col * this._sprite_width;
+                    this._cursor_y = next_step;
+                } else {
+                    this._cursor_x = this._current_index * this._sprite_width;
                 }
 
                 ctx.drawImage(this.image,
@@ -573,6 +624,7 @@
                         if (this.indexes[this._real_index + 1]) {
                             this._real_index = this._real_index + 1;
                             this._current_index = this.indexes[this._real_index];
+
                         } else if (this.loop) {
                             this._real_index = 0;
                             this._current_index = this.indexes[0];
@@ -594,7 +646,6 @@
 
             return movieclip;
         };
-
 
     })(Animate.prototype);
     (/** @type Animate.prototype */ function (prototype) {
@@ -663,6 +714,20 @@
      */
     Animate.LOOP_TIMER = 'timer';
     Animate.LOOP_ANIMATE = 'animation';
+
+    /**
+     * Radians as degrees
+     * @type {number}
+     */
+    Animate.DEGREES_0 = 0;
+    Animate.DEGREES_45 = 0.7853981633974483;
+    Animate.DEGREES_90 = 1.5707963267948966;
+    Animate.DEGREES_135 = 2.3561944901923450;
+    Animate.DEGREES_180 = 3.1415926535897930;
+    Animate.DEGREES_225 = 3.9269908169872414;
+    Animate.DEGREES_270 = 4.7123889803846900;
+    Animate.DEGREES_315 = 5.4977871437821380;
+    Animate.DEGREES_360 = 6.2831853071795860;
 
     /**
      * Storage of extensions
@@ -734,6 +799,37 @@
         Animate._internal_extensions.push(func);
     };
 
+
+    /**
+     * Loads a script element with javascript source
+     *
+     * @param src
+     * @param onload
+     * @param onerror
+     * @returns {*}
+     */
+    Animate.loadJS = function (src, onload, onerror) {
+        if (!src) return null;
+        if (Array.isArray(src)) {
+            var i;
+            for (i = 0; i < src.length; i++) {
+                Animate.loadJS(src[i], onload, onerror);
+            }
+        } else {
+            var script = document.createElement('script'),
+                id = "src-" + Math.random().toString(32).slice(2);
+
+            script.src = (src.substr(-3) === '.js') ? src : src + '.js';
+            script.type = 'application/javascript';
+            script.id = id;
+            script.onload = onload;
+            script.onerror = onerror;
+
+            document.head.appendChild(script);
+            return script
+        }
+    };
+
     /**
      * Marge object with defaultObject
      * @param defaultObject
@@ -785,6 +881,16 @@
     };
 
     /**
+     * Return random item from array
+     * @param arr
+     * @returns {*}
+     */
+    Animate.randomItem = function (arr) {
+        var i = Animate.random(0, arr.length - 1);
+        return arr[i];
+    };
+
+    /**
      * Convert degrees to radians
      * Formula: degrees * Math.PI / 180
      * @param deg
@@ -815,6 +921,24 @@
         var dy = p2.y - p1.y;
         return Math.sqrt(dx * dx + dy * dy);
     };
+
+    /**
+     * Calculate angle between two points. return object:
+     *  {angle:, x:, y:}
+     * @param p1
+     * @param p2
+     * @returns {{angle: number, x: number, y: number}}
+     */
+    Animate.calculateAngle = function (p1, p2) {
+        var dx = p2.x - p1.x;
+        var dy = p2.y - p1.y;
+        var angle = Math.atan2(dy, dx);
+        return {
+            angle: angle,
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        };
+    };
     (/** @type Animate.prototype */ function (prototype) {
 
         /**
@@ -824,14 +948,16 @@
         prototype.createClip = Animate.Clip;
         prototype.point = Animate.Point;
         prototype.rectangle = Animate.Rectangle;
-
+        prototype.loadJS = Animate.loadJS;
         prototype.defaultObject = Animate.defaultObject;
         prototype.copy = Animate.copy;
         prototype.random = Animate.random;
         prototype.randomColor = Animate.randomColor;
+        prototype.randomItem = Animate.randomItem;
         prototype.degreesToRadians = Animate.degreesToRadians;
         prototype.radiansToDegrees = Animate.radiansToDegrees;
         prototype.distanceBetween = Animate.distanceBetween;
+        prototype.calculateAngle = Animate.calculateAngle;
 
     })(Animate.prototype);
     Animate.Extension(function (instance) {
@@ -884,13 +1010,13 @@
 
             //context.lineWidth = instance.text._parameters.lineWidth;
             if (_transform) {
-                CanvasRenderingContext2D.prototype.setTransform.apply(ctx, _transform);
+                CanvasRenderingContext2D.prototype.setTransform.apply(context, _transform);
             }
             if (_rotate) {
                 context.rotate(_rotate);
             }
             if (_scale) {
-                CanvasRenderingContext2D.prototype.scale.apply(ctx, _scale);
+                CanvasRenderingContext2D.prototype.scale.apply(context, _scale);
             }
             if (_alpha) {
                 context.globalAlpha = _alpha;
@@ -1112,6 +1238,7 @@
             height = height || 100;
             radius = radius || 5;
             color = color || '#000';
+            fill = fill === undefined ? true : !!fill;
 
             context.beginPath();
             context.moveTo(x + radius, y);
@@ -1352,6 +1479,7 @@
             }
         };
 
+
     });
     Animate.Extension(function (instance) {
 
@@ -1451,7 +1579,7 @@
                 "                        45          Insert\n" +
                 "                        46          Delete\n" +
                 "1           Digit1      48-57       0 to 9\n" +
-                "a           KeyA        65-90       A to Z\n" +
+                "a-z         KeyA        65-90       A to Z\n" +
                 "                        91          WIN Key (Start)\n" +
                 "                        93          WIN Menu\n" +
                 "                        112-123     F1 to F12\n" +
@@ -1473,6 +1601,7 @@
 
         if (!(instance instanceof Animate))
             return;
+
         /**
          * .mousePress()         (in loop use) return position point object if mouse click, or false
          * .mousePress(callback) (in loop use) execute function if mouse click with argument point object
@@ -1490,6 +1619,8 @@
 
             return instance.mousePress._position;
         };
+        instance.mousePress._position = false;
+        instance.mousePress._is_init = false;
         instance.mousePress._init_once_click_listener = function () {
             if (instance.mousePress._is_init === false) {
                 instance.mousePress._is_init = true;
@@ -1500,14 +1631,32 @@
                 instance._canvas.addEventListener('mouseup', function (event) {
                     instance.mousePress._position = false;
                 });
-                instance._canvas.addEventListener('mousemove', function (event) {
-                    if (instance.mousePress._position)
-                        instance.mousePress._position = instance.mousePosition(event);
-                });
+
             }
         };
-        instance.mousePress._position = false;
-        instance.mousePress._is_init = false;
+
+
+        /**
+         * .mouseMove()         (in loop use) return position point object when mouse move
+         * .mouseMove(callback) (in loop use) execute function when mouse move with argument point object
+         *
+         * @param callback
+         * @returns {*}
+         */
+        instance.mouseMove = function (callback) {
+            if (instance.mouseMove._is_init === false) {
+                instance.mouseMove._is_init = true;
+                instance._canvas.addEventListener('mousemove', function (event) {
+                    instance.mouseMove._position = instance.mousePosition(event);
+                });
+            }
+            if (instance.mouseMove._position && typeof callback === 'function')
+                callback.call(null, instance.mouseMove._position);
+            return instance.mouseMove._position;
+        };
+        instance.mouseMove._position = false;
+        instance.mouseMove._is_init = false;
+
     });
 
     /** Set script version. Property [read-only]*/
@@ -1516,6 +1665,5 @@
     });
 
     window.Animate = Animate;
-
 
 })(window);
