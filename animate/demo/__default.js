@@ -2,7 +2,7 @@
     var node = {
         menu: NSA.queryAll('#menu'),
         page: NSA.query('#page'),
-        desc: NSA.query('#desc'),
+        desc: NSA.query('#description'),
         move: NSA.query('#move'),
         after: NSA.query('#after')
     };

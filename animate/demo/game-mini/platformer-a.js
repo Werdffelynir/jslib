@@ -30,7 +30,7 @@
 
 
     Game.space = function (ctx, frame) {
-
+        ctx.drawImage(Game.images['rocket'], 100, 100)
     };
 
 

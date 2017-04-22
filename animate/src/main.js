@@ -16,6 +16,7 @@
     [[['expansion']]];
     [[['extension.text']]];
     [[['extension.graphic']]];
+    [[['extension.graphic2']]];
     [[['extension.resource']]];
     [[['extension.keypress']]];
     [[['extension.mousepress']]];
