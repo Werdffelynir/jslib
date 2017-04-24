@@ -11,7 +11,7 @@
         selector: '#canvas',
         width: 960,
         height: 600,
-        fps: 60
+        fps: 24
     });
 
     an.text.font('bold 18px/18px sans');
@@ -21,52 +21,6 @@
     var Gm = {
         mouse:false
     };
-    Gm.grid_cache = false;
-
-    Gm.grid = function (px, lw, ss) {
-        /** @type CanvasRenderingContext2D */
-        var ctx = an.getContext();
-
-        if (Gm.grid_cache) {
-
-            ctx.putImageData(Gm.grid_cache, 0, 0);
-
-        } else {
-
-            var i, j,
-                w = an.getWidth(),
-                h = an.getHeight();
-
-            ctx.beginPath();
-
-            for (i = 0; i < w; i += px) {
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, h);
-            }
-            for (i = 0; i < h; i += px) {
-                ctx.moveTo(0, i);
-                ctx.lineTo(w, i);
-            }
-
-            ctx.lineWidth = lw || 0.5;
-            ctx.strokeStyle = ss || '#efefef';
-            ctx.stroke();
-            ctx.closePath();
-
-            Gm.grid_cache = ctx.getImageData(0, 0, w, h);
-        }
-    };
-
-    an.frame(function(ctx, i) {
-        /** @type CanvasRenderingContext2D */
-        ctx = ctx;
-        Gm.mouse = an.mouseMove();
-        Gm.grid(50, 0.1, '#FFF');
-        Gm.space(ctx, i);
-        Gm.shuttle(ctx, i);
-        Gm.cursor(ctx, i);
-    });
-
     Gm.cache = {};
     Gm.cache.start = false;
     Gm.cache.shuttle = false;
@@ -93,15 +47,15 @@
 
     Gm.mcShuttle = an.createMovieClip({
         x:100,
-        y:100,
         dx:0.001,
         dx_max:1.5,
+        y:100,
+        rotate:0,
         dr:0,
+        acceleration: 0.01,
         da:0,
         da_def:0.1,
-        speed:0.04,
-        rotate:0,
-        acceleration: 0.01
+        speed:0.04
     }, function (ctx, frame) {
 
         if (!Gm.images || !Gm.images['rocket']) return;
@@ -185,14 +139,25 @@
 
     };
 
-    Gm.cursor = function (ctx, frame) {
+    // Gm.cursor = function (ctx, frame) {
+    //
+    //     if (Gm.images && Gm.images['target']) {
+    //         var img = Gm.images['target'];
+    //         ctx.drawImage(img, Gm.mouse.x - img.width/2, Gm.mouse.y - img.height/2);
+    //     }
+    //
+    // };
 
-        if (Gm.images && Gm.images['target']) {
-            var img = Gm.images['target'];
-            ctx.drawImage(img, Gm.mouse.x - img.width/2, Gm.mouse.y - img.height/2);
-        }
 
-    };
+    an.frame(function(ctx, i) {
+        /** @type CanvasRenderingContext2D */
+        ctx = ctx;
+        Gm.mouse = an.mouseMove();
+
+        Gm.space(ctx, i);
+        Gm.shuttle(ctx, i);
+        //Gm.cursor(ctx, i);
+    });
 
     an.resource.loadImage({
         target: '/animate/demo/images/arrow_target_light.png',
@@ -202,7 +167,7 @@
 
         console.log('IMAGES >> ', Gm.images);
 
-        an.getCanvas().style.cursor = 'none';
+        //an.getCanvas().style.cursor = 'none';
 
         // start
         an.start();
@@ -213,7 +178,7 @@
 
 
 
-    document.addEventListener('mousedown', function(event) {
+/*    document.addEventListener('mousedown', function(event) {
         var whichs = [];
         whichs[1] = 'Left Mouse button pressed.';
         whichs[2] = 'Middle Mouse button pressed.';
@@ -224,7 +189,7 @@
     document.addEventListener('contextmenu', function(event) {
         console.log('Context menu is disabled');
         event.preventDefault();
-    }, false);
+    }, false);*/
 
 })();
 

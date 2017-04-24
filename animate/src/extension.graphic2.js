@@ -4,9 +4,12 @@ Animate.Extension(function (instance) {
         return;
 
     /**
-     * @type CanvasRenderingContext2D
+     * @namespace Animate.prototype.Graphic
+     * @type Animate.prototype.Graphic
      */
-    var instance_context = instance.getContext();
+    instance.Graphic = {};
+
+    // Components
 
     var Point = function (x, y) {
         if ( !(this instanceof Point) ) return new Point(x, y);
@@ -18,7 +21,7 @@ Animate.Extension(function (instance) {
     var Circle = function (x, y, radius, color, fill) {
         if ( !(this instanceof Circle) ) return new Circle(x, y, radius, color, fill);
         Point.apply(this, arguments);
-        this.context = instance_context;
+        this.context = instance._context;
         this.radius = radius;
         this.color = color;
         this.fill = (fill === undefined) ? true : !!fill;
@@ -42,7 +45,7 @@ Animate.Extension(function (instance) {
     var Rectangle = function (x, y, width, height, color, fill) {
         if ( !(this instanceof Rectangle) ) return new Rectangle(x, y, width, height, color, fill);
         Point.apply(this, arguments);
-        this.context = instance_context;
+        this.context = instance._context;
         this.width = width;
         this.height = height;
         this.color = color;
@@ -62,6 +65,7 @@ Animate.Extension(function (instance) {
             this.context.stroke();
         }
     };
+
 
     var RectangleRound = function (x, y, width, height, round, color, fill) {
         Rectangle.call(this, x, y, width, height, color, fill);
@@ -113,7 +117,6 @@ Animate.Extension(function (instance) {
         }
         this.context.restore();
     };
-
 
 
     var Shape = function (points, lineWidth, color, fill, closePath) {
@@ -178,26 +181,21 @@ Animate.Extension(function (instance) {
         }
     };
 
-
-    instance.Graphic = {
-        Point: Point,
-        Circle: Circle,
-        Line: Line,
-        Shape: Shape,
-        Ellipse: Ellipse,
-        Rectangle: Rectangle,
-        RectangleRound: RectangleRound,
-
-        shadow: function (x, y, blur, color) {
-            context.shadowOffsetX = x;
-            context.shadowOffsetY = y;
-            context.shadowBlur = blur;
-            context.shadowColor = color;
-        },
-
-        clearShadow: function () {
-            context.shadowOffsetX = context.shadowOffsetY = context.shadowBlur = 0;
-        }
+    instance.Graphic.Line = Line;
+    instance.Graphic.Shape = Shape;
+    instance.Graphic.Point = Point;
+    instance.Graphic.Circle = Circle;
+    instance.Graphic.Ellipse = Ellipse;
+    instance.Graphic.Rectangle = Rectangle;
+    instance.Graphic.RectangleRound = RectangleRound;
+    instance.Graphic.shadow = function (x, y, blur, color) {
+        instance._context.shadowOffsetX = x;
+        instance._context.shadowOffsetY = y;
+        instance._context.shadowBlur = blur;
+        instance._context.shadowColor = color;
+    };
+    instance.Graphic.clearShadow = function () {
+        instance._context.shadowOffsetX = context.shadowOffsetY = context.shadowBlur = 0;
     };
 
 })
