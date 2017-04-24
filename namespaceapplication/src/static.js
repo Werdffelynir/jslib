@@ -430,16 +430,22 @@ NamespaceApplication.copy = function (src, addProperties) {
 /**
  * App style\s to HTMLElement\s
  *
- * .css('.menuinline', 'background-color: #ffffff')
- * .css(HTMLElement, 'background-color: #10b626; color: #3a363f')
+ * .css(HTMLElement, 'background-color: #ffffff; color: #3a363f' )
+ * .css(HTMLElement, {background-color: '#ffffff'} )
+ * .css(HTMLElement', 'background-color', '#ffffff' )
  * .css([HTMLElement, HTMLElement, ...], {fontSize: '22px'})
  *
- * @param selector
+ * @param selector  - HTMLElement or String selector
  * @param properties
  * @returns {*}
  */
 NamespaceApplication.css = function (selector, properties) {
     if (!selector || !properties) return;
+    if (arguments.length === 3) {
+        var _prop = {};
+        _prop[properties] = arguments[2];
+        return NamespaceApplication.css(selector, _prop);
+    }
 
     var i, k, elements = null,
         typeSelector = NamespaceApplication.typeOf(selector),

@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>Animate demo</title>
 
-    <link rel="stylesheet" href="../grid.css">
+    <link rel="stylesheet" href="/grid_css/grid.css">
 
-    <script src="../namespaceapplication/build/namespaceapplication.js"></script>
-    <script src="build/animate.js"></script>
-    <script src="extensions/animate.extensions.grid.js"></script>
+    <script src="/namespaceapplication/build/namespaceapplication.js"></script>
+    <script src="/animate/build/animate.js"></script>
+    <script src="/animate/extensions/animate.extensions.grid.js"></script>
 
     <style>
+
         #menu{
             width: 180px;
         }
@@ -18,7 +19,48 @@
             max-height: 500px;
             overflow: auto;
         }
+        #menu>ul>li{  }
+        #menu>ul>li>{  }
+        #menu>ul>li>ul{  }
+        #menu>ul>li>ul>li{  }
+        span.toggle{
+            display: block;
+            padding: 3px 10px;
+            border-bottom: 2px solid #a2a2a2;
+            background-color: #c1c1c1;
+            color: #000000;
+            cursor: pointer;
+        }
+        span.toggle:hover{
+            background-color: #a2a2a2;
+        }
+        ul.toggle{  }
+        ul.toggle > li a{
+            display: block;
+            padding: 3px 20px;
+            border-bottom: 2px solid #505050;
+            background-color: #696969;
+            color: #f5f5f5;
+        }
+        ul.toggle > li a:hover{
+            background-color: #585858;
+        }
+
+        .logo{
+            display: block;
+            padding: 10px 10px;
+            background-color: #1d1d1d;
+            color: #ffcc00;
+            font-size: 120%;
+            text-align: center;
+            font-weight: bold;
+        }
+        #title{
+            padding: 2px 10px;
+            border-bottom: 2px solid #a2a2a2;
+        }
         #canvas{
+            margin: 10px;
             border: 2px solid #ddd;
         }
     </style>
@@ -26,37 +68,15 @@
 <body>
 
 <div class="table">
-    <div id="menu" class="valign_top">
-        <ul>
-            <li><a href="shape-generator.js">Shape Generator</a></li>
-            <li><a href="graphic-shapes.js">Graphic Shape</a></li>
-            <li><a href="background-circle.js">Background Circle</a></li>
-            <li><a href="fox-gardener.js">Game Fox Gardener</a></li>
-            <li><a href="camera.js">Camera</a></li>
-            <li><a href="mouse-cursor.js">Mouse-Cursor</a></li>
-            <li><a href="space-runner.js">Space Runner</a></li>
-            <li><a href="attacker.js">Attacker demo</a></li>
-            <li><a href="ping-pong.js">Ping-Pong</a></li>
-            <li><a href="tank_defender.js">Tank Defender</a></li>
-            <li><a href="noise.js">NOISE</a></li>
-            <li><a href="planet.js">Planet</a></li>
-            <li><a href="rocket-station.js">Rocket Station</a></li>
-            <li><a href="spacewalker.js">SpaceWalker Game</a></li>
-            <li><a href="walker.js">Walker Game</a></li>
-            <li><a href="platformer.js">Platformer Game</a></li>
-            <li><a href="carmove.js">Car move Game</a></li>
-            <li><a href="carmove-2.js">Car move 2 Game</a></li>
-            <li><a href="map-mask.js">Map Mask</a></li>
-            <li><a href="map-mask-2.js">Map Mask 2</a></li>
-            <li><a href="sprite-dev.js">sprite-dev</a></li>
-            <li><a href="images-filters.js">Images Filters</a></li>
-        </ul>
+    <div id="menu" class="valign-top">
+        <?php include 'index.menu.php'?>
     </div>
-    <div id="page" class="valign_top">
-        <div id="desc"></div>
+    <div id="page" class="valign-top">
+        <div id="title"></div>
+        <div id="description"></div>
+        <div id="before"></div>
         <div id="move">
             <canvas id="canvas" class="select_off"></canvas>
-<!--            <svg id="svg1"></svg>-->
         </div>
         <div id="after"></div>
     </div>
@@ -64,20 +84,39 @@
 
 <script>
     (function () {
-
-        var
+        var closed_menu = true,
             src,
-            url = location.pathname,
-            desc = NamespaceApplication.query('#desc');
+            path = location.pathname,
+            node_title = NSA.query('#title');
 
-        if (url.indexOf('.js') > -1) {
-            src = url.substr(url.lastIndexOf('/') + 1);
+        // menu size
+        NSA.css('#menu>ul', 'max-height', window.innerHeight + 'px');
 
-            NamespaceApplication.inject(desc, '<h4>' + src + '</h4>');
+        // menu toggles
+        NSA.each(NSA.queryAll('span.toggle'), function(item){
+            if (closed_menu)
+                NSA.hide(item.nextElementSibling);
+            NSA.on(item, 'click', function (event) {
+                NSA.toggle(event.target.nextElementSibling);
+            })
+        });
 
-            NamespaceApplication.loadJS('/animate/demo/' + src, function() {
-                console.log('Loaded: ' + src);
-            });
+        if (path.indexOf('.js') > -1) {
+            src = '/animate/demo/' + path.split('/animate/')[1];
+            NSA.inject(node_title, '<h4>' + src + '</h4>');
+            NSA.loadJS(src,
+                function () {
+                    // console.log('LOADED SCRIPT: ' + src);
+
+                    // open selected element
+                    var sele = 'a[href$="'+src.substr(path.lastIndexOf('/') + 1)+'"]';
+                    NSA.css(NSA.query(sele), 'font-weight: bold');
+                    NSA.show(NSA.query(sele).parentNode.parentNode);
+
+                },
+                function () {
+                    console.error('Error Loaded: ' + src);
+                });
         }
 
     })();
