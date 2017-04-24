@@ -67,7 +67,6 @@
             loop: false
         });
 
-
         Game.sprite3 = an.createSprite({
             image: Game.images.sprite1,
             x: 290,
