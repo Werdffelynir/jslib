@@ -44,13 +44,9 @@ Animate.Extension(function (instance) {
 
             if (hitAsteroid) {
 
-                var explode = this.explodeSprite({
-                    x: this.setting.x - 64,
-                    y: this.setting.y - 64
-                });
-
-                // explode.x = this.setting.x - 64;
-                // explode.y = this.setting.y - 64;
+                var explode = this.explodeSprite();
+                explode.x = this.setting.x - 64;
+                explode.y = this.setting.y - 64;
 
                 Game.Player.moveEnable = false;
 
