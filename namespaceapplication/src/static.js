@@ -734,6 +734,26 @@ NamespaceApplication.position = function (elem) {
     return data;
 };
 
+
+/**
+ * Return point object
+ * @param event     MouseEvent
+ * @returns {{x: number, y: number}}
+ */
+NamespaceApplication.positionMouse = function (event) {
+    if (!(event instanceof MouseEvent)) {
+        console.error('Error: argument is not type the MouseEvent!');
+        return;
+    }
+    var rect = document.body.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+};
+
+
+
 /**
  * Search all objects in array with key `attr` and value `attrValue`
  * @param values    Source array with objects

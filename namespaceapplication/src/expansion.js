@@ -54,6 +54,7 @@
     prototype.node2str = NamespaceApplication.node2str;
     prototype.str2node = NamespaceApplication.str2node;
     prototype.position = NamespaceApplication.position;
+    prototype.positionMouse = NamespaceApplication.positionMouse;
     prototype.findObjects = NamespaceApplication.findObjects;
     prototype.findObject = NamespaceApplication.findObject;
     prototype.Timer = NamespaceApplication.Timer;
