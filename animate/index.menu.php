@@ -47,6 +47,7 @@
             <li><a href="/animate/test/sprite-dev.js">sprite-dev</a></li>
             <li><a href="/animate/test/images-filters.js">Images Filters</a></li>
             <li><a href="/animate/test/heroonmask.js">Hero on mask</a></li>
+            <li><a href="/animate/test/cat-on-road.js">Cat on road</a></li>
         </ul>
     </li>
 </ul>
