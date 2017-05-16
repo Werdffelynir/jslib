@@ -380,14 +380,20 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
 
 /**
  * Get|Set attribute from|to element
- *  .attr (HTMLElement, name)
- *  .attr (HTMLElement, name, value)
- * @param element
- * @param name
- * @param value
+ *
+ * Get: .attr (HTMLElement, name)
+ * Set: .attr (HTMLElement, name, value)
+ * @param element   HTMLElement or css selector
+ * @param name      name of attribute
+ * @param value     if set value, this method to modify an attribute of element
  * @returns {string}
  */
 NamespaceApplication.attr = function (element, name, value) {
+    var type_element = NamespaceApplication.typeOf(element);
+    if (type_element === 'string') {
+        element = NamespaceApplication.query(element);
+    }
+
     if (NamespaceApplication.isNode(element) && arguments.length == 2) {
         if (NamespaceApplication.typeOf(name, 'object')) {
             for (var key in name)
