@@ -380,12 +380,14 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
 
 /**
  * Get|Set attribute from|to element
+ * Note: Worked only with one element, and with several attributes.
  *
  * Get: .attr (HTMLElement, name)
  * Set: .attr (HTMLElement, name, value)
  * @param element   HTMLElement or css selector
- * @param name      name of attribute
- * @param value     if set value, this method to modify an attribute of element
+ * @param name      String|Array name|s of attribute|s
+ * @param value     if set value, this method will change the attribute of the element
+ *                  if value is false, the attribute of the element will be deleted
  * @returns {string}
  */
 NamespaceApplication.attr = function (element, name, value) {
@@ -402,8 +404,10 @@ NamespaceApplication.attr = function (element, name, value) {
         else
             return element.getAttribute(name);
     }
-    else if (NamespaceApplication.isNode(element) && arguments.length == 3)
-        element.setAttribute(name, value);
+    else if (NamespaceApplication.isNode(element) && arguments.length == 3) {
+        if (value === false) element.removeAttribute(name);
+        else element.setAttribute(name, value);
+    }
 };
 
 /**
