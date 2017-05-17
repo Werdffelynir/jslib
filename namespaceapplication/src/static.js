@@ -573,53 +573,65 @@ NamespaceApplication.format = function(string, formated) {
 /**
  * Base AJAX request.
  *
+ * Explane:
+ * .ajax( configure, callback, thisInstance );
+ * configure - object, must have properties:
+ *      method  - `GET`, `POST` or custom `PUT`, `DELETE` some-else. Default: `GET`
+ *      data    - data transfer to the server. Default: empty `Object`
+ *      headers - `Object` consisting a request headers. Default: Object with one header it`is "X-Requested-With: XMLHttpRequest" (Mark - this request is AJAX)
+ *      action  - (alias: url). URL address. Default: used the value of property the `document.location.href` i.e current URL
+ * callback - function, a function context has property `XMLHttpRequest` with an instance of XMLHttpRequest the  current request, receives parameters:
+ *      status          - status code of current response
+ *      responseText    - response data
+ * thisInstance - Object. Context for `callback`
+ *
  * Example:
  * .ajax({method: 'POST', url: '/server.php', data: {id:123}}, function (status, data) {});
  *
- * @param {*} config        {method: 'POST', data: {}, headers: {}, action: '/index'}
+ * @param {*} config        {method: 'GET', data: {}, headers: {}, action: '/index'}
  * @param callback          executing event - onloadend. function (status, responseText)
  * @param thisInstance      object 'this' for callback
  *
  * @returns {XMLHttpRequest}
  */
 NamespaceApplication.ajax = function (config, callback, thisInstance) {
-    var kd,
-        kh,
+    var key,
         form_data = new FormData(),
         xhr = new XMLHttpRequest(),
         conf = {
             method: config.method || 'GET',
-            data:   config.data || {},
-            headers:config.headers || {},
+            data: config.data || {},
+            headers: config.headers || {},
             action: config.action || config.url || document.location.href
         };
 
+    thisInstance = (NamespaceApplication.typeOf(thisInstance, 'object')) ? thisInstance : {} ;
+
     if (config.data instanceof FormData) {
         form_data = config.data;
-        conf.data = {} }
+        conf.data = {}
+    }
 
     if (conf.method.toUpperCase() !== 'POST') {
         conf.action += conf.action.indexOf('?') === -1 ? '?' : '';
-        for (kd in conf.data)
-            conf.action += '&' + kd + '=' + encodeURIComponent(conf.data[kd])
+        for (key in conf.data)
+            conf.action += '&' + key + '=' + encodeURIComponent(conf.data[key])
     } else
-        for (kd in conf.data)
-            form_data.append(kd, encodeURIComponent(conf.data[kd]));
+        for (key in conf.data)
+            form_data.append(key, encodeURIComponent(conf.data[key]));
 
-    xhr.open (conf.method, conf.action, true);
+    xhr.open(conf.method, conf.action, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-    for (kd in conf.headers)
-        xhr.setRequestHeader(kd, conf.headers[kd]);
+    for (key in conf.headers)
+        xhr.setRequestHeader(key, conf.headers[key]);
 
     xhr.onloadend = function () {
-        if (typeof thisInstance !== 'object') thisInstance = {};
-
         thisInstance.XMLHttpRequest = xhr;
-
         if (typeof callback === 'function')
-            callback.call(thisInstance, xhr.status, xhr.responseText);
+            callback.call(thisInstance, xhr.status, xhr.responseText, xhr);
     };
+
     xhr.send(form_data);
 
     return xhr;
