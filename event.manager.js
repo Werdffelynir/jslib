@@ -2,9 +2,9 @@
 
     var EventManager = {
 
-        version: '0.0.1',
+        version: '0.0.2',
         eventsType: {},
-        superTarget: document.createDocumentFragment(),
+        super: document.createDocumentFragment(),
 
         /**
          * Create new Event
@@ -16,8 +16,9 @@
             var key, event = new CustomEvent(name, {detail: details});
             if (typeof details === 'object')
                 for (key in details)
-                    if (!event.hasOwnProperty(key)) event[key] = details[key]
-            return EventManager.superTarget[name] = event;
+                    if (!event.hasOwnProperty(key)) event[key] = details[key];
+            EventManager.super[name] = event;
+            return this;
         },
 
         /**
@@ -25,59 +26,47 @@
          * @param name
          */
         removeEvent: function(name){
-            if (EventManager.superTarget[name]) delete EventManager.superTarget[name]
+            if (EventManager.super[name])
+                delete EventManager.super[name]
+            return this;
         },
 
         /**
-         *
+         * Register an event handler of a specific event type on the EventTarget.
          * @param type
          * @param listener
          * @param useCapture
          * @returns {{type: *, listener: *, useCapture: (*|boolean)}}
          */
-        addEventListener: function(type, listener, useCapture){
+        addEventListener: function (type, listener, useCapture){
             useCapture = useCapture || false;
-            EventManager.superTarget.addEventListener(type, listener, useCapture);
-            return {type: type, listener: listener, useCapture: useCapture};
+            EventManager.super.addEventListener(type, listener, useCapture);
+            return this;
         },
 
         /**
-         *
+         * Removes an event listener from the EventTarget.
          * @param type
          * @param listener
          * @param useCapture
          */
         removeEventListener: function (type, listener, useCapture) {
-            if (arguments.length === 1 && typeof type === 'object') {
-                type = type.type;
-                listener = type.listener;
-                useCapture = type.useCapture||false;
-            }
-            EventManager.superTarget.removeEventListener(type, listener, useCapture||false)
+            EventManager.super.removeEventListener(type, listener, useCapture||false);
+            return this;
         },
 
         /**
-         *
+         * Dispatch an event to this EventTarget.
          * @param type
          */
-        dispatchEvent: function(type){
-            if (EventManager.superTarget[type] instanceof CustomEvent)
-                EventManager.superTarget.dispatchEvent(EventManager.superTarget[type])
-        },
-
-
-
-        register_events_list: [],
-
-        register: function(type, listener, useCapture){
-
-        },
-
-        unregister: function(type, listener, useCapture){
-
+        dispatchEvent: function (type){
+            if (EventManager.super[type] instanceof CustomEvent)
+                EventManager.super.dispatchEvent(EventManager.super[type]);
+            return this;
         }
 
     };
 
-    window.EventManager = EventManager
+    window.EventManager = window.EventManager || EventManager
+
 })(window);
