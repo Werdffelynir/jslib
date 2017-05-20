@@ -4,6 +4,7 @@
 
 ## Base uses
 
+### Create custom event
 ```js
 // Create two events
 EventManager.addEvent('main');
@@ -23,10 +24,19 @@ EventManager.dispatchEvent('after_main');
 
 // Delete listener
 EventManager.removeEventListener('after_main', showInside, false);
-
-// Coll deleted listeners
-EventManager.dispatchEvent('after_main');
 ```
+
+### Events management
+```js
+// example for custom event
+
+
+// example for native event
+
+
+```
+
+
 
 <br>
 

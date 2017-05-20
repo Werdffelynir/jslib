@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="grid/grid.css">
+    <script src="event.manager.js"></script>
+    <script src="namespaceapplication/build/namespaceapplication.js"></script>
+
+    <script src="ns.extensions/ns.emmet.js"></script>
+    <script src="ns.extensions/ns.resizer.js"></script>
+
+</head>
+<body>
+<div id="page"></div>
+
+
+<script>
+    (function () {
+
+        var App = new NamespaceApplication();
+
+        var lists = [
+            {name: 'Item A'},
+            {name: 'Item B'},
+            {name: 'Item C'},
+            {name: 'Item D'},
+            {name: 'Item E'}
+        ];
+
+        var add = function (elem) {
+            App.inject('#page', elem, true);
+            console.log(App.node2str(elem));
+        };
+
+        var create = function () {
+            return NamespaceApplication.createElement.apply(NamespaceApplication, arguments)
+        };
+
+        add( create('div', '<h1>text hello</h1>') );
+        add( NamespaceApplication.Emmet('#left (class="sidebar") > p {text left} + #right (class="contentbar") > p {text right}') );
+
+//        add( NSA.createElement('div', '<h1>text hello</h1>') );
+//        add( NSA.createElement('div', {id: 'block'}) );
+//        add( NSA.createElement('div', {id: 'block'}, 'text hello') );
+//        add( NSA.createElement('div', ['string 1', 'string 2', 'string 3']) );
+//        add( NSA.createElement('div', ['<h2>text one</h2>', '<p>string-string-string-string</p>']) );
+//        add( NSA.createElement('div', [NSA.createElement('p','paragraph 1'), NSA.createElement('p','paragraph 2'), NSA.createElement('p','paragraph 3')]) );
+
+
+
+/*        console.log(
+            NSA.create('div', ['aaa', 'bbb', 'ccc']),
+            NSA.create('div', {id: 'block'}),
+            NSA.create('div', 'text hello'),
+            NSA.create('div', {id: 'block'}, 'text hello')
+        );*/
+
+/*
+        var create = function (tag, attrs, inner) {
+            var k, i, elem = document.createElement(tag);
+
+            //if (!elem) {return false;}
+
+            if (arguments.length > 1) {
+                attrs = this.
+                inner
+
+
+            }
+
+            return elem;
+
+
+
+            if (NamespaceApplication.typeOf(attrs, 'object') && !NamespaceApplication.isNode(attrs)) {
+                for (k in attrs) {
+                    elem.setAttribute(k, attrs[k]);
+                }
+            }
+
+            if (NamespaceApplication.typeOf(inner, 'string')) {
+                elem.innerHTML = inner;
+            }
+            else if (NamespaceApplication.isNode(inner)) {
+                elem.appendChild(inner);
+            }
+            else if (NamespaceApplication.typeOf(inner, 'array')) {
+                for (i = 0; i < inner.length; i++) {
+                    if (NamespaceApplication.isNode(inner[i])){
+                        elem.appendChild(inner[i]);
+                    }
+                    else if (NamespaceApplication.typeOf(inner[i], 'string')) {
+                        elem.innerHTML += inner[i];
+                    }
+                }
+            }
+            return elem;
+        };
+        */
+
+
+
+/*
+        NamespaceApplication.createElement = function (tag, attrs, inner) {
+            var k, i, elem = document.createElement(tag);
+
+            if (!elem) {
+                return false;
+            }
+
+            if (NamespaceApplication.typeOf(attrs, 'object') && !NamespaceApplication.isNode(attrs)) {
+                for (k in attrs) {
+                    elem.setAttribute(k, attrs[k]);
+                }
+            }
+
+            if (NamespaceApplication.typeOf(inner, 'string')) {
+                elem.innerHTML = inner;
+            }
+            else if (NamespaceApplication.isNode(inner)) {
+                elem.appendChild(inner);
+            }
+            else if (NamespaceApplication.typeOf(inner, 'array')) {
+                for (i = 0; i < inner.length; i++) {
+                    if (NamespaceApplication.isNode(inner[i])){
+                        elem.appendChild(inner[i]);
+                    }
+                    else if (NamespaceApplication.typeOf(inner[i], 'string')) {
+                        elem.innerHTML += inner[i];
+                    }
+                }
+            }
+            return elem;
+        };*/
+
+//        create ( tag );
+//        create ( tag , attrs );
+//        create ( tag , inner );
+//        create ( tag , attrs, inner );
+
+//        var createMenu = function (items) {
+//            var ul = App.createElement('ul');
+//            var menu = App.createElement('div', {id: 'menu'}, ul);
+//
+//            items.map(function (item, index) {
+//                ul.appendChild(App.createElement('li', {'data-on': index}, item.name))
+//            });
+//
+//            NSA.inject( '#page' , menu );
+//        };
+//
+//        createMenu(lists);
+
+
+//        console.log(NamespaceApplication.Emmet);
+//        console.log(App.Emmet);
+//        console.log(NamespaceApplication.Resizer);
+//        console.log(App.Resizer);
+//
+
+//        if (NamespaceApplication.Emmet) {
+//            var ems = 'tag#id.classes.separated.by.dots.and(attributes="sepearated by",commas=""){Plus inner texts all included} > .nested + .sibling ^ .parent';
+//            var html = NamespaceApplication.Emmet(ems);
+//
+//            NSA.inject('#page', html);
+//            console.log('html', html);
+//        }
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+        function createElem (elemsCommand) {
+            var firstOperator = elemsCommand.match(/[\>|\+]/);
+            if (firstOperator)
+            {
+
+                //first > | +
+
+
+
+
+                var i, y, key,
+                    fragmentOuter = document.createDocumentFragment(),
+                    appendChild = function (tag, parent) {
+
+                    },
+                    enner = function (tag, parent) {
+
+                    }
+                    ;
+
+                if (elemsCommand.indexOf('>') !== -1 && elemsCommand.indexOf('+') !== -1) {
+
+                }
+
+
+                return fragmentOuter;
+            }
+
+            var i, y, key;
+            var fragmentInner, fragmentOuter = document.createDocumentFragment();
+            var tag, lins, levels = elemsCommand.split('>');
+
+            console.log(elemsCommand, elemsCommand.indexOf('>'), elemsCommand.indexOf('+'));
+
+            if (elemsCommand.indexOf('>') < elemsCommand.indexOf('+'))
+            {
+                console.log('>');
+            }
+            else
+            {
+
+                console.log('+');
+            }
+            console.log(levels);
+            if (levels.length > 1) {
+
+            }
+            for (i = 0; i < levels.length; i++) {
+                lins = levels[i].split('+');
+                console.log(lins);
+
+
+                fragmentInner = document.createDocumentFragment();
+                for (y = 0; y < lins.length; y++) {
+                    tag = lins[y];
+                    //console.log('lins', tag);
+                    fragmentInner.appendChild(NamespaceApplication.createElement(tag));
+                    //fragment =
+                }
+                fragmentOuter.appendChild(fragmentInner);
+            }
+        }
+
+
+
+        var elems = createElem('(div>span)+div>ul');
+        var elems = createElem('div>span+span>ul');
+        var elems = createElem('div>span');
+        var elems = createElem('div+div');
+        var elems = createElem('div>span+span>ul');
+        NSA.inject('#page', elems);
+        */
+        //var elemsCommand = 'div>span+span>ul';
+        //console.log(createElem(elemsCommand));
+
+    })();
+</script>
+</body>
+</html>

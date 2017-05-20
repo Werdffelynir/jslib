@@ -47,7 +47,12 @@
          * @param listener
          * @param useCapture
          */
-        removeEventListener: function(type, listener, useCapture){
+        removeEventListener: function (type, listener, useCapture) {
+            if (arguments.length === 1 && typeof type === 'object') {
+                type = type.type;
+                listener = type.listener;
+                useCapture = type.useCapture||false;
+            }
             EventManager.superTarget.removeEventListener(type, listener, useCapture||false)
         },
 
@@ -58,7 +63,20 @@
         dispatchEvent: function(type){
             if (EventManager.superTarget[type] instanceof CustomEvent)
                 EventManager.superTarget.dispatchEvent(EventManager.superTarget[type])
+        },
+
+
+
+        register_events_list: [],
+
+        register: function(type, listener, useCapture){
+
+        },
+
+        unregister: function(type, listener, useCapture){
+
         }
+
     };
 
     window.EventManager = EventManager
