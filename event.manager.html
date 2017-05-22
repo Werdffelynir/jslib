@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="grid/grid.css">
+    <script src="event.manager.js"></script>
+    <script src="namespaceapplication/build/namespaceapplication.js"></script>
+
+    <script src="ns.extensions/ns.emmet.js"></script>
+    <script src="ns.extensions/ns.resizer.js"></script>
+
+</head>
+<body class="font-sans">
+<div id="page" data-app="root">
+    <div class="table" data-app="header"></div>
+    <div class="table" data-app="wrapper">
+        <div data-app="sidebar">sidebar</div>
+        <div data-app="content">content</div>
+    </div>
+    <div class="table" data-app="footer"></div>
+</div>
+
+<script>
+    (function () {
+
+        var App = new NamespaceApplication({
+            url: '/',
+            create: function () {return NamespaceApplication.createElement.apply(NamespaceApplication, arguments)},
+            dataElement: NamespaceApplication.search('[data-app]', 'data-app'),
+            set: function (n, data, append) {if (this.dataElement[n]) NamespaceApplication.inject(this.dataElement[n], data, append)},
+            get: function (n) { return this.dataElement[n] }
+        });
+
+        App.set('header', '<h1>header-header-header</h1>');
+        App.set('sidebar', '<h2>sidebar</h2>');
+        App.set('content', '<h2>content</h2><div>text text text text</div>');
+        App.set('footer', '<div>footer</div>', true);
+        App.set('footer', '<div>footer</div>', true);
+        App.set('footer', '<div>footer</div>', true);
+        App.get('content').appendChild(App.create('h1', 'append element to content'));
+        console.log();
+
+    })();
+</script>
+</body>
+</html>

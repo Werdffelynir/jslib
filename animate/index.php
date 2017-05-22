@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Animate demo</title>
 
-    <link rel="stylesheet" href="/grid_css/grid.css">
+    <link rel="stylesheet" href="/grid/grid.css">
 
     <script src="/namespaceapplication/build/namespaceapplication.js"></script>
     <script src="/animate/build/animate.js"></script>

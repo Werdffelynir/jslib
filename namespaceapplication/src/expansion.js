@@ -51,6 +51,7 @@
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;
     prototype.createElement = NamespaceApplication.createElement;
+    prototype.emmet = NamespaceApplication.emmet;
     prototype.node2str = NamespaceApplication.node2str;
     prototype.str2node = NamespaceApplication.str2node;
     prototype.position = NamespaceApplication.position;

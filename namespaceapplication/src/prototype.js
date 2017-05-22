@@ -86,18 +86,5 @@
             self._load_scripts_recursive(++i, key);
     };
 
-    prototype._init_extensions = function () {
-        if (typeof NamespaceApplication.extension === 'function' &&
-            typeof NamespaceApplication.extension.stack === 'object') {
-            var name, callback, stack = NamespaceApplication.extension.stack;
-            for (name in stack) {
-                callback = stack[name]['callback'];
-                if (typeof callback === 'function') {
-                    this[name] = callback.call(callback, this)
-                }
-            }
-        }
-    };
-
     return prototype
 })()

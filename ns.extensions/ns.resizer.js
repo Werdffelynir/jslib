@@ -1,8 +1,6 @@
 NamespaceApplication.extension('Resizer', function (App) {
 
-    /**
-     * @namespace App.Resizer
-     */
+
     var Resizer = function (resizer, resized, onChangeDrag, onStopDrag) {
 
         if (!(this instanceof Resizer))
@@ -42,5 +40,8 @@ NamespaceApplication.extension('Resizer', function (App) {
         }
     };
 
+    /**
+     * @namespace NamespaceApplication.Resizer
+     */
     return Resizer;
 });

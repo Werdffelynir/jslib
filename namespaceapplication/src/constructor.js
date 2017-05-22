@@ -19,7 +19,9 @@
             }
         }
 
-        this._init_extensions();
+        // Set extension aliases to instance
+        NamespaceApplication.extension.set_instance_application(this);
+
         return this;
     }
 })()
