@@ -28,6 +28,7 @@
     </li>
     <li><span class="toggle">Test</span>
         <ul class="toggle">
+            <li><a href="/animate/test/text2.js">Text 2</a></li>
             <li><a href="/animate/test/write-text.js">Write Text</a></li>
             <li><a href="/animate/test/shape-generator.js">Shape Generator</a></li>
             <li><a href="/animate/test/graphic-shapes.js">Graphic Shape</a></li>
