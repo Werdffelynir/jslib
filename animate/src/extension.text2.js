@@ -13,9 +13,9 @@ Animate.Extension(function (instance) {
      */
     var TextField = {};
 
+    TextField._current_stylename = false;
 
-    TextField._last_style_name = false;
-    TextField._list_style = {
+    TextField._stylelist = {
         default: {
             font: '12px Arial, sans',
             color: '#000000',
@@ -34,14 +34,20 @@ Animate.Extension(function (instance) {
         }
     };
 
+    TextField._custom_properties = [
+        'x',
+        'y',
+        'fill',
+        'point'
+    ];
+
     TextField._canvas_properties = [
         'font',
-        'textAlign',
-        'textBaseline',
-        'direction',
         'lineWidth',
+        'direction',
+        'textAlign',
         'globalAlpha',
-        'direction'
+        'textBaseline'
     ];
 
     TextField._canvas_methods = [
@@ -55,25 +61,62 @@ Animate.Extension(function (instance) {
      * label, x, y
      * label, x, y, color
      * label, x, y, styleName
+     *
      * @param label
-     * @param a
      * @param b
      * @param c
+     * @param d
      */
-    TextField.write = function (label, a, b, c) {
+    TextField.write = function (label, b, c, d) {
+        var st_name, st_object, ar_len = arguments.length;
+
+        // label
+        if (ar_len === 1) {
+
+
+
+
+        } else
+
+        // label, styleName
+        if (ar_len === 2 && typeof b === 'string') {
+            st_name = b;
+
+
+
+        } else
+
+        //
+        if (ar_len  >  2 && typeof b === 'number' && typeof c === 'number') {
+
+
+
+        }
 
     };
 
-    TextField.addStyle = function (name, styles) {
-        this._list_style[name] = this._create_styles_object(styles);
+
+    TextField.applyStyle = function (name) {
+
+        if (this._current_stylename !== name) {
+            name = name || 'default';
+
+            this._current_stylename = name;
+        }
     };
 
-    TextField.applyStyle = function (name) {};
 
-    TextField._create_styles_object = function (styles) {
-        var key, def = JSON.parse(JSON.stringify(this._list_style.default));
-        for (key in styles)
-            def[key] = styles[key];
+    TextField.addStyle = function (name, st_object) {
+        this._stylelist[name] = this._create_styleobject(st_object);
+    };
+
+
+    TextField._create_styleobject = function (st_object) {
+        var key, def = JSON.parse(JSON.stringify(this._stylelist.default));
+
+        for (key in st_object)
+            def[key] = st_object[key];
+
         return def;
     };
 

@@ -38,7 +38,7 @@
         an.TextField.write('Hello', TEXT_STYLE_BOLDER);
         an.TextField.write('World', TEXT_STYLE_NORMAL);
 
-        an.TextField.write('Next text', 300, 100, TEXT_STYLE_BOLDER);
+        //an.TextField.write('Next text', 300, 100, TEXT_STYLE_BOLDER);
         // var o1 = {a:101};
         // var o2 = {a:101};
         // console.dir(o1 === o2);
