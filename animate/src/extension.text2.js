@@ -10,34 +10,39 @@ Animate.Extension(function (instance) {
 
     /**
      * @namespace Animate.prototype.TextField
-     */
+
     var TextField = {};
 
     TextField._current_stylename = false;
 
     TextField._stylelist = {
         default: {
-            font: '12px Arial, sans',
+
+            font: '14px Arial, sans',
             color: '#000000',
             direction: 'inherit',
             textAlign: 'start',
             textBaseline: 'top',
             lineWidth: 1,
+
             globalAlpha: false,
             transform: false,
             rotate: false,
             scale: false,
+
             point: {x:0, y:0},
             x: 0,
             y: 0,
-            fill: true
+            fill: true,
+            value: ''
         }
-    };
+    };     */
 
-    TextField._custom_properties = [
+/*    TextField._custom_properties = [
         'x',
         'y',
         'fill',
+        'text',
         'point'
     ];
 
@@ -53,79 +58,156 @@ Animate.Extension(function (instance) {
     TextField._canvas_methods = [
         'scale',
         'rotate'
-    ];
+    ];*/
 
     /**
      * label
      * label, styleName
      * label, x, y
-     * label, x, y, color
      * label, x, y, styleName
      *
-     * @param label
+     * @param value
      * @param b
      * @param c
      * @param d
      */
-    TextField.write = function (label, b, c, d) {
-        var st_name, st_object, ar_len = arguments.length;
+/*
+    TextField.write = function (value, b, c, d) {
 
-        // label
-        if (ar_len === 1) {
+        var style, color, name = (arguments.length === 2 && typeof b === 'string') ? b
+            : (arguments.length === 4 && typeof d === 'string') ? d :'default';
 
-
-
-
-        } else
-
-        // label, styleName
-        if (ar_len === 2 && typeof b === 'string') {
-            st_name = b;
-
-
-
-        } else
-
-        //
-        if (ar_len  >  2 && typeof b === 'number' && typeof c === 'number') {
-
-
-
+        style = this.applyStyle(name);
+        style.value = value;
+        if (arguments.length  >  2 && typeof b === 'number' && typeof c === 'number') {
+            style.x = b;
+            style.y = c;
         }
+*/
+
+
+/*        if (arguments.length === 1) {
+            style.value = value;
+
+        } else if (arguments.length === 2 && typeof b === 'string') {
+            style = this.getStyle(b);
+            style.value = value;
+
+        } else if (arguments.length  >  2 && typeof b === 'number' && typeof c === 'number') {
+            if (typeof d === 'string') {
+                if (d.substr(0,1) === '#') style.color = d;
+                else style = this.getStyle(d);
+            }
+            style.value = value;
+            style.x = b;
+            style.y = c;
+        }*/
+
+/*
+console.log(name, style);
+
+        this.drawText(style);
+    };
+
+    TextField.drawText = function (style) {
+
+        var tmp = {
+            fillStyle: context.fillStyle,
+            strokeStyle: context.strokeStyle,
+        };
+
+
+        if (style.fill) {
+            context.fillStyle = style.color;
+            context.fillText(style.value, style.x, style.y);
+            context.fillStyle = tmp.fillStyle;
+        }
+        else {
+            context.strokeStyle = style.color;
+            context.strokeText(style.value, style.x, style.y);
+            context.strokeStyle = tmp.strokeStyle;
+        }
+
 
     };
 
-
-    TextField.applyStyle = function (name) {
-
-        if (this._current_stylename !== name) {
-            name = name || 'default';
-
-            this._current_stylename = name;
-        }
-    };
 
 
     TextField.addStyle = function (name, st_object) {
-        this._stylelist[name] = this._create_styleobject(st_object);
+        this._stylelist[name] = this.createStyle(st_object);
+        return this._stylelist[name];
+    };
+*/
+
+
+/*    TextField.getStyle = function (name) {
+
+
+/!*        if (this._current_stylename !== name) {
+            var st = this._stylelist[name || 'default'];
+            if (st) {
+
+
+
+
+
+                this._current_stylename = name;
+            }
+        }*!/
+
+        return name && this._stylelist[name]
+            ? this._stylelist[name]
+            : this._stylelist[this._current_stylename || 'default']
+    };*/
+
+
+/*
+    TextField.applyStyle = function (name) {
+        name = name || 'default';
+
+        if (this._current_stylename !== name) {
+            var st = this._stylelist[name];
+            if (st) {
+
+
+                context.font = st.font;
+                context.textAlign = st.textAlign;
+                context.textBaseline = st.textBaseline;
+                context.direction = st.direction;
+                context.lineWidth = st.lineWidth;
+
+                //context.globalAlpha = st.globalAlpha;
+
+
+
+
+
+                this._current_stylename = name;
+            }
+        }
+
+        return this._stylelist[this._current_stylename];
     };
 
 
-    TextField._create_styleobject = function (st_object) {
-        var key, def = JSON.parse(JSON.stringify(this._stylelist.default));
 
-        for (key in st_object)
-            def[key] = st_object[key];
+
+    TextField.createStyle = function (st_object) {
+        var k, def = JSON.parse(JSON.stringify(this._stylelist.default));
+
+        for (k in st_object)
+            def[k] = st_object[k];
 
         return def;
     };
 
-    /**
+    /!**
      * @namespace Animate.prototype.TextField
-     */
+     *!/
     instance.TextField = TextField;
-
+ */
 })
+
 
 
 

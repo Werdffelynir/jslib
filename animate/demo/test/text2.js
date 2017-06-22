@@ -35,8 +35,11 @@
 
     an.onFrame = function (ctx, i) {
 
-        an.TextField.write('Hello', TEXT_STYLE_BOLDER);
-        an.TextField.write('World', TEXT_STYLE_NORMAL);
+        an.TextField.write('Hello World');
+        an.TextField.write('Hello World', TEXT_STYLE_BOLDER);
+        an.TextField.write('Hello World', 200, 200);
+        an.TextField.write('Hello World', 100, 200, TEXT_STYLE_NORMAL);
+        an.TextField.write('Hello World', 300, 100, TEXT_STYLE_BOLDER);
 
         //an.TextField.write('Next text', 300, 100, TEXT_STYLE_BOLDER);
         // var o1 = {a:101};
