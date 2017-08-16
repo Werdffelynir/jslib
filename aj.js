@@ -1,3 +1,6 @@
+/**
+ * Broken! Don`t use!
+ */
 (function (window) {
 
     "use strict";

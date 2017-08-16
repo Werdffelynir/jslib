@@ -1,3 +1,6 @@
+/**
+ * Broken! Don`t use!
+ */
 function PointJS(D, w, h, s, NodeJS) { // GL2D/2D/3D, width, height, styleObject
     'use strict';
 

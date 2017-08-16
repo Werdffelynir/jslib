@@ -1,6 +1,6 @@
 /**
  * Script Timer (Timer.js) simulates class ActionScript 3.0 Timer
- * @url
+ * @url https://github.com/Werdffelynir/jslib/timer.js
  */
 (function(){
 

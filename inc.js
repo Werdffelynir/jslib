@@ -1,3 +1,6 @@
+/**
+ * Broken! Don`t use!
+ */
 (function (window) {
 
     var version = '0.0.2',
