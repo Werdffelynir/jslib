@@ -5,6 +5,8 @@
  piece-content
  piece-close
  */
+
+
 (function(){
 
     /**
@@ -31,6 +33,7 @@
 
     };
 
+
     piece.addCommonStyle = function(){
         var style = document.createElement('style');
         style.textContent = '.piece-bg{}.piece-box {position: absolute;background-color: #ffffff}.piece-title {display: inline-block}.piece-content {}.piece-close {display: inline-block; position: absolute;right: 5px;}';
@@ -42,6 +45,7 @@
         elem.style.left = ((document.body.clientWidth / 2) - ( elem.offsetWidth / 2) ) + 'px';
     };
 
+
     piece.verticalAlign = function(elem){
 
         elem.style.top = ((window.innerHeight / 2) - ( elem.offsetHeight / 2) ) + 'px';
@@ -49,6 +53,7 @@
 
 
     piece.prototype._stack = {};
+
 
     piece.prototype.createElement = function (id) {
 
@@ -79,6 +84,7 @@
         return box;
     };
 
+
     piece.prototype.register = function (id) {
         var elem = document.getElementById(id);
         if(!elem) {
@@ -90,9 +96,11 @@
         return this.create(id, node);
     };
 
+
     piece.prototype.get = function (id) {
         return this._stack[id]
     };
+
 
     piece.prototype.create = function (id, elem) {
 
@@ -161,6 +169,7 @@
         return this._stack[id] = fn;
     };
 
+    
     window.Piece = piece;
 
 })();
