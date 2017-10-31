@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="EventEmitter.js"></script>
+</head>
+<body>
+<h1>- EventEmitter</h1>
+<form action="">
+    <input name="nnm" type="text">
+    <button value="">Button</button>
+</form>
+
+<script>
+    let input = document.querySelector('input[type="text"]');
+    let button = document.querySelector('button');
+    let h1 = document.querySelector('h1');
+
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        emitter.emit('event:name-changed', {name: input.value});
+    });
+
+    let emitter = new EventEmitter();
+
+    emitter.subscribe('event:name-changed', data => {
+        h1.innerHTML = `Your name is: ${data.name}`;
+    });
+
+</script>
+</body>
+</html>

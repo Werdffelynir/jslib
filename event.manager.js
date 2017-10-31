@@ -5,9 +5,9 @@
 
     var EventManager = {
 
+        super: document.createDocumentFragment(),
         version: '0.0.2',
         eventsType: {},
-        super: document.createDocumentFragment(),
 
         /**
          * Create new Event

@@ -94,6 +94,22 @@ Animate.Extension(function (instance) {
         context.closePath();
     };
 
+  /**
+   * Set line width, type pixels
+   * @param num
+   */
+  instance.graphic.lineWidth = function (num) {
+    context.lineWidth = num;
+  };
+
+  /**
+   * Set opacity
+   * @param num
+   */
+  instance.graphic.globalAlpha = function (num) {
+    context.globalAlpha = num;
+  };
+
     /**
      *
      * @param x
@@ -219,7 +235,7 @@ Animate.Extension(function (instance) {
     };
 
     /**
-     *
+     * Draw ellipse
      * @param x
      * @param y
      * @param radiusX
@@ -228,17 +244,23 @@ Animate.Extension(function (instance) {
      * @param startAngle
      * @param endAngle
      * @param anticlockwise
+     * @param closePath
+     * @param fill
      */
-    instance.graphic.ellipse = function (x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise) {
+    instance.graphic.ellipse = function (x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, closePath, fill) {
         context.save();
         context.beginPath();
         context.translate(x, y);
         context.rotate(rotation);
         context.scale(radiusX / radiusY, 1);
-        context.arc(0, 0, radiusY, startAngle, endAngle, (anticlockwise || true));
+        context.arc(0, 0, radiusY, startAngle, endAngle, (anticlockwise === undefined ? true : !!anticlockwise));
         context.restore();
-        context.closePath();
-        context.stroke();
+
+        if (!!closePath || closePath === undefined)
+            context.closePath();
+
+        if (!!fill) context.fill();
+        else context.stroke();
     };
 
 })

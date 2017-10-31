@@ -51,4 +51,11 @@
             <li><a href="/animate/test/cat-on-road.js">Cat on road</a></li>
         </ul>
     </li>
+    <li><span class="toggle">Develop</span>
+        <ul class="toggle">
+            <li><a href="/animate/develop/sk-logo.js">SK logo</a></li>
+            <li><a href="/animate/develop/sk-logo2.js">SK logo 2</a></li>
+            <li><a href="/animate/develop/sk-logo3.js">SK logo 3</a></li>
+        </ul>
+    </li>
 </ul>

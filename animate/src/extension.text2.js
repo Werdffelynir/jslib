@@ -8,13 +8,16 @@ Animate.Extension(function (instance) {
      */
     var context = instance.getContext();
 
-    /**
-     * @namespace Animate.prototype.TextField
 
+  /**
+   * @namespace Animate.prototype.TextField
+   */
     var TextField = {};
 
     TextField._current_stylename = false;
 
+  /**
+   *
     TextField._stylelist = {
         default: {
 
