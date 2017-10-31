@@ -38,6 +38,8 @@
   Movie.drawArc = function () {
     this.i = An.getIteration();
 
+    if (this.delay && this.delay > this.i) return;
+
     if (!this.startAngle) this.startAngle = 0;
     if (!this.endAngle) this.endAngle = 0;
 
@@ -208,14 +210,15 @@
     width: 4,
     rotate: An.degreesToRadians(180),
     radius: 145,
-    acceleration: 0.1
+    acceleration: 0.2,
+    delay: 100
   }));
 
   Movie.traLeft = An.createMovieClip({
     i: 0,
     x: Movie.centerPoint.x - 170,
     y: Movie.centerPoint.y - 20,
-    delay: 80,
+    delay: 110,
     n1: 20,
     n2: 20
   }, function () {
@@ -241,7 +244,7 @@
     x: Movie.centerPoint.x + 10,
     y: Movie.centerPoint.y - 10,
     rotate: Animate.degreesToRadians(-45),
-    delay: 90,
+    delay: 110,
     n:  0,
   }, function () {
 
@@ -325,7 +328,7 @@
   }, function () {
     if (this.delay && this.delay < Movie.i()) {
       if (this.width < this.widthMax)
-        this.width += 2;
+        this.width += 3;
       An.graphic.line(Animate.Point(0, 0), Animate.Point(0, this.width), 5);
       An.graphic.line(Animate.Point(0,-2), Animate.Point(0, this.width + 2), 3, '#fff');
     }
@@ -341,7 +344,7 @@
   }, function () {
     if (this.delay && this.delay < Movie.i()) {
       if (this.width < this.widthMax)
-        this.width += 2;
+        this.width += 3;
       An.graphic.line(Animate.Point(0, 0), Animate.Point(0, this.width), 5);
       An.graphic.line(Animate.Point(0,-2), Animate.Point(0, this.width + 2), 3, '#fff');
     }
