@@ -56,6 +56,7 @@
             <li><a href="/animate/develop/sk-logo.js">SK logo</a></li>
             <li><a href="/animate/develop/sk-logo2.js">SK logo 2</a></li>
             <li><a href="/animate/develop/sk-logo3.js">SK logo 3</a></li>
+            <li><a href="/animate/develop/sk-logo4.js">SK logo 4</a></li>
         </ul>
     </li>
 </ul>

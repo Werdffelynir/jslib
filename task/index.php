@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../grid/grid2.css">
     <link rel="stylesheet" href="style.css">
 <!--    <script src="https://use.fontawesome.com/d221e5e5b6.js"></script>-->
-    <script data-init="application/controller.js" src="../namespaceapplication/build/namespaceapplication.js"></script>
+    <script data-init="application/controller.js" src="../namespaceapplication/namespaceapplication.js"></script>
 </head>
 <body>
 

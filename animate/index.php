@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="/grid/grid.css">
 
-    <script src="/namespaceapplication/build/namespaceapplication.js"></script>
+    <script src="/namespaceapplication/namespaceapplication.js"></script>
     <script src="/animate/build/animate.js"></script>
     <script src="/animate/extensions/animate.extensions.maskmap.js"></script>
     <script src="/animate/extensions/animate.extensions.grid.js"></script>

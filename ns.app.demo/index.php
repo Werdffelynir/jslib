@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../grid_css/grid2.css">
     <link rel="stylesheet" href="style.css">
 
-    <script data-init="application/controller.js" src="../namespaceapplication/build/namespaceapplication.js"></script>
+    <script data-init="application/controller.js" src="../namespaceapplication/namespaceapplication.js"></script>
 </head>
 <body>
 
