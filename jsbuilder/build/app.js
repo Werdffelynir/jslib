@@ -1,36 +1,36 @@
 (function () {
 
-  var Demo = function () {
+  var Demo = function (config) {
+    if (!(this instanceof Demo)) return new Demo(config);
+
+    var _constructor = (function () {
+
+  console.log('this', this);
+
+
+
+});
+
+    this.config = config;
+
+    _constructor.call(this);
 
   };
 
   
-Demo.prototype.one = function () {
+Demo.prototype.one = function () {};
 
-};
-
-
-Demo.prototype.two = function () {
-
-};
-
-
-Demo.prototype.zzz = function () {
-
-};
+Demo.prototype.two = function () {};
 
 
   
-Demo.typeOf = function () {
+Demo.a = function () {
 
 };
 
+Demo.b = function () {
 
-Demo.defined = function (value, defaults) {
-  var is = value === undefined;
-  return (defaults === undefined) ? is : (is?is:defaults)
 };
-
 
 Demo.c = function () {
 
@@ -38,8 +38,11 @@ Demo.c = function () {
 
 
 
+
   window.Demo = Demo;
 
 })();
 
-
+var demo = new Demo({
+  name: 'Hello world'
+});

@@ -1,15 +1,4 @@
 
-Demo.prototype.one = function () {
+Demo.prototype.one = function () {};
 
-};
-
-
-Demo.prototype.two = function () {
-
-};
-
-
-Demo.prototype.zzz = function () {
-
-};
-
+Demo.prototype.two = function () {};

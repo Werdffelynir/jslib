@@ -1,7 +1,7 @@
-function Demo() {
+(function () {
 
-  console.log(this);
+  console.log('this', this);
 
 
 
-}
+})
