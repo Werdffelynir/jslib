@@ -379,8 +379,9 @@
     Movie.lineB();
     Movie.lineBR();
 
-
-
+    ctx.fillText("Frame: " + i, 10, 20);
+    if (i > 159)
+      An.stop();
 
   });
 
