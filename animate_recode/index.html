@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jsbuilder</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script src="build/app.js"></script>
+    <div id="text"></div>
+
+    <script>
+        var
+          i,
+          text = document.querySelector('#text'),
+          list = '';
+        for (var i = 0; i <= 360; i ++) {
+          list += 'Animate.DEGREES_' + i + ' = '+ Animate.degreesToRadians(i) + '; ';
+        }
+//        text.innerHTML = '<ul>' + list + '</ul>';
+        text.innerHTML = list;
+
+
+    </script>
+</body>
+</html>
