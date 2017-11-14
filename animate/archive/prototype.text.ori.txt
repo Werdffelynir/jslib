@@ -1,0 +1,156 @@
+
+/*
+ctx.font = "12px Arial, sans-serif" || bold italic 110% serif;
+ctx.textAlign = "left" || "right" || "center" || "start" || "end";
+ctx.textBaseline = "top" || "hanging" || "middle" || "alphabetic" || "ideographic" || "bottom";
+ctx.fillText("Hello World", 10, 50)
+ctx.strokeText("Hello World", 10, 50)
+ctx.measureText(text) // вернет объект с параметром "width" - ширина текста
+*/
+
+var TextField = {};
+
+/**
+ * Set font as CSS property `font`
+ *
+ * Syntax:
+ *  font: [font-style||font-variant||font-weight] font-size [/line-height] font-family | inherit
+ *
+ * Example:
+ * .font ( "12px Arial, sans-serif" )
+ * .font ( "bold italic 110% serif" )
+ * .font ( "normal small-caps 12px/14px fantasy" )
+ *
+ * @param font
+ */
+TextField.font = function (font) {
+  this._context.font = font;
+};
+
+/**
+ * Set text align.
+ * "left" || "right" || "center" || "start" || "end";
+ *
+ * Example:
+ * .textAlign ( "left" );
+ *
+ * @param pos
+ */
+TextField.textAlign = function (pos) {
+  this._context.textAlign = pos;
+};
+
+/**
+ * Set align to baseline of text.
+ * "top" || "hanging" || "middle" || "alphabetic" || "ideographic" || "bottom";
+ *
+ * Example:
+ * .textBaseline ( "middle" );
+ *
+ * @param pos
+ */
+TextField.textBaseline = function (pos) {
+  this._context.textBaseline = pos;
+};
+
+/**
+ * Write fill text to position x y
+ * Example:
+ * .fillText("Hello World", 10, 50)
+ *
+ * @param text
+ * @param x
+ * @param y
+ * @param maxWidth
+ */
+TextField.fillText = function (text, x, y, maxWidth) {
+  this._context.beginPath();
+  this._context.fillText(text, x, y, maxWidth);
+  this._context.closePath();
+};
+
+/**
+ * Write text border to position x y
+ *
+ * Example:
+ * .strokeText("Hello World", 10, 50)
+ *
+ * @param text
+ * @param x
+ * @param y
+ * @param maxWidth
+ */
+TextField.strokeText = function (text, x, y, maxWidth) {
+  this._context.beginPath();
+  this._context.strokeText(text, x, y, maxWidth);
+  this._context.closePath();
+};
+
+/**
+ * Return object with property "width"
+ *
+ * Example:
+ * .measureText(text)
+ *
+ * @param text
+ */
+TextField.measureText = function (text) {
+  return this._context.measureText(text);
+};
+
+/**
+ * Create text block
+ *
+ * @param text
+ * @param x
+ * @param y
+ * @param color
+ * @param fill
+ * @namespace Animate.prototype.TextField.write
+ */
+TextField.write = function (text, x, y, color, fill) {
+  text = text || '';
+  x = x || 0;
+  y = y || 0;
+  color = color || false;
+  fill = fill === undefined || !!fill;
+
+
+  if (fill) {
+    if (color)
+      this._canvas.fillStyle = color;
+    this.fillText(text, x, y);
+  } else {
+    if (color)
+      this._canvas.strokeStyle = color;
+    this.strokeText(text, x, y);
+  }
+};
+
+Animate.prototype.TextField = function () {
+  return {
+    ALIGN: {
+      LEFT: "left",
+      RIGHT: "right",
+      CENTER: "center",
+      START: "start",
+      END: "end",
+    },
+    BASELINE: {
+      TOP: "top",
+      HANDING: "hanging",
+      MIDDLE: "middle",
+      ALPHABETIC: "alphabetic",
+      IDEOGRAPHIC: "ideographic",
+      BOTTOM: "bottom",
+    },
+    font: TextField.font,
+    textAlign: TextField.textAlign,
+    textBaseline: TextField.textBaseline,
+    fillText: TextField.fillText,
+    strokeText: TextField.strokeText,
+    measureText: TextField.measureText,
+    write: TextField.write,
+  };
+};
+

@@ -10,16 +10,63 @@
     <div id="text"></div>
 
     <script>
-        var
-          i,
-          text = document.querySelector('#text'),
-          list = '';
-        for (var i = 0; i <= 360; i ++) {
-          list += 'Animate.DEGREES_' + i + ' = '+ Animate.degreesToRadians(i) + '; ';
-        }
-//        text.innerHTML = '<ul>' + list + '</ul>';
-        text.innerHTML = list;
+        var an = new Animate({
+          selector: '#canvas',
+          width: 600,
+          height: 400,
+          fps: 0
+        });
 
+        var Graphic = an.Graphic();
+        var TextField = an.TextField();
+
+//        var g1 = an.getGraphic();
+//        var g2 = new AnimateGraphic(an);
+//        var t1 = new AnimateText(an);
+
+//        an.TextField.font();
+
+        an.frame(function (ctx, i) {
+
+//          TextField.text('Text Field', 100, 100)
+//            .fill();
+//
+//          Graphic.rect(10, 10, 200, 50)
+//            .fill();
+
+          Graphic.rect()
+            .color('#C00000')
+            .x(50)
+            .y(50)
+            .width(200)
+            .height(50)
+            .stroke();
+
+
+
+
+//          an.Graphic().rect(10, 10, 200, 50);
+//
+//          an.TextField('Rectangle', 15, 15)
+//            .align(Animate.ALIGN.START)
+//            .baseline(Animate.BASELINE.TOP)
+//            .color('#C00')
+//            .font('bold 20px sans, sans-serif')
+//            .fill();
+
+//          hic.rect();
+//          hic.rect();
+//          an.TextField()
+//            .text('Simple TextField')
+//            .x(10)
+//            .y(10)
+//            .align(Animate.ALIGN.START)
+//            .baseline(Animate.BASELINE.TOP)
+//            .fill();
+
+        });
+
+        an.start();
 
     </script>
 </body>

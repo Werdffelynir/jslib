@@ -1,11 +1,52 @@
 (function () {
 
+  /**
+   * Create Animate object
+   *
+   * ```
+   * Example:
+   * var an = new Animate({
+   *    selector: '#canvas',
+   *    width: 600,
+   *    height: 400,
+   *    fps: 30
+   * });
+   *
+   * an.frame(function (ctx, i) {
+   *    console.log(ctx, i);
+   *    if (i > 60)
+   *      an.stop();
+   * });
+   *
+   * an.start();
+   * ```
+   */
+
   "use strict";
 
   window.requestAnimationFrame = function () {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (f) {window.setTimeout(f, 1e3 / 60);}
   }();
 
+  /**
+   * Constructor
+   *
+   * ```
+   * Example:
+   * new Animate({ selector: '#canvas', width: 600, height: 400, fps: 30 });
+   *
+   * // Or
+   *
+   * new Animate('#canvas', 100, 100, 30);
+   * ```
+   *
+   * @param config
+   * @param width
+   * @param height
+   * @param fps
+   * @returns {Animate}
+   * @constructor
+   */
   var Animate = function (config, width, height, fps) {
     if (!(this instanceof Animate)) return new Animate(config, width, height, fps);
 
@@ -19,34 +60,40 @@
   };
 
   [[['static']]]
+  ;
+
+  [[['static.degrees']]]
+  ;
+
+  [[['static.to.instance']]]
+  ;
 
   [[['prototype']]]
+  ;
+
+  [[['prototype.keypress']]]
+  ;
+
+  [[['prototype.mousepress']]]
+  ;
+
+  [[['prototype.graphic']]]
+  ;
+
+  [[['prototype.text']]]
+  ;
 
   /** Set script version. Property [read-only]*/
   Object.defineProperty(Animate, 'version', {
     enumerable: false, configurable: false, writable: false, value: '0.6.0'
   });
 
+  /**
+   * @type {Animate}
+   */
   window.Animate = Animate;
 
 })();
 
 
 
-var animateSimple = new Animate('#canvas', 100, 100, 30);
-console.log(animateSimple);
-
-/*
-
-var animate = new Animate({
-  selector: '#canvas',
-  width: 100,
-  height: 100,
-  fps: 30
-});
-
-var animateSimple = new Animate('#canvas', 100, 100, 30);
-
-console.log(animate, animateSimple);
-
-*/

@@ -423,12 +423,6 @@
     ctx.drawImage(Movie.images.part4, this.x, this.y);
   });
 
-  // Movie.bgImage = new Image();
-  // Movie.bgImage.src = '/animate/demo/images/logosk.png';
-  // An.frame(function (ctx, i) {
-  //   ctx.drawImage(Movie.bgImage, 0,0, 300,180);
-  // });
-
   Movie.s = 1;
   An.frame(function (ctx, i) {
     /** @type CanvasRenderingContext2D */
