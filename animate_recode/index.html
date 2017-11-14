@@ -7,13 +7,13 @@
 <body>
     <canvas id="canvas"></canvas>
     <script src="build/app.js"></script>
-    <div id="text"></div>
+    <div id="text">php -f builder.php < config.json </div>
 
     <script>
         var an = new Animate({
           selector: '#canvas',
           width: 600,
-          height: 400,
+          height: 300,
           fps: 0
         });
 
@@ -26,24 +26,45 @@
 
 //        an.TextField.font();
 
+        // ... ...
+        console.log('Graphic >> ', Graphic);
+
         an.frame(function (ctx, i) {
 
 //          TextField.text('Text Field', 100, 100)
 //            .fill();
 //
-//          Graphic.rect(10, 10, 200, 50)
+//          Graphic.rect(10, 10, 160, 40)
+//            .color('#c09740')
 //            .fill();
 
-          Graphic.rect()
-            .color('#C00000')
-            .x(50)
-            .y(50)
-            .width(200)
-            .height(50)
-            .stroke();
+//          Graphic.rectRound(210, 10, 200, 30, 10)
+//            .color('#21a2b1')
+//            .fill();
+//          ctx.closePath();
+
+//          Graphic.rect()
+//            .color('#C00000')
+//            .x(i + 10)
+//            .y(90)
+//            .width(100)
+//            .height(70)
+//            .fill();
 
 
+//          Graphic.shape([10,10,50,50,25,100,80,140], false, 5)
+//            .color('#C00000')
+//            .stroke();
 
+          Graphic.circle(100, 100, 30)
+            .color('#8ccc83')
+            .fill();
+
+          Graphic.circle(180, 100, 30)
+            .color('#b9cc5c')
+            .fill();
+
+          //ctx.closePath();
 
 //          an.Graphic().rect(10, 10, 200, 50);
 //

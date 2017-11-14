@@ -1660,89 +1660,131 @@ Animate.prototype.mouseMove._is_init = false;
 
   /**
  *
- * @type {{context: CanvasRenderingContext2D, _x: number, _y: number, _width: number, _height: number, x: Graphic.x, y: Graphic.y, width: Graphic.width, height: Graphic.height}}
- */
-var Graphic = {
-
-  context: null,
-  _x: 0,
-  _y: 0,
-  _width: 0,
-  _height: 0,
-  _color: '#000000',
-
-  x: function (n) {
-    this._x = Animate.isset(n) ? n : this._x;
-    return this;},
-  y: function (n) {
-    this._y = Animate.isset(n) ? n : this._y;
-    return this;},
-  width: function (n) {
-    this._width = Animate.isset(n) ? n : this._width;
-    return this;},
-  height: function (n) {
-    this._height = Animate.isset(n) ? n : this._height;
-    return this;},
-  color: function (n) {
-    this._color = Animate.isset(n) ? n : this._color;
-    return this;},
-
-};
-
-
-
-Graphic.rect = function (x, y, width, height) {
-  this.x(x);
-  this.y(y);
-  this.width(width);
-  this.height(height);
-  this.context.rect(this._x, this._y, this._width, this._height);
-  console.log(this);
-  return this;
-};
-
-Graphic.abstractDraw = function () {
-  return this;
-};
-Graphic.stroke = function () {
-  if (this._color)
-    this.context.strokeStyle = this._color;
-  this.context.stroke();
-  return this;
-};
-Graphic.fill = function () {
-  if (this._color)
-    this.context.fillStyle = this._color;
-  this.context.fill();
-  return this;
-};
-
-/**
- *
  * @returns {Graphic}
  */
 Animate.prototype.Graphic = function () {
-  Graphic.context = this._context;
+
+  var Graphic = {
+
+    context: this._context,
+    drawCallback: function () {},
+    
+    _x: 0,
+    _y: 0,
+    _width: 0,
+    _height: 0,
+    _color: '#000000',
+
+    x: function (n) {
+      this._x = Animate.isset(n) ? n : this._x;
+      return this;},
+    y: function (n) {
+      this._y = Animate.isset(n) ? n : this._y;
+      return this;},
+    width: function (n) {
+      this._width = Animate.isset(n) ? n : this._width;
+      return this;},
+    height: function (n) {
+      this._height = Animate.isset(n) ? n : this._height;
+      return this;},
+    
+    color: function (n) {
+      this._color = Animate.isset(n) ? n : this._color;
+      return this;},
+    alpha: function (n) {
+      if (this.context.globalAlpha !== n) this.context.globalAlpha = n;
+      return this;},
+    lineWidth: function (n) {
+      if (this.context.lineWidth !== n) this.context.lineWidth = n;
+      return this;},
+
+  };
+
+  Graphic.circle = function (x, y, radius) {
+    this.drawCallback = function () {
+      this.drawRectRound(x - (radius / 2), y - (radius / 2), radius, radius, radius / 2);
+    };
+    return this;
+  };
+
+  Graphic.rect = function (x, y, width, height) {
+    this.drawCallback = function () {
+      this.context.rect(x, y, width, height);
+    };
+    return this;
+  };
+
+  Graphic.drawRectRound = function (x, y, width, height, radius) {
+    this.context.beginPath();
+    this.context.moveTo(x + radius, y);
+    this.context.arcTo(x + width, y, x + width, y + height, radius);
+    this.context.arcTo(x + width, y + height, x, y + height, radius);
+    this.context.arcTo(x, y + height, x, y, radius);
+    this.context.arcTo(x, y, x + width, y, radius);
+    this.context.closePath();
+  };
+
+  Graphic.rectRound = function (x, y, width, height, radius) {
+
+    this.drawCallback = function () {
+      this.drawRectRound(x, y, width, height, radius);
+    };
+    return this;
+  };
+
+  Graphic.shape = function (points, closePath, lineWidth) {
+    this.drawCallback = function () {
+      var i, temp = {}, positions = [];
+      points.map(function (p) {
+        if (temp.x === undefined) {
+          temp.x = p
+        }
+        else if (temp.y === undefined) {
+          temp.y = p
+        }
+        if (temp.x !== undefined && temp.y !== undefined) {
+          positions.push(temp);
+          temp = {}
+        }
+      });
+
+      this.context.beginPath();
+      for (i = 0; i < positions.length; i++) {
+        this.context.lineTo(positions[i].x, positions[i].y);
+      }
+      if (closePath !== false)
+        this.context.closePath();
+
+      if (lineWidth)
+        this.lineWidth(lineWidth);
+    };
+    return this;
+  };
+
+
+  Graphic.stroke = function () {
+    if (this._color)
+      this.context.strokeStyle = this._color;
+
+    this.drawCallback.call(this);
+    this.context.stroke();
+    return this;
+  };
+
+
+  Graphic.fill = function () {
+    if (this._color)
+      this.context.fillStyle = this._color;
+
+    this.drawCallback.call(this);
+    this.context.fill();
+    return this;
+  };
+
+
   return Graphic;
-};
 
-/*
-Animate.prototype.graphic = {
-  shape: Graphic.shape,
-  rect: Graphic.rect,
-  lineWidth: Graphic.lineWidth,
-  globalAlpha: Graphic.globalAlpha,
-  rectRound: Graphic.rectRound,
-  circle: Graphic.circle,
-  line: Graphic.line,
-  lineVertical: Graphic.lineVertical,
-  lineHorizontal: Graphic.lineHorizontal,
-  shadow: Graphic.shadow,
-  clearShadow: Graphic.clearShadow,
-  ellipse: Graphic.ellipse
 };
-*/
-
   ;
 
   /**
