@@ -1665,42 +1665,49 @@ Animate.prototype.mouseMove._is_init = false;
 Animate.prototype.Graphic = function () {
 
   var Graphic = {
-
     context: this._context,
     drawCallback: function () {},
-    
-    _x: 0,
-    _y: 0,
-    _width: 0,
-    _height: 0,
-    _color: '#000000',
+    formats: {
+      color: '#000000',
+      alpha: false,
+    }
 
-    x: function (n) {
-      this._x = Animate.isset(n) ? n : this._x;
-      return this;},
-    y: function (n) {
-      this._y = Animate.isset(n) ? n : this._y;
-      return this;},
-    width: function (n) {
-      this._width = Animate.isset(n) ? n : this._width;
-      return this;},
-    height: function (n) {
-      this._height = Animate.isset(n) ? n : this._height;
-      return this;},
-    
+    // _x: 0,
+    // _y: 0,
+    // _width: 0,
+    // _height: 0,
+    // _color: '#000000',
+    // x: function (n) {
+    //   this._x = Animate.isset(n) ? n : this._x;
+    //   return this;},
+    // y: function (n) {
+    //   this._y = Animate.isset(n) ? n : this._y;
+    //   return this;},
+    // width: function (n) {
+    //   this._width = Animate.isset(n) ? n : this._width;
+    //   return this;},
+    // height: function (n) {
+    //   this._height = Animate.isset(n) ? n : this._height;
+    //   return this;},
+    //
+
     color: function (n) {
-      this._color = Animate.isset(n) ? n : this._color;
-      return this;},
-    alpha: function (n) {
-      if (this.context.globalAlpha !== n) this.context.globalAlpha = n;
-      return this;},
-    lineWidth: function (n) {
-      if (this.context.lineWidth !== n) this.context.lineWidth = n;
-      return this;},
+      this.formats.color = Animate.isset(n) ? n : this._color;
+      return this;
+    },
 
+    alpha: function (n) {
+      this.formats.alpha = n;
+      return this;
+    },
+
+    // lineWidth: function (n) {
+    //   this.context.lineWidth = n;
+    //   return this;},
   };
 
   Graphic.circle = function (x, y, radius) {
+    var that = this;
     this.drawCallback = function () {
       this.drawRectRound(x - (radius / 2), y - (radius / 2), radius, radius, radius / 2);
     };
@@ -1721,13 +1728,11 @@ Animate.prototype.Graphic = function () {
     this.context.arcTo(x + width, y + height, x, y + height, radius);
     this.context.arcTo(x, y + height, x, y, radius);
     this.context.arcTo(x, y, x + width, y, radius);
-    this.context.closePath();
   };
 
   Graphic.rectRound = function (x, y, width, height, radius) {
-
     this.drawCallback = function () {
-      this.drawRectRound(x, y, width, height, radius);
+      this.drawRectRound(x, y, width, height, radius)
     };
     return this;
   };
@@ -1763,8 +1768,8 @@ Animate.prototype.Graphic = function () {
 
 
   Graphic.stroke = function () {
-    if (this._color)
-      this.context.strokeStyle = this._color;
+    if (this.formats.color)
+      this.context.strokeStyle = this.formats.color;
 
     this.drawCallback.call(this);
     this.context.stroke();
@@ -1773,8 +1778,8 @@ Animate.prototype.Graphic = function () {
 
 
   Graphic.fill = function () {
-    if (this._color)
-      this.context.fillStyle = this._color;
+    if (this.formats.color)
+      this.context.fillStyle = this.formats.color;
 
     this.drawCallback.call(this);
     this.context.fill();
@@ -1790,103 +1795,160 @@ Animate.prototype.Graphic = function () {
   /**
  * Examples:
  *
- * .TextField("Simple TextField", 100, 150, '#C00000', true);
- * // or
- * .TextField("Simple TextField")
- *    .x(10)
- *    .y(10)
+ * .TextField()
+ *    .text('Simple TextField', 10, 10)
  *    .color('#dd0')
+ *    .align(TextField.ALIGN.CENTER)
  *    .font('bold 20px sans, sans-serif')
  *    .fill();
  *
- * @type {{context: null}}
+ * @returns {{context: (CanvasRenderingContext2D|null), ALIGN: {LEFT: string, RIGHT: string, CENTER: string, START: string, END: string}, BASELINE: {TOP: string, HANDING: string, MIDDLE: string, ALPHABETIC: string, IDEOGRAPHIC: string, BOTTOM: string}, font: Function, text: Function, fill: Function, stroke: Function, align: Function, baseline: Function, color: Function}}
+ * @constructor
  */
+Animate.prototype.TextField = function () {
 
-var TextField = {context:null};
+  var TextField = {
+    context: this._context,
+    formats: {
+      x: 10,
+      y: 10,
+      text: '',
+      font: 'normal 14px serif, sans-serif',
+      color: '#000000',
+      align: 'left',
+      baseline: 'top',
+    },
+    ALIGN: {
+      LEFT: "left",
+      RIGHT: "right",
+      CENTER: "center",
+      START: "start",
+      END: "end",
+    },
+    BASELINE: {
+      TOP: "top",
+      HANDING: "hanging",
+      MIDDLE: "middle",
+      ALPHABETIC: "alphabetic",
+      IDEOGRAPHIC: "ideographic",
+      BOTTOM: "bottom",
+    }
+  };
 
-TextField.text = function (val, x, y) {
-  if (Animate.isset(x)) this._x = x;
-  if (Animate.isset(y)) this._y = y;
-  this._text = val;
-  return this;};
-TextField.font = function (val) {
-  this._font = val;
-  return this;};
-TextField.x = function (val) {
-  this._x = val;
-  return this;};
-TextField.y = function (val) {
-  this._y = val;
-  return this;};
-TextField.color = function (val) {
-  this._color = val;
-  return this;};
-TextField.align = function (val) {
-  this._align = val;
-  return this;};
-TextField.baseline = function (val) {
-  this._baseline = val;
-  return this;};
+  /**
+   * Set font as CSS property `font`
+   *
+   * Syntax:
+   *  font: [font-style||font-variant||font-weight] font-size [/line-height] font-family | inherit
+   *
+   * Example:
+   * .font ( "12px Arial, sans-serif" )
+   * .font ( "bold italic 110% serif" )
+   * .font ( "normal small-caps 12px/14px fantasy" )
+   *
+   * @param value
+   * @returns {TextField}
+   */
+  TextField.font = function (value) {
+    this.formats.font = value;
+    return this;
+  };
 
-TextField.fill = function () {
-  var
-    x = this._x || 0,
-    y = this._y || 0,
-    text = this._text || '';
+  /**
+   * Set text string, x y positions
+   * @param value
+   * @param x
+   * @param y
+   * @returns {TextField}
+   */
+  TextField.text = function (value, x, y) {
+    this.formats.text = value;
+    this.formats.x = x;
+    this.formats.y = y;
+    return this;
+  };
 
-  if (this._font)
-    this.context.font = this._font;
-  if (this._align)
-    this.context.textAlign = this._align;
-  if (this._baseline)
-    this.context.textBaseline = this._baseline;
-  if (this._color)
-    this.context.fillStyle = this._color;
+  /**
+   * Set color
+   * @param value
+   * @returns {TextField}
+   */
+  TextField.color = function (value) {
+    this.formats.color = value;
+    return this;
+  };
 
-  this.context.fillText(text, x, y);
-};
+  /**
+   * Set text align.
+   * "left" || "right" || "center" || "start" || "end";
+   *
+   * Example:
+   * .align ( "left" );
+   *
+   * @param value
+   * @returns {TextField}
+   */
+  TextField.align = function (value) {
+    this.formats.align = value;
+    return this;
+  };
 
-TextField.stroke = function () {
-  var
-    x = this._x || 0,
-    y = this._y || 0,
-    text = this._text || '';
+  /**
+   * Set align to baseline of text.
+   * "top" || "hanging" || "middle" || "alphabetic" || "ideographic" || "bottom";
+   *
+   * Example:
+   * .baseline ( "middle" );
+   *
+   * @param value
+   * @returns {TextField}
+   */
+  TextField.baseline = function (value) {
+    this.formats.baseline = value;
+    return this;
+  };
 
-  if (this._font)
-    this.context.font = this._font;
-  if (this._align)
-    this.context.textAlign = this._align;
-  if (this._baseline)
-    this.context.textBaseline = this._baseline;
-  if (this._color)
-    this.context.strokeStyle = this._color;
+  TextField.formatsApply = function () {
+    if (this.formats.font)
+      this.context.font = this.formats.font;
 
-  this.context.strokeText(text, x, y);
-};
+    if (this.formats.align)
+      this.context.textAlign = this.formats.align;
 
-/**
- *
- * @param text
- * @param x
- * @param y
- * @param color
- * @param fill
- * @returns {TextField}
- */
-Animate.prototype.TextField = function (text, x, y, color, fill) {
-  TextField.context = this._context;
+    if (this.formats.baseline)
+      this.context.textBaseline = this.formats.baseline;
+  };
 
-  if (Animate.isset(text))  TextField.text(text);
-  if (Animate.isset(x))     TextField.x(x);
-  if (Animate.isset(y))     TextField.y(y);
-  if (Animate.isset(color)) TextField.color(color);
+  TextField.fill = function () {
+    this.formatsApply();
+    if (this.formats.color)
+      this.context.fillStyle = this.formats.color;
+    this.context.fillText(this.formats.text, this.formats.x, this.formats.y);
+  };
 
-  if (fill === true) {
-    TextField.fill();
-  }
-  else if (fill === false) {
-    TextField.stroke();
-  }
+  TextField.stroke = function () {
+    this.formatsApply();
+    if (this.formats.color)
+      this.context.strokeStyle = this.formats.color;
+    this.context.strokeText(this.formats.text, this.formats.x, this.formats.y);
+  };
+
+  TextField.ALIGN = {
+    LEFT: "left",
+    RIGHT: "right",
+    CENTER: "center",
+    START: "start",
+    END: "end",
+  };
+
+  TextField.BASELINE = {
+    TOP: "top",
+    HANDING: "hanging",
+    MIDDLE: "middle",
+    ALPHABETIC: "alphabetic",
+    IDEOGRAPHIC: "ideographic",
+    BOTTOM: "bottom",
+  };
 
   return TextField;
 };
