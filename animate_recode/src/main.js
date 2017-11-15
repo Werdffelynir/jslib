@@ -60,28 +60,31 @@
   };
 
   [[['static']]]
-  ;
-
-  [[['static.degrees']]]
-  ;
+  
 
   [[['static.to.instance']]]
-  ;
+  
 
   [[['prototype']]]
-  ;
+  
+
+  [[['prototype.movieclip']]]
+  
+
+  [[['prototype.sprite']]]
+  
 
   [[['prototype.keypress']]]
-  ;
+  
 
   [[['prototype.mousepress']]]
-  ;
+  
 
   [[['prototype.graphic']]]
-  ;
+  
 
   [[['prototype.text']]]
-  ;
+  
 
   /** Set script version. Property [read-only]*/
   Object.defineProperty(Animate, 'version', {

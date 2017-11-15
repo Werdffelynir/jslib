@@ -6,21 +6,7 @@
  */
 Animate.LOOP_TIMER = 'timer';
 Animate.LOOP_ANIMATE = 'animation';
-Animate.ALIGN = {
-  LEFT: 'left',
-  RIGHT: 'right',
-  CENTER: 'center',
-  START: 'start',
-  END: 'end',
-};
-Animate.BASELINE = {
-  TOP: 'top',
-  HANDING: 'hanging',
-  MIDDLE: 'middle',
-  ALPHABETIC: 'alphabetic',
-  IDEOGRAPHIC: 'ideographic',
-  BOTTOM: 'bottom',
-};
+Animate.DEGREE = 0.017453292519943295;
 
 /**
  * Storage of extensions

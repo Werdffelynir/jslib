@@ -3,7 +3,7 @@
  * Module of Expansion
  * Assign static as instance methods
  */
-Animate.prototype.createClip = Animate.Clip;
+Animate.prototype.Clip = Animate.Clip;
 Animate.prototype.point = Animate.Point;
 Animate.prototype.rectangle = Animate.Rectangle;
 Animate.prototype.loadJS = Animate.loadJS;

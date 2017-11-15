@@ -23,15 +23,17 @@ Animate.prototype.TextField = function () {
       color: '#000000',
       align: 'left',
       baseline: 'top',
+      thickness: false,
+      alpha: false,
     },
-    ALIGN: {
+    ALIGNS: {
       LEFT: "left",
       RIGHT: "right",
       CENTER: "center",
       START: "start",
       END: "end",
     },
-    BASELINE: {
+    BASELINES: {
       TOP: "top",
       HANDING: "hanging",
       MIDDLE: "middle",
@@ -114,15 +116,31 @@ Animate.prototype.TextField = function () {
     return this;
   };
 
+  TextField.alpha = function (value) {
+    this.formats.alpha = value;
+    return this;
+  };
+
+  TextField.thickness = function (value) {
+    this.formats.thickness = value;
+    return this;
+  };
+
   TextField.formatsApply = function () {
-    if (this.formats.font)
+    if (this.formats.font !== false)
       this.context.font = this.formats.font;
 
-    if (this.formats.align)
+    if (this.formats.align !== false)
       this.context.textAlign = this.formats.align;
 
-    if (this.formats.baseline)
+    if (this.formats.baseline !== false)
       this.context.textBaseline = this.formats.baseline;
+
+    if (this.formats.alpha !== false)
+      this.context.globalAlpha = this.formats.alpha;
+
+    if (this.formats.thickness !== false)
+      this.context.lineWidth = this.formats.thickness;
   };
 
   TextField.fill = function () {
@@ -137,23 +155,6 @@ Animate.prototype.TextField = function () {
     if (this.formats.color)
       this.context.strokeStyle = this.formats.color;
     this.context.strokeText(this.formats.text, this.formats.x, this.formats.y);
-  };
-
-  TextField.ALIGN = {
-    LEFT: "left",
-    RIGHT: "right",
-    CENTER: "center",
-    START: "start",
-    END: "end",
-  };
-
-  TextField.BASELINE = {
-    TOP: "top",
-    HANDING: "hanging",
-    MIDDLE: "middle",
-    ALPHABETIC: "alphabetic",
-    IDEOGRAPHIC: "ideographic",
-    BOTTOM: "bottom",
   };
 
   return TextField;
