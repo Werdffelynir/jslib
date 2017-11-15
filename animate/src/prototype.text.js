@@ -148,6 +148,7 @@ Animate.prototype.TextField = function () {
     if (this.formats.color)
       this.context.fillStyle = this.formats.color;
     this.context.fillText(this.formats.text, this.formats.x, this.formats.y);
+    return this;
   };
 
   TextField.stroke = function () {
@@ -155,6 +156,7 @@ Animate.prototype.TextField = function () {
     if (this.formats.color)
       this.context.strokeStyle = this.formats.color;
     this.context.strokeText(this.formats.text, this.formats.x, this.formats.y);
+    return this;
   };
 
   return TextField;

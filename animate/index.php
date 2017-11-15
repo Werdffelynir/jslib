@@ -13,7 +13,7 @@
         html, body {
             background: #393939;
             color: #ffffff;
-            font-family: sans, sans-serif, Vrinda, Arial;
+            font-family: sans, sans-serif, Vrinda, Arial, fantasy;
         }
         #menu{
             width: 180px;
