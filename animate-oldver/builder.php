@@ -48,7 +48,7 @@ class Builder
         if (!is_file($output)) file_put_contents($output, '');
 
         if (file_put_contents($output, $context))
-            $this->console("[Parser] File {$output} is created.");
+            $this->console("[Parser] [" .date('H:i:s'). "] File {$output} is created.");
         else
             $this->console("[Parser] Error File {$output} not created. Content not find.");
     }

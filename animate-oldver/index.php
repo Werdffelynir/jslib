@@ -8,13 +8,11 @@
 
     <script src="/namespaceapplication/namespaceapplication.js"></script>
     <script src="/animate/build/animate.js"></script>
+    <script src="/animate/extensions/animate.extensions.maskmap.js"></script>
+    <script src="/animate/extensions/animate.extensions.grid.js"></script>
 
     <style>
-        html, body {
-            background: #393939;
-            color: #ffffff;
-            font-family: sans, sans-serif, Vrinda, Arial;
-        }
+
         #menu{
             width: 180px;
         }
@@ -29,48 +27,42 @@
         span.toggle{
             display: block;
             padding: 3px 10px;
-            border-bottom: 6px solid #4e4e4e;
-            background-color: #5f5f5f;
-            color: #9a9a9a;
-            font-weight: bold;
-            font-size: 14px;
+            border-bottom: 2px solid #a2a2a2;
+            background-color: #c1c1c1;
+            color: #000000;
             cursor: pointer;
         }
         span.toggle:hover{
-            background-color: #585858;
+            background-color: #a2a2a2;
         }
         ul.toggle{  }
         ul.toggle > li a{
             display: block;
-            padding: 1px 15px;
-            border-bottom: 2px solid #4e4e4e;
-            background-color: #424242;
-            color: #dcdcdc;
-            font-size: 12px;
+            padding: 3px 20px;
+            border-bottom: 2px solid #505050;
+            background-color: #696969;
+            color: #f5f5f5;
         }
         ul.toggle > li a:hover{
-            background-color: #3a3a3a;
+            background-color: #585858;
         }
 
         .logo{
             display: block;
-            padding: 8px 10px;
-            background-color: #4e4e4e;
-            color: #333333;
-            font-size: 105%;
+            padding: 10px 10px;
+            background-color: #1d1d1d;
+            color: #ffcc00;
+            font-size: 120%;
             text-align: center;
             font-weight: bold;
         }
         #title{
             padding: 2px 10px;
-            font-family: monospace, Consolas, sans-serif;
-            border-bottom: 2px solid #4e4e4e;
-            font-size: 12px;
+            border-bottom: 2px solid #a2a2a2;
         }
         #canvas{
             margin: 10px;
-            border: 2px solid #b30000;
-            background-color: #ffffff;
+            border: 2px solid #ddd;
         }
     </style>
 </head>

@@ -7,7 +7,7 @@
         after: NSA.query('#after')
     };
 
-    var An = new Animate({
+    var an = new Animate({
         selector: '#canvas',
         width: 600,
         height: 400,
@@ -16,16 +16,16 @@
 
     // * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    An.frame(function(ctx, i) {
+    an.frame(function(ctx, i) {
         /** @type CanvasRenderingContext2D */
         ctx = ctx;
 
         console.log(ctx, i);
 
         if (i > 100)
-            An.stop();
+            an.stop();
     });
 
     // start
-    An.start();
+    an.start();
 })();

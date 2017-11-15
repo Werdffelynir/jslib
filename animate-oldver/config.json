@@ -1,5 +1,5 @@
 {
-  "output": "build/app.js",
+  "output": "build/animate.js",
   "main":  "src/main.js",
   "root": "src/",
   "watcher_directory": "src/",

@@ -1,5 +1,7 @@
 #!/usr/bin/python3.5
-# python3 watcher.py 'src' 'php -f script.php'
+# python3 watcher.py 'temp' 'php -f script.php'
+# python3 watcher.py config.json
+
 
 import os
 import sys

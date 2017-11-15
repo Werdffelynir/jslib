@@ -768,6 +768,8 @@ Animate.prototype.hitTest = function (rectangle, point) {
 
 /**
  * isPointInPath
+ * hitTestPoint(x, y)
+ * hitTestPoint(point)
  * @param point
  * @param y
  * @returns {boolean}
