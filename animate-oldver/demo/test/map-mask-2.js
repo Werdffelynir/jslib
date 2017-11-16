@@ -83,8 +83,8 @@
     });
 
     an.resource.loadImage({
-        cursor : '/animate/demo/images/ppw.png',
-        bgs : '/animate/demo/images/bg_six-50x50.png'
+        cursor : '/animate-oldver/demo/images/ppw.png',
+        bgs : '/animate-oldver/demo/images/bg_six-50x50.png'
     }, function (imgs) {
         Game.images = imgs;
 

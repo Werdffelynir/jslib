@@ -363,12 +363,12 @@
 
   An.getContext().fillStyle = Movie.baseColor;
   An.resource.loadImage({
-    sk: '/animate/demo/images/sk.png',
-    part0: '/animate/demo/images/sk-part-0.png',
-    part1: '/animate/demo/images/sk-part-1.png',
-    part2: '/animate/demo/images/sk-part-2.png',
-    part3: '/animate/demo/images/sk-part-3.png',
-    part4: '/animate/demo/images/sk-part-4.png'
+    sk: '/animate-oldver/demo/images/sk.png',
+    part0: '/animate-oldver/demo/images/sk-part-0.png',
+    part1: '/animate-oldver/demo/images/sk-part-1.png',
+    part2: '/animate-oldver/demo/images/sk-part-2.png',
+    part3: '/animate-oldver/demo/images/sk-part-3.png',
+    part4: '/animate-oldver/demo/images/sk-part-4.png'
   }, function (list) {
     Movie.images = list;
     console.log(list);

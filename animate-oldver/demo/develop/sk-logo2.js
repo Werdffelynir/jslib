@@ -357,7 +357,7 @@
   An.getContext().strokeStyle = Movie.baseColor;
 
   // Movie.bgImage = new Image();
-  // Movie.bgImage.src = '/animate/demo/images/logosk.png';
+  // Movie.bgImage.src = '/animate-oldver/demo/images/logosk.png';
   // An.frame(function (ctx, i) {
   //   ctx.drawImage(Movie.bgImage, 0,0, 300,180);
   // });

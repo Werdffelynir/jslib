@@ -131,7 +131,7 @@
     // * * * * * * * * * * * * * * * * * * * * * * * *
 
     an.resource.loadImage({
-        cursor : '/animate/demo/images/ppw.png'
+        cursor : '/animate-oldver/demo/images/ppw.png'
     }, function () {
 
         // * Start Game

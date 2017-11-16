@@ -84,7 +84,7 @@
 
 
     an.resource.loadImage({
-        tree: '/animate/demo/images/tree.jpg'
+        tree: '/animate-oldver/demo/images/tree.jpg'
     }, function (images) {
         Game.images = images;
 

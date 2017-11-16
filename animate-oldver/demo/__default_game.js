@@ -63,7 +63,7 @@
 
 
     an.resource.loadImage({
-        rocket: '/animate/demo/images/rocket_28x50.png'
+        rocket: '/animate-oldver/demo/images/rocket_28x50.png'
     }, function (images) {
         Game.images = images;
 

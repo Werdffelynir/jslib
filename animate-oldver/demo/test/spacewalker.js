@@ -124,8 +124,8 @@
     };
 
     an.resource.loadImage({
-        target: '/animate/demo/images/arrow_target_light.png',
-        rocket: '/animate/demo/images/rocket_28x50.png'
+        target: '/animate-oldver/demo/images/arrow_target_light.png',
+        rocket: '/animate-oldver/demo/images/rocket_28x50.png'
     }, function (images) {
         Game.images = images;
         an.start();

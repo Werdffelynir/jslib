@@ -12,9 +12,9 @@
 
     var Game = {
         scripts: [
-            '/animate/demo/game-mini/space-runner/level.js',
-            '/animate/demo/game-mini/space-runner/player.js',
-            '/animate/demo/game-mini/space-runner/asteroid.js'
+            '/animate-oldver/demo/game-mini/space-runner/level.js',
+            '/animate-oldver/demo/game-mini/space-runner/player.js',
+            '/animate-oldver/demo/game-mini/space-runner/asteroid.js'
         ],
         full_screen: false,
         size_width: false,
@@ -45,9 +45,9 @@
         });
 
         animate.resource.loadImage({
-            rocket: '/animate/demo/images/rocket-icon-32x100.png',
-            asteroid: '/animate/demo/images/asteroid-32x32.png',
-            explosion: '/animate/demo/images/explosion.png'
+            rocket: '/animate-oldver/demo/images/rocket-icon-32x100.png',
+            asteroid: '/animate-oldver/demo/images/asteroid-32x32.png',
+            explosion: '/animate-oldver/demo/images/explosion.png'
         }, function (images) {
 
             Game.images = images;

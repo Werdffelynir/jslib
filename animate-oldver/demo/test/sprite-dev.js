@@ -37,8 +37,8 @@
     });
 
     an.resource.loadImage({
-        sprite1: '/animate/demo/images/sprite-3x2.png',
-        sprite2: '/animate/demo/images/sprite-3x3.png'
+        sprite1: '/animate-oldver/demo/images/sprite-3x2.png',
+        sprite2: '/animate-oldver/demo/images/sprite-3x3.png'
     }, function (images) {
         Game.images = images;
 

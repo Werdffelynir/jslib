@@ -119,9 +119,9 @@
 
 
     an.resource.loadImage({
-        cars: '/animate/demo/images/cars-300x200.png',
-        cat: '/animate/demo/images/cat_1_face.65x50.png',
-        rocket: '/animate/demo/images/rocket_28x50.png'
+        cars: '/animate-oldver/demo/images/cars-300x200.png',
+        cat: '/animate-oldver/demo/images/cat_1_face.65x50.png',
+        rocket: '/animate-oldver/demo/images/rocket_28x50.png'
     }, function (images) {
         Game.images = images;
 

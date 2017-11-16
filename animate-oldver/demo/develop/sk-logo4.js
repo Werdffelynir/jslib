@@ -49,7 +49,7 @@
   An.getContext().strokeStyle = Movie.baseColor;
 
   An.resource.loadImage({
-    sk: '/animate/demo/images/sk-ico.png'
+    sk: '/animate-oldver/demo/images/sk-ico.png'
   }, function (list) {
     Movie.images = list;
 

@@ -1,6 +1,6 @@
 
 var App = new NamespaceApplication({
-    path: '/animate/demo/game-mini/ping-pong/',
+    path: '/animate-oldver/demo/game-mini/ping-pong/',
     debug: true
 });
 

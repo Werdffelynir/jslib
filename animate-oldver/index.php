@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/grid/grid.css">
 
     <script src="/namespaceapplication/namespaceapplication.js"></script>
-    <script src="/animate/build/animate.js"></script>
-    <script src="/animate/extensions/animate.extensions.maskmap.js"></script>
-    <script src="/animate/extensions/animate.extensions.grid.js"></script>
+    <script src="/animate-oldver/animate.js"></script>
+    <script src="/animate-oldver/extensions/animate.extensions.maskmap.js"></script>
+    <script src="/animate-oldver/extensions/animate.extensions.grid.js"></script>
 
     <style>
 
@@ -103,7 +103,7 @@
         });
 
         if (path.indexOf('.js') > -1) {
-            src = '/animate/demo/' + path.split('/animate/')[1];
+            src = '/animate-oldver/demo/' + path.split('/animate-oldver/')[1];
             NSA.inject(node_title, '<h4>' + src + '</h4>');
             NSA.loadJS(src,
                 function () {

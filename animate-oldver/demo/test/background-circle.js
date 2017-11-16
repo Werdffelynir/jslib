@@ -82,10 +82,10 @@
 
     NSA.domLoaded(function () {
         an.resource.loadImage({
-            bg1: '/animate/demo/images/bgparallax/1.png',
-            bg2: '/animate/demo/images/bgparallax/2.png',
-            bg3: '/animate/demo/images/bgparallax/3.png',
-            flying: '/animate/demo/images/flying.png'
+            bg1: '/animate-oldver/demo/images/bgparallax/1.png',
+            bg2: '/animate-oldver/demo/images/bgparallax/2.png',
+            bg3: '/animate-oldver/demo/images/bgparallax/3.png',
+            flying: '/animate-oldver/demo/images/flying.png'
         }, function (imgs) {
             Game.img = imgs;
 

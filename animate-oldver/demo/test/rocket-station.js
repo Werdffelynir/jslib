@@ -160,8 +160,8 @@
     });
 
     an.resource.loadImage({
-        target: '/animate/demo/images/arrow_target_light.png',
-        rocket: '/animate/demo/images/rocket.png'
+        target: '/animate-oldver/demo/images/arrow_target_light.png',
+        rocket: '/animate-oldver/demo/images/rocket.png'
     }, function (images) {
         Gm.images = images;
 
