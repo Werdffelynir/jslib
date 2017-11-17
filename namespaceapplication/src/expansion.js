@@ -50,6 +50,7 @@
     prototype.inject = NamespaceApplication.inject;
     prototype.format = NamespaceApplication.format;
     prototype.ajax = NamespaceApplication.ajax;
+    prototype.httpRequest = NamespaceApplication.httpRequest;
     prototype.createElement = NamespaceApplication.createElement;
     prototype.emmet = NamespaceApplication.emmet;
     prototype.node2str = NamespaceApplication.node2str;
