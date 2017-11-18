@@ -14,7 +14,7 @@
     /** @type CanvasRenderingContext2D */
     ctx = ctx;
 
-    ctx.translate(100, 60);
+    ctx.translate(150, 60);
 
     Graphic.rect(0, 0, 300, 200)
       .thickness(4)
@@ -48,14 +48,14 @@
       .thickness(4)
       .stroke();
 
-    Graphic.rect(200, 150, 50, 50)
+    Graphic.rect(80, 220, 50, 50)
       .thickness(10)
       .color('#7b7391')
       .fill()
       .color('#494457')
       .stroke();
 
-    Graphic.rect(300, 150, 50, 50)
+    Graphic.rect(180, 220, 50, 50)
       .thickness(10)
       .color('#494457')
       .stroke()

@@ -74,6 +74,7 @@ Animate.prototype.Graphic = function () {
       this.context.lineJoin = this.formats.join;
   };
 
+  Graphic.begin = function () {this.context.beginPath()};
   Graphic.close = function () {this.context.closePath()};
   Graphic.save = function () {this.context.save()};
   Graphic.restore = function () {this.context.restore()};
@@ -138,7 +139,7 @@ Animate.prototype.Graphic = function () {
         this.context.lineTo(positions[i].x, positions[i].y);
       }
       
-      if (Animate.isset(closePath) && !!closePath) this.context.closePath();
+      if (!!closePath) this.context.closePath();
     };
     return this;
   };

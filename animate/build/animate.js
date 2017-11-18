@@ -958,6 +958,75 @@ Animate.prototype.MovieClip = function (options, callback, thisInstance) {
   return clip;
 };
 
+
+
+/**
+ *
+ * @param options
+ * @param callback
+ * @param thisInstance      if `true` prototype = options
+ * @returns {clip}
+ * @constructor
+ */
+Animate.prototype.MovieClip2 = function (options, callback, thisInstance) {
+  var key,
+    ctx = this.getContext(),
+    defaultOptions = {
+    x: 0,
+    y: 0,
+    transform: false,
+    composite: false,
+    rotate: false,
+    rotation: false,
+    scale: false,
+    alpha: false,
+    instance: this
+  };
+
+  for (key in defaultOptions) {
+    if (options[key] === undefined)
+      options[key] = defaultOptions[key];
+  }
+
+  return Animate.Clip(options, function () {
+    // draw image
+    ctx.save();
+    ctx.translate(this.x, this.y);
+
+    if (this.transform) {
+      CanvasRenderingContext2D.prototype.setTransform.apply(ctx, this.transform);
+    }
+    if (this.scale) {
+      CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);
+    }
+    if (this.rotate) {
+      ctx.rotate(this.rotate);
+    }
+    if (this.rotation) {
+      ctx.rotate(Animate.degreesToRadians(this.rotation));
+    }
+    if (this.alpha) {
+      ctx.globalAlpha = this.alpha;
+    }
+    if (this.composite) {
+      ctx.globalCompositeOperation = this.composite;
+    }
+    callback.apply(this, arguments);
+    ctx.restore();
+
+    this.setTransform = function () {this.transform = arguments};
+    this.setScale = function () {this.scale = arguments};
+    this.setRotate = function () {this.rotate = arguments[0]};
+    this.setRotation = function () {this.rotation = arguments[0]};
+    this.setAlpha = function () {this.alpha = arguments[0]};
+    this.setComposite = function () {this.composite = arguments[0]};
+
+    // return self context
+    return this;
+  }, thisInstance);
+
+  //return clip;
+};
   
 
   
@@ -1358,6 +1427,7 @@ Animate.prototype.Graphic = function () {
       this.context.lineJoin = this.formats.join;
   };
 
+  Graphic.begin = function () {this.context.beginPath()};
   Graphic.close = function () {this.context.closePath()};
   Graphic.save = function () {this.context.save()};
   Graphic.restore = function () {this.context.restore()};
@@ -1422,7 +1492,7 @@ Animate.prototype.Graphic = function () {
         this.context.lineTo(positions[i].x, positions[i].y);
       }
       
-      if (Animate.isset(closePath) && !!closePath) this.context.closePath();
+      if (!!closePath) this.context.closePath();
     };
     return this;
   };
@@ -1499,7 +1569,7 @@ Animate.prototype.TextField = function () {
       x: 10,
       y: 10,
       text: '',
-      font: 'normal 14px serif, sans-serif',
+      font: '12px sans-serif',
       color: '#000000',
       align: 'left',
       baseline: 'top',
@@ -1606,21 +1676,16 @@ Animate.prototype.TextField = function () {
     return this;
   };
 
+  TextField.isCanFormating = function (name) {
+    return this.formats[name] !== false && this.formats[name] !== this.context[name]
+  };
+
   TextField.formatsApply = function () {
-    if (this.formats.font !== false)
-      this.context.font = this.formats.font;
-
-    if (this.formats.align !== false)
-      this.context.textAlign = this.formats.align;
-
-    if (this.formats.baseline !== false)
-      this.context.textBaseline = this.formats.baseline;
-
-    if (this.formats.alpha !== false)
-      this.context.globalAlpha = this.formats.alpha;
-
-    if (this.formats.thickness !== false)
-      this.context.lineWidth = this.formats.thickness;
+    if (this.isCanFormating('font')) this.context.font = this.formats.font;
+    if (this.isCanFormating('align')) this.context.textAlign = this.formats.align;
+    if (this.isCanFormating('baseline')) this.context.textBaseline = this.formats.baseline;
+    if (this.isCanFormating('alpha')) this.context.globalAlpha = this.formats.alpha;
+    if (this.isCanFormating('thickness')) this.context.lineWidth = this.formats.thickness;
   };
 
   TextField.fill = function () {

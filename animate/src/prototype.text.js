@@ -19,7 +19,7 @@ Animate.prototype.TextField = function () {
       x: 10,
       y: 10,
       text: '',
-      font: 'normal 14px serif, sans-serif',
+      font: '12px sans-serif',
       color: '#000000',
       align: 'left',
       baseline: 'top',
@@ -126,21 +126,16 @@ Animate.prototype.TextField = function () {
     return this;
   };
 
+  TextField.isCanFormating = function (name) {
+    return this.formats[name] !== false && this.formats[name] !== this.context[name]
+  };
+
   TextField.formatsApply = function () {
-    if (this.formats.font !== false)
-      this.context.font = this.formats.font;
-
-    if (this.formats.align !== false)
-      this.context.textAlign = this.formats.align;
-
-    if (this.formats.baseline !== false)
-      this.context.textBaseline = this.formats.baseline;
-
-    if (this.formats.alpha !== false)
-      this.context.globalAlpha = this.formats.alpha;
-
-    if (this.formats.thickness !== false)
-      this.context.lineWidth = this.formats.thickness;
+    if (this.isCanFormating('font')) this.context.font = this.formats.font;
+    if (this.isCanFormating('align')) this.context.textAlign = this.formats.align;
+    if (this.isCanFormating('baseline')) this.context.textBaseline = this.formats.baseline;
+    if (this.isCanFormating('alpha')) this.context.globalAlpha = this.formats.alpha;
+    if (this.isCanFormating('thickness')) this.context.lineWidth = this.formats.thickness;
   };
 
   TextField.fill = function () {

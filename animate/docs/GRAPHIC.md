@@ -1,7 +1,7 @@
 
 # Graphic 
 
-### Контанты
+### Контанты (Constants)
 ```
 CAPS.BUTT
 CAPS.ROUND
@@ -12,42 +12,70 @@ JOINS.ROUND
 JOINS.MITER
 ``` 
 
-### Задать свойства
+### Задать свойства (Settings)
 
 Определяет свойства, выполняются методами `stroke()` `fill()` 
 
 ```js
 color ( color )
+// color hex
+
 alpha ( n )
+// float 0 to 1
+
 thickness ( n )
-cap ( n )
+// number
+
+cap ( n ) 
+// "butt" "round" "square"
+
 join ( n )
+// "bevel" "round" "miter"
 ```
 
-### Операции
+### Операции (Native Operations)
+
+Являются короткоименными ссылками на меотды `CanvasRenderingContext2D`
+> Применяется к текущей операции. 
 ```js
+begin ()
 close ()
 save ()
 restore ()
 ```
 
-### Тени (глобально)
+### Тени (Shadow)
+Глобально применяет тени.
+> Применяется к текущей операции. 
 ```js
 shadow ( x, y, blur, color )
 clearShadow ()
 ```
 
-### Фигуры
+### Фигуры (Graphic Objects)
 ```js
 circle ( x, y, radius )
+//
+
 rect ( x, y, width, height )
+//
+
 rectRound ( x, y, width, height, radius ) 
+//
+
 shape ( points, closePath )
+//
+
 line ( x1, y1, x2, y2 )
+//
+
 ellipse ( x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, closePath )
+//
+
 ```
 
-### Приминения
+### Приминения (Draw Graphic Objects)
+Рисует фигуру, обводкой, заливкой или тем и другим, применяются заданые свойства включая глобальные.
 ```js
 stroke ()
 fill ()
