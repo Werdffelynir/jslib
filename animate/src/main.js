@@ -60,10 +60,13 @@
   };
 
   [[['static']]]
+
+
+  [[['static.resource']]]
   
 
   [[['static.to.instance']]]
-  
+
 
   [[['prototype']]]
   
@@ -97,6 +100,3 @@
   window.Animate = Animate;
 
 })();
-
-
-

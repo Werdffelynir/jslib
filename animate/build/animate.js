@@ -427,6 +427,88 @@ Animate.position = function (elem) {
 };
 
 
+
+
+  
+/**
+ * Animate.Loader.images ( {name: src}, function (list) {} )
+ * Animate.Loader.audios ( {name: src}, function (list) {} )
+ * Animate.Loader.videos ( {name: src}, function (list) {} )
+ *
+ * Module of Expansion
+ * Assign static as instance methods
+ */
+Animate.Loader = {
+
+  images: function (imgs, callback) {
+    if (imgs && typeof imgs === 'object') {
+      var length = Object.keys(imgs).length;
+      var images = {};
+      var iterator = 0;
+      for (var name in imgs) {
+        var img = document.createElement('img');
+        img.src = imgs[name];
+        img.name = name;
+        img.onload = function (e) {
+          images[this.name] = this;
+          iterator ++;
+          if (iterator === length) {
+            callback.call({}, images);
+          }
+        };
+      }
+    }
+  },
+
+
+  audios: function (srcs, callback) {
+    if (srcs && typeof srcs === 'object') {
+      var length = Object.keys(srcs).length;
+      var audios = {};
+      var iterator = 0;
+      for (var name in srcs) {
+        var audio =  document.createElement('audio');
+        audio.src = srcs[name];
+        audio.name = name;
+        audio.preload = 'auto';
+        audios[name] = audio;
+        iterator ++;
+        if (iterator === length) {
+          callback.call({}, audios);
+        }
+      }
+    }
+  },
+
+
+  videos: function (srcs, callback) {
+    if (srcs && typeof srcs === 'object') {
+      var length = Object.keys(srcs).length;
+      var videos = {};
+      var iterator = 0;
+      for (var name in srcs) {
+        var video =  document.createElement('video');
+        video.src = srcs[name];
+        video.name = name;
+        video.preload = 'auto';
+        videos[name] = video;
+        iterator ++;
+        if (iterator == length) {
+          callback.call({}, videos);
+        }
+      }
+    }
+  }
+
+};
+
+
+
+
+
+
+
+
   
 
   
@@ -448,8 +530,9 @@ Animate.prototype.radiansToDegrees = Animate.radiansToDegrees;
 Animate.prototype.distanceBetween = Animate.distanceBetween;
 Animate.prototype.calculateAngle = Animate.calculateAngle;
 Animate.prototype.position = Animate.position;
+Animate.prototype.Loader = Animate.Loader;
 
-  
+
 
   
 /**
@@ -761,9 +844,9 @@ Animate.prototype.backgroundImage = function (img, opts) {
 Animate.prototype.hitTest = function (rectangle, point) {
   var x = parseInt(point.x), y = parseInt(point.y);
   return x > rectangle[0] &&
-    y > rectangle[1] &&
-    x < rectangle[0] + rectangle[2] &&
-    y < rectangle[1] + rectangle[3];
+         y > rectangle[1] &&
+         x < rectangle[0] + rectangle[2] &&
+         y < rectangle[1] + rectangle[3];
 };
 
 /**
@@ -998,8 +1081,7 @@ Animate.prototype.Sprite = function (options) {
 
   // to default
   for (key in default_options) {
-    if (options[key] === undefined)
-      options[key] = default_options[key];
+    if (options[key] === undefined) options[key] = default_options[key];
   }
 
   var grid_count = options['grid'][0] * options['grid'][1];
@@ -1089,8 +1171,8 @@ Animate.prototype.Sprite = function (options) {
  * @returns {*}
  */
 Animate.prototype.keyPress = function (key, callback) {
-  if (this.keyPress._keys === false)
-    this.keyPress._init_once_click_listener();
+  if (this.keyPress_keys === false)
+    this.keyPress_init_once_click_listener();
 
   if (arguments.length === 0) {
     return this.keyPress.info();
@@ -1098,47 +1180,45 @@ Animate.prototype.keyPress = function (key, callback) {
   } 
   else if (typeof key === 'string') {
     if (typeof callback === 'function') {
-      if (this.keyPress._keys[arguments[0]])
-        callback.call(null, this.keyPress._keys[arguments[0]]);
+      if (this.keyPress_keys[arguments[0]])
+        callback.call(null, this.keyPress_keys[arguments[0]]);
     }
-    return !!this.keyPress._keys[arguments[0]];
+    return !!this.keyPress_keys[arguments[0]];
 
   } 
   else if (typeof key === 'function') {
-    this.keyPress._keydown_callbacks.push(key);
+    this.keyPress_keydown_callbacks.push(key);
     if (typeof callback === 'function')
-      this.keyPress._keyup_callbacks.push(callback);
+      this.keyPress_keyup_callbacks.push(callback);
   }
 };
 
-Animate.prototype.keyPress._keys = false;
-
-Animate.prototype.keyPress._keyup_callbacks = [];
-
-Animate.prototype.keyPress._keydown_callbacks = [];
-
-Animate.prototype.keyPress._init_once_click_listener = function () {
-  if (this.keyPress._keys === false) {
-    this.keyPress._keys = {};
+Animate.prototype.keyPress_keys = false;
+Animate.prototype.keyPress_keyup_callbacks = [];
+Animate.prototype.keyPress_keydown_callbacks = [];
+Animate.prototype.keyPress_init_once_click_listener = function () {
+  if (this.keyPress_keys === false) {
+    var that = this;
+    this.keyPress_keys = {};
 
     window.addEventListener('keydown', function (event) {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
       }
 
-      for (var i = 0; i < this.keyPress._keydown_callbacks.length; i++) {
-        if (typeof this.keyPress._keydown_callbacks[i] === 'function') {
-          this.keyPress._keydown_callbacks[i].call(null, event);
+      for (var i = 0; i < that.keyPress_keydown_callbacks.length; i++) {
+        if (typeof that.keyPress_keydown_callbacks[i] === 'function') {
+          that.keyPress_keydown_callbacks[i].call(null, event);
         }
       }
 
-      this.keyPress._keys[event.keyCode] = event;
+      that.keyPress_keys[event.keyCode] = event;
 
       if (event.key)
-        this.keyPress._keys[event.key]  = this.keyPress._keys[event.keyCode];
+        that.keyPress_keys[event.key]  = that.keyPress_keys[event.keyCode];
 
       if (event.code)
-        this.keyPress._keys[event.code] = this.keyPress._keys[event.keyCode];
+        that.keyPress_keys[event.code] = that.keyPress_keys[event.keyCode];
 
     });
 
@@ -1147,15 +1227,15 @@ Animate.prototype.keyPress._init_once_click_listener = function () {
         return; // Do nothing if the event was already processed
       }
 
-      for (var i = 0; i < this.keyPress._keyup_callbacks.length; i++) {
-        if (typeof this.keyPress._keyup_callbacks[i] === 'function') {
-          this.keyPress._keyup_callbacks[i].call(null, event);
+      for (var i = 0; i < that.keyPress_keyup_callbacks.length; i++) {
+        if (typeof that.keyPress_keyup_callbacks[i] === 'function') {
+          that.keyPress_keyup_callbacks[i].call(null, event);
         }
       }
 
-      delete this.keyPress._keys[event.key];
-      delete this.keyPress._keys[event.code];
-      delete this.keyPress._keys[event.keyCode];
+      delete that.keyPress_keys[event.key];
+      delete that.keyPress_keys[event.code];
+      delete that.keyPress_keys[event.keyCode];
     });
   }
 };
@@ -1164,7 +1244,7 @@ Animate.prototype.keyPress._init_once_click_listener = function () {
  * Keys info
  * @returns {string}
  */
-Animate.prototype.keyPress.info = function () {
+Animate.prototype.keyPressInfo = function () {
   var codes = "" +
     "Event keydown/keyup                                      \n" +
     "key         code        keyCode     Key pressed          \n" +
@@ -1644,6 +1724,3 @@ Animate.prototype.TextField = function () {
   window.Animate = Animate;
 
 })();
-
-
-

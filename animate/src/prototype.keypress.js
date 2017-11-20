@@ -10,8 +10,8 @@
  * @returns {*}
  */
 Animate.prototype.keyPress = function (key, callback) {
-  if (this.keyPress._keys === false)
-    this.keyPress._init_once_click_listener();
+  if (this.keyPress_keys === false)
+    this.keyPress_init_once_click_listener();
 
   if (arguments.length === 0) {
     return this.keyPress.info();
@@ -19,47 +19,45 @@ Animate.prototype.keyPress = function (key, callback) {
   } 
   else if (typeof key === 'string') {
     if (typeof callback === 'function') {
-      if (this.keyPress._keys[arguments[0]])
-        callback.call(null, this.keyPress._keys[arguments[0]]);
+      if (this.keyPress_keys[arguments[0]])
+        callback.call(null, this.keyPress_keys[arguments[0]]);
     }
-    return !!this.keyPress._keys[arguments[0]];
+    return !!this.keyPress_keys[arguments[0]];
 
   } 
   else if (typeof key === 'function') {
-    this.keyPress._keydown_callbacks.push(key);
+    this.keyPress_keydown_callbacks.push(key);
     if (typeof callback === 'function')
-      this.keyPress._keyup_callbacks.push(callback);
+      this.keyPress_keyup_callbacks.push(callback);
   }
 };
 
-Animate.prototype.keyPress._keys = false;
-
-Animate.prototype.keyPress._keyup_callbacks = [];
-
-Animate.prototype.keyPress._keydown_callbacks = [];
-
-Animate.prototype.keyPress._init_once_click_listener = function () {
-  if (this.keyPress._keys === false) {
-    this.keyPress._keys = {};
+Animate.prototype.keyPress_keys = false;
+Animate.prototype.keyPress_keyup_callbacks = [];
+Animate.prototype.keyPress_keydown_callbacks = [];
+Animate.prototype.keyPress_init_once_click_listener = function () {
+  if (this.keyPress_keys === false) {
+    var that = this;
+    this.keyPress_keys = {};
 
     window.addEventListener('keydown', function (event) {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
       }
 
-      for (var i = 0; i < this.keyPress._keydown_callbacks.length; i++) {
-        if (typeof this.keyPress._keydown_callbacks[i] === 'function') {
-          this.keyPress._keydown_callbacks[i].call(null, event);
+      for (var i = 0; i < that.keyPress_keydown_callbacks.length; i++) {
+        if (typeof that.keyPress_keydown_callbacks[i] === 'function') {
+          that.keyPress_keydown_callbacks[i].call(null, event);
         }
       }
 
-      this.keyPress._keys[event.keyCode] = event;
+      that.keyPress_keys[event.keyCode] = event;
 
       if (event.key)
-        this.keyPress._keys[event.key]  = this.keyPress._keys[event.keyCode];
+        that.keyPress_keys[event.key]  = that.keyPress_keys[event.keyCode];
 
       if (event.code)
-        this.keyPress._keys[event.code] = this.keyPress._keys[event.keyCode];
+        that.keyPress_keys[event.code] = that.keyPress_keys[event.keyCode];
 
     });
 
@@ -68,15 +66,15 @@ Animate.prototype.keyPress._init_once_click_listener = function () {
         return; // Do nothing if the event was already processed
       }
 
-      for (var i = 0; i < this.keyPress._keyup_callbacks.length; i++) {
-        if (typeof this.keyPress._keyup_callbacks[i] === 'function') {
-          this.keyPress._keyup_callbacks[i].call(null, event);
+      for (var i = 0; i < that.keyPress_keyup_callbacks.length; i++) {
+        if (typeof that.keyPress_keyup_callbacks[i] === 'function') {
+          that.keyPress_keyup_callbacks[i].call(null, event);
         }
       }
 
-      delete this.keyPress._keys[event.key];
-      delete this.keyPress._keys[event.code];
-      delete this.keyPress._keys[event.keyCode];
+      delete that.keyPress_keys[event.key];
+      delete that.keyPress_keys[event.code];
+      delete that.keyPress_keys[event.keyCode];
     });
   }
 };
@@ -85,7 +83,7 @@ Animate.prototype.keyPress._init_once_click_listener = function () {
  * Keys info
  * @returns {string}
  */
-Animate.prototype.keyPress.info = function () {
+Animate.prototype.keyPressInfo = function () {
   var codes = "" +
     "Event keydown/keyup                                      \n" +
     "key         code        keyCode     Key pressed          \n" +

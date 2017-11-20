@@ -25,7 +25,8 @@
     mc: {},
     key: {up: false, down: false, left: false, right: false, space: false, z: false, x: false, c: false},
     mouse: false,
-    images: {}
+    images: {},
+    mousePosition: {x: 0, y: 0},
   };
 
 
@@ -36,8 +37,10 @@
 
   Game.space = function (ctx, frame) {
 
-  };
+    TextField.text('Mouse position:' + Game.mousePosition.x + '/' + Game.mousePosition.y, 5, 40).fill();
+    TextField.text(Game.key.space ? 'Space is Pressed!' : 'Press Space', 5, 75).fill();
 
+  };
 
   An.backgroundColor('#03020f');
   TextField.color('#FFFFFF');
@@ -46,8 +49,6 @@
   An.frame(function (ctx, i) {
     /** @type CanvasRenderingContext2D */
     ctx = ctx;
-
-    // An.addGrid(50, 0.35, '#FFF');
 
     Game.space(ctx, i);
     Game.panel(ctx, i);
@@ -64,7 +65,6 @@
     Game.key.x = An.keyPress('KeyX');
     Game.key.c = An.keyPress('KeyC');
   };
-
 
   An.Loader.images({
     rocket: An.urimg + 'rocket.png'
@@ -84,9 +84,12 @@
     which[2] = 'Middle Mouse button pressed.';
     which[3] = 'Right Mouse button pressed.';
 
+    Game.mousePosition = An.mousePosition(event);
+
     console.log('Which: ' + (which[event.which] ? which[event.which] : 'You have a strange Mouse!'), event);
     return false;
   });
+
   document.addEventListener('contextmenu', function (event) {
     console.log('Context menu is disabled');
     event.preventDefault();

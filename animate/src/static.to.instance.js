@@ -17,3 +17,4 @@ Animate.prototype.radiansToDegrees = Animate.radiansToDegrees;
 Animate.prototype.distanceBetween = Animate.distanceBetween;
 Animate.prototype.calculateAngle = Animate.calculateAngle;
 Animate.prototype.position = Animate.position;
+Animate.prototype.Loader = Animate.Loader;

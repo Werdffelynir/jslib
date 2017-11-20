@@ -29,4 +29,18 @@
             <li><a href="/animate/effects/noise.js">Noise</a></li>
         </ul>
     </li>
+    <li><span class="toggle">Games</span>
+        <ul class="toggle">
+            <li><a href="/animate/games/main.js">Games</a></li>
+        </ul>
+    </li>
+
+    <li><span class="toggle">Resource</span>
+        <ul class="toggle">
+            <li><a href="/animate/resource/main.js">Resource</a></li>
+            <li><a href="/animate/resource/load-image.js">Load image</a></li>
+            <li><a href="/animate/resource/load-audio.js">Load audio</a></li>
+            <li><a href="/animate/resource/web-camera.js">Web Camera</a></li>
+        </ul>
+    </li>
 </ul>

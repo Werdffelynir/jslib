@@ -118,6 +118,8 @@ if(App.namespace){App.namespace('Canvas', function(App){
     __.edit_point_indexs = {x:false,y:false};
     __.editPoint = function () {
 
+        if (__.is_lock) return;
+
         if (__.edit_mode === 'point') {
 
             if (__.edit_point_indexs.x === false || __.edit_point_indexs.y === false ||

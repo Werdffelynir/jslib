@@ -308,9 +308,9 @@ Animate.prototype.backgroundImage = function (img, opts) {
 Animate.prototype.hitTest = function (rectangle, point) {
   var x = parseInt(point.x), y = parseInt(point.y);
   return x > rectangle[0] &&
-    y > rectangle[1] &&
-    x < rectangle[0] + rectangle[2] &&
-    y < rectangle[1] + rectangle[3];
+         y > rectangle[1] &&
+         x < rectangle[0] + rectangle[2] &&
+         y < rectangle[1] + rectangle[3];
 };
 
 /**

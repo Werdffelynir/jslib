@@ -42,8 +42,7 @@ Animate.prototype.Sprite = function (options) {
 
   // to default
   for (key in default_options) {
-    if (options[key] === undefined)
-      options[key] = default_options[key];
+    if (options[key] === undefined) options[key] = default_options[key];
   }
 
   var grid_count = options['grid'][0] * options['grid'][1];
