@@ -25,7 +25,9 @@
   "use strict";
 
   window.requestAnimationFrame = function () {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (f) {window.setTimeout(f, 1e3 / 60);}
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function (f) {
+      window.setTimeout(f, 1e3 / 60);
+    }
   }();
 
   /**
@@ -51,7 +53,12 @@
     if (!(this instanceof Animate)) return new Animate(config, width, height, fps);
 
     if (arguments.length > 1) {
-      config = {selector: arguments[0], width: parseInt(arguments[1]), height: parseInt(arguments[2]), fps: arguments[3] || 0};
+      config = {
+        selector: arguments[0],
+        width: parseInt(arguments[1]),
+        height: parseInt(arguments[2]),
+        fps: arguments[3] || 0
+      };
     }
 
     var _constructor = (function (config) {
@@ -126,7 +133,6 @@
   };
 
 
-
   /**
    * Animation types
    * @type {string}
@@ -183,7 +189,7 @@
    * @returns {string}
    */
   Animate.typeOf = function (value, type) {
-    var types = ['null','boolean','undefined','function','string','number','date','number','array','object'],
+    var types = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
       t = Animate.typeOfStrict(value).toLowerCase();
 
     if (types.indexOf(t) === -1 && typeof value === 'object')
@@ -251,7 +257,7 @@
    * @returns {*}
    */
   Animate.randomItem = function (arr) {
-    var i = Animate.random(0, arr.length-1);
+    var i = Animate.random(0, arr.length - 1);
     return arr[i];
   };
 
@@ -344,7 +350,7 @@
    */
   Animate.Clip = function (options, callback, thisInstance) {
     return function () {
-      callback.apply(thisInstance || {}, arguments || {})
+      callback.bind(options).apply(thisInstance || {}, arguments || {})
     };
   };
 
@@ -360,8 +366,8 @@
     if (!src) return null;
     if (Array.isArray(src)) {
       var i;
-      for (i = 0; i < src.length; i ++) {
-        Animate.loadJS( src[i], onload, onerror );
+      for (i = 0; i < src.length; i++) {
+        Animate.loadJS(src[i], onload, onerror);
       }
     } else {
       var script = document.createElement('script'),
@@ -395,8 +401,7 @@
       data.height = window.innerHeight;
       data.element = window;
     }
-    else
-    if (elem && elem.nodeType === Node.ELEMENT_NODE) {
+    else if (elem && elem.nodeType === Node.ELEMENT_NODE) {
       if (elem.getBoundingClientRect) {
         var rect = elem.getBoundingClientRect(),
           scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
@@ -427,14 +432,11 @@
   };
 
 
-
-
-
   /**
    * Module of Expansion
    * Assign static as instance methods
    */
-  Animate.prototype.createClip = Animate.Clip;
+  Animate.prototype.Clip = Animate.Clip;
   Animate.prototype.point = Animate.Point;
   Animate.prototype.rectangle = Animate.Rectangle;
   Animate.prototype.loadJS = Animate.loadJS;
@@ -449,10 +451,6 @@
   Animate.prototype.calculateAngle = Animate.calculateAngle;
   Animate.prototype.position = Animate.position;
 
-
-
-
-  Animate.prototype.one = function () {};
 
   /**
    * Return HTMLCanvasElement
@@ -770,6 +768,8 @@
 
   /**
    * isPointInPath
+   * hitTestPoint(x, y)
+   * hitTestPoint(point)
    * @param point
    * @param y
    * @returns {boolean}
@@ -829,8 +829,6 @@
   };
 
 
-
-
   Animate.prototype._events_initialize = function () {
 
     var that = this;
@@ -885,80 +883,91 @@
   };
 
 
-
-
   /**
    *
-   * @param options
+   * @param opts
    * @param callback
    * @param thisInstance      if `true` prototype = options
    * @returns {clip}
    * @constructor
    */
-  Animate.prototype.MovieClip = function (options, callback, thisInstance) {
-    var clip,
+  Animate.prototype.MovieClip = function (opts, callback, thisInstance) {
+
+    var
       key,
-      ctx = this._context;
+      context = this.getContext(),
+      options = {
+        x: undefined,
+        y: undefined,
+        translate: undefined,
+        transform: undefined,
+        rotate: undefined,
+        rotation: undefined,
+        scale: undefined,
+        alpha: undefined,
+        composite: undefined,
+        setTranslate: function () {
+          this.translate = arguments
+        },
+        setTransform: function () {
+          this.transform = arguments
+        },
+        setScale: function () {
+          this.scale = arguments
+        },
+        setRotate: function () {
+          this.rotate = arguments[0]
+        },
+        setRotation: function () {
+          this.rotation = arguments[0]
+        },
+        setAlpha: function () {
+          this.alpha = arguments[0]
+        },
+        setComposite: function () {
+          this.composite = arguments[0]
+        },
+        instance: this
+      };
 
-    var default_options = {
-      x: 0,
-      y: 0,
-      transform: false,
-      composite: false,
-      rotate: false,
-      rotation: false,
-      scale: false,
-      alpha: false,
-      instance: this
-    };
-
-    for (key in default_options) {
-      if (options[key] === undefined)
-        options[key] = default_options[key];
+    for (key in options) {
+      if (opts[key] !== undefined) options[key] = opts[key];
     }
 
-    var func = function () {
-      // draw image
-      ctx.save();
-      ctx.translate(this.x, this.y);
+    return Animate.Clip(options, function () {
+      // save state
+      context.save();
 
-      if (this.transform) {
-        CanvasRenderingContext2D.prototype.setTransform.apply(ctx, this.transform);
+      // set dynamic options
+      if (this.translate !== undefined) {
+        CanvasRenderingContext2D.prototype.translate.apply(context, this.translate)
       }
-      if (this.scale) {
-        CanvasRenderingContext2D.prototype.scale.apply(ctx, this.scale);
+      if (this.transform !== undefined) {
+        CanvasRenderingContext2D.prototype.setTransform.apply(context, this.transform)
       }
-      if (this.rotate) {
-        ctx.rotate(this.rotate);
+      if (this.scale !== undefined) {
+        CanvasRenderingContext2D.prototype.scale.apply(context, this.scale)
       }
-      if (this.rotation) {
-        ctx.rotate(Animate.degreesToRadians(this.rotation));
+      if (this.rotate !== undefined) {
+        context.rotate(this.rotate)
       }
-      if (this.alpha) {
-        ctx.globalAlpha = this.alpha;
+      if (this.rotation !== undefined) {
+        context.rotate(Animate.degreesToRadians(this.rotation))
       }
-      if (this.composite) {
-        ctx.globalCompositeOperation = this.composite;
+      if (this.alpha !== undefined) {
+        context.globalAlpha = this.alpha
       }
+      if (this.composite !== undefined) {
+        context.globalCompositeOperation = this.composite
+      }
+
       callback.apply(this, arguments);
-      ctx.restore();
 
-      this.setTransform = function () {this.transform = arguments};
-      this.setScale = function () {this.scale = arguments};
-      this.setRotate = function () {this.rotate = arguments[0]};
-      this.setRotation = function () {this.rotation = arguments[0]};
-      this.setAlpha = function () {this.alpha = arguments[0]};
-      this.setComposite = function () {this.composite = arguments[0]};
+      // restore state
+      context.restore();
 
-      // return self context
-      return this;
-    };
-
-    clip = Animate.Clip(options, func, thisInstance);
-    return clip;
+    }, thisInstance);
   };
-
-
 
 
   /**
@@ -1039,9 +1048,9 @@
         for (k in arguments[0]) this[k] = arguments[0][k];
 
       if (this['_image_width'] === 0 && this['_image_height'] === 0) {
-        this['_image_width']   = this['image'].naturalWidth || this['image'].width;
-        this['_image_height']  = this['image'].naturalHeight || this['image'].height;
-        this['_sprite_width']  = this['_image_width'] / this['grid'][0];
+        this['_image_width'] = this['image'].naturalWidth || this['image'].width;
+        this['_image_height'] = this['image'].naturalHeight || this['image'].height;
+        this['_sprite_width'] = this['_image_width'] / this['grid'][0];
         this['_sprite_height'] = this['_image_height'] / this['grid'][1];
         this['_rea_index'] = 0;
       }
@@ -1064,8 +1073,7 @@
       if (this['indexes'].length > 1 && iterator % this['delay'] === 0) {
         if (this['indexes'][this['_rea_index'] + 1] !== undefined) {
           this['_rea_index'] += 1;
-        } else
-        if (this['loop'])
+        } else if (this['loop'])
           this['_rea_index'] = 0;
       }
 
@@ -1141,7 +1149,7 @@
         this.keyPress._keys[event.keyCode] = event;
 
         if (event.key)
-          this.keyPress._keys[event.key]  = this.keyPress._keys[event.keyCode];
+          this.keyPress._keys[event.key] = this.keyPress._keys[event.keyCode];
 
         if (event.code)
           this.keyPress._keys[event.code] = this.keyPress._keys[event.keyCode];
@@ -1217,8 +1225,6 @@
   }
 
 
-
-
   /**
    * .mousePress()         (in loop use) return position point object if mouse click, or false
    * .mousePress(callback) (in loop use) execute function if mouse click with argument point object
@@ -1281,13 +1287,12 @@
   Animate.prototype.mouseMove._is_init = false;
 
 
-
-
   Animate.prototype.Graphic = function () {
 
     var Graphic = {
       context: this._context,
-      drawCallback: function () {},
+      drawCallback: function () {
+      },
       formats: {
         color: '#000000',
         alpha: false,
@@ -1358,9 +1363,18 @@
         this.context.lineJoin = this.formats.join;
     };
 
-    Graphic.close = function () {this.context.closePath()};
-    Graphic.save = function () {this.context.save()};
-    Graphic.restore = function () {this.context.restore()};
+    Graphic.begin = function () {
+      this.context.beginPath()
+    };
+    Graphic.close = function () {
+      this.context.closePath()
+    };
+    Graphic.save = function () {
+      this.context.save()
+    };
+    Graphic.restore = function () {
+      this.context.restore()
+    };
     Graphic.shadow = function (x, y, blur, color) {
       this.context.shadowOffsetX = x;
       this.context.shadowOffsetY = y;
@@ -1410,11 +1424,17 @@
       this.drawCallback = function () {
         var i, temp = {}, positions = [];
         points.map(function (p) {
-          if (temp.x === undefined) {temp.x = p}
-          else if (temp.y === undefined) {temp.y = p}
+          if (temp.x === undefined) {
+            temp.x = p
+          }
+          else if (temp.y === undefined) {
+            temp.y = p
+          }
 
           if (temp.x !== undefined && temp.y !== undefined) {
-            positions.push(temp);temp = {}}
+            positions.push(temp);
+            temp = {}
+          }
         });
 
         this.context.beginPath();
@@ -1422,7 +1442,7 @@
           this.context.lineTo(positions[i].x, positions[i].y);
         }
 
-        if (Animate.isset(closePath) && !!closePath) this.context.closePath();
+        if (!!closePath) this.context.closePath();
       };
       return this;
     };
@@ -1477,7 +1497,6 @@
   };
 
 
-
   /**
    * Examples:
    *
@@ -1499,7 +1518,7 @@
         x: 10,
         y: 10,
         text: '',
-        font: 'normal 14px serif, sans-serif',
+        font: '12px sans-serif',
         color: '#000000',
         align: 'left',
         baseline: 'top',
@@ -1606,21 +1625,16 @@
       return this;
     };
 
+    TextField.isCanFormating = function (name) {
+      return this.formats[name] !== false && this.formats[name] !== this.context[name]
+    };
+
     TextField.formatsApply = function () {
-      if (this.formats.font !== false)
-        this.context.font = this.formats.font;
-
-      if (this.formats.align !== false)
-        this.context.textAlign = this.formats.align;
-
-      if (this.formats.baseline !== false)
-        this.context.textBaseline = this.formats.baseline;
-
-      if (this.formats.alpha !== false)
-        this.context.globalAlpha = this.formats.alpha;
-
-      if (this.formats.thickness !== false)
-        this.context.lineWidth = this.formats.thickness;
+      if (this.isCanFormating('font')) this.context.font = this.formats.font;
+      if (this.isCanFormating('align')) this.context.textAlign = this.formats.align;
+      if (this.isCanFormating('baseline')) this.context.textBaseline = this.formats.baseline;
+      if (this.isCanFormating('alpha')) this.context.globalAlpha = this.formats.alpha;
+      if (this.isCanFormating('thickness')) this.context.lineWidth = this.formats.thickness;
     };
 
     TextField.fill = function () {
@@ -1628,6 +1642,7 @@
       if (this.formats.color)
         this.context.fillStyle = this.formats.color;
       this.context.fillText(this.formats.text, this.formats.x, this.formats.y);
+      return this;
     };
 
     TextField.stroke = function () {
@@ -1635,6 +1650,7 @@
       if (this.formats.color)
         this.context.strokeStyle = this.formats.color;
       this.context.strokeText(this.formats.text, this.formats.x, this.formats.y);
+      return this;
     };
 
     return TextField;

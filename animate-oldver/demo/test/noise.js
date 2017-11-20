@@ -22,6 +22,7 @@
         images:{},
         mouse:false
     };
+
     an.frame(function(ctx, i) {
         /** @type CanvasRenderingContext2D */
         ctx = ctx;

@@ -217,7 +217,7 @@ Animate.Rectangle = function (x, y, width, height) {
  */
 Animate.Clip = function (options, callback, thisInstance) {
   return function () {
-    callback.apply(thisInstance || {}, arguments || {})
+    callback.bind(options).apply(thisInstance || {}, arguments || {})
   };
 };
 
