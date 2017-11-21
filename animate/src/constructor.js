@@ -18,13 +18,21 @@
       filtering: true,
 
       // events
-      onFrame: null,
-      onMousemove: null,
-      onMousedown: null,
-      onMouseup: null,
-      onKeyup: null,
-      onKeydown: null,
-      onClick: null,
+      onFrame: function (callback) {this.onFrameCallback = callback;},
+      onClick: function (callback) {this.onClickCallback = callback;},
+      onMousemove: function (callback) {this.onMousemoveCallback = callback;},
+      onMousedown: function (callback) {this.onMousedownCallback = callback;},
+      onMouseup: function (callback) {this.onMouseupCallback = callback;},
+      onKeydown: function (callback) {this.onKeydownCallback = callback;},
+      onKeyup: function (callback) {this.onKeyupCallback = callback;},
+
+      onFrameCallback: null,
+      onClickCallback: null,
+      onMousemoveCallback: null,
+      onMousedownCallback: null,
+      onMouseupCallback: null,
+      onKeydownCallback: null,
+      onKeyupCallback: null,
 
       // internal
       _canvas: null,

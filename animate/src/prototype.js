@@ -157,8 +157,8 @@ Animate.prototype._internal_drawframe = function () {
     this.clear();
 
   // call onFrame
-  if (typeof this.onFrame === 'function')
-    this.onFrame.call(this, this._context, this._iterator);
+  if (typeof this.onFrameCallback === 'function')
+    this.onFrameCallback.call(this, this._context, this._iterator);
 
   if (Array.isArray(frames)) {
     if (!this._is_filtering && frames.length > 0) {
@@ -383,51 +383,51 @@ Animate.prototype._events_initialize = function () {
   var that = this;
 
   // onclick event
-  if (typeof this.onClick === 'function' && !this._on_click_init) {
+  if (typeof this.onClickCallback === 'function' && !this._on_click_callback_init) {
     this._canvas.addEventListener('click', function (event) {
-      that.onClick.call(that, event, that.mousePosition(event))
+      that.onClickCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_click_init = true;
+    this._on_click_callback_init = true;
   }
 
   // onmousemove event
-  if (typeof this.onMousemove === 'function' && !this._on_mousemove_init) {
+  if (typeof this.onMousemoveCallback === 'function' && !this._on_mousemove_callback_init) {
     this._canvas.addEventListener('mousemove', function (event) {
-      that.onMousemove.call(that, event, that.mousePosition(event))
+      that.onMousemoveCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mousemove_init = true;
+    this._on_mousemove_callback_init = true;
   }
 
   // onmousedown event
-  if (typeof this.onMousedown === 'function' && !this._on_mousedown_init) {
+  if (typeof this.onMousedownCallback === 'function' && !this._on_mousedown_callback_init) {
     this._canvas.addEventListener('mousedown', function (event) {
-      that.onMousedown.call(that, event, that.mousePosition(event))
+      that.onMousedownCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mousedown_init = true;
+    this._on_mousedown_callback_init = true;
   }
 
   // onmouseup event
-  if (typeof this.onMouseup === 'function' && !this._on_mouseup_init) {
+  if (typeof this.onMouseupCallback === 'function' && !this._on_mouseup_callback_init) {
     this._canvas.addEventListener('mouseup', function (event) {
-      that.onMouseup.call(that, event, that.mousePosition(event))
+      that.onMouseupCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mouseup_init = true;
+    this._on_mouseup_callback_init = true;
   }
 
   // onkeydown event
-  if (typeof this.onKeydown === 'function' && !this._on_keydown_init) {
+  if (typeof this.onKeydownCallback === 'function' && !this._on_keydown_callback_init) {
     window.addEventListener('keydown', function (event) {
-      that.onKeydown.call(that, event)
+      that.onKeydownCallback.call(that, event)
     });
-    this._on_keydown_init = true;
+    this._on_keydown_callback_init = true;
   }
 
   // onkeyup event
-  if (typeof this.onKeyup === 'function' && !this._on_keyup_init) {
+  if (typeof this.onKeyupCallback === 'function' && !this._on_keyup_callback_init) {
     window.addEventListener('keyup', function (event) {
-      that.onKeyup.call(that, event)
+      that.onKeyupCallback.call(that, event)
     });
-    this._on_keyup_init = true;
+    this._on_keyup_callback_init = true;
   }
 };
 

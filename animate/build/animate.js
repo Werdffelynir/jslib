@@ -74,13 +74,21 @@
       filtering: true,
 
       // events
-      onFrame: null,
-      onMousemove: null,
-      onMousedown: null,
-      onMouseup: null,
-      onKeyup: null,
-      onKeydown: null,
-      onClick: null,
+      onFrame: function (callback) {this.onFrameCallback = callback;},
+      onClick: function (callback) {this.onClickCallback = callback;},
+      onMousemove: function (callback) {this.onMousemoveCallback = callback;},
+      onMousedown: function (callback) {this.onMousedownCallback = callback;},
+      onMouseup: function (callback) {this.onMouseupCallback = callback;},
+      onKeydown: function (callback) {this.onKeydownCallback = callback;},
+      onKeyup: function (callback) {this.onKeyupCallback = callback;},
+
+      onFrameCallback: null,
+      onClickCallback: null,
+      onMousemoveCallback: null,
+      onMousedownCallback: null,
+      onMouseupCallback: null,
+      onKeydownCallback: null,
+      onKeyupCallback: null,
 
       // internal
       _canvas: null,
@@ -348,35 +356,6 @@ Animate.Clip = function (options, callback, thisInstance) {
   };
 };
 
-/**
- * Loads a script element with javascript source
- *
- * @param src
- * @param onload
- * @param onerror
- * @returns {*}
- */
-Animate.loadJS = function (src, onload, onerror) {
-  if (!src) return null;
-  if (Array.isArray(src)) {
-    var i;
-    for (i = 0; i < src.length; i ++) {
-      Animate.loadJS( src[i], onload, onerror );
-    }
-  } else {
-    var script = document.createElement('script'),
-      id = "src-" + Math.random().toString(32).slice(2);
-
-    script.src = (src.substr(-3) === '.js') ? src : src + '.js';
-    script.type = 'application/javascript';
-    script.id = id;
-    script.onload = onload;
-    script.onerror = onerror;
-
-    document.head.appendChild(script);
-    return script
-  }
-};
 
 /**
  * Calculates the position and size of elements.
@@ -431,15 +410,83 @@ Animate.position = function (elem) {
 
   
 /**
- * Animate.Loader.images ( {name: src}, function (list) {} )
- * Animate.Loader.audios ( {name: src}, function (list) {} )
- * Animate.Loader.videos ( {name: src}, function (list) {} )
+ * Animate.Loader.javascript ( {name: src, name: src}, function (list) {} )
+ * Animate.Loader.javascript ( [src, src], function (list) {} )
+ * Animate.Loader.images ( {name: src, name: src}, function (list) {} )
+ * Animate.Loader.audios ( {name: src, name: src}, function (list) {} )
+ * Animate.Loader.videos ( {name: src, name: src}, function (list) {} )
  *
  * Module of Expansion
  * Assign static as instance methods
  */
 Animate.Loader = {
 
+  /**
+   * Loads a script element with javascript source
+   *
+   * .javascript ( {
+   *      myscript1: '/path/to/myscript1',
+   *      myscript2: '/path/to/myscript2',
+   *    },
+   *    function (list) {})
+   *
+   * .javascript ( [
+   *      '/path/to/myscript1',
+   *      '/path/to/myscript2',
+   *    ],
+   *    function (list) {})
+   *
+   * @namespace Animate.Loader.javascript
+   * @param src       Object, Array. items: key is ID, value is src
+   * @param callback  Function called when all srcs is loaded
+   * @param onerror   Function called when load is failed
+   * @returns {*}
+   */
+  javascript: function (src, callback, onerror) {
+    if (src && typeof src === 'object') {
+
+      if (Array.isArray(src)) {
+        var obj = {};
+        src.map(function (item) {obj[Math.random().toString(32).slice(2)] = item});
+        src = obj;
+      }
+
+      var length = Object.keys(src).length,
+        key,
+        script,
+        scripts = {},
+        iterator = 0;
+      for (key in src) {
+        script = document.createElement('script');
+        script.src = (src[key].substr(-3) === '.js') ? src[key] : src[key] + '.js';
+        script.type = 'application/javascript';
+        script.id = key;
+        script.onerror = onerror;
+        script.onload = function (e) {
+          scripts[this.id] = this;
+          iterator++;
+          if (iterator === length) {
+            callback.call({}, scripts);
+          }
+        };
+        document.head.appendChild(script);
+      }
+    }
+  },
+
+  /**
+   * Load an images
+   *
+   * .images ( {
+   *      img1: '/path/to/img1',
+   *      img2: '/path/to/img2',
+   *    },
+   *    function (list) {})
+   *
+   * @namespace Animate.Loader.images
+   * @param imgs
+   * @param callback
+   */
   images: function (imgs, callback) {
     if (imgs && typeof imgs === 'object') {
       var length = Object.keys(imgs).length;
@@ -451,7 +498,7 @@ Animate.Loader = {
         img.name = name;
         img.onload = function (e) {
           images[this.name] = this;
-          iterator ++;
+          iterator++;
           if (iterator === length) {
             callback.call({}, images);
           }
@@ -460,19 +507,31 @@ Animate.Loader = {
     }
   },
 
-
+  /**
+   * Load an audio files
+   *
+   * .audios ( {
+   *      audio1: '/path/to/audio1',
+   *      audio2: '/path/to/audio2',
+   *    },
+   *    function (list) {})
+   *
+   * @namespace Animate.Loader.audios
+   * @param srcs
+   * @param callback
+   */
   audios: function (srcs, callback) {
     if (srcs && typeof srcs === 'object') {
       var length = Object.keys(srcs).length;
       var audios = {};
       var iterator = 0;
       for (var name in srcs) {
-        var audio =  document.createElement('audio');
+        var audio = document.createElement('audio');
         audio.src = srcs[name];
         audio.name = name;
         audio.preload = 'auto';
         audios[name] = audio;
-        iterator ++;
+        iterator++;
         if (iterator === length) {
           callback.call({}, audios);
         }
@@ -480,19 +539,31 @@ Animate.Loader = {
     }
   },
 
-
+  /**
+   * Load an video files
+   *
+   * .videos ( {
+   *      video1: '/path/to/video1',
+   *      video2: '/path/to/video2',
+   *    },
+   *    function (list) {})
+   *
+   * @namespace Animate.Loader.videos
+   * @param srcs
+   * @param callback
+   */
   videos: function (srcs, callback) {
     if (srcs && typeof srcs === 'object') {
       var length = Object.keys(srcs).length;
       var videos = {};
       var iterator = 0;
       for (var name in srcs) {
-        var video =  document.createElement('video');
+        var video = document.createElement('video');
         video.src = srcs[name];
         video.name = name;
         video.preload = 'auto';
         videos[name] = video;
-        iterator ++;
+        iterator++;
         if (iterator == length) {
           callback.call({}, videos);
         }
@@ -501,13 +572,6 @@ Animate.Loader = {
   }
 
 };
-
-
-
-
-
-
-
 
   
 
@@ -519,7 +583,6 @@ Animate.Loader = {
 Animate.prototype.Clip = Animate.Clip;
 Animate.prototype.point = Animate.Point;
 Animate.prototype.rectangle = Animate.Rectangle;
-Animate.prototype.loadJS = Animate.loadJS;
 Animate.prototype.defaultObject = Animate.defaultObject;
 Animate.prototype.copy = Animate.copy;
 Animate.prototype.random = Animate.random;
@@ -693,8 +756,8 @@ Animate.prototype._internal_drawframe = function () {
     this.clear();
 
   // call onFrame
-  if (typeof this.onFrame === 'function')
-    this.onFrame.call(this, this._context, this._iterator);
+  if (typeof this.onFrameCallback === 'function')
+    this.onFrameCallback.call(this, this._context, this._iterator);
 
   if (Array.isArray(frames)) {
     if (!this._is_filtering && frames.length > 0) {
@@ -919,51 +982,51 @@ Animate.prototype._events_initialize = function () {
   var that = this;
 
   // onclick event
-  if (typeof this.onClick === 'function' && !this._on_click_init) {
+  if (typeof this.onClickCallback === 'function' && !this._on_click_callback_init) {
     this._canvas.addEventListener('click', function (event) {
-      that.onClick.call(that, event, that.mousePosition(event))
+      that.onClickCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_click_init = true;
+    this._on_click_callback_init = true;
   }
 
   // onmousemove event
-  if (typeof this.onMousemove === 'function' && !this._on_mousemove_init) {
+  if (typeof this.onMousemoveCallback === 'function' && !this._on_mousemove_callback_init) {
     this._canvas.addEventListener('mousemove', function (event) {
-      that.onMousemove.call(that, event, that.mousePosition(event))
+      that.onMousemoveCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mousemove_init = true;
+    this._on_mousemove_callback_init = true;
   }
 
   // onmousedown event
-  if (typeof this.onMousedown === 'function' && !this._on_mousedown_init) {
+  if (typeof this.onMousedownCallback === 'function' && !this._on_mousedown_callback_init) {
     this._canvas.addEventListener('mousedown', function (event) {
-      that.onMousedown.call(that, event, that.mousePosition(event))
+      that.onMousedownCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mousedown_init = true;
+    this._on_mousedown_callback_init = true;
   }
 
   // onmouseup event
-  if (typeof this.onMouseup === 'function' && !this._on_mouseup_init) {
+  if (typeof this.onMouseupCallback === 'function' && !this._on_mouseup_callback_init) {
     this._canvas.addEventListener('mouseup', function (event) {
-      that.onMouseup.call(that, event, that.mousePosition(event))
+      that.onMouseupCallback.call(that, event, that.mousePosition(event))
     });
-    this._on_mouseup_init = true;
+    this._on_mouseup_callback_init = true;
   }
 
   // onkeydown event
-  if (typeof this.onKeydown === 'function' && !this._on_keydown_init) {
+  if (typeof this.onKeydownCallback === 'function' && !this._on_keydown_callback_init) {
     window.addEventListener('keydown', function (event) {
-      that.onKeydown.call(that, event)
+      that.onKeydownCallback.call(that, event)
     });
-    this._on_keydown_init = true;
+    this._on_keydown_callback_init = true;
   }
 
   // onkeyup event
-  if (typeof this.onKeyup === 'function' && !this._on_keyup_init) {
+  if (typeof this.onKeyupCallback === 'function' && !this._on_keyup_callback_init) {
     window.addEventListener('keyup', function (event) {
-      that.onKeyup.call(that, event)
+      that.onKeyupCallback.call(that, event)
     });
-    this._on_keyup_init = true;
+    this._on_keyup_callback_init = true;
   }
 };
 
@@ -1157,204 +1220,7 @@ Animate.prototype.Sprite = function (options) {
 
   return movieclip
 };
-  
 
-  /**
- * app.keyPress()                              (out loop use) return info about this method
- * app.keyPress('ArrowUp')                     (in loop use) return bool. true - when press 'ArrowUp'
- * app.keyPress('ArrowUp', function(){})       (in loop use) execute function when press 'ArrowUp'
- * app.keyPress(function(){})                  (out loop use) execute function every time when press any key
- * app.keyPress(function(){}, function(){})    (out loop use) execute function1 for keyDown and function1 for keyUp
- *
- * @param key         key (key, code, keyCode) or callback
- * @param callback    callback
- * @returns {*}
- */
-Animate.prototype.keyPress = function (key, callback) {
-  if (this.keyPress_keys === false)
-    this.keyPress_init_once_click_listener();
-
-  if (arguments.length === 0) {
-    return this.keyPress.info();
-    
-  } 
-  else if (typeof key === 'string') {
-    if (typeof callback === 'function') {
-      if (this.keyPress_keys[arguments[0]])
-        callback.call(null, this.keyPress_keys[arguments[0]]);
-    }
-    return !!this.keyPress_keys[arguments[0]];
-
-  } 
-  else if (typeof key === 'function') {
-    this.keyPress_keydown_callbacks.push(key);
-    if (typeof callback === 'function')
-      this.keyPress_keyup_callbacks.push(callback);
-  }
-};
-
-Animate.prototype.keyPress_keys = false;
-Animate.prototype.keyPress_keyup_callbacks = [];
-Animate.prototype.keyPress_keydown_callbacks = [];
-Animate.prototype.keyPress_init_once_click_listener = function () {
-  if (this.keyPress_keys === false) {
-    var that = this;
-    this.keyPress_keys = {};
-
-    window.addEventListener('keydown', function (event) {
-      if (event.defaultPrevented) {
-        return; // Do nothing if the event was already processed
-      }
-
-      for (var i = 0; i < that.keyPress_keydown_callbacks.length; i++) {
-        if (typeof that.keyPress_keydown_callbacks[i] === 'function') {
-          that.keyPress_keydown_callbacks[i].call(null, event);
-        }
-      }
-
-      that.keyPress_keys[event.keyCode] = event;
-
-      if (event.key)
-        that.keyPress_keys[event.key]  = that.keyPress_keys[event.keyCode];
-
-      if (event.code)
-        that.keyPress_keys[event.code] = that.keyPress_keys[event.keyCode];
-
-    });
-
-    window.addEventListener('keyup', function (event) {
-      if (event.defaultPrevented) {
-        return; // Do nothing if the event was already processed
-      }
-
-      for (var i = 0; i < that.keyPress_keyup_callbacks.length; i++) {
-        if (typeof that.keyPress_keyup_callbacks[i] === 'function') {
-          that.keyPress_keyup_callbacks[i].call(null, event);
-        }
-      }
-
-      delete that.keyPress_keys[event.key];
-      delete that.keyPress_keys[event.code];
-      delete that.keyPress_keys[event.keyCode];
-    });
-  }
-};
-
-/**
- * Keys info
- * @returns {string}
- */
-Animate.prototype.keyPressInfo = function () {
-  var codes = "" +
-    "Event keydown/keyup                                      \n" +
-    "key         code        keyCode     Key pressed          \n" +
-    "_________________________________________________________\n" +
-    "Backspace   Backspace   8           Backspace\n" +
-    "Tab         Tab         9           Tab\n" +
-    "Enter       Enter       13          Enter\n" +
-    "Shift       ShiftLeft   16          Shift\n" +
-    "Control     ControlLeft 17          Ctrl\n" +
-    "Alt         AltLeft     18          Alt\n" +
-    "Pause       Pause       19          Pause, Break\n" +
-    "            CapsLock    20          CapsLock\n" +
-    "Escape      Escape      27          Esc\n" +
-    "' '         Space       32          Space\n" +
-    "PageUp      PageUp      33          Page Up\n" +
-    "PageDown    PageDown    34          Page Down\n" +
-    "End         End         35          End\n" +
-    "Home        Home        36          Home\n" +
-    "ArrowLeft   ArrowLeft   37          Left arrow\n" +
-    "ArrowUp     ArrowUp     38          Up arrow\n" +
-    "ArrowRight  ArrowRight  39          Right arrow\n" +
-    "ArrowDown   ArrowDown   40          Down arrow\n" +
-    "                        44          PrntScrn\n" +
-    "                        45          Insert\n" +
-    "                        46          Delete\n" +
-    "1           Digit1      48-57       0 to 9\n" +
-    "a           KeyA        65-90       A to Z\n" +
-    "                        91          WIN Key (Start)\n" +
-    "                        93          WIN Menu\n" +
-    "                        112-123     F1 to F12\n" +
-    "                        144         NumLock\n" +
-    "                        145         ScrollLock\n" +
-    "                        188         , <\n" +
-    "                        190         . >\n" +
-    "                        191         / ?\n" +
-    "`           Backquote   192         ` ~\n" +
-    "                        219         [ {\n" +
-    "                        220         \ |\n" +
-    "                        221         ] }\n" +
-    "                        222         ' \"\n";
-
-  console.info(codes);
-  return codes;
-}
-
-  
-
-  
-/**
- * .mousePress()         (in loop use) return position point object if mouse click, or false
- * .mousePress(callback) (in loop use) execute function if mouse click with argument point object
- *
- * @param callback
- * @returns {*}
- */
-Animate.prototype.mousePress = function (callback) {
-
-  if (this.mousePress._is_init === false)
-    this.mousePress._init_once_click_listener();
-
-  if (this.mousePress._position && typeof callback === 'function')
-    callback.call(null, this.mousePress._position);
-
-  return this.mousePress._position;
-};
-
-Animate.prototype.mousePress._position = false;
-Animate.prototype.mousePress._is_init = false;
-Animate.prototype.mousePress._init_once_click_listener = function () {
-  if (this.mousePress._is_init === false) {
-    var that = this;
-    this.mousePress._is_init = true;
-
-    this._canvas.addEventListener('mousedown', function (event) {
-      that.mousePress._position = that.mousePosition(event);
-    });
-
-    this._canvas.addEventListener('mouseup', function (event) {
-      that.mousePress._position = false;
-    });
-
-  }
-};
-
-/**
- * .mouseMove()         (in loop use) return position point object when mouse move
- * .mouseMove(callback) (in loop use) execute function when mouse move with argument point object
- *
- * @param callback
- * @returns {*}
- */
-Animate.prototype.mouseMove = function (callback) {
-  if (this.mouseMove._is_init === false) {
-    var that = this;
-    this.mouseMove._is_init = true;
-    this._canvas.addEventListener('mousemove', function (event) {
-      that.mouseMove._position = that.mousePosition(event);
-    });
-  }
-
-  if (this.mouseMove._position && typeof callback === 'function')
-    callback.call(null, this.mouseMove._position);
-
-  return this.mouseMove._position;
-};
-
-Animate.prototype.mouseMove._position = false;
-Animate.prototype.mouseMove._is_init = false;
-
-  
 
   
 Animate.prototype.Graphic = function () {
@@ -1715,7 +1581,7 @@ Animate.prototype.TextField = function () {
 
   /** Set script version. Property [read-only]*/
   Object.defineProperty(Animate, 'version', {
-    enumerable: false, configurable: false, writable: false, value: '0.6.0'
+    enumerable: false, configurable: false, writable: false, value: '0.7.0'
   });
 
   /**

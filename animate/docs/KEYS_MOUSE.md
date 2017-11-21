@@ -1,3 +1,8 @@
+>
+> Remove in v 0.7.0
+> use An.onKeydown, An.onKeyup
+>
+
 # Keys
 
 ```js

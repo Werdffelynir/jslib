@@ -221,35 +221,6 @@ Animate.Clip = function (options, callback, thisInstance) {
   };
 };
 
-/**
- * Loads a script element with javascript source
- *
- * @param src
- * @param onload
- * @param onerror
- * @returns {*}
- */
-Animate.loadJS = function (src, onload, onerror) {
-  if (!src) return null;
-  if (Array.isArray(src)) {
-    var i;
-    for (i = 0; i < src.length; i ++) {
-      Animate.loadJS( src[i], onload, onerror );
-    }
-  } else {
-    var script = document.createElement('script'),
-      id = "src-" + Math.random().toString(32).slice(2);
-
-    script.src = (src.substr(-3) === '.js') ? src : src + '.js';
-    script.type = 'application/javascript';
-    script.id = id;
-    script.onload = onload;
-    script.onerror = onerror;
-
-    document.head.appendChild(script);
-    return script
-  }
-};
 
 /**
  * Calculates the position and size of elements.

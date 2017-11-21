@@ -32,6 +32,8 @@
     <li><span class="toggle">Games</span>
         <ul class="toggle">
             <li><a href="/animate/games/main.js">Games</a></li>
+            <li><a href="/animate/games/template.js">Games template</a></li>
+            <li><a href="/animate/games/onpanet.js">On Planet</a></li>
         </ul>
     </li>
 

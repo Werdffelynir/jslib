@@ -33,11 +33,24 @@ backgroundColor ( color )
 backgroundImage ( img, opts )
 ```
 
+
 ```js
 hitTest ( rectangle, point )
 hitTestPoint ( x, y )
 hitTestPoint ( point )
 ```
+
+### Events
+```js
+onFrame ( callback )
+onClick ( callback )
+onMousemove ( callback )
+onMousedown ( callback )
+onMouseup ( callback )
+onKeydown ( callback )
+onKeyup ( callback )
+```
+
 
 ```js
 mousePosition ( event: MouseEvent )

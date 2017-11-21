@@ -75,13 +75,7 @@
   
 
   [[['prototype.sprite']]]
-  
 
-  [[['prototype.keypress']]]
-  
-
-  [[['prototype.mousepress']]]
-  
 
   [[['prototype.graphic']]]
   
@@ -91,7 +85,7 @@
 
   /** Set script version. Property [read-only]*/
   Object.defineProperty(Animate, 'version', {
-    enumerable: false, configurable: false, writable: false, value: '0.6.0'
+    enumerable: false, configurable: false, writable: false, value: '0.7.0'
   });
 
   /**
