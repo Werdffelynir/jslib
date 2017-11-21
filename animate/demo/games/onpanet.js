@@ -26,47 +26,7 @@
 
   // --------------------------------------------------
   // Game object
-
-  var Game = {
-    mc: {},
-    key: {},
-    mouse: false,
-    images: {},
-    mousePosition: {x: 0, y: 0},
-    act: {loading: 'loading', mainmenu: 'mainmenu', level: 'level'},
-    actCurrent: 'loading'
-  };
-
-
-  Game.panel = function (ctx, frame) {
-    TextField.text('Frame: ' + frame, 5, 5).fill();
-    TextField.text('Mouse position:' + Game.mousePosition.x + '/' + Game.mousePosition.y, 5, 40).fill();
-    TextField.text(Game.mouseButtonClick, 5, 75).fill();
-
-    var k, keysString = '';
-    for (k in Game.key)
-      if (Game.key[k]) keysString += k + ': ' + Game.key[k] + ', ';
-    TextField.text(keysString, 5, 100).fill();
-  };
-
-
-  Game.rocket = An.MovieClip ({
-    translate: [An.width/2, An.height/2],
-    rotation: 0,
-    speed: 3
-  }, function (ctx, frame) {
-    if (Game.key['a']) this.rotation --;
-    if (Game.key['d']) this.rotation ++;
-    if (Game.key['w']) this.translate[1] --;
-    if (Game.key['s']) this.translate[1] ++;
-
-    ctx.drawImage(Game.images.rocket, -(Game.images.rocket.width/2), -(Game.images.rocket.height/2));
-  });
-
-  Game.space = function (ctx, frame) {
-    Game.rocket(ctx, frame);
-  };
-
+  var Game = {};
 
   // --------------------------------------------------
   // Animate settings
@@ -102,7 +62,6 @@
     Graphic.rect(0, 150, 200, 40).fill();
     TextField.text('Rates', 10, 160).color('#000').fill();
 
-    // console.log(An.GameEnemy());
     ctx.restore();
     An.stop();
   });
@@ -142,6 +101,7 @@
 
   // Loading resources
   An.Loader.javascript([
+    An.uri + 'game.js',
     An.uri + 'enemy.js',
     An.uri + 'hero.js',
     An.uri + 'space.js',
@@ -151,7 +111,15 @@
       rocket: An.uri + 'assets/rocket.png',
       rocket: An.uri + 'assets/rocket.png'
     }, function (images) {
-      Game.images = images;
+
+
+      Game = Animate.Module('Game');
+
+      console.log(Game);
+      // Game.init(An);
+      // Game.images = images;
+
+
 
       setTimeout(function () {
         An.start(Game.act.mainmenu)

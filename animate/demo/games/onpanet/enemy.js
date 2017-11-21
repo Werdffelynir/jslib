@@ -1,17 +1,13 @@
-Animate.Extension(function (instance) {
+Animate.Module('Enemy', function () {
+  var __ = {};
 
-  if (!(instance instanceof Animate))
-    return;
-
-  /**
-   * @type CanvasRenderingContext2D
-   */
-  var context = instance.getContext();
-
-  console.log('GameEnemy:instance', instance);
-
-  instance.GameEnemy = function () {
-    return 'GameEnemy';
+  __.add = function () {
+    return 'add'
   };
 
+  __.remove = function () {
+    return 'remove'
+  };
+
+  return __;
 });

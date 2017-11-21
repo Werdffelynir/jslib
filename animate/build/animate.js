@@ -150,12 +150,34 @@ Animate.DEGREE = 0.017453292519943295;
 Animate._internal_extensions = [];
 
 /**
- * Add extensions in loader
+ * Storage of static modules
+ * @type {Array}
+ */
+Animate._external_modules = {};
+
+/**
+ * Add extensions in list, extensions executed when creating new instance
+ *
  * @param func
  * @constructor
  */
 Animate.Extension = function (func) {
   Animate._internal_extensions.push(func);
+};
+
+/**
+ * Getter|Setter
+ * Storage for static modules
+ *
+ * @param name    String
+ * @param func    Function | Object
+ * @constructor
+ */
+Animate.Module = function (name, func) {
+  if (arguments.length === 1)
+    return Animate._external_modules[name];
+  if (arguments.length === 2)
+    return Animate._external_modules[name] = func;
 };
 
 /**

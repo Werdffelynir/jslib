@@ -1,1 +1,13 @@
-console.log('4. weapon.js');
+Animate.Module('Weapon', function () {
+  var __ = {};
+
+  __.add = function () {
+    return 'add'
+  };
+
+  __.remove = function () {
+    return 'remove'
+  };
+
+  return __;
+});
