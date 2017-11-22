@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CallbackManager</title>
+
+    <script src="/namespaceapplication/namespaceapplication.js"></script>
+    <script src="/callback.manager.js"></script>
+    <link rel="stylesheet" href="/grid/grid.css">
+
+    <style>
+        body, html {
+            background: #333; color: #FFF;
+        }
+        #menu {
+            padding: 5px;
+        }
+        #reset {
+            display: inline-block;
+            padding: 5px;
+            border: 2px solid #000;
+            background: #555555;
+            color: #FFF;
+            cursor: pointer;
+        }
+        #log {
+            margin: 10px 0;
+            height: 500px;
+            overflow-y: auto;
+            padding: 5px;
+            background: #333;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="font-sans">
+<div id="menu">
+    <span id="reset" style="">reset</span>
+</div>
+<div id="log" style=""></div>
+<script>
+  (function () {
+
+    var loger = function (string, color) {
+      NamespaceApplication.inject('#log', '<p><code style="color:' + (color || 'black') + '">' + string + '</code></p>', true);
+    };
+
+    var onConnect = function (data, color) {
+      var tm = parseInt(Math.random() * 10) * 500 + 500;
+      loger('onConnect > ' + data + ' delay: ' + tm + 'ms.', color);
+      setTimeout(function () {
+          cbmConnect.dispatch('upload', data + ' ' + 'data data data', color)
+        }, tm);
+    };
+
+    var onUpload = function (data, color) {
+      loger('onUpload > ' + data, color);
+      setTimeout(function () {
+        cbmConnect.dispatch('render', '[FILTER] ' + data, color)
+      }, 1000);
+    };
+
+    var onRender = function (data, color) {
+      loger('onRender > ' + data, color);
+      setTimeout(function () {
+        cbmConnect.dispatch('close', color)
+      }, 1000);
+    };
+
+    var onClose = function (color) {
+      loger('onClose ', color);
+    };
+
+    var cbmConnect = new CallbackManager();
+    cbmConnect.register('connect', onConnect);
+    cbmConnect.register('upload', onUpload);
+    cbmConnect.register('render', onRender);
+    cbmConnect.register('close', onClose);
+
+    setTimeout(function () {
+      cbmConnect.dispatch('connect', 'connect 1', '#CC0000');
+      cbmConnect.dispatch('connect', 'connect 2', '#00CC00');
+      cbmConnect.dispatch('connect', 'connect 3', '#8375b1');
+    }, 1000);
+
+    NamespaceApplication.on('#reset', 'click', function (event) {
+      NamespaceApplication.inject('#log','');
+      cbmConnect.dispatch('connect', 'connect 1', '#CC0000');
+      cbmConnect.dispatch('connect', 'connect 2', '#00CC00');
+      cbmConnect.dispatch('connect', 'connect 3', '#8375b1');
+    })
+  })();
+
+</script>
+</body>
+</html>

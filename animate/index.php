@@ -17,9 +17,9 @@
         }
         #menu{
             width: 180px;
+            max-height: 600px;
         }
         #menu ul{
-            max-height: 500px;
             overflow: auto;
         }
         #menu>ul>li{  }
@@ -99,7 +99,7 @@
             node_title = NSA.query('#title');
 
         // menu size
-        NSA.css('#menu>ul', 'max-height', window.innerHeight + 'px');
+        // NSA.css('#menu>ul', 'max-height', window.innerHeight + 'px');
 
         // menu toggles
         NSA.each(NSA.queryAll('span.toggle'), function(item){
