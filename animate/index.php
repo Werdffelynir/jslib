@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Animate demo</title>
-
     <link rel="stylesheet" href="/grid/grid.css">
 
     <script src="/namespaceapplication/namespaceapplication.js"></script>
     <script src="/animate/build/animate.js"></script>
+    <script src="/callback.manager.js"></script>
 
     <style>
         html, body {
@@ -115,8 +115,6 @@
             NSA.inject(node_title, '<h4>' + src + '</h4>');
             NSA.loadJS(src,
                 function () {
-                    // console.log('LOADED SCRIPT: ' + src);
-
                     // open selected element
                     var sele = 'a[href$="'+src.substr(path.lastIndexOf('/') + 1)+'"]';
                     NSA.css(NSA.query(sele), 'font-weight: bold');

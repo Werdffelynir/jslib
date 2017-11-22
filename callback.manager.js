@@ -11,11 +11,12 @@
     this._registered[name] = callback
   };
 
-  CallbackManager.prototype.dispatch = function (name) {
+  CallbackManager.prototype.dispatch = function (name, once) {
     if (this._registered[name]) {
       var i, args = [];
       for (i = 1; i < arguments.length; i ++) args.push(arguments[i]);
-      this._registered[name].apply({}, args)
+      this._registered[name].apply({}, args);
+      if (!!once) delete this._registered[name];
     }
   };
 
