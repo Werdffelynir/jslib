@@ -21,7 +21,8 @@
     </li>
     <li><span class="toggle">Tools</span>
         <ul class="toggle">
-            <li><a href="/animate/tools/shapegenerator.js">Shape Generator</a></li>
+            <li><a href="/animate/tools/extension-grid.js">Extension Grid</a></li>
+            <li><a href="/animate/tools/extension-maskmap.js">Extension MaskMap</a></li>
         </ul>
     </li>
     <li><span class="toggle">Effects</span>
@@ -33,7 +34,7 @@
         <ul class="toggle">
             <li><a href="/animate/games/main.js">Games</a></li>
             <li><a href="/animate/games/template.js">Games template</a></li>
-            <li><a href="/animate/games/onpanet.js">On Planet</a></li>
+<!--            <li><a href="/animate/games/onpanet.js">On Planet</a></li>-->
         </ul>
     </li>
 
