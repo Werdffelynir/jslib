@@ -154,6 +154,60 @@ NamespaceApplication.loadJS = function (src, onload, onerror) {
 };
 
 /**
+ * Loads a script element with javascript source
+ *
+ * .loadJSSync ( {
+ *      myscript1: '/path/to/myscript1',
+ *      myscript2: '/path/to/myscript2',
+ *    },
+ *    function (list) {})
+ *
+ * .loadJSSync ( [
+ *      '/path/to/myscript1',
+ *      '/path/to/myscript2',
+ *    ],
+ *    function (list) {})
+ *
+ * @namespace NamespaceApplication.loadJSSync
+ * @param src       Object, Array. items: key is ID, value is src
+ * @param callback  Function called when all srcs is loaded
+ * @param onerror   Function called when load is failed
+ * @returns {*}
+ */
+NamespaceApplication.loadJSSync = function (src, callback, onerror) {
+  if (src && typeof src === 'object') {
+
+    if (Array.isArray(src)) {
+      var obj = {};
+      src.map(function (item) {obj[Math.random().toString(32).slice(2)] = item});
+      src = obj;
+    }
+
+    var length = Object.keys(src).length,
+      key,
+      script,
+      scripts = {},
+      iterator = 0;
+    for (key in src) {
+      script = document.createElement('script');
+      script.src = (src[key].substr(-3) === '.js') ? src[key] : src[key] + '.js';
+      script.type = 'application/javascript';
+      script.id = key;
+      script.onerror = onerror;
+      script.onload = function (e) {
+        scripts[this.id] = this;
+        iterator++;
+        if (iterator === length) {
+          callback.call({}, scripts);
+        }
+      };
+      document.head.appendChild(script);
+    }
+  }
+};
+
+
+/**
  * Loads a link element with CSS stylesheet
  *
  * @param src
@@ -1570,6 +1624,7 @@ NamespaceApplication.Datetime.strToDate =  function (date, format, utc) {
 
     /*assign static as instance methods*/
     prototype.loadJS = NamespaceApplication.loadJS;
+    prototype.loadJSSync = NamespaceApplication.loadJSSync;
     prototype.loadCSS = NamespaceApplication.loadCSS;
     prototype.domLoaded = NamespaceApplication.domLoaded;
     prototype.typeOf = NamespaceApplication.typeOf;
@@ -1627,7 +1682,7 @@ NamespaceApplication.Datetime.strToDate =  function (date, format, utc) {
      * Set script version. Property [read-only]
      */
     Object.defineProperty(NamespaceApplication, 'version', {
-        enumerable: false, configurable: false, writable: false, value: '0.3.0'
+        enumerable: false, configurable: false, writable: false, value: '0.4.0'
     });
 
     window.NamespaceApplication = window.NSA = NamespaceApplication;

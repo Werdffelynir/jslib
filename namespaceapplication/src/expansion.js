@@ -24,6 +24,7 @@
 
     /*assign static as instance methods*/
     prototype.loadJS = NamespaceApplication.loadJS;
+    prototype.loadJSSync = NamespaceApplication.loadJSSync;
     prototype.loadCSS = NamespaceApplication.loadCSS;
     prototype.domLoaded = NamespaceApplication.domLoaded;
     prototype.typeOf = NamespaceApplication.typeOf;

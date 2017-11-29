@@ -16,7 +16,7 @@
     selector: '#canvas',
     width: 600,
     height: 400,
-    fps: 12
+    fps: 1
   });
 
   var Graphic = An.Graphic();
@@ -33,7 +33,33 @@
     mousePosition: {x: 0, y: 0},
   };
 
+  Move.mapSource = An.maskmapCreate([
+    1, 0, 0, 0, 1,
+    0, 1, 0, 1, 0,
+    0, 0, 1, 0, 0,
+    0, 1, 0, 1, 0,
+    1, 0, 0, 0, 1
+  ], 5, 25);
 
+
+  Move.draw = function (ctx, frame) {
+    /** @type CanvasRenderingContext2D */
+    ctx = ctx;
+
+    An.maskmapRender(Move.mapSource, function (x, y, value, iter, maskmap) {
+
+      if (value === 1)
+        if (frame % 10 < 5)
+          Graphic.color('black');
+        else
+          Graphic.color('white');
+      else
+        Graphic.color('red');
+
+      Graphic.rect(x, y, maskmap['size'], maskmap['size'])
+        .fill();
+    });
+  };
 
   // --------------------------------------------------
   // Animate frame and global settings
@@ -46,7 +72,7 @@
     /** @type CanvasRenderingContext2D */
     ctx = ctx;
 
-    An.addGrid(10, 1, '#C00');
+    Move.draw(ctx, frameCounter);
 
   });
 
