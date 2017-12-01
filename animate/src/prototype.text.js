@@ -8,7 +8,7 @@
  *    .font('bold 20px sans, sans-serif')
  *    .fill();
  *
- * @returns {{context: (CanvasRenderingContext2D|null), ALIGN: {LEFT: string, RIGHT: string, CENTER: string, START: string, END: string}, BASELINE: {TOP: string, HANDING: string, MIDDLE: string, ALPHABETIC: string, IDEOGRAPHIC: string, BOTTOM: string}, font: Function, text: Function, fill: Function, stroke: Function, align: Function, baseline: Function, color: Function}}
+ * @returns {{context: (CanvasRenderingContext2D|null), ALIGN: {LEFT: string, RIGHT: string, CENTER: string, START: string, END: string}, BASELINE: {TOP: string, HANDING: string, MIDDLE: string, ALPHABETIC: string, IDEOGRAPHIC: string, BOTTOM: string}, font: Function, text: Function, fill: Function, stroke: Function, align: Function, baseline: Function, color: Function, alpha: alpha, thickness: thickness}}
  * @constructor
  */
 Animate.prototype.TextField = function () {

@@ -34,7 +34,10 @@
         <ul class="toggle">
             <li><a href="/animate/games/main.js">Games</a></li>
             <li><a href="/animate/games/template.js">Games template</a></li>
-<!--            <li><a href="/animate/games/onpanet.js">On Planet</a></li>-->
+            <li><a href="/animate/games/stepmove.js">Step move</a></li>
+            <li><a href="/animate/games/background-movie.js">Background Movie</a></li>
+            <li><a href="/animate/games/gravity.js">Gravity</a></li>
+            <li><a href="/animate/games/mapwalker.js">Map Walker</a></li>
         </ul>
     </li>
 

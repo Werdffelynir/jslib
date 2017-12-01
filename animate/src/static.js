@@ -7,6 +7,7 @@
 Animate.LOOP_TIMER = 'timer';
 Animate.LOOP_ANIMATE = 'animation';
 Animate.DEGREE = 0.017453292519943295;
+Animate.DEGREE_360 = Animate.DEGREE * 360;
 
 /**
  * Storage of extensions
@@ -106,14 +107,17 @@ Animate.typeOfStrict = function (value, type) {
 /**
  * Clone an Array or Objects
  * @param src
- * @param addProperties
+ * @param args
  */
-Animate.copy = function (src, addProperties) {
-  var copy_object = JSON.parse(JSON.stringify(src));
-  if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
-    for (var i in addProperties)
-      copy_object[i] = addProperties[i];
-  return copy_object;
+Animate.copy = function (src, args) {
+  if (Animate.typeOf(src, 'function')) {
+    return src.bind({}, args);
+  } else if (Animate.typeOf(args, 'object') || Animate.typeOf(args, 'array')) {
+    var cObject = JSON.parse(JSON.stringify(src));
+    for (var i in args)
+      cObject[i] = args[i];
+    return cObject;
+  }
 };
 
 /**

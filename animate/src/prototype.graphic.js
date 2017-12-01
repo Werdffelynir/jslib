@@ -1,4 +1,8 @@
-
+/**
+ * Graphic draw methods
+ * @returns {{color: color, alpha: alpha, thickness: thickness, cap: cap, join: join, CAPS: {BUTT: string, ROUND: string, SQUARE: string}, JOINS: {BEVEL: string, ROUND: string, MITER: string}, formatsApply: formatsApply, begin: begin, close: close, save: save, restore: restore, shadow: shadow, clearShadow: clearShadow, circle: circle, rect: rect, rectRound: rectRound, shape: shape, line: line, ellipse: ellipse, stroke: stroke, fill: fill}}
+ * @constructor
+ */
 Animate.prototype.Graphic = function () {
 
   var Graphic = {

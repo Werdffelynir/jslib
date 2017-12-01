@@ -222,14 +222,14 @@ Animate.prototype.clear = function () {
  * Set camera position and scales
  * @param x         camera position y
  * @param y         camera position x
- * @param wight     camera wight
+ * @param width     camera width
  * @param callback  function a clip
  */
-Animate.prototype.camera = function (x, y, wight, callback) {
+Animate.prototype.camera = function (x, y, width, callback) {
   /** @type CanvasRenderingContext2D */
   var ctx = this.getContext();
   var i = this.getIteration();
-  var scale = this.width / wight;
+  var scale = this.width / width;
   ctx.save();
   ctx.translate(-x - this.camera.position.x, -y - this.camera.position.y);
   ctx.scale(scale, scale);

@@ -76,7 +76,6 @@
 
   });
 
-
   // Animate start
   An.start();
 
