@@ -17,7 +17,7 @@
         }
         #page > .table-cell:last-child{
             width: 25%;
-            border-left: 5px solid #ddd;
+            border-left: 5px solid #9ab598;
         }
         .properties li {
             display: table;
@@ -30,37 +30,28 @@
         .properties li .values{
             display: table-cell;
         }
-        .editor-item, .editor-container {
+        .editor-item, .editor-container, .editor-item-selected {
             padding: 10px;
         }
         .buttons {
             padding: 10px;
         }
-
-        .flex-container {
-            width: 100%;
-            /* flex | inline-flex */
-            display: flex;
-            /* row (default) | row-reverse | column | column-reverse */
-            flex-direction: row;
-            /* nowrap (default) | wrap | wrap-reverse */
-            flex-wrap: wrap;
-            /* Краткая запись для `flex-direction` и `flex-wrap`
-            flex-flow: <flex-direction> || <flex-wrap>
-            flex-flow: row wrap; */
-            /* flex-start (default) | flex-end | center | space-between | space-around | space-evenly; */
-            justify-content: flex-start;
-            /* flex-start | flex-end | center | baseline | stretch (default) */
-            align-items: center;
-            /* flex-start | flex-end | center | space-between | space-around | stretch (default) */
-            align-content: center;
+        .label {
+            display: inline-block;
+            width: 100px;
+        }
+        h3 {
+            padding: 15px;
+            color: forestgreen;
         }
 
         .flex-item {
             width: 150px;
             padding: 10px 20px;
-            border: 3px solid #CC0000;
+            background: #d2eccc;
+            border: 5px solid #9ab598;
         }
+
     </style>
 </head>
 <body>
@@ -78,6 +69,8 @@
         <div class="editor-container"></div>
         <h3>.flex-item</h3>
         <div class="editor-item"></div>
+        <h3> SELECTED <span class="item-name"></span></h3>
+        <div class="editor-item-selected"></div>
     </div>
 
 </div>
@@ -85,9 +78,10 @@
 <script>
   (function () {
     var App = new NamespaceApplication({
-      container: NamespaceApplication.query('.flex-container'),
-      editorContainer: NamespaceApplication.query('.editor-container'),
-      editorItem: NamespaceApplication.query('.editor-item'),
+      containerDOMElement: NamespaceApplication.query('.flex-container'),
+      editorContainerDOMElement: NamespaceApplication.query('.editor-container'),
+      editorItemDOMElement: NamespaceApplication.query('.editor-item'),
+      editorItemSelectedDOMElement: NamespaceApplication.query('.editor-item-selected'),
       button: NamespaceApplication.search('button', 'data-action'),
       items: [],
       containerParamRef: {
@@ -127,14 +121,29 @@
         var len = this.items.length;
         var itm = this.createElement('div', {'class': 'flex-item'}, 'IMG: ' + len);
 
+        this.on(itm, 'click', this.onClickItem);
         this.css(itm, this.itemParam);
         this.items.push(itm);
-        this.container.appendChild(itm);
+        this.containerDOMElement.appendChild(itm);
       },
 
       onClickItem: function (event) {
-        var itm = event.target;
-        console.log(itm.params);
+        var paramsRef = NamespaceApplication.copy(App.itemParamRef),
+          itm = event.target;
+
+        NamespaceApplication.inject('.item-name', itm.textContent);
+        NamespaceApplication.css('.flex-item', {'background-color': '#d2eccc'});
+        NamespaceApplication.css(itm, {'background-color': '#bfd8ba'});
+
+        // console.log('params', paramsRef);
+        // NamespaceApplication.each(App.itemParam, function (value, key) {params[key] = itm.style[key] });
+        // console.log('params', params);
+
+        App.createItemEditorSelected(paramsRef, function (event) {
+          var param = {};
+          param[event.target.name] = event.target.value;
+          App.css(itm, param) });
+
       },
 
       onClickContainer: function (event) {
@@ -144,49 +153,54 @@
 
       onChangeContainer: function (event) {
         App.containerParam[event.target.name] = event.target.value;
-        App.css(App.container, App.containerParam);
+        App.css(App.containerDOMElement, App.containerParam);
       },
 
       onChangeItem: function (event) {
+        NamespaceApplication.inject('.item-name', '');
+        NamespaceApplication.inject(App.editorItemSelectedDOMElement, '');
         App.itemParam[event.target.name] = event.target.value;
         App.css('.flex-item', App.itemParam);
       },
 
-      createContainerEditor: function (event) {
+      createEditor: function (paramRef, editorDOMElement, eventCallback) {
         var name, key, option, select, wrapper = this.createElement('div');
-        for (name in this.containerParamRef) {
-          select = this.createElement('select', {name: name});
-          for (key in this.containerParamRef[name]) {
-            option = this.createElement('option', {value: this.containerParamRef[name][key]}, this.containerParamRef[name][key]);
+        for (name in paramRef) {
+          select = NamespaceApplication.createElement('select', {name: name});
+          for (key in paramRef[name]) {
+            option = NamespaceApplication.createElement('option', {value: paramRef[name][key]}, paramRef[name][key]);
             select.appendChild(option);
           }
           wrapper.appendChild(
-            this.createElement('div', {}, ['<p>'+name+':</p>', select])
+            NamespaceApplication.createElement('div', {}, ['<span class="label">'+name+':</span>', select])
           );
-          App.on(select, 'change', this.onChangeContainer);
+          App.on(select, 'change', eventCallback);
         }
-        this.editorContainer.appendChild(wrapper);
+        NamespaceApplication.inject(editorDOMElement, wrapper);
+      },
+
+      createContainerEditor: function (event) {
+        this.createEditor(
+          this.containerParamRef,
+          this.editorContainerDOMElement,
+          this.onChangeContainer);
       },
 
       createItemEditor: function (event) {
-        var name, key, option, select, wrapper = this.createElement('div');
-        for (name in this.itemParamRef) {
-          select = this.createElement('select', {name: name});
-          for (key in this.itemParamRef[name]) {
-            option = this.createElement('option', {value: this.itemParamRef[name][key]}, this.itemParamRef[name][key]);
-            select.appendChild(option);
-          }
-          wrapper.appendChild(
-            this.createElement('div', {}, ['<p>'+name+':</p>', select])
-          );
-          App.on(select, 'change', this.onChangeItem);
-        }
-        this.editorItem.appendChild(wrapper);
+        this.createEditor(
+          this.itemParamRef,
+          this.editorItemDOMElement,
+          this.onChangeItem);
+      },
+
+      createItemEditorSelected: function (paramRef, eventCallback) {
+        this.createEditor(
+          paramRef,
+          this.editorItemSelectedDOMElement,
+          eventCallback);
       }
 
     });
-
-    // add sections with settings
 
 
     App.on(App.button['addItem'], 'click', function (event) {
@@ -194,14 +208,16 @@
     });
 
     // add default items
-    for (var i = 0; i < 10; i ++) {
+    for (var i = 0; i < 4; i ++) {
       App.addItem();
     }
 
+    // add sections with settings
     App.createContainerEditor();
     App.createItemEditor();
 
-    App.css(App.container, App.containerParam);
+    // to default style
+    App.css(App.containerDOMElement, App.containerParam);
     App.css('.flex-item', App.itemParam);
 
   })();
@@ -251,6 +267,80 @@ item:
  flex: 0 0 1 */
 
 /* align-self: auto (default?) | flex-start | flex-end | center | baseline | stretch; */
+
+
+-->
+
+
+<!--
+
+
+
+
+
+
+
+
+
+
+
+/*        .flex-container {
+            width: 100%;
+            !* flex | inline-flex *!
+            display: flex;
+            !* row (default) | row-reverse | column | column-reverse *!
+            flex-direction: row;
+            !* nowrap (default) | wrap | wrap-reverse *!
+            flex-wrap: wrap;
+            !* Краткая запись для `flex-direction` и `flex-wrap`
+            flex-flow: <flex-direction> || <flex-wrap>
+            flex-flow: row wrap; *!
+            !* flex-start (default) | flex-end | center | space-between | space-around | space-evenly; *!
+            justify-content: flex-start;
+            !* flex-start | flex-end | center | baseline | stretch (default) *!
+            align-items: center;
+            !* flex-start | flex-end | center | space-between | space-around | stretch (default) *!
+            align-content: center;
+        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+        var name, key, option, select, wrapper = this.createElement('div');
+        for (name in this.containerParamRef) {
+          select = this.createElement('select', {name: name});
+          for (key in this.containerParamRef[name]) {
+            option = this.createElement('option', {value: this.containerParamRef[name][key]}, this.containerParamRef[name][key]);
+            select.appendChild(option);
+          }
+          wrapper.appendChild(
+            this.createElement('div', {}, ['<span class="label">'+name+':</span>', select])
+          );
+          App.on(select, 'change', this.onChangeContainer);
+        }
+        this.editorContainerDOMElement.appendChild(wrapper);
+
+/*        var name, key, option, select, wrapper = this.createElement('div');
+        for (name in this.itemParamRef) {
+          select = this.createElement('select', {name: name});
+          for (key in this.itemParamRef[name]) {
+            option = this.createElement('option', {value: this.itemParamRef[name][key]}, this.itemParamRef[name][key]);
+            select.appendChild(option);
+          }
+          wrapper.appendChild(
+            this.createElement('div', {}, ['<span class="label">'+name+':</span>', select])
+          );
+          App.on(select, 'change', this.onChangeItem);
+        }
+        this.editorItemDOMElement.appendChild(wrapper);*/
 
 
 -->
