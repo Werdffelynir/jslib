@@ -2,54 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Flexbox Play</title>
     <link rel="stylesheet" href="http://jslib.loc/grid/grid2.css">
     <script src="http://jslib.loc/namespaceapplication/namespaceapplication.js"></script>
+    <script src="http://jslib.loc/resizer.js"></script>
     <style>
+        * {
+            font-family: "Arial", "Calibri", "Verdana";
+            font-size: 96%;
+        }
+
         html, body {
+            width: 100%;
             height: 100%;
         }
+
         #page {
+            width: 100%;
             height: 100%;
         }
-        #page > .table-cell:first-child{
-            width: 75%;
+
+        #page > .table-cell:first-child {
+            width: calc(100% - 280px);
+            background-color: #9ab598;
         }
-        #page > .table-cell:last-child{
-            width: 25%;
+
+        #page > .table-cell:last-child {
+            width: 280px;
+            background-color: #f3f3f3;
             border-left: 5px solid #9ab598;
         }
+
         .properties li {
             display: table;
             width: 100%;
         }
-        .properties li .property{
+
+        .properties li .property {
             display: table-cell;
             width: 50%;
         }
-        .properties li .values{
+
+        .properties li .values {
             display: table-cell;
         }
+
         .editor-item, .editor-container, .editor-item-selected {
             padding: 10px;
         }
+
         .buttons {
             padding: 10px;
         }
+
         .label {
             display: inline-block;
             width: 100px;
         }
+
         h3 {
-            padding: 15px;
+            border-top: 1px solid #91ab90;
+            padding: 15px 0 0 15px;
             color: forestgreen;
+        }
+
+        .resizer {
+            width: 50px;
+            min-width: 50px;
+            background: #CC0000;
+            cursor: ne-resize;
+        }
+
+        .button-delete {
+            font-size: 70%;
+            padding: 4px 10px;
+            text-transform: uppercase;
+        }
+
+        input[data-action="containerSize"] {
+            width: 250px;
+        }
+
+        .flex-wrapper {
+            height: 100%;
+            width: 100%;
+            overflow-x: auto;
+            background-color: #ffffff;
         }
 
         .flex-item {
             width: 150px;
             padding: 10px 20px;
-            background: #d2eccc;
+            background-color: #d2eccc;
             border: 5px solid #9ab598;
+            font-weight: bold;
         }
 
     </style>
@@ -58,12 +104,17 @@
 <div id="page" class="table">
 
     <div class="table-cell valign-top">
-        <div class="flex-container"></div>
+        <div class="flex-wrapper ">
+            <div class="flex-container"></div>
+        </div>
     </div>
 
     <div class="table-cell valign-top">
         <div class="buttons">
-            <button data-action="addItem">Add item</button>
+            <div>
+                <input data-action="containerSize" type="range" name="size" min="1" max="100" value="100"></div>
+            <div>
+                <button data-action="addItem">Add item</button></div>
         </div>
         <h3>.flex-container</h3>
         <div class="editor-container"></div>
@@ -78,28 +129,61 @@
 <script>
   (function () {
     var App = new NamespaceApplication({
+      wrapperDOMElement: NamespaceApplication.query('.flex-wrapper'),
       containerDOMElement: NamespaceApplication.query('.flex-container'),
       editorContainerDOMElement: NamespaceApplication.query('.editor-container'),
       editorItemDOMElement: NamespaceApplication.query('.editor-item'),
       editorItemSelectedDOMElement: NamespaceApplication.query('.editor-item-selected'),
+      sizeInputElement: NamespaceApplication.query('[name="size"]'),
       button: NamespaceApplication.search('button', 'data-action'),
       items: [],
       containerParamRef: {
-        'width': {'100%':'100%', '600px':'600px'},
-        'height': {'100%':'100%', '400px':'400px'},
-        'display': {'flex':'flex', 'inline-flex':'inline-flex'},
-        'flex-direction': {'row':'row', 'row-reverse':'row-reverse', 'column':'column', 'column-reverse':'column-reverse'},
-        'flex-wrap': {'nowrap':'nowrap', 'wrap':'wrap', 'wrap-reverse':'wrap-reverse'},
-        'justify-content': {'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'space-between':'space-between', 'space-around':'space-around', 'space-evenly':'space-evenly'},
-        'align-items': {'stretch':'stretch', 'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'baseline':'baseline'},
-        'align-content': {'stretch':'stretch', 'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'space-between':'space-between', 'space-around':'space-around'}
+        'height': {'100%': '100%', '400px': '400px'},
+        'display': {'flex': 'flex', 'inline-flex': 'inline-flex'},
+        'flex-direction': {
+          'row': 'row',
+          'row-reverse': 'row-reverse',
+          'column': 'column',
+          'column-reverse': 'column-reverse'
+        },
+        'flex-wrap': {'nowrap': 'nowrap', 'wrap': 'wrap', 'wrap-reverse': 'wrap-reverse'},
+        'justify-content': {
+          'flex-start': 'flex-start',
+          'flex-end': 'flex-end',
+          'center': 'center',
+          'space-between': 'space-between',
+          'space-around': 'space-around',
+          'space-evenly': 'space-evenly'
+        },
+        'align-items': {
+          'stretch': 'stretch',
+          'flex-start': 'flex-start',
+          'flex-end': 'flex-end',
+          'center': 'center',
+          'baseline': 'baseline'
+        },
+        'align-content': {
+          'stretch': 'stretch',
+          'flex-start': 'flex-start',
+          'flex-end': 'flex-end',
+          'center': 'center',
+          'space-between': 'space-between',
+          'space-around': 'space-around'
+        }
       },
       itemParamRef: {
-        'order': {'0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
-        'flex-grow': {'0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
-        'flex-shrink': {'1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
-        'flex-basis': {'auto': 'auto', '5':'5', '10':'10'},
-        'align-self': {'auto': 'auto', 'flex-start': 'flex-start', 'flex-end': 'flex-end', 'center': 'center', 'baseline': 'baseline', 'stretch': 'stretch'}
+        'order': {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5'},
+        'flex-grow': {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10'},
+        'flex-shrink': {'1': '1', '2': '2', '3': '3', '4': '4', '5': '5'},
+        'flex-basis': {'auto': 'auto', '10': '10', '5': '5'},
+        'align-self': {
+          'auto': 'auto',
+          'flex-start': 'flex-start',
+          'flex-end': 'flex-end',
+          'center': 'center',
+          'baseline': 'baseline',
+          'stretch': 'stretch'
+        }
       },
       containerParam: {
         'width': '100%',
@@ -119,7 +203,7 @@
       },
       addItem: function () {
         var len = this.items.length;
-        var itm = this.createElement('div', {'class': 'flex-item'}, 'IMG: ' + len);
+        var itm = this.createElement('div', {'class': 'flex-item'}, 'BOX: ' + len + ' . ');
 
         this.on(itm, 'click', this.onClickItem);
         this.css(itm, this.itemParam);
@@ -129,20 +213,28 @@
 
       onClickItem: function (event) {
         var paramsRef = NamespaceApplication.copy(App.itemParamRef),
-          itm = event.target;
+          itm = event.target,
+          deleteButton = NamespaceApplication.createElement('button', {class: 'button-delete'}, 'delete');
 
-        NamespaceApplication.inject('.item-name', itm.textContent);
-        NamespaceApplication.css('.flex-item', {'background-color': '#d2eccc'});
+        NamespaceApplication.on(deleteButton, 'click', function (eve) {
+          App.containerDOMElement.removeChild(itm);
+          App.cleanItemSelected();
+        });
+
+        App.cleanItemSelected();
+        NamespaceApplication.inject('.item-name', [itm.textContent, deleteButton]);
         NamespaceApplication.css(itm, {'background-color': '#bfd8ba'});
 
-        // console.log('params', paramsRef);
-        // NamespaceApplication.each(App.itemParam, function (value, key) {params[key] = itm.style[key] });
-        // console.log('params', params);
-
-        App.createItemEditorSelected(paramsRef, function (event) {
+        App.createItemEditorSelected(App.itemParamRef, function (eve) {
           var param = {};
-          param[event.target.name] = event.target.value;
-          App.css(itm, param) });
+          param[eve.target.name] = eve.target.value;
+          App.css(itm, param)
+        });
+
+        NamespaceApplication.each(App.itemParam, function (value, key) {
+          var se = App.query('select[name="'+key+'"]>option[value="'+itm.style[key]+'"]', App.editorItemSelectedDOMElement);
+          se.selected = 'selected';
+        });
 
       },
 
@@ -157,10 +249,15 @@
       },
 
       onChangeItem: function (event) {
-        NamespaceApplication.inject('.item-name', '');
-        NamespaceApplication.inject(App.editorItemSelectedDOMElement, '');
+        App.cleanItemSelected();
         App.itemParam[event.target.name] = event.target.value;
         App.css('.flex-item', App.itemParam);
+      },
+
+      cleanItemSelected: function () {
+        NamespaceApplication.inject('.item-name', '');
+        NamespaceApplication.inject(App.editorItemSelectedDOMElement, '');
+        NamespaceApplication.css('.flex-item', {'background-color': '#d2eccc'});
       },
 
       createEditor: function (paramRef, editorDOMElement, eventCallback) {
@@ -169,10 +266,13 @@
           select = NamespaceApplication.createElement('select', {name: name});
           for (key in paramRef[name]) {
             option = NamespaceApplication.createElement('option', {value: paramRef[name][key]}, paramRef[name][key]);
+            // console.log(select.childNodes.length, name, paramRef[name][key]);
+            // if (select.childNodes.length === 0) {
+            //   option.selected = 'selected' }
             select.appendChild(option);
           }
           wrapper.appendChild(
-            NamespaceApplication.createElement('div', {}, ['<span class="label">'+name+':</span>', select])
+            NamespaceApplication.createElement('div', {}, ['<span class="label">' + name + ':</span>', select])
           );
           App.on(select, 'change', eventCallback);
         }
@@ -202,23 +302,35 @@
 
     });
 
+    App.domLoaded(function () {
 
-    App.on(App.button['addItem'], 'click', function (event) {
-      App.addItem();
+      App.on(App.button['addItem'], 'click', function (event) {
+        App.addItem();
+      });
+
+      // add default items
+      for (var i = 0; i < 4; i++) {
+        App.addItem();
+      }
+
+      // add sections with settings
+      App.createContainerEditor();
+      App.createItemEditor();
+
+      // to default style
+      App.css(App.wrapperDOMElement, {width: App.position(App.wrapperDOMElement).width + 'px'});
+      App.css(App.containerDOMElement, App.containerParam);
+      App.css('.flex-item', App.itemParam);
+
+      // get wrapper size
+      var wrapperWidth = App.position(App.wrapperDOMElement).width;
+
+      App.on(App.sizeInputElement, 'input', function (eve) {
+        var newWidth = wrapperWidth * eve.target.value  / 100;
+        App.css(App.wrapperDOMElement, {width: newWidth + 'px'});
+      });
+
     });
-
-    // add default items
-    for (var i = 0; i < 4; i ++) {
-      App.addItem();
-    }
-
-    // add sections with settings
-    App.createContainerEditor();
-    App.createItemEditor();
-
-    // to default style
-    App.css(App.containerDOMElement, App.containerParam);
-    App.css('.flex-item', App.itemParam);
 
   })();
 </script>
