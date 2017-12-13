@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://jslib.loc/grid/grid2.css">
+    <script src="http://jslib.loc/namespaceapplication/namespaceapplication.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        #page {
+            height: 100%;
+        }
+        #page > .table-cell:first-child{
+            width: 75%;
+        }
+        #page > .table-cell:last-child{
+            width: 25%;
+            border-left: 5px solid #ddd;
+        }
+        .properties li {
+            display: table;
+            width: 100%;
+        }
+        .properties li .property{
+            display: table-cell;
+            width: 50%;
+        }
+        .properties li .values{
+            display: table-cell;
+        }
+        .editor-item, .editor-container {
+            padding: 10px;
+        }
+        .buttons {
+            padding: 10px;
+        }
+
+        .flex-container {
+            width: 100%;
+            /* flex | inline-flex */
+            display: flex;
+            /* row (default) | row-reverse | column | column-reverse */
+            flex-direction: row;
+            /* nowrap (default) | wrap | wrap-reverse */
+            flex-wrap: wrap;
+            /* Краткая запись для `flex-direction` и `flex-wrap`
+            flex-flow: <flex-direction> || <flex-wrap>
+            flex-flow: row wrap; */
+            /* flex-start (default) | flex-end | center | space-between | space-around | space-evenly; */
+            justify-content: flex-start;
+            /* flex-start | flex-end | center | baseline | stretch (default) */
+            align-items: center;
+            /* flex-start | flex-end | center | space-between | space-around | stretch (default) */
+            align-content: center;
+        }
+
+        .flex-item {
+            width: 150px;
+            padding: 10px 20px;
+            border: 3px solid #CC0000;
+        }
+    </style>
+</head>
+<body>
+<div id="page" class="table">
+
+    <div class="table-cell valign-top">
+        <div class="flex-container"></div>
+    </div>
+
+    <div class="table-cell valign-top">
+        <div class="buttons">
+            <button data-action="addItem">Add item</button>
+        </div>
+        <h3>.flex-container</h3>
+        <div class="editor-container"></div>
+        <h3>.flex-item</h3>
+        <div class="editor-item"></div>
+    </div>
+
+</div>
+
+<script>
+  (function () {
+    var App = new NamespaceApplication({
+      container: NamespaceApplication.query('.flex-container'),
+      editorContainer: NamespaceApplication.query('.editor-container'),
+      editorItem: NamespaceApplication.query('.editor-item'),
+      button: NamespaceApplication.search('button', 'data-action'),
+      items: [],
+      containerParamRef: {
+        'width': {'100%':'100%', '600px':'600px'},
+        'height': {'100%':'100%', '400px':'400px'},
+        'display': {'flex':'flex', 'inline-flex':'inline-flex'},
+        'flex-direction': {'row':'row', 'row-reverse':'row-reverse', 'column':'column', 'column-reverse':'column-reverse'},
+        'flex-wrap': {'nowrap':'nowrap', 'wrap':'wrap', 'wrap-reverse':'wrap-reverse'},
+        'justify-content': {'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'space-between':'space-between', 'space-around':'space-around', 'space-evenly':'space-evenly'},
+        'align-items': {'stretch':'stretch', 'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'baseline':'baseline'},
+        'align-content': {'stretch':'stretch', 'flex-start':'flex-start', 'flex-end':'flex-end', 'center':'center', 'space-between':'space-between', 'space-around':'space-around'}
+      },
+      itemParamRef: {
+        'order': {'0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
+        'flex-grow': {'0':'0', '1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
+        'flex-shrink': {'1':'1', '2':'2', '3':'3', '4':'4', '5':'5'},
+        'flex-basis': {'auto': 'auto', '5':'5', '10':'10'},
+        'align-self': {'auto': 'auto', 'flex-start': 'flex-start', 'flex-end': 'flex-end', 'center': 'center', 'baseline': 'baseline', 'stretch': 'stretch'}
+      },
+      containerParam: {
+        'width': '100%',
+        'height': '100%',
+        'display': 'flex',
+        'flex-grow': 0,
+        'flex-shrink': 1,
+        'flex-basis': 'auto',
+        'align-self': 'auto'
+      },
+      itemParam: {
+        'order': 0,
+        'flex-grow': 0,
+        'flex-shrink': 1,
+        'flex-basis': 'auto',
+        'align-self': 'auto'
+      },
+      addItem: function () {
+        var len = this.items.length;
+        var itm = this.createElement('div', {'class': 'flex-item'}, 'IMG: ' + len);
+
+        this.css(itm, this.itemParam);
+        this.items.push(itm);
+        this.container.appendChild(itm);
+      },
+
+      onClickItem: function (event) {
+        var itm = event.target;
+        console.log(itm.params);
+      },
+
+      onClickContainer: function (event) {
+        var itm = event.target;
+        console.log(itm.params);
+      },
+
+      onChangeContainer: function (event) {
+        App.containerParam[event.target.name] = event.target.value;
+        App.css(App.container, App.containerParam);
+      },
+
+      onChangeItem: function (event) {
+        App.itemParam[event.target.name] = event.target.value;
+        App.css('.flex-item', App.itemParam);
+      },
+
+      createContainerEditor: function (event) {
+        var name, key, option, select, wrapper = this.createElement('div');
+        for (name in this.containerParamRef) {
+          select = this.createElement('select', {name: name});
+          for (key in this.containerParamRef[name]) {
+            option = this.createElement('option', {value: this.containerParamRef[name][key]}, this.containerParamRef[name][key]);
+            select.appendChild(option);
+          }
+          wrapper.appendChild(
+            this.createElement('div', {}, ['<p>'+name+':</p>', select])
+          );
+          App.on(select, 'change', this.onChangeContainer);
+        }
+        this.editorContainer.appendChild(wrapper);
+      },
+
+      createItemEditor: function (event) {
+        var name, key, option, select, wrapper = this.createElement('div');
+        for (name in this.itemParamRef) {
+          select = this.createElement('select', {name: name});
+          for (key in this.itemParamRef[name]) {
+            option = this.createElement('option', {value: this.itemParamRef[name][key]}, this.itemParamRef[name][key]);
+            select.appendChild(option);
+          }
+          wrapper.appendChild(
+            this.createElement('div', {}, ['<p>'+name+':</p>', select])
+          );
+          App.on(select, 'change', this.onChangeItem);
+        }
+        this.editorItem.appendChild(wrapper);
+      }
+
+    });
+
+    // add sections with settings
+
+
+    App.on(App.button['addItem'], 'click', function (event) {
+      App.addItem();
+    });
+
+    // add default items
+    for (var i = 0; i < 10; i ++) {
+      App.addItem();
+    }
+
+    App.createContainerEditor();
+    App.createItemEditor();
+
+    App.css(App.container, App.containerParam);
+    App.css('.flex-item', App.itemParam);
+
+  })();
+</script>
+</body>
+</html>
+<!--
+
+
+container:
+
+/* flex | inline-flex */
+display: flex;
+
+/* row (default) | row-reverse | column | column-reverse */
+flex-direction: row;
+
+/* nowrap (default) | wrap | wrap-reverse */
+flex-wrap: wrap;
+
+/* Краткая запись для `flex-direction` и `flex-wrap`
+flex-flow: <flex-direction> || <flex-wrap>
+flex-flow: row wrap; */
+
+/* flex-start (default) | flex-end | center | space-between | space-around | space-evenly; */
+justify-content: flex-start;
+
+/* flex-start | flex-end | center | baseline | stretch (default) */
+align-items: center;
+
+/* flex-start | flex-end | center | space-between | space-around | stretch (default) */
+align-content: center;
+
+
+item:
+
+/* order: <integer>; (default is 0) */
+
+/* flex-grow: <number>; (default 0) */
+
+/* flex-shrink: <number>; (default 1) */
+
+/* flex-basis: <length> | auto; (default auto) */
+
+/* Кратка язапись для `flex-grow`, `flex-shrink` и `flex-basis`
+ flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+ flex: 0 0 1 */
+
+/* align-self: auto (default?) | flex-start | flex-end | center | baseline | stretch; */
+
+
+-->

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://jslib.loc/grid/grid2.css">
+    <script src="http://jslib.loc/namespaceapplication/namespaceapplication.js"></script>
+    <style>
+        .container {
+            width: 100%;
+            /* flex | inline-flex */
+            display: flex;
+            /* row (default) | row-reverse | column | column-reverse */
+            flex-direction: row;
+            /* nowrap (default) | wrap | wrap-reverse */
+            flex-wrap: wrap;
+            /* Краткая запись для `flex-direction` и `flex-wrap`
+            flex-flow: <flex-direction> || <flex-wrap>
+            flex-flow: row wrap; */
+            /* flex-start (default) | flex-end | center | space-between | space-around | space-evenly; */
+            justify-content: flex-start;
+            /* flex-start | flex-end | center | baseline | stretch (default) */
+            align-items: center;
+            /* flex-start | flex-end | center | space-between | space-around | stretch (default) */
+            align-content: center;
+        }
+        .item {
+            padding: 10px 20px;
+            border: 3px solid #CC0000;
+
+            /* order: <integer>; (default is 0) */
+            /* flex-grow: <number>; (default 0) */
+            /* flex-shrink: <number>; (default 1) */
+            /* flex-basis: <length> | auto; (default auto) */
+            /* Кратка язапись для `flex-grow`, `flex-shrink` и `flex-basis`
+             flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+             flex: 0 0 1 */
+            /* align-self: auto | flex-start | flex-end | center | baseline | stretch; */
+        }
+        .list {
+
+        }
+    </style>
+</head>
+<body>
+
+<div class="settings">
+    <button id="view">Grid | List</button>
+</div>
+
+<div class="container" style="display: flex">
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+    <div class="item">Item</div>
+</div>
+
+<script>
+  NamespaceApplication.on('#view', 'click', function (eve) {
+    var c = NamespaceApplication.query('.container');
+    if (c.style.display === 'flex')
+      c.style.display = 'block';
+    else
+      c.style.display = 'flex';
+  });
+</script>
+</body>
+</html>

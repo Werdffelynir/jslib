@@ -28,6 +28,8 @@
     <li><span class="toggle">Effects</span>
         <ul class="toggle">
             <li><a href="/animate/effects/noise.js">Noise</a></li>
+            <li><a href="/animate/effects/sk.logo.1.js">sk logo 1</a></li>
+            <li><a href="/animate/effects/sk.logo.2.js">sk logo 2</a></li>
         </ul>
     </li>
     <li><span class="toggle">Games</span>
