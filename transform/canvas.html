@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/grid/grid2.css">
+    <script src="/namespaceapplication/namespaceapplication.js"></script>
+    <style>
+        * {
+            font-family: "Arial", "Calibri", "Verdana";
+            font-size: 96%;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #page {
+            width: 100%;
+            height: 100%;
+        }
+
+        #page > .table-cell {
+            vertical-align: top;
+        }
+
+        #page > .table-cell:first-child {
+            width: calc(100% - 360px);
+            background-color: #9ab598;
+        }
+
+        #page > .table-cell:last-child {
+            width: 360px;
+            background-color: #f3f3f3;
+            border-left: 5px solid #9ab598;
+        }
+
+        #workspace {
+            width: 100%;
+            height: 100%;
+        }
+
+        #properties {
+        }
+
+
+        .transform-form {
+            padding: 10px;
+        }
+
+        .transform-form input[type="range"] {
+            width: 260px;
+        }
+
+        span.label {
+            display: block;
+        }
+
+        span[class^="value-"] {
+            position: relative;
+            top: -8px;
+            left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="page" class="table">
+    <div class="table-cell">
+        <div id="workspace">
+            <canvas></canvas>
+        </div>
+    </div>
+    <div class="table-cell">
+        <div id="properties">
+            <h1>transfoem</h1>
+        </div>
+    </div>
+</div>
+
+<script>
+  NamespaceApplication.domLoaded(function () {
+    var App = new NamespaceApplication({
+      path: '/transform',
+      data: []
+    });
+
+    var Workspace = {};
+    Workspace.element = App.query('#workspace');
+    Workspace.canvas = App.query('#workspace canvas');
+    Workspace.ctx = Workspace.canvas.getContext('2d');
+
+    Workspace.createForm = function (fields) {
+      var input, line, rows = [];
+      fields.forEach(function (inp) {
+        input =  App.createElement('input', {value: inp.value, type: inp.type, name: inp.name, min: inp.min, max: inp.max});
+
+        App.on(input, 'input', function (e) {
+          App.findObject(fields, 'name', e.target.name)['value'] = parseFloat(e.target.value) / 100;
+          App.inject('.value-' + e.target.name, parseFloat(e.target.value) / 100);
+
+          Workspace.drawTransformRectangle(fields);
+        });
+
+        line = NamespaceApplication.createElement('div',
+          {}, ['<span class="label">' + inp.placeholder + '</span>', input, '<span class="value-' + inp.name + '">' + inp.value + '</span>']
+        );
+        rows.push(line);
+      });
+      return App.createElement('form', {'class': 'transform-form'}, rows);
+    };
+
+    Workspace.drawTransformRectangle = function (fields) {
+      console.log('draw', fields);
+
+      Workspace.ctx.clearRect(0, 0, 2000, 1000);
+      Workspace.ctx.save();
+      Workspace.ctx.translate(200, 200);
+
+      Workspace.ctx.beginPath();
+      Workspace.ctx.fillStyle = '#62487e';
+      Workspace.ctx.strokeStyle = '#322540';
+
+      Workspace.ctx.transform(
+        App.findObject(fields, 'name', 'm11')['value'],
+        App.findObject(fields, 'name', 'm12')['value'],
+        App.findObject(fields, 'name', 'm21')['value'],
+        App.findObject(fields, 'name', 'm22')['value'],
+        App.findObject(fields, 'name', 'dx')['value'],
+        App.findObject(fields, 'name', 'dy')['value']
+      );
+
+      Workspace.ctx.rect(0, 0, 400, 200);
+      Workspace.ctx.fill();
+      Workspace.ctx.stroke();
+      Workspace.ctx.restore();
+
+    };
+
+
+    var Properties = {};
+    Properties.element = App.query('#properties');
+
+
+/*
+a (m11) Horizontal scaling.
+b (m12) Horizontal skewing.
+c (m21) Vertical skewing.
+d (m22) Vertical scaling.
+e (dx) Horizontal moving.
+f (dy) Vertical moving.
+*/
+    Properties.fields = {
+      transform: [
+        {name: 'm11', value: 1, type: 'range', min: -100, max: 100, placeholder: 'Horizontal scaling'},
+        {name: 'm12', value: 0, type: 'range', min: -100, max: 100, placeholder: 'Horizontal skewing'},
+        {name: 'm21', value: 0, type: 'range', min: -100, max: 100, placeholder: 'Vertical scaling'},
+        {name: 'm22', value: 1, type: 'range', min: -100, max: 100, placeholder: 'Vertical skewing'},
+        {name: 'dx', value: 0, type: 'range',  min: -10000, max: 10000, placeholder: 'Horizontal moving'},
+        {name: 'dy', value: 0, type: 'range',  min: -10000, max: 10000, placeholder: 'Vertical moving'}
+      ]
+    };
+
+    // funcs
+    Workspace.canvas.width = NamespaceApplication.position('#workspace').width;
+    Workspace.canvas.height = NamespaceApplication.position('#workspace').height;
+
+
+    var transformForm = Workspace.createForm(Properties.fields.transform);
+    Workspace.drawTransformRectangle(Properties.fields.transform);
+
+    Properties.element.appendChild(transformForm);
+
+    console.log('transformForm', transformForm);
+    console.log('transformForm', NamespaceApplication.position('#workspace'));
+    console.log('transformForm', NamespaceApplication.position(Workspace.element));
+  });
+</script>
+</body>
+</html>
