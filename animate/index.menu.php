@@ -7,6 +7,7 @@
             <li><a href="/animate/graphic/rectround.js">Rectangle Round</a></li>
             <li><a href="/animate/graphic/circle.js">Circle</a></li>
             <li><a href="/animate/graphic/line.js">Line</a></li>
+            <li><a href="/animate/graphic/draw-line.js">Draw Line</a></li>
             <li><a href="/animate/graphic/line-clock.js">Line Clock</a></li>
             <li><a href="/animate/graphic/shape.js">Shape</a></li>
             <li><a href="/animate/graphic/shape-html5.js">Shape HTML5</a></li>

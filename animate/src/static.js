@@ -211,6 +211,8 @@ Animate.calculateAngle = function (p1, p2) {
  * @returns {{x: *, y: *}}
  */
 Animate.Point = function (x, y) {
+  x = Animate.isset(x, 0);
+  y = Animate.isset(y, 0);
   var point = [x, y];
   point.x = x;
   point.y = y;
@@ -243,7 +245,7 @@ Animate.Rectangle = function (x, y, width, height) {
  */
 Animate.Clip = function (options, callback, thisInstance) {
   return function () {
-    callback.bind(options).apply(thisInstance || {}, arguments || {})
+    return callback.bind(options).apply(thisInstance || {}, arguments || {})
   };
 };
 
