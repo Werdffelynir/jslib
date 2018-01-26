@@ -112,6 +112,7 @@ Animate.typeOfStrict = function (value, type) {
 Animate.copy = function (src, args) {
   if (Animate.typeOf(src, 'function')) {
     return src.bind({}, args);
+
   } else if (Animate.typeOf(args, 'object') || Animate.typeOf(args, 'array')) {
     var cObject = JSON.parse(JSON.stringify(src));
     for (var i in args)
