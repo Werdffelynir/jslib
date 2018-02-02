@@ -34,6 +34,7 @@
             <li><a href="/animate/games/main.js">Games</a></li>
             <li><a href="/animate/games/template.js">Games template</a></li>
             <li><a href="/animate/games/onpanet.js">On Planet</a></li>
+            <li><a href="/animate/games/mapmen.js">MapMen</a></li>
         </ul>
     </li>
 
