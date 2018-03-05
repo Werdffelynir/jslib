@@ -41,6 +41,7 @@
             <li><a href="/animate/games/background-movie.js">Background Movie</a></li>
             <li><a href="/animate/games/gravity.js">Gravity</a></li>
             <li><a href="/animate/games/mapwalker.js">Map Walker</a></li>
+            <li><a href="/animate/games/mapgenerator.js">Map Generator</a></li>
         </ul>
     </li>
 
