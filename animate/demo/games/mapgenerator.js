@@ -51,11 +51,18 @@ height
       return new RoomsGenerator(config)}
 
     //
+    this.rooms = [];
     this.config = config;
+
+
 
   };
 
-  RoomsGenerator.prototype.config = {canvas: {width: null, height: null}, part: {width: null, height: null}};
+  RoomsGenerator.prototype.config = {
+    canvas: {width: null, height: null},
+    part: {width: null, height: null},
+    start: {x: 0, y: 0}
+  };
   RoomsGenerator.prototype.rooms = [];
   RoomsGenerator.prototype.generateRoom = function () {
 
