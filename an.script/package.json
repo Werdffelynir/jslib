@@ -15,5 +15,9 @@
     "nodemon": "^1.17.4",
     "ts-node": "^6.0.3",
     "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.2"
   }
 }
