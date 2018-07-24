@@ -1,5 +1,127 @@
-/** Static Methods * */
-var NamespaceApplication = window.NamespaceApplication || {}; // THIS-LINE-WILL-DELETED
+(function (window) {
+
+    var NamespaceApplication = (function () {
+    return function () {
+        // Simplex
+        if (!(this instanceof NamespaceApplication)) return new NamespaceApplication();
+
+        // Public config properties
+        this.path = '/';
+        this.debug = true;
+
+        // Private properties
+        this._require_key = false;
+        this._requires_stack = {};
+
+        // Set Configurations
+        if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
+            for (var k in arguments[0]) {
+                if (this[k] === undefined || ['path', 'debug'].indexOf(k) !== -1)
+                    this[k] = arguments[0][k];
+            }
+        }
+
+        // Set extension aliases to instance
+        NamespaceApplication.extension.set_instance_application(this);
+
+        return this;
+    }
+})();
+
+    NamespaceApplication.prototype = (function () {
+    /**
+     * @namespace NamespaceApplication.prototype
+     */
+    var prototype = {};
+
+    /**
+     * Create namespace for module object
+     *
+     * @param namespace     namespace. Ex: "Module.Name" ="AppInstance.Module.Name"
+     * @param callback      Must return Object or Function
+     * @returns {NamespaceApplication.prototype.namespace|{}}
+     */
+    prototype.namespace = function (namespace, callback) {
+
+        var
+            i,
+            name,
+            path = namespace.split('.'),
+            inst = this || {},
+            len = path.length;
+
+        for (i = 0; i < len; i++) {
+            name = path[i].trim();
+            if (typeof inst[name] !== 'object') {
+                inst[name] = (i + 1 >= len) ? (callback ? callback.call(inst, this, {}) : {}) : {};
+                inst = inst[name];
+            } else
+                inst = inst[name];
+        }
+
+        return inst;
+    };
+
+    /**
+     * Designate a list of scripts for loading
+     *
+     * @param key           list key (identifier)
+     * @param path          array with scripts url
+     * @param oncomplete    executing when all scripts are loaded
+     * @param onerror
+     * @returns {NamespaceApplication.prototype.require}
+     */
+    prototype.require = function (key, path, oncomplete, onerror) {
+        this._require_key = key;
+        this._requires_stack[key] = {
+            src: Array.isArray(path) ? path : [path],
+            elements: [],
+            oncomplete: oncomplete,
+            onerror: onerror
+        };
+        return this;
+    };
+
+    /**
+     * Start loading the list of scripts by key (identifier)
+     *
+     * @param key
+     * @returns {NamespaceApplication.prototype.requireStart}
+     */
+    prototype.requireStart = function (key) {
+        key = key || this._require_key;
+        if (this._requires_stack[key])
+            this._load_scripts_recursive(0, key);
+        else
+            console.error("Require source not found! Key: " + key + " not exist!");
+
+        return this;
+    };
+
+    prototype._load_scripts_recursive = function (i, key) {
+        var self = this,
+            requires = this._requires_stack[key];
+
+        if (requires.src[i]) {
+            if (!Array.isArray(requires.elements))
+                requires.elements = [];
+
+            requires.elements.push(NamespaceApplication.loadJS(requires.src[i], function () {
+                self._load_scripts_recursive(++i, key);
+            }, requires.onerror));
+        }
+        else if (i === requires.src.length)
+            requires.oncomplete.call(self, requires.elements);
+        else
+            self._load_scripts_recursive(++i, key);
+    };
+
+    return prototype
+})();
+
+    NamespaceApplication.prototype.constructor = NamespaceApplication;
+
+    /** Static Methods * */
 
 /**
  * Loads a script element with javascript source
@@ -1536,7 +1658,7 @@ NamespaceApplication.Datetime.strToDate = function (date, format, utc) {
 
 /**
  * Example:
- * const chain = new NamespaceApplication.Chain(onSuccess, onError);
+ * const chain = new NamespaceApplication.Chain();
  * chain.add('Test begin', function (next) {
  * }).add('Next model', function (next) { next()
  * }).add('Last model', function (next) { next()
@@ -1544,67 +1666,120 @@ NamespaceApplication.Datetime.strToDate = function (date, format, utc) {
  * @returns {Function}
  * @constructor
  */
-NamespaceApplication.Chain = function (ons, onf) {
-  "use strict";
-  var _createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
+NamespaceApplication.Chain = function () {
+  return function Chain (onSuccess, onFailed) {
+    if (!(this instanceof Chain)) {
+      return new Chain(onSuccess, onFailed);
     }
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
+    this._index = 0;
+    this._callbacks = [];
+    this._onsuccess = onSuccess;
+    this._onfailed = onFailed;
+    this.add = function (name, callback) {
+      callback.chainName = name;
+      this._callbacks.push(callback.bind({}, this.next.bind(this), this._onfailed));
+      return this;
     };
-  }();
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
+    this.next = function () {
+      this._index ++;
+      if (this._callbacks[this._index]) {
+        this._callbacks[this._index]();
+      } else {
+        this._onsuccess();
+      }
+      return this;
+    };
   }
-  var Chain = function () {
-    function Chain(onSuccess, onFailed) {
-      _classCallCheck(this, Chain);
+};
 
-      this._onsuccess = onSuccess;
-      this._onfailed = onFailed;
-      this._currentIndex = 0;
-      this._callbacks = [];
-    }
+    /** Expansion Base **/
+(function (prototype) {
 
-    _createClass(Chain, [{
-      key: "register",
-      value: function register(id, callback) {
-        this._callbacks.push({id: id, callback: callback});
-      }
-    }, {
-      key: "next",
-      value: function next() {
-        var _this = this;
+    /**
+     * Simple router
+     *
+     * @param uri
+     * @param callback
+     * @param hash
+     * @param query
+     * @returns {boolean}
+     */
+    prototype.router = function (uri, callback, hash, query) {
+        uri = uri || '';
+        var reg = new RegExp('^' + uri + '$', 'i'),
+            path = NamespaceApplication.routePath.call(this, hash, query);
 
-        var registered = this._callbacks[this._currentIndex];
-        if (registered) {
-          if (registered.callback instanceof Function) {
-            registered.callback.call({}, function () {
-              _this._currentIndex++;
-              _this.next();
-            }, registered.id);
-          } else {
-            this._onfailed();
-          }
-        } else {
-          this._onsuccess();
+        if (reg.test(path)) {
+            callback.call(this);
+            return true;
         }
-      }
-    }]);
+        return false;
+    };
 
-    return Chain;
-  }();
+    /*assign static as instance methods*/
+    prototype.loadJS = NamespaceApplication.loadJS;
+    prototype.loadJSSync = NamespaceApplication.loadJSSync;
+    prototype.loadCSS = NamespaceApplication.loadCSS;
+    prototype.domLoaded = NamespaceApplication.domLoaded;
+    prototype.typeOf = NamespaceApplication.typeOf;
+    prototype.typeOfStrict = NamespaceApplication.typeOfStrict;
+    prototype.defined = NamespaceApplication.defined;
+    prototype.isEmpty = NamespaceApplication.isEmpty;
+    prototype.isNode = NamespaceApplication.isNode;
+    prototype.extend = NamespaceApplication.extend;
+    prototype.uri = NamespaceApplication.uri;
+    prototype.redirect = NamespaceApplication.redirect;
+    prototype.routePath = NamespaceApplication.routePath;
+    prototype.search = NamespaceApplication.search;
+    prototype.query = NamespaceApplication.query;
+    prototype.queryAll = NamespaceApplication.queryAll;
+    prototype.each = NamespaceApplication.each;
+    prototype.eachParent = NamespaceApplication.eachParent;
+    prototype.on = NamespaceApplication.on;
+    prototype.css = NamespaceApplication.css;
+    prototype.show = NamespaceApplication.show;
+    prototype.hide = NamespaceApplication.hide;
+    prototype.toggle = NamespaceApplication.toggle;
+    prototype.attr = NamespaceApplication.attr;
+    prototype.copy = NamespaceApplication.copy;
+    prototype.inject = NamespaceApplication.inject;
+    prototype.format = NamespaceApplication.format;
+    prototype.ajax = NamespaceApplication.ajax;
+    prototype.httpRequest = NamespaceApplication.httpRequest;
+    prototype.createElement = NamespaceApplication.createElement;
+    prototype.emmet = NamespaceApplication.emmet;
+    prototype.node2str = NamespaceApplication.node2str;
+    prototype.str2node = NamespaceApplication.str2node;
+    prototype.position = NamespaceApplication.position;
+    prototype.positionMouse = NamespaceApplication.positionMouse;
+    prototype.findObjects = NamespaceApplication.findObjects;
+    prototype.findObject = NamespaceApplication.findObject;
+    prototype.Timer = NamespaceApplication.Timer;
+    prototype.Cookie = NamespaceApplication.Cookie;
+    prototype.Storage = NamespaceApplication.Storage;
+    prototype.Util = NamespaceApplication.Util;
+    prototype.Datetime = NamespaceApplication.Datetime;
+    prototype.Chain = NamespaceApplication.Chain;
 
-  return new Chain(ons, onf)
-}
+})(NamespaceApplication.prototype);
+
+    /**
+     * Tries loading script init,  if it declared on attribute of data-init into script element
+     */
+    NamespaceApplication.domLoaded(function () {
+        var script = NamespaceApplication.query('script[data-init]');
+        if (script && script.getAttribute('data-init').length > 2){
+            NamespaceApplication.loadJS(script.getAttribute('data-init'));
+        }
+    });
+
+    /**
+     * Set script version. Property [read-only]
+     */
+    Object.defineProperty(NamespaceApplication, 'version', {
+        enumerable: false, configurable: false, writable: false, value: '0.5.0'
+    });
+
+    window.NamespaceApplication = window.NSA = NamespaceApplication;
+
+})(window)

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flex</title>
+
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/namespaceapplication.js"></script>
+    <script src="js/resizer.js"></script>
+    <script src="jsapp/index.js"></script>
+
+    <style rel="stylesheet">
+        * {
+            color: #e0e0e0;
+        }
+        #page {}
+        #toolPanel {}
+        #toolContainer {}
+        #toolBlocks {}
+        #toolBlockCurrent {}
+        #canvasExamples {}
+        #ooo {}
+        .toolColumn {
+            width: 33%;
+            vertical-align: top;
+        }
+        .container {}
+        .item {}
+        .ooo {}
+    </style>
+</head>
+<body>
+
+<div id="page">
+    <div id="toolPanel">
+        <div class="table">
+            <div class="toolColumn">
+                <h2>Container</h2>
+                <div id="toolContainer">
+
+                </div>
+            </div>
+            <div class="toolColumn">
+                <h2>Blocks (each)</h2>
+                <div id="toolBlocks">
+
+                </div>
+            </div>
+            <div class="toolColumn">
+                <h2>Selected block</h2>
+                <div id="toolBlockCurrent">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="canvasExamples">
+        <div>
+            <div class="container">
+                <div class="item">block: 1</div>
+                <div class="item">block: 2</div>
+                <div class="item">block: 3</div>
+                <div class="item">block: 4</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

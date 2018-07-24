@@ -9,9 +9,8 @@ gulp.task("default", function () {
       out: "output.js"
     }));
   return tsResult.js.pipe(gulp.dest("dist"));
-});*/
-
-
+});
+*/
 
 var gulp = require("gulp");
 var ts = require("gulp-typescript");

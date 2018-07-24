@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "outDir": "dist",
+    "outFile": "output-file.js",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "types": [
+      "node"
+    ]
+  },
+  "typeRoots": [
+    "./node_modules/@types"
+  ],
+  "include": [
+    "./src/*.ts",
+    "./src/*/*.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
+}

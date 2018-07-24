@@ -65,5 +65,6 @@
     prototype.Storage = NamespaceApplication.Storage;
     prototype.Util = NamespaceApplication.Util;
     prototype.Datetime = NamespaceApplication.Datetime;
+    prototype.Chain = NamespaceApplication.Chain;
 
 })(NamespaceApplication.prototype)

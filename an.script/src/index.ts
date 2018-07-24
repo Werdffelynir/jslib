@@ -1,13 +1,26 @@
-import {clone} from './Util/clone';
+import { Classes } from './Classes';
 
 
-export class Animate {
 
-  constructor() {
-    const o: Object = {a: 0, b: 1, c: 2, e: 3};
-    console.log('Animate Start', clone(o, {z: 9}));
-  }
+const {Dispatcher} = Classes;
 
+export class App {
+    constructor() {
+
+        const say = Dispatcher.say('Domain');
+
+        console.log('App: ', say);
+    }
 }
 
-new Animate();
+new App();
+
+
+
+
+
+
+
+// window.addEventListener("load", (ev: Event) => {
+//   var racetrack = new SomeModule.RaceTrack(document.getElementById("content"));
+// });
