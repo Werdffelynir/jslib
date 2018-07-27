@@ -9,6 +9,9 @@
         this.path = '/';
         this.debug = true;
 
+        // To singleton
+        NamespaceApplication._instance = this;
+
         // Private properties
         this._require_key = false;
         this._requires_stack = {};
@@ -23,7 +26,6 @@
 
         // Set extension aliases to instance
         NamespaceApplication.extension.set_instance_application(this);
-
         return this;
     }
 })();
@@ -122,6 +124,15 @@
     NamespaceApplication.prototype.constructor = NamespaceApplication;
 
     /** Static Methods * */
+
+/**
+ * Singleton for application, helps with creations namespaces
+ */
+NamespaceApplication._instance = null;
+NamespaceApplication.getInstance = function () {
+  return NamespaceApplication._instance;
+};
+
 
 /**
  * Loads a script element with javascript source
@@ -1598,6 +1609,7 @@ NamespaceApplication.Datetime.betweenDates = function (dateFrom, dateTo) {
 
 /**
  * Convert date string to Date Object
+ *
  * yy - the year as a two-digit number ( 00 to 99 );
  * YY - the year as a four-digit number ( 1900-9999 );
  * mm - the month as a number with a leading zero ( 01 to 12 ) ( 1 to 12 );

@@ -7,6 +7,9 @@
         this.path = '/';
         this.debug = true;
 
+        // To singleton
+        NamespaceApplication._instance = this;
+
         // Private properties
         this._require_key = false;
         this._requires_stack = {};
@@ -21,7 +24,6 @@
 
         // Set extension aliases to instance
         NamespaceApplication.extension.set_instance_application(this);
-
         return this;
     }
 })()

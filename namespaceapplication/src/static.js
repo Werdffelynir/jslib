@@ -2,6 +2,15 @@
 var NamespaceApplication = window.NamespaceApplication || {}; // THIS-LINE-WILL-DELETED
 
 /**
+ * Singleton for application, helps with creations namespaces
+ */
+NamespaceApplication._instance = null;
+NamespaceApplication.getInstance = function () {
+  return NamespaceApplication._instance;
+};
+
+
+/**
  * Loads a script element with javascript source
  *
  * @param src
