@@ -1,0 +1,10 @@
+
+
+
+export class Movieclip {
+
+  constructor() {
+
+  }
+
+}
