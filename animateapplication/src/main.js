@@ -15,6 +15,8 @@
 
   [[['extensions/animatemovieclip']]]
 
+  [[['extensions/animateclip']]]
+
   [[['extensions/animatesprite']]]
 
   [[['extensions/animatetext']]]

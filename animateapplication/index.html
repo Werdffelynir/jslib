@@ -11,7 +11,54 @@
 
 <script>
     const Animate = new AnimateApplication('canvas.canvas', 800, 600, 60);
+    const Clip = new AnimateClip(Animate);
+    const Text = new AnimateText(Animate);
 
+    const Canvas = {};
+
+    Canvas.page = {
+        main: 'main',
+        menu: 'menu',
+        intro: 'intro',
+        level: 'level',
+    };
+
+    Canvas.currentPage = Canvas.page.main;
+    Canvas.cursorPosition = {};
+
+    Animate.on('mousemove', (eve, pos) => {
+      Canvas.cursorPosition = pos || {};
+    });
+
+    Animate.on('click', (eve, pos) => {
+        console.log('click', pos);
+    });
+
+    document.addEventListener('keydown', (eve, pos) => {
+      console.log('keydown', eve.keyCode);
+      console.log('keydown', eve.key);
+    });
+
+
+    Animate.scene('main', {
+      x: 30,
+      y: 30
+    }, function (ctx, iter) {
+
+      ctx.fillRect(Canvas.cursorPosition.x, Canvas.cursorPosition.y, 25, 25);
+
+
+
+    });
+
+
+
+
+
+    Animate.start('main');
+
+
+    /*
     function clip_Background(ctx, color) {
       ctx.fillStyle = color || 'blue';
       ctx.fillRect(this.x, this.y, 300, 200);
@@ -23,14 +70,10 @@
       ctx.fillText('FPS: ' + Animate.getFPS() + 'fps; Frame: ' + Animate.getIteration(), 20, 20);
     }
 
-    Animate.scene('default', {
-      x: 30,
-      y: 30
-    }, function (ctx, iter) {
+    Animate.scene('default', {x: 30, y: 30}
+    , function (ctx, iter) {
       clip_Background.bind(this)(ctx,'blue');
       clip_ShowFPS.bind(this)(ctx);
-
-
       if (iter > 100 && iter < 200) {
         Animate.start('default2');
       }
@@ -42,16 +85,13 @@
     }, function (ctx, iter) {
       clip_Background.bind(this)(ctx,'red');
       clip_ShowFPS.bind(this)(ctx);
-
       if (iter > 200) {
         Animate.start('default');
       }
-
     });
 
 
-    Animate.start();
-
+    Animate.start();*/
 
 
 

@@ -30,7 +30,7 @@ class AnimateConfig {
         autoClear: true,
         sorting: true,
         filtering: true,
-      }, ...config};
+      }, ...config };
   }
 }
 
@@ -53,7 +53,8 @@ class AnimateApplication extends AnimateConfig {
       mousedown:null,
       mouseup:null,
       keydown:null,
-      keyup:null};
+      keyup:null };
+
     this._canvas = null;
     this._context = null;
 
@@ -77,31 +78,23 @@ class AnimateApplication extends AnimateConfig {
     } catch (err) {
       throw new Error(err);
     }
-
-    console.dir(this);
   }
 
-  on (name, cb) {
-    this._events[name] = typeof cb === 'function' ? cb : null;
-  }
+  // on (name, cb) {
+  //   this._events[name] = typeof cb === 'function' ? cb : null;
+  //   this._canvas.addEventListener(name, (event) => this._events[name].call(this, event, this.getMouseEventPosition(event)));
+  // }
 
-  _events_init () {
-    if (this._events['click'] && !(this._events_click_inited = true))
-      this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
+  // _events_init () {
+  //   if (this._events['click'] && !(this._events_click_inited = true))
+  //     this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
+  //
+  //   if (this._events['mousemove'] && !(this._events_mousemove_inited = true))
+  //     this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
+  // }
+  //
+  // _events_remove () {}
 
-    if (this._events['mousemove'] && !(this._events_mousemove_inited = true))
-      this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
-  }
-
-  _events_remove () {}
-
-  mousePosition (mouseevent) {
-    const rect = this._canvas.getBoundingClientRect();
-    return {
-      x: mouseevent.clientX - rect.left,
-      y: mouseevent.clientY - rect.top
-    };
-  };
 
   sceneObject (params) {
     if (typeof params === 'function') params = {init: params};
@@ -138,26 +131,20 @@ class AnimateApplication extends AnimateConfig {
     window.cancelAnimationFrame(this._requestanimationframeid) }
 
   start (sceneName = null) {
-    if (sceneName) this.setSceneName(sceneName);
+    if (sceneName) this._sceneName = sceneName;
     this.stop();
     this._fpsTimeThen = Date.now();
     this._fpsTimeFirst = this._fpsTimeThen;
     this._paused = false;
-    this._events_init();
+    // this._events_init();
     this.loop();
   }
-
-  pause () {
-    this._paused = ! this._paused }
 
   getFPS () {
     return Math.ceil(this._iteration / ( (this._fpsTimeThen - this._fpsTimeFirst) / 1000)) }
 
   getIteration () {
     return this._iteration }
-
-  setSceneName (sceneName) {
-    this._sceneName = sceneName }
 
 }
 
@@ -222,6 +209,19 @@ class AnimateMousePress {
 
   
 class AnimateMovieClip {
+
+  constructor (Animate) {
+    if ( !(Animate instanceof AnimateApplication) ) {
+      throw new Error(':constructor argument in not of instance AnimateApplication');
+    }
+    this.Animate = Animate;
+  }
+
+}
+
+
+  
+class AnimateClip {
 
   constructor (Animate) {
     if ( !(Animate instanceof AnimateApplication) ) {
