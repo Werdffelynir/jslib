@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 600, 60);
+
+    function clip_Background(ctx, color) {
+      ctx.fillStyle = color || 'blue';
+      ctx.fillRect(this.x, this.y, 300, 200);
+    }
+
+    function clip_ShowFPS(ctx) {
+      ctx.fillStyle = 'black';
+      ctx.font = '16px/16px sans';
+      ctx.fillText('FPS: ' + Animate.getFPS() + 'fps; Frame: ' + Animate.getIteration(), 20, 20);
+    }
+
+    Animate.scene('default', {
+      x: 30,
+      y: 30
+    }, function (ctx, iter) {
+      clip_Background.bind(this)(ctx,'blue');
+      clip_ShowFPS.bind(this)(ctx);
+
+
+      if (iter > 100 && iter < 200) {
+        Animate.start('default2');
+      }
+    });
+
+    Animate.scene('default2', {
+      x: 60,
+      y: 60
+    }, function (ctx, iter) {
+      clip_Background.bind(this)(ctx,'red');
+      clip_ShowFPS.bind(this)(ctx);
+
+      if (iter > 200) {
+        Animate.start('default');
+      }
+
+    });
+
+
+    Animate.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+fillStyle: "#000000"
+filter: "none"
+font: "10px sans-serif"
+globalAlpha: 1
+globalCompositeOperation: "source-over"
+imageSmoothingEnabled: true
+imageSmoothingQuality: "low"
+lineCap: "butt"
+lineDashOffset: 0
+lineJoin: "miter"
+lineWidth: 1
+miterLimit: 10
+shadowBlur: 0
+shadowColor: "rgba(0, 0, 0, 0)"
+shadowOffsetX: 0
+shadowOffsetY: 0
+strokeStyle: "#000000"
+textAlign: "start"
+textBaseline: "alphabetic"
+*/
+</script>
+</body>
+</html>

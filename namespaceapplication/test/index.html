@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="scripts/mocha.css">
+    <script src="../build/namespaceapplication.js"></script>
+    <script src="scripts/mocha.js"></script>
+    <script src="scripts/chai.js"></script>
+
+    <script>
+      mocha.setup('bdd');
+    </script>
+</head>
+<body>
+
+<script src="test.js"></script>
+
+<div id="mocha"></div>
+
+<script>
+  mocha.run();
+</script>
+
+</body>
+</html>

@@ -194,13 +194,13 @@ NamespaceApplication.domLoaded = function (callback) {
 /**
  * Вернет обобщенный тип передаваемого параметра value,
  * или сравнит тип value с передаваемым type и вернет boolean
- * Поддержуемые значение типов: null, boolean, undefined, function, string, number, date, number, array, object
+ * Поддержуемые значение типов: null, boolean, undefined, function, string, number, date, array, object
  * @param value
  * @param type
  * @returns {string}
  */
 NamespaceApplication.typeOf = function (value, type) {
-  var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
+  var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'array', 'object'],
     t = NamespaceApplication.typeOfStrict(value).toLowerCase();
   if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
     t = 'object';
