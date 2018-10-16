@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    canvas.width = 600;
+    canvas.height = 300;
+    const ctx = canvas.getContext('2d');
+    document.addEventListener('keydown', (e) => {
+      console.log(e);
+      ctx.clearRect(0, 0, 600, 300);
+      ctx.font = '16px/18px sans';
+      ctx.fillText('key: [' + e.key + ']', 100, 50);
+      ctx.fillText('code: ' + e.code, 100, 100);
+      ctx.fillText('keyCode: ' + e.keyCode, 100, 150);
+      ctx.fillText('altKey: ' + String(e.altKey), 100, 200);
+      ctx.fillText('ctrlKey: ' + String(e.ctrlKey), 100, 250);
+    });
+</script>
+
+</body>
+</html>

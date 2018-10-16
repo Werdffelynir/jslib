@@ -10,53 +10,177 @@
     <canvas class="canvas"></canvas>
 
 <script>
-    const Animate = new AnimateApplication('canvas.canvas', 800, 600, 60);
-    const Clip = new AnimateClip(Animate);
+    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
     const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+    Text.format({
+      size: 12,
+      family: 'Ubuntu',
+    });
 
     const Canvas = {};
 
+    Canvas.cursor = Point(0, 0);
+
+    // Event.mousemove((eve, pos) => Canvas.cursor = pos );
+
+    Canvas.keys = {top: false, down: false, left: false, right: false, space: false};
+    Canvas.keysBinder = ((types) => {
+      Animate.getGlobal().addEventListener('keydown', (e) => {
+        switch (e.keyCode) {
+          case types.top:Canvas.keys.top = true;break;
+          case types.down:Canvas.keys.down = true;break;
+          case types.left:Canvas.keys.left = true;break;
+          case types.right:Canvas.keys.right = true;break;
+          case types.space:Canvas.keys.space = true;break;
+          default:
+        }
+      });
+      Animate.getGlobal().addEventListener('keyup', (e) => {
+        switch (e.keyCode) {
+          case types.top:Canvas.keys.top = false;break;
+          case types.down:Canvas.keys.down = false;break;
+          case types.left:Canvas.keys.left = false;break;
+          case types.right:Canvas.keys.right = false;break;
+          case types.space:Canvas.keys.space = false;break;
+          default:
+        }
+      });
+    })({top: 87, down: 83, left: 65, right: 68, space: 32});
+
+    // Animate.getContext({
+    //   fillStyle: 'blue',
+    //   globalAlpha: 0.3
+    // });
+
+    // Graphic.shadow(0, 0, 6, '#000000');
+
+    Animate.scene('main', {
+      point: Point(50, 50),
+      speed: 1
+    }, function (ctx, iter) {
+      if (Canvas.keys.top) this.point.y -= this.speed;
+      if (Canvas.keys.down) this.point.y += this.speed;
+      if (Canvas.keys.left) this.point.x -= this.speed;
+      if (Canvas.keys.right) this.point.x += this.speed;
+
+
+      // Graphic.ellipse(100, 100, 30, 70, 0, 0, DEGREE_AS_RADIAN).fill();
+
+
+      // Graphic.circle(100, 100, 30).fill();
+
+
+      // Graphic.alpha(100);
+      // Graphic.color('red');
+      // Graphic.rect(Point(100, 100), 75, 75).fill();
+
+      // Graphic.alpha(50);
+      // Graphic.color('blue');
+      // Graphic.rect(Point(300, 100), 75, 75).fill();
+      //
+      // Graphic.rectRound(Point(50, 50), 100, 75, 75).fill();
+
+      // Graphic.shape([
+      //  10, 200, 150, 100, 110, 200
+      // ], true).stroke();
+
+
+      Graphic.color('#b32f00');
+      Graphic.shape(
+        [85,80,85,115,140,115,140,165,305,165,305,110,425,110,425,215,335,215,335,330,160,330,160,275,200,275,200,225,75,225,75,275,120,275,120,380,455,380,455,285,575,285,575,70,400,70,400,25,245,25,245,85,175,85,175,15,20,15,20,80,50,80],
+        true
+      ).fill();
+
+
+      // ctx.fillRect(this.point.x, this.point.y, 10, 10);
+      // Text.print('Police', 10, 10);
+
+
+      // Graphic.shadow(0, 0, 6, '#000000');
+      // Graphic.alpha(80);
+      // Graphic.color('#b32f00');
+      // Graphic.rect(this.point, 10, 10).fill();
+      Graphic.alpha(100);
+      Graphic.color('#b3ac85');
+      Graphic.circle(this.point, 10).fill();
+      Graphic.clearShadow();
+
+      // Graphic.line(Point(10, 10), Point(10, 400))
+      //   .stroke();
+
+      // Graphic.line(0, 0, Canvas.cursor.x, Canvas.cursor.y)
+      //   .fill();
+
+    }).start('main');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*      Animate.getContext({fillStyle: 'blue'});
+          Animate.getContext({globalAlpha: 1});
+          Text.print(`Mouse Potion. Frame: ${iter}`,  0, 0);
+          Text.print(`x: ${Canvas.cursor.x}`, 0, 20);
+          Text.print(`y: ${Canvas.cursor.x}`, 0, 40);
+
+          Animate.getContext({fillStyle: 'red'});
+          Animate.getContext({globalAlpha: 0.2});
+          ctx.fillRect(100, 100, 300, 50);*/
+    // Animate.getCanvas().onclick = (e) => { console.log('event:', Event.getMouseEventPosition(e)); };
+    // Animate.getCanvas().onpointermove = (e) => { console.log('event:', e); };
+    // Animate.getGlobal().onkeydown = (e) => { console.log('event:', e); };
+    // console.log(Text.config);
+    // console.log(Animate.getContext());
+    // ctx.font = '16px/16px bold sans, Arial';
+    // ctx.fillText(`x: ${Canvas.cursorPosition.x}  y:${Canvas.cursorPosition.x}`, 25, 25)
+    // console.dir(Animate.getCanvas());
+/*
+    const Canvas = {};
     Canvas.page = {
         main: 'main',
         menu: 'menu',
         intro: 'intro',
         level: 'level',
     };
-
     Canvas.currentPage = Canvas.page.main;
     Canvas.cursorPosition = {};
-
     Animate.on('mousemove', (eve, pos) => {
       Canvas.cursorPosition = pos || {};
     });
-
     Animate.on('click', (eve, pos) => {
         console.log('click', pos);
     });
-
     document.addEventListener('keydown', (eve, pos) => {
       console.log('keydown', eve.keyCode);
       console.log('keydown', eve.key);
     });
-
-
     Animate.scene('main', {
       x: 30,
       y: 30
     }, function (ctx, iter) {
-
       ctx.fillRect(Canvas.cursorPosition.x, Canvas.cursorPosition.y, 25, 25);
-
-
-
     });
-
-
-
-
-
     Animate.start('main');
-
+*/
 
     /*
     function clip_Background(ctx, color) {

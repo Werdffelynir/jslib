@@ -1,4 +1,5 @@
 
+
 class AnimateConfig {
   constructor (config) {
     this.config = {...{
@@ -6,7 +7,7 @@ class AnimateConfig {
         width: 600,
         height: 400,
         fps: 30,
-        loop: ANIMATE_LOOP,
+        loop: LOOP_ANIMATE,
         fullScreen: false,
         autoStart: true,
         autoClear: true,
@@ -28,17 +29,9 @@ class AnimateApplication extends AnimateConfig {
     super(config);
 
     this._scenes = {};
-    this._events = {
-      frames:null,
-      click:null,
-      mousemove:null,
-      mousedown:null,
-      mouseup:null,
-      keydown:null,
-      keyup:null };
-
     this._canvas = null;
     this._context = null;
+    this._frameCallback = null;
 
     this._fpsTimeNow = 0;
     this._fpsTimeThen = 0;
@@ -50,9 +43,10 @@ class AnimateApplication extends AnimateConfig {
     this._sceneName = 'default';
     this._paused = false;
     this._iteration = 0;
+    this._global = document ? document : {};
 
     try {
-      this._canvas = document.querySelector(this.config.selector);
+      this._canvas = this._global.querySelector(this.config.selector);
       this._context = this._canvas.getContext('2d');
 
       this.width = this._canvas.width = this.config.width ;
@@ -62,30 +56,14 @@ class AnimateApplication extends AnimateConfig {
     }
   }
 
-  // on (name, cb) {
-  //   this._events[name] = typeof cb === 'function' ? cb : null;
-  //   this._canvas.addEventListener(name, (event) => this._events[name].call(this, event, this.getMouseEventPosition(event)));
-  // }
-
-  // _events_init () {
-  //   if (this._events['click'] && !(this._events_click_inited = true))
-  //     this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
-  //
-  //   if (this._events['mousemove'] && !(this._events_mousemove_inited = true))
-  //     this._canvas.addEventListener('click', (event) => this._events['click'].call(this, event, this.mousePosition(event)));
-  // }
-  //
-  // _events_remove () {}
-
-
   sceneObject (params) {
     if (typeof params === 'function') params = {init: params};
     return {...{animate: this, index: 100, hide: false, name: 'scene', init: null}, ...params};
   }
 
-  loop () {
+  _loop () {
     if (!this._paused) {
-      this._requestanimationframeid = requestAnimationFrame( () => this.loop() );
+      this._requestanimationframeid = requestAnimationFrame( () => this._loop() );
       this._fpsTimeNow = Date.now();
       this._fpsDelta = this._fpsTimeNow - this._fpsTimeThen;
       if (this._fpsDelta > this._fpsInterval) {
@@ -99,35 +77,76 @@ class AnimateApplication extends AnimateConfig {
 
   draw () {
     this._scenes[this._sceneName].map((cb) =>
-      cb.bind(this)(this._context, this._iteration)) }
+      cb.bind(this)(this._context, this._iteration));
+
+    if (this._frameCallback && this._frameCallback.init)
+      this._frameCallback.bind(this)(this._context, this._iteration)
+  };
 
   clear () {
-    this._context.clearRect( 0, 0, this.config.width, this.config.height ) }
+    this._context.clearRect( 0, 0, this.config.width, this.config.height );
+    return this;
+  }
 
   scene (sceneName, params, cb) {
-    if (!Array.isArray(this._scenes[sceneName])) this._scenes[sceneName] = [];
-    this._scenes[sceneName].push(cb.bind(this.sceneObject(params))) }
+    if (!Array.isArray(this._scenes[sceneName]))
+      this._scenes[sceneName] = [];
+    this._scenes[sceneName].push(cb.bind(this.sceneObject(params)));
+    return this;
+  }
 
   stop () {
     this._paused = true;
-    window.cancelAnimationFrame(this._requestanimationframeid) }
+    window.cancelAnimationFrame(this._requestanimationframeid)
+    return this;
+  }
 
   start (sceneName = null) {
-    if (sceneName) this._sceneName = sceneName;
+    if (sceneName)
+      this._sceneName = sceneName;
     this.stop();
     this._fpsTimeThen = Date.now();
     this._fpsTimeFirst = this._fpsTimeThen;
     this._paused = false;
-    // this._events_init();
-    this.loop();
+    this._loop();
+    return this;
   }
 
   getFPS () {
-    return Math.ceil(this._iteration / ( (this._fpsTimeThen - this._fpsTimeFirst) / 1000)) }
+    return Math.ceil(this._iteration / ( (this._fpsTimeThen - this._fpsTimeFirst) / 1000))
+  }
 
   getIteration () {
-    return this._iteration }
+    return this._iteration
+  }
 
+  /**
+   * @returns {null|CanvasRenderingContext2D}
+   */
+  getContext (props = null) {
+    if (props) {
+      let key;
+      for (key in props)
+        if (isDefined(props[key]))
+          this._context[key] = props[key];
+    }
+      return this._context
+  }
+
+  /**
+   * @returns {null|HTMLCanvasElement}
+   */
+  getCanvas () {
+    return this._canvas
+  }
+
+  /**
+   *
+   * @returns {Document | *}
+   */
+  getGlobal () {
+    return this._global
+  }
 }
 
 /** Set script version. Property [read-only]*/

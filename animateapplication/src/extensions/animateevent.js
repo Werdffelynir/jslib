@@ -2,15 +2,18 @@
 class AnimateEvent {
 
   constructor (Animate) {
+
     if ( !(Animate instanceof AnimateApplication) )
       throw new Error(':constructor argument in not of instance AnimateApplication');
 
+    this.canvas = Animate.getCanvas();
+    this.global = Animate.getGlobal();
     this.Animate = Animate;
   }
 
   getMouseEventPosition (mouseEvent) {
     if (mouseEvent instanceof MouseEvent) {
-      const rect = this.Animate._canvas.getBoundingClientRect();
+      const rect = this.canvas.getBoundingClientRect();
       return {
         x: mouseEvent.clientX - rect.left,
         y: mouseEvent.clientY - rect.top }
@@ -18,13 +21,13 @@ class AnimateEvent {
   };
 
   click (cb) {
-    this.Animate._canvas.addEventListener('click', (event) =>
+    this.canvas.addEventListener('click', (event) =>
       cb.call(this.Animate, event, this.getMouseEventPosition(event))
     );
   }
 
   move (cb) {
-    this.Animate._canvas.addEventListener('mousemove', (event) =>
+    this.canvas.addEventListener('mousemove', (event) =>
       cb.call(this.Animate, event, this.getMouseEventPosition(event))
     );
   }
@@ -34,19 +37,15 @@ class AnimateEvent {
   }
 
   keydown (cb) {
-    this.Animate._canvas.addEventListener('keydown', (event) =>
+    this.global.addEventListener('keydown', (event) =>
       cb.call(this.Animate, event, this.getMouseEventPosition(event))
     );
   }
 
   keyup (cb) {
-    this.Animate._canvas.addEventListener('keyup', (event) =>
+    this.global.addEventListener('keyup', (event) =>
       cb.call(this.Animate, event, this.getMouseEventPosition(event))
     );
-  }
-
-  key () {
-
   }
 
 }

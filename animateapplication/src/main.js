@@ -5,18 +5,10 @@
 
   [[['animateapplication']]]
 
-  [[['extensions/animatemouse']]]
+  [[['extensions/animateevent']]]
 
   [[['extensions/animategraphic']]]
 
-  [[['extensions/animatekeypress']]]
-
-  [[['extensions/animatemousepress']]]
-
-  [[['extensions/animatemovieclip']]]
-
-  [[['extensions/animateclip']]]
-
-  [[['extensions/animatesprite']]]
-
   [[['extensions/animatetext']]]
+
+  [[['static']]]
