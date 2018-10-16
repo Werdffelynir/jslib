@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animate Keys</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+
+  const {
+    Point,
+    Rectangle
+  } = AnimateApplication;
+
+  Text.format({
+    size: 12,
+    family: 'Ubuntu',
+  });
+
+  const Canvas = {};
+
+  Canvas.steps = [];
+  Canvas.step = function (point) {
+    Canvas.steps.push(point);
+    return point;
+  };
+  Canvas.stepBack = function () {
+    return Canvas.steps[Canvas.steps.length - 2];
+  };
+
+  Canvas.cursor = Point(0, 0);
+
+  Canvas.keys = {top: false, down: false, left: false, right: false, space: false};
+
+  Canvas.keysBinder = (function (types) {
+    Animate.getGlobal().addEventListener('keydown', function (e) {
+      switch (e.keyCode) {
+        case types.top:
+          Canvas.keys.top = true;
+          break;
+        case types.down:
+          Canvas.keys.down = true;
+          break;
+        case types.left:
+          Canvas.keys.left = true;
+          break;
+        case types.right:
+          Canvas.keys.right = true;
+          break;
+        case types.space:
+          Canvas.keys.space = true;
+          break;
+        default:
+      }
+    });
+    Animate.getGlobal().addEventListener('keyup', function (e) {
+      switch (e.keyCode) {
+        case types.top:
+          Canvas.keys.top = false;
+          break;
+        case types.down:
+          Canvas.keys.down = false;
+          break;
+        case types.left:
+          Canvas.keys.left = false;
+          break;
+        case types.right:
+          Canvas.keys.right = false;
+          break;
+        case types.space:
+          Canvas.keys.space = false;
+          break;
+        default:
+      }
+    });
+  })({top: 87, down: 83, left: 65, right: 68, space: 32});
+
+  Animate.scene('main', {
+    point: Point(50, 50),
+    speed: 1
+  }, function (ctx, iter) {
+    if (Canvas.keys.top) this.point.y -= this.speed;
+    if (Canvas.keys.down) this.point.y += this.speed;
+    if (Canvas.keys.left) this.point.x -= this.speed;
+    if (Canvas.keys.right) this.point.x += this.speed;
+
+    // Map
+    Graphic.color('#b32f00');
+    Graphic.shape(
+      [85, 80, 85, 115, 140, 115, 140, 165, 305, 165, 305, 110, 425, 110, 425, 215, 335, 215, 335, 330, 160, 330, 160, 275, 200, 275, 200, 225, 75, 225, 75, 275, 120, 275, 120, 380, 455, 380, 455, 285, 575, 285, 575, 70, 400, 70, 400, 25, 245, 25, 245, 85, 175, 85, 175, 15, 20, 15, 20, 80, 50, 80],
+      true
+    ).fill();
+
+    // hit
+    if (!Animate.hitTestPoint(this.point)) {
+      this.point = Point(50, 50);
+    }
+
+    // Player
+    Graphic.alpha(100);
+    Graphic.color('#b3ac85');
+    Graphic.circle(this.point, 10).fill();
+
+  }).start('main');
+
+</script>
+</body>
+</html>

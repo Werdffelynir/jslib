@@ -1,0 +1,7 @@
+{
+  "output": "build/animateapplication.js",
+  "main":  "src/main.js",
+  "root": "src/",
+  "watcher_directory": "src/",
+  "watcher_command": "php -f builder.php < config.json"
+}

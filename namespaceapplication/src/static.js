@@ -2,6 +2,15 @@
 var NamespaceApplication = window.NamespaceApplication || {}; // THIS-LINE-WILL-DELETED
 
 /**
+ * Singleton for application, helps with creations namespaces
+ */
+NamespaceApplication._instance = null;
+NamespaceApplication.getInstance = function () {
+  return NamespaceApplication._instance;
+};
+
+
+/**
  * Loads a script element with javascript source
  *
  * @param src
@@ -185,13 +194,13 @@ NamespaceApplication.domLoaded = function (callback) {
 /**
  * Вернет обобщенный тип передаваемого параметра value,
  * или сравнит тип value с передаваемым type и вернет boolean
- * Поддержуемые значение типов: null, boolean, undefined, function, string, number, date, number, array, object
+ * Поддержуемые значение типов: null, boolean, undefined, function, string, number, date, array, object
  * @param value
  * @param type
  * @returns {string}
  */
 NamespaceApplication.typeOf = function (value, type) {
-  var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'number', 'array', 'object'],
+  var simpleTypes = ['null', 'boolean', 'undefined', 'function', 'string', 'number', 'date', 'array', 'object'],
     t = NamespaceApplication.typeOfStrict(value).toLowerCase();
   if (simpleTypes.indexOf(t) === -1 && typeof value === 'object')
     t = 'object';
@@ -1532,4 +1541,79 @@ NamespaceApplication.Datetime.strToDate = function (date, format, utc) {
     return new Date(Date.UTC(set[0], set[1], set[2], set[3], set[4], set[5]));
   }
   return new Date(set[0], set[1], set[2], set[3], set[4], set[5]);
+}
+
+/**
+ * Example:
+ * const chain = new NamespaceApplication.Chain(onSuccess, onError);
+ * chain.add('Test begin', function (next) {
+ * }).add('Next model', function (next) { next()
+ * }).add('Last model', function (next) { next()
+ * }).next();
+ * @returns {Function}
+ * @constructor
+ */
+NamespaceApplication.Chain = function (ons, onf) {
+  "use strict";
+  var _createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  var Chain = function () {
+    function Chain(onSuccess, onFailed) {
+      _classCallCheck(this, Chain);
+
+      this._onsuccess = onSuccess;
+      this._onfailed = onFailed;
+      this._currentIndex = 0;
+      this._callbacks = [];
+    }
+
+    _createClass(Chain, [{
+      key: "register",
+      value: function register(id, callback) {
+        this._callbacks.push({id: id, callback: callback});
+      }
+    }, {
+      key: "next",
+      value: function next() {
+        var _this = this;
+
+        var registered = this._callbacks[this._currentIndex];
+        if (registered) {
+          if (registered.callback instanceof Function) {
+            registered.callback.call({}, function () {
+              _this._currentIndex++;
+              _this.next();
+            }, registered.id);
+          } else {
+            this._onfailed();
+          }
+        } else {
+          this._onsuccess();
+        }
+      }
+    }]);
+
+    return Chain;
+  }();
+
+  return new Chain(ons, onf)
 }
