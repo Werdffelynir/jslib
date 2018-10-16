@@ -69,7 +69,7 @@ var myMcClip = An.MovieClip({
     this.setScale(2, 2);
     this.setAlpha(0.5);
     
-    An.Graphic().line(this.x,this.y, this.x + 200,this.y)
+    An.Graphic().line(this.x, this.y, this.x + 200, this.y)
       .thickness(5)
       .stroke();
 

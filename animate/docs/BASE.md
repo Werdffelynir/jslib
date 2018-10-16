@@ -11,6 +11,7 @@ getFrameName ()
 getIteration ()
 ```
 
+
 ### Drawing Paying
 ```js
 frame ( frameName, sceneObject )
@@ -25,7 +26,7 @@ stop ()
 clear ()
 clearIteration ()
 
-camera ( x, y, wight, callback )
+camera ( x, y, width, callback )
 cameraRestore ()
 
 resizeCanvas ( width, height, position )
@@ -39,6 +40,7 @@ hitTest ( rectangle, point )
 hitTestPoint ( x, y )
 hitTestPoint ( point )
 ```
+
 
 ### Events
 ```js

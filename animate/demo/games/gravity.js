@@ -17,16 +17,59 @@
     width: 800,
     height: 400,
     fps: 30,
-    uri: '/animate/demo/games/onpanet/',
+    urimg: '/animate/demo/assets/'
   });
 
+  /**
+   */
   var Graphic = An.Graphic();
   var TextField = An.TextField();
 
 
   // --------------------------------------------------
   // Game object
-  var Game = {};
+
+  var Game = {
+    mc: {},
+    key: {},
+    mouse: false,
+    images: {},
+    mousePosition: {x: 0, y: 0},
+  };
+
+
+  Game.panel = function (ctx, frame) {
+    TextField.text('Frame: ' + frame, 5, 5).fill();
+    TextField.text('Mouse position: ' + Game.mousePosition.x + '/' + Game.mousePosition.y, 5, 40).fill();
+  };
+
+
+  Game.protoDowner = An.MovieClip ({
+    x: 400,
+    y: 0,
+    size: 50,
+    speedX: 0,
+    speedY: 0,
+    gravity: 0.09,
+    gravitySpeed: 0,
+    hitBottom: function() {
+      var bottom = An.height - this.size;
+      if (this.y > bottom) {
+        this.y = bottom;
+      }
+    }
+  }, function () {
+
+    this.gravitySpeed += this.gravity;
+    this.x += this.speedX;
+    this.y += this.speedY + this.gravitySpeed;
+    this.hitBottom();
+
+    Graphic.rect(this.x, this.y, this.size, this.size)
+      .thickness(5)
+      .color('#C00')
+      .stroke();
+  });
 
   // --------------------------------------------------
   // Animate settings
@@ -35,42 +78,12 @@
   TextField.color('#FFFFFF');
   TextField.font('bold 16px/16px sans');
 
-  An.frame('loading', function (ctx, i) {
-    /** @type CanvasRenderingContext2D */
-    ctx = ctx;
-    ctx.save();
-    ctx.translate(10, 10);
-    TextField.text('Loading...', 0, 0).color('#c00000').fill();
-    ctx.restore();
-  });
 
-  An.frame('mainmenu', function (ctx, i) {
-    /** @type CanvasRenderingContext2D */
-    ctx = ctx;
-    ctx.save();
-    ctx.translate(10, 10);
-    TextField.text('MainMenu', 0, 0).color('#c00000').fill();
-
-    Graphic.color('#c00000');
-
-    Graphic.rect(0, 50, 200, 40).fill();
-    TextField.text('New Game', 10, 60).color('#000').fill();
-
-    Graphic.rect(0, 100, 200, 40).fill();
-    TextField.text('Load Game', 10, 110).color('#000').fill();
-
-    Graphic.rect(0, 150, 200, 40).fill();
-    TextField.text('Rates', 10, 160).color('#000').fill();
-
-    ctx.restore();
-    An.stop();
-  });
-
-  An.frame('level', function (ctx, i) {
+  An.frame(function (ctx, i) {
     /** @type CanvasRenderingContext2D */
     ctx = ctx;
 
-    Game.space(ctx, i);
+    Game.protoDowner();
     Game.panel(ctx, i);
   });
 
@@ -99,39 +112,14 @@
     Game.mouseButtonClick = 'Which: ' + (which[event.which] ? which[event.which] : 'You have a strange Mouse!');
   });
 
-  // Loading resources
-  An.Loader.javascript([
-    An.uri + 'game.js',
-    An.uri + 'enemy.js',
-    An.uri + 'hero.js',
-    An.uri + 'space.js',
-    An.uri + 'weapon.js'
-  ], function (list) {
-    An.Loader.images({
-      rocket: An.uri + 'assets/rocket.png',
-      rocket: An.uri + 'assets/rocket.png'
-    }, function (images) {
+  An.Loader.images({
+    rocket: An.urimg + 'rocket.png'
+  }, function (images) {
+    Game.images = images;
 
-
-      Game = Animate.Module('Game');
-
-      console.log(Game);
-      // Game.init(An);
-      // Game.images = images;
-
-
-
-      setTimeout(function () {
-        An.start(Game.act.mainmenu)
-      }, 1000);
-    });
+    // start
+    An.start();
   });
-
-
-
-
-  // Animate start
-  An.start(Game.act.loading);
 
   // --------------------------------------------------
   // Отключения контекстного меню

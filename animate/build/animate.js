@@ -142,6 +142,7 @@
 Animate.LOOP_TIMER = 'timer';
 Animate.LOOP_ANIMATE = 'animation';
 Animate.DEGREE = 0.017453292519943295;
+Animate.DEGREE_360 = Animate.DEGREE * 360;
 
 /**
  * Storage of extensions
@@ -241,14 +242,17 @@ Animate.typeOfStrict = function (value, type) {
 /**
  * Clone an Array or Objects
  * @param src
- * @param addProperties
+ * @param args
  */
-Animate.copy = function (src, addProperties) {
-  var copy_object = JSON.parse(JSON.stringify(src));
-  if (NamespaceApplication.typeOf(addProperties, 'object') || NamespaceApplication.typeOf(addProperties, 'array'))
-    for (var i in addProperties)
-      copy_object[i] = addProperties[i];
-  return copy_object;
+Animate.copy = function (src, args) {
+  if (Animate.typeOf(src, 'function')) {
+    return src.bind({}, args);
+  } else if (Animate.typeOf(args, 'object') || Animate.typeOf(args, 'array')) {
+    var cObject = JSON.parse(JSON.stringify(src));
+    for (var i in args)
+      cObject[i] = args[i];
+    return cObject;
+  }
 };
 
 /**
@@ -374,7 +378,7 @@ Animate.Rectangle = function (x, y, width, height) {
  */
 Animate.Clip = function (options, callback, thisInstance) {
   return function () {
-    callback.bind(options).apply(thisInstance || {}, arguments || {})
+    return callback.bind(options).apply(thisInstance || {}, arguments || {})
   };
 };
 
@@ -469,10 +473,12 @@ Animate.Loader = {
 
       if (Array.isArray(src)) {
         var obj = {};
-        src.map(function (item) {obj[Math.random().toString(32).slice(2)] = item});
+        src.map(function (item) {
+          obj[Math.random().toString(32).slice(2)] = item
+        });
         src = obj;
       }
-
+      console.log('javascript', src);
       var length = Object.keys(src).length,
         key,
         script,
@@ -843,14 +849,14 @@ Animate.prototype.clear = function () {
  * Set camera position and scales
  * @param x         camera position y
  * @param y         camera position x
- * @param wight     camera wight
+ * @param width     camera width
  * @param callback  function a clip
  */
-Animate.prototype.camera = function (x, y, wight, callback) {
+Animate.prototype.camera = function (x, y, width, callback) {
   /** @type CanvasRenderingContext2D */
   var ctx = this.getContext();
   var i = this.getIteration();
-  var scale = this.width / wight;
+  var scale = this.width / width;
   ctx.save();
   ctx.translate(-x - this.camera.position.x, -y - this.camera.position.y);
   ctx.scale(scale, scale);
@@ -1094,6 +1100,10 @@ Animate.prototype.MovieClip = function (opts, callback, thisInstance) {
   for (key in opts) {
     if (options[key] === undefined) options[key] = opts[key]}
 
+  for (key in opts) {
+    if (options[key] === undefined) options[key] = opts[key];
+  }
+
   return Animate.Clip(options, function () {
     // save state
     context.save();
@@ -1246,7 +1256,11 @@ Animate.prototype.Sprite = function (options) {
 };
 
 
-  
+  /**
+ * Graphic draw methods
+ * @returns {{color: color, alpha: alpha, thickness: thickness, cap: cap, join: join, CAPS: {BUTT: string, ROUND: string, SQUARE: string}, JOINS: {BEVEL: string, ROUND: string, MITER: string}, formatsApply: formatsApply, begin: begin, close: close, save: save, restore: restore, shadow: shadow, clearShadow: clearShadow, circle: circle, rect: rect, rectRound: rectRound, shape: shape, line: line, ellipse: ellipse, stroke: stroke, fill: fill}}
+ * @constructor
+ */
 Animate.prototype.Graphic = function () {
 
   var Graphic = {
@@ -1453,7 +1467,7 @@ Animate.prototype.Graphic = function () {
  *    .font('bold 20px sans, sans-serif')
  *    .fill();
  *
- * @returns {{context: (CanvasRenderingContext2D|null), ALIGN: {LEFT: string, RIGHT: string, CENTER: string, START: string, END: string}, BASELINE: {TOP: string, HANDING: string, MIDDLE: string, ALPHABETIC: string, IDEOGRAPHIC: string, BOTTOM: string}, font: Function, text: Function, fill: Function, stroke: Function, align: Function, baseline: Function, color: Function}}
+ * @returns {{context: (CanvasRenderingContext2D|null), ALIGN: {LEFT: string, RIGHT: string, CENTER: string, START: string, END: string}, BASELINE: {TOP: string, HANDING: string, MIDDLE: string, ALPHABETIC: string, IDEOGRAPHIC: string, BOTTOM: string}, font: Function, text: Function, fill: Function, stroke: Function, align: Function, baseline: Function, color: Function, alpha: alpha, thickness: thickness}}
  * @constructor
  */
 Animate.prototype.TextField = function () {
