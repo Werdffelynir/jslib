@@ -97,7 +97,7 @@ class AnimateApplication extends AnimateConfig {
 
   stop () {
     this._paused = true;
-    window.cancelAnimationFrame(this._requestanimationframeid)
+    window.cancelAnimationFrame(this._requestanimationframeid);
     return this;
   }
 
