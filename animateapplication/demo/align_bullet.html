@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+    Text.format({
+      size: 12,
+      family: 'Ubuntu',
+    });
+
+    const Canvas = {};
+    Canvas.cursor = Point(0, 0);
+    Canvas.player = Point(200, 200);
+
+    Event.keyBind([32], function (e, key) {
+      console.log(key.top);
+    });
+
+/*    Event.keyBind({
+      top: [87, 38],
+      down: [83, 40],
+      left: [65, 37],
+      right: [68, 39],
+      space: 32
+    }, function (e, key) {
+        console.log(key.top);
+    });*/
+
+    Event.mousemove((eve, pos) => Canvas.cursor = pos );
+
+    Animate.scene('main', {}, function (ctx, iter) {
+
+      Graphic.color('#b3ac85');
+      Graphic.circle(Canvas.player, 20).fill();
+
+    }).start('main');
+
+</script>
+</body>
+</html>

@@ -1,5 +1,4 @@
 
-
 class AnimateConfig {
   constructor (config) {
     this.config = {...{
@@ -16,7 +15,6 @@ class AnimateConfig {
       }, ...config };
   }
 }
-
 
 class AnimateApplication extends AnimateConfig {
 
@@ -67,17 +65,19 @@ class AnimateApplication extends AnimateConfig {
       this._fpsTimeNow = Date.now();
       this._fpsDelta = this._fpsTimeNow - this._fpsTimeThen;
       if (this._fpsDelta > this._fpsInterval) {
-        this._fpsTimeThen = this._fpsTimeNow - ( this._fpsDelta % this._fpsInterval );
-        this._iteration ++;
         this.clear();
         this.draw();
+        this._fpsTimeThen = this._fpsTimeNow - ( this._fpsDelta % this._fpsInterval );
       }
     }
   }
 
-  draw () {
+  draw (sceneName = null) {
+    if (sceneName) this._sceneName = sceneName;
+
+    this._iteration ++;
     this._scenes[this._sceneName].map((cb) =>
-      cb.bind(this)(this._context, this._iteration));
+        cb.bind(this)(this._context, this._iteration));
 
     if (this._frameCallback && this._frameCallback.init)
       this._frameCallback.bind(this)(this._context, this._iteration)
@@ -89,8 +89,8 @@ class AnimateApplication extends AnimateConfig {
   }
 
   scene (sceneName, params, cb) {
-    if (!Array.isArray(this._scenes[sceneName]))
-      this._scenes[sceneName] = [];
+    if (!Array.isArray(this._scenes[sceneName])) this._scenes[sceneName] = [];
+    this._sceneName = sceneName;
     this._scenes[sceneName].push(cb.bind(this.sceneObject(params)));
     return this;
   }
@@ -102,8 +102,7 @@ class AnimateApplication extends AnimateConfig {
   }
 
   start (sceneName = null) {
-    if (sceneName)
-      this._sceneName = sceneName;
+    if (sceneName) this._sceneName = sceneName;
     this.stop();
     this._fpsTimeThen = Date.now();
     this._fpsTimeFirst = this._fpsTimeThen;
@@ -118,6 +117,12 @@ class AnimateApplication extends AnimateConfig {
 
   getIteration () {
     return this._iteration
+  }
+  getWidth () {
+    return this.config.width
+  }
+  getHeight () {
+    return this.config.height
   }
 
   /**
@@ -148,7 +153,6 @@ class AnimateApplication extends AnimateConfig {
     return this._global
   }
 
-
   /**
    * Hit point inside rectangle
    * @param rectangle
@@ -165,10 +169,8 @@ class AnimateApplication extends AnimateConfig {
 
   /**
    * isPointInPath
-   * hitTestPoint(x, y)
    * hitTestPoint(point)
-   * @param point
-   * @param y
+   * @param point {object}
    * @returns {boolean}
    */
   hitTestPoint (point) {

@@ -14,4 +14,6 @@
 
   [[['extensions/animateloader']]]
 
+  [[['extensions/animategrid']]]
+
   [[['static']]]

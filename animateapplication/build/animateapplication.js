@@ -49,11 +49,141 @@ const isDefined = function (src) {
   return src !== undefined;
 };
 
+/**
+ * Generate a random number
+ * @param min
+ * @param max
+ * @returns {number}
+ */
+const random = function (min, max) {
+  min = min || 0;
+  max = max || 100;
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+/**
+ * Generate a random hex color
+ * @returns {string}
+ */
+const randomColor = function () {
+  const letters = '0123456789ABCDEF'.split('');
+  let i, color = '#';
+  for (i = 0; i < 6; i++)
+    color += letters[Math.floor(Math.random() * 16)];
+  return color;
+};
+
+/**
+ * Return random item from array
+ * @param arr
+ * @returns {*}
+ */
+const randomItem = function (arr) {
+  const i = random(0, arr.length-1);
+  return arr[i];
+};
+
+/**
+ * Convert degrees to radians
+ * Formula: degrees * Math.PI / 180
+ * @param deg
+ * @returns {number}
+ */
+const degreesToRadians = function (deg) {
+  return (deg * Math.PI) / 180;
+};
+/**
+ * Convert radians to degrees
+ * Formula: radians * 180 / Math.PI
+ * @param rad
+ * @returns {number}
+ */
+const radiansToDegrees = function (rad) {
+  return (rad * 180) / Math.PI;
+};
+
+/**
+ * Calculate distance between two Points
+ * @param p1
+ * @param p2
+ * @returns {number}
+ */
+const distanceBetween = function (p1, p2) {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
+/**
+ * Calculate angle between two points. return object:
+ *  {angle:, x:, y:}
+ * @param p1
+ * @param p2
+ * @returns {{angle: number, x: number, y: number}}
+ */
+const calculateAngle = function (p1, p2) {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  const angle = Math.atan2(dy, dx);
+  return {
+    angle: angle,
+    x: Math.cos(angle),
+    y: Math.sin(angle)
+  };
+};
+
+/**
+ * Calculates the position and size of elements.
+ *
+ * @param elem
+ * @returns {{y: number, x: number, width: number, height: number}}
+ */
+const position = function (elem) {
+  const data = {x: 0, y: 0, width: 0, height: 0};
+
+  if (typeof elem === 'string')
+    elem = document.querySelector(elem);
+
+  if (elem === undefined || elem === window || elem === document) {
+    data.width = window.innerWidth;
+    data.height = window.innerHeight;
+    data.element = window;
+  }
+  else
+  if (elem && elem.nodeType === Node.ELEMENT_NODE) {
+    if (elem.getBoundingClientRect) {
+      const rect = elem.getBoundingClientRect(),
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+        clientTop = document.documentElement.clientTop || document.body.clientTop || 0,
+        clientLeft = document.documentElement.clientLeft || document.body.clientLeft || 0;
+
+      data.y = Math.round(rect.top + scrollTop - clientTop);
+      data.x = Math.round(rect.left + scrollLeft - clientLeft);
+      data.width = elem.offsetWidth;
+      data.height = elem.offsetHeight;
+    }
+    else {
+      let top = 0, left = 0;
+      while (elem) {
+        top += parseInt(elem.offsetTop, 10);
+        left += parseInt(elem.offsetLeft, 10);
+        elem = elem.offsetParent;
+      }
+      data.y = top;
+      data.x = left;
+      data.width = elem.offsetWidth;
+      data.height = elem.offsetHeight;
+    }
+    data.element = elem;
+  }
+  return data;
+};
+
 
 
 
   
-
 class AnimateConfig {
   constructor (config) {
     this.config = {...{
@@ -70,7 +200,6 @@ class AnimateConfig {
       }, ...config };
   }
 }
-
 
 class AnimateApplication extends AnimateConfig {
 
@@ -121,17 +250,19 @@ class AnimateApplication extends AnimateConfig {
       this._fpsTimeNow = Date.now();
       this._fpsDelta = this._fpsTimeNow - this._fpsTimeThen;
       if (this._fpsDelta > this._fpsInterval) {
-        this._fpsTimeThen = this._fpsTimeNow - ( this._fpsDelta % this._fpsInterval );
-        this._iteration ++;
         this.clear();
         this.draw();
+        this._fpsTimeThen = this._fpsTimeNow - ( this._fpsDelta % this._fpsInterval );
       }
     }
   }
 
-  draw () {
+  draw (sceneName = null) {
+    if (sceneName) this._sceneName = sceneName;
+
+    this._iteration ++;
     this._scenes[this._sceneName].map((cb) =>
-      cb.bind(this)(this._context, this._iteration));
+        cb.bind(this)(this._context, this._iteration));
 
     if (this._frameCallback && this._frameCallback.init)
       this._frameCallback.bind(this)(this._context, this._iteration)
@@ -143,8 +274,8 @@ class AnimateApplication extends AnimateConfig {
   }
 
   scene (sceneName, params, cb) {
-    if (!Array.isArray(this._scenes[sceneName]))
-      this._scenes[sceneName] = [];
+    if (!Array.isArray(this._scenes[sceneName])) this._scenes[sceneName] = [];
+    this._sceneName = sceneName;
     this._scenes[sceneName].push(cb.bind(this.sceneObject(params)));
     return this;
   }
@@ -156,8 +287,7 @@ class AnimateApplication extends AnimateConfig {
   }
 
   start (sceneName = null) {
-    if (sceneName)
-      this._sceneName = sceneName;
+    if (sceneName) this._sceneName = sceneName;
     this.stop();
     this._fpsTimeThen = Date.now();
     this._fpsTimeFirst = this._fpsTimeThen;
@@ -172,6 +302,12 @@ class AnimateApplication extends AnimateConfig {
 
   getIteration () {
     return this._iteration
+  }
+  getWidth () {
+    return this.config.width
+  }
+  getHeight () {
+    return this.config.height
   }
 
   /**
@@ -202,7 +338,6 @@ class AnimateApplication extends AnimateConfig {
     return this._global
   }
 
-
   /**
    * Hit point inside rectangle
    * @param rectangle
@@ -219,10 +354,8 @@ class AnimateApplication extends AnimateConfig {
 
   /**
    * isPointInPath
-   * hitTestPoint(x, y)
    * hitTestPoint(point)
-   * @param point
-   * @param y
+   * @param point {object}
    * @returns {boolean}
    */
   hitTestPoint (point) {
@@ -368,6 +501,8 @@ class AnimateGraphic {
   }
 
   save () {this.context.save()}
+
+  translate (x, y) {this.context.translate(x, y)}
 
   restore () {this.context.restore()}
 
@@ -590,20 +725,8 @@ class AnimateText {
   }
 
   /**
-   * Loads a script element with javascript source
-   *
-   * .javascript ( {
-   *      myscript1: '/path/to/myscript1',
-   *      myscript2: '/path/to/myscript2',
-   *    },
-   *    function (list) {})
-   *
-   * .javascript ( [
-   *      '/path/to/myscript1',
-   *      '/path/to/myscript2',
-   *    ],
-   *    function (list) {})
-   *
+   *  ( { myscript1: '/path/to/myscript1', }, function (list) {})
+   *  ( [ '/path/to/myscript1', ], function (list) {})
    * @param src       Object, Array. items: key is ID, value is src
    * @param callback  Function called when all srcs is loaded
    * @param onerror   Function called when load is failed
@@ -710,17 +833,69 @@ class AnimateText {
         video.preload = 'auto';
         loadedData[name] = video;
         iterator++;
-        if (iterator == length)
+        if (iterator === length)
           callback.call({}, loadedData);
       }
     }
   }
 
 
+}
 
+  
+class AnimateGrid {
 
+  constructor (Animate) {
+    if ( !(Animate instanceof AnimateApplication) ) {
+      throw new Error(':constructor argument in not of instance AnimateApplication');
+    }
+
+    this.canvas = Animate.getCanvas();
+    this.global = Animate.getGlobal();
+    this.Animate = Animate;
+
+    /**@type {CanvasRenderingContext2D}*/
+    this.context = Animate._context;
+
+    this.cache = {};
+  }
+
+  /**
+   * @param size          Grid step size. Default: 50
+   * @param lineWidth     Толщина линии. Default: 0.5
+   * @param color         Цвет линий. Default: '#efefef'
+   */
+  add (size, lineWidth, color, fullWidth, fullHeight) {
+    const gridname = 'id_' + size +'_'+ lineWidth;
+
+    if (this.cache[gridname]) {
+      this.context.putImageData(this.cache[gridname], 0, 0);
+    } else {
+      let i,
+        w = fullWidth || this.Animate.getWidth(),
+        h = fullHeight || this.Animate.getHeight();
+
+      size = size || 50;
+      this.context.beginPath();
+
+      for (i = 0; i < (w + size); i += size) {
+        this.context.moveTo(i, 0);
+        this.context.lineTo(i, h); }
+      for (i = 0; i < (h + size); i += size) {
+        this.context.moveTo(0, i);
+        this.context.lineTo(w, i); }
+
+      this.context.lineWidth = lineWidth || 0.5;
+      this.context.strokeStyle = color || '#efefef';
+      this.context.stroke();
+      this.context.closePath();
+
+      this.cache[gridname] = this.context.getImageData(0, 0, w, h);
+    }
+  }
 
 }
+
 
   
 

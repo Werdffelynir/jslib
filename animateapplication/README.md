@@ -358,3 +358,64 @@ width: 800
 
 
 
+
+/*    const blockProperties = Point();
+
+    const blockGenerator = function (point) {
+      const list = [];
+      const step = 20;
+      const percent = 20;
+      const w = Animate.getWidth();
+      const h = Animate.getHeight();
+      const valid = (p) => {
+        return p.x > -1 && p.x <= w && p.y > -1 && p.y <= h;
+      };
+      const add = (p) => {
+        if (/!*random() > percent &&*!/ valid(p) && list.length < 10) {
+          list.push(p);
+          // block(Point(p.x, p.y));
+        }
+      };
+      const block = function (poi) {
+        const splinter = (p) => [
+          Point(p.x - step, p.y),
+          Point(p.x + step, p.y),
+          Point(p.x, p.y - step),
+          Point(p.x, p.y + step),
+        ];
+        splinter(poi).map((p) => {
+          add(p);
+        });
+        add(poi);
+      };
+      block(point || Point());
+      return list;
+    };
+
+    const blocksmap = blockGenerator(Point(400, 140));
+    console.log(blocksmap);*/
+
+    function blockGenerator (point) {
+      const list = [];
+      const step = 20;
+      const percent = 20;
+      const width = Animate.getWidth();
+      const height = Animate.getHeight();
+      const widthblocks = width / step;
+      const heightblocks = height / step;
+
+      let x , y ;
+
+      for (x = 0; x < widthblocks; x ++) {
+        for (y = 0; y < heightblocks; y ++) {
+          random() < 80 ? list.push(Point(x * step, y * step)) : null;
+        }
+      }
+
+      return list;
+    }
+    const blocksmap = blockGenerator();
+
+    console.log(blocksmap);
+    
+#############################################################

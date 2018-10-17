@@ -11,20 +11,8 @@ class AnimateLoader {
   }
 
   /**
-   * Loads a script element with javascript source
-   *
-   * .javascript ( {
-   *      myscript1: '/path/to/myscript1',
-   *      myscript2: '/path/to/myscript2',
-   *    },
-   *    function (list) {})
-   *
-   * .javascript ( [
-   *      '/path/to/myscript1',
-   *      '/path/to/myscript2',
-   *    ],
-   *    function (list) {})
-   *
+   *  ( { myscript1: '/path/to/myscript1', }, function (list) {})
+   *  ( [ '/path/to/myscript1', ], function (list) {})
    * @param src       Object, Array. items: key is ID, value is src
    * @param callback  Function called when all srcs is loaded
    * @param onerror   Function called when load is failed
@@ -131,14 +119,11 @@ class AnimateLoader {
         video.preload = 'auto';
         loadedData[name] = video;
         iterator++;
-        if (iterator == length)
+        if (iterator === length)
           callback.call({}, loadedData);
       }
     }
   }
-
-
-
 
 
 }

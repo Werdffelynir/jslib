@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="build/animateapplication.js"></script>
+    <script src="../build/animateapplication.js"></script>
 </head>
 <body>
 
@@ -21,26 +21,9 @@
       Rectangle
     } = AnimateApplication;
 
-    function blockGenerator (point) {
-      const list = [];
-      const step = 20;
-      const percent = 20;
-      const width = Animate.getWidth();
-      const height = Animate.getHeight();
-      const widthblocks = width / step;
-      const heightblocks = height / step;
 
-      let x , y ;
-      for (x = 0; x < widthblocks; x ++)
-        for (y = 0; y < heightblocks; y ++)
-          random() < 80 ? list.push(Point(x * step, y * step)) : null;
-
-      return list;
-    }
-    const blocksmap = blockGenerator();
-    console.log(blocksmap);
-    
     const Canvas = {};
+    Canvas.blocklandStack = {};
     Canvas.cursor = Point(0, 0);
     Canvas.point = Point(0, 0);
     Canvas.speed = 20;
@@ -89,22 +72,24 @@
     })({top: 87, down: 83, left: 65, right: 68, space: 32});
 
     Animate.scene('main', {}, function (ctx, iterator) {
-
       if (Canvas.keys.top) Canvas.point.y -= Canvas.speed;
       if (Canvas.keys.down) Canvas.point.y += Canvas.speed;
       if (Canvas.keys.left) Canvas.point.x -= Canvas.speed;
       if (Canvas.keys.right) Canvas.point.x += Canvas.speed;
 
-      // Grid.add(20, 1, '#eeeeee');
+      Grid.add(20, 1, '#eeeeee');
 
-      blocksmap.map((point) => {
-        Graphic.rect(point, 20, 20)
-          .color('rgba(255, 0, 0, 0.3)').fill();
-      });
+      if (Canvas.keys.space) {
+        const pname = 'id_' + Canvas.point.x + '_' + Canvas.point.y;
+        if (!Canvas.blocklandStack[pname])
+          Canvas.blocklandStack[pname] = Object.assign({}, Canvas.point);
+      }
 
-      Graphic.rect(Canvas.point, 20, 20)
-        .color('rgba(0, 0, 0, 1)').fill();
+      for (let key in Canvas.blocklandStack) {
+        Graphic.rect(Canvas.blocklandStack[key], 20, 20).color('rgba(255, 0, 0, 0.3)').fill();
+      }
 
+      Graphic.rect(Canvas.point, 20, 20).color('rgba(0, 0, 0, 1)').fill();
     });
 
 

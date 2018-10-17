@@ -76,6 +76,8 @@ class AnimateGraphic {
 
   save () {this.context.save()}
 
+  translate (x, y) {this.context.translate(x, y)}
+
   restore () {this.context.restore()}
 
   begin () {this.context.beginPath()}

@@ -6,6 +6,7 @@ class AnimateEvent {
     if ( !(Animate instanceof AnimateApplication) )
       throw new Error(':constructor argument in not of instance AnimateApplication');
 
+    this.keyBinded = [];
     this.canvas = Animate.getCanvas();
     this.global = Animate.getGlobal();
     this.Animate = Animate;
@@ -46,6 +47,31 @@ class AnimateEvent {
     this.global.addEventListener('keyup', (event) =>
       cb.call(this.Animate, event, this.getMouseEventPosition(event))
     );
+  }
+
+  keyBind (keyCodes, cb) {
+
+    this.keyBinded.push({
+      keyCode: Array.isArray(keyCodes) ? keyCodes : [keyCodes],
+      callback: cb
+    });
+
+
+    // for (key in keys) {
+    //   let _keys = keys[key];
+    //   if (!Array.isArray(_keys))
+    //     _keys = [_keys];
+    //
+    //   _keys.map((k) => {
+    //     if (!Array.isArray(list[k])) list[k] = [];
+    //     list[k];
+    //   });
+    // }
+
+    this.keydown((e) => {
+      this.keyBinded.map()
+    });
+    this.keyup();
   }
 
 }
