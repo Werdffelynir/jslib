@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="build/animateapplication.js"></script>
+    <script src="../build/animateapplication.js"></script>
 </head>
 <body>
 
@@ -29,68 +29,37 @@
 
     Canvas.cursor = Point(0, 0);
 
-    // Event.mousemove((eve, pos) => Canvas.cursor = pos );
+    Event.mousemove((eve, pos) => Canvas.cursor = pos );
 
-    Canvas.keys = {top: false, down: false, left: false, right: false, space: false};
-    Canvas.keysBinder = ((types) => {
-      Animate.getGlobal().addEventListener('keydown', (e) => {
-        switch (e.keyCode) {
-          case types.top:Canvas.keys.top = true;break;
-          case types.down:Canvas.keys.down = true;break;
-          case types.left:Canvas.keys.left = true;break;
-          case types.right:Canvas.keys.right = true;break;
-          case types.space:Canvas.keys.space = true;break;
-          default:
-        }
-      });
-      Animate.getGlobal().addEventListener('keyup', (e) => {
-        switch (e.keyCode) {
-          case types.top:Canvas.keys.top = false;break;
-          case types.down:Canvas.keys.down = false;break;
-          case types.left:Canvas.keys.left = false;break;
-          case types.right:Canvas.keys.right = false;break;
-          case types.space:Canvas.keys.space = false;break;
-          default:
-        }
-      });
-    })({top: 87, down: 83, left: 65, right: 68, space: 32});
+     Animate.getContext({
+       fillStyle: 'blue',
+       globalAlpha: 0.3
+     });
 
-    // Animate.getContext({
-    //   fillStyle: 'blue',
-    //   globalAlpha: 0.3
-    // });
-
-    // Graphic.shadow(0, 0, 6, '#000000');
+     Graphic.shadow(0, 0, 6, '#000000');
 
     Animate.scene('main', {
       point: Point(50, 50),
       speed: 1
     }, function (ctx, iter) {
-      if (Canvas.keys.top) this.point.y -= this.speed;
-      if (Canvas.keys.down) this.point.y += this.speed;
-      if (Canvas.keys.left) this.point.x -= this.speed;
-      if (Canvas.keys.right) this.point.x += this.speed;
 
+       Graphic.ellipse(Point(100, 100), 30, 70, 0, 0, DEGREE_AS_RADIAN).fill().close();
 
-      // Graphic.ellipse(100, 100, 30, 70, 0, 0, DEGREE_AS_RADIAN).fill();
+       Graphic.circle(Point(100, 100), 30).fill().close();
 
+       Graphic.alpha(100);
+       Graphic.color('red');
+       Graphic.rect(Point(100, 100), 75, 75).fill();
 
-      // Graphic.circle(100, 100, 30).fill();
+       Graphic.alpha(50);
+       Graphic.color('blue');
+       Graphic.rect(Point(300, 100), 75, 75).fill();
 
+       Graphic.rectRound(Point(50, 50), 100, 75, 75).fill();
 
-      // Graphic.alpha(100);
-      // Graphic.color('red');
-      // Graphic.rect(Point(100, 100), 75, 75).fill();
-
-      // Graphic.alpha(50);
-      // Graphic.color('blue');
-      // Graphic.rect(Point(300, 100), 75, 75).fill();
-      //
-      // Graphic.rectRound(Point(50, 50), 100, 75, 75).fill();
-
-      // Graphic.shape([
-      //  10, 200, 150, 100, 110, 200
-      // ], true).stroke();
+       Graphic.shape([
+        10, 200, 150, 100, 110, 200
+       ], true).stroke();
 
 
       Graphic.color('#b32f00');
@@ -100,24 +69,22 @@
       ).fill();
 
 
-      // ctx.fillRect(this.point.x, this.point.y, 10, 10);
-      // Text.print('Police', 10, 10);
+       ctx.fillRect(this.point.x, this.point.y, 10, 10);
+       Text.print('Police', 10, 10);
 
+       Graphic.shadow(0, 0, 6, '#000000');
 
-      // Graphic.shadow(0, 0, 6, '#000000');
-      // Graphic.alpha(80);
-      // Graphic.color('#b32f00');
-      // Graphic.rect(this.point, 10, 10).fill();
+       Graphic.alpha(80);
+       Graphic.color('#b32f00');
+       Graphic.rect(this.point, 10, 10).fill();
+
       Graphic.alpha(100);
       Graphic.color('#b3ac85');
       Graphic.circle(this.point, 10).fill();
       Graphic.clearShadow();
 
-      // Graphic.line(Point(10, 10), Point(10, 400))
-      //   .stroke();
-
-      // Graphic.line(0, 0, Canvas.cursor.x, Canvas.cursor.y)
-      //   .fill();
+       Graphic.line(Point(10, 10), Point(10, 400))
+         .stroke();
 
     }).start('main');
 

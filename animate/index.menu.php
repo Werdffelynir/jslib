@@ -37,6 +37,10 @@
         <ul class="toggle">
             <li><a href="/animate/games/main.js">Games</a></li>
             <li><a href="/animate/games/template.js">Games template</a></li>
+
+            <li><a href="/animate/games/onpanet.js">On Planet</a></li>
+            <li><a href="/animate/games/mapmen.js">MapMen</a></li>
+
             <li><a href="/animate/games/stepmove.js">Step move</a></li>
             <li><a href="/animate/games/background-movie.js">Background Movie</a></li>
             <li><a href="/animate/games/gravity.js">Gravity</a></li>
@@ -44,7 +48,6 @@
             <li><a href="/animate/games/mapgenerator.js">Map Generator</a></li>
         </ul>
     </li>
-
     <li><span class="toggle">Resource</span>
         <ul class="toggle">
             <li><a href="/animate/resource/main.js">Resource</a></li>

@@ -71,8 +71,12 @@ class AnimateText {
     if (isDefined(posy)) this.config.y = posy;
 
     switch (this.config.type) {
-      case FONT_TYPE_FILL:this.fill();break;
-      case FONT_TYPE_STROKE:this.stroke();break;
+      case FONT_TYPE_FILL:
+        this.fill();
+        break;
+      case FONT_TYPE_STROKE:
+        this.stroke();
+        break;
       default:
     }
     return this;

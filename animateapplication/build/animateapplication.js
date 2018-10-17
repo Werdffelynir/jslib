@@ -1,3 +1,4 @@
+"use strict";
 
   
 function isObject(scr) {
@@ -200,7 +201,35 @@ class AnimateApplication extends AnimateConfig {
   getGlobal () {
     return this._global
   }
+
+
+  /**
+   * Hit point inside rectangle
+   * @param rectangle
+   * @param point
+   * @returns {boolean}
+   */
+  hitTest (rectangle, point) {
+    const x = parseInt(point.x), y = parseInt(point.y);
+    return x > rectangle[0] &&
+      y > rectangle[1] &&
+      x < rectangle[0] + rectangle[2] &&
+      y < rectangle[1] + rectangle[3];
+  };
+
+  /**
+   * isPointInPath
+   * hitTestPoint(x, y)
+   * hitTestPoint(point)
+   * @param point
+   * @param y
+   * @returns {boolean}
+   */
+  hitTestPoint (point) {
+    return this._context.isPointInPath(point.x, point.y);
+  };
 }
+
 
 /** Set script version. Property [read-only]*/
 Object.defineProperty(AnimateApplication, 'version', {
@@ -266,7 +295,6 @@ class AnimateEvent {
 const LINE_CAPS_BUTT = 'butt';
 const LINE_CAPS_ROUND = 'round';
 const LINE_CAPS_SQUARE = 'square';
-
 const LINE_JOIN_BEVEL = 'bevel';
 const LINE_JOIN_ROUND = 'round';
 const LINE_JOIN_MITER = 'miter';
@@ -290,12 +318,12 @@ class AnimateGraphic {
     /**@type {function|null}*/
     this.drawContextFunction = null;
 
-    this.formatProperties= {
+    this.formatProperties = {
       color: '#000000',
-      alpha: null,
+      alpha: 1,
       thickness: null,
-      cap: null,
-      join: null,
+      cap: LINE_CAPS_ROUND,
+      join: LINE_JOIN_ROUND,
     };
   }
 
@@ -535,8 +563,12 @@ class AnimateText {
     if (isDefined(posy)) this.config.y = posy;
 
     switch (this.config.type) {
-      case FONT_TYPE_FILL:this.fill();break;
-      case FONT_TYPE_STROKE:this.stroke();break;
+      case FONT_TYPE_FILL:
+        this.fill();
+        break;
+      case FONT_TYPE_STROKE:
+        this.stroke();
+        break;
       default:
     }
     return this;
@@ -544,6 +576,151 @@ class AnimateText {
 
 }
 
+
+  class AnimateLoader {
+
+  constructor(Animate) {
+    if (!(Animate instanceof AnimateApplication)) {
+      throw new Error(':constructor argument in not of instance AnimateApplication');
+    }
+
+    /**@type {CanvasRenderingContext2D}*/
+    this.context = Animate._context;
+    this.global = Animate.getGlobal();
+  }
+
+  /**
+   * Loads a script element with javascript source
+   *
+   * .javascript ( {
+   *      myscript1: '/path/to/myscript1',
+   *      myscript2: '/path/to/myscript2',
+   *    },
+   *    function (list) {})
+   *
+   * .javascript ( [
+   *      '/path/to/myscript1',
+   *      '/path/to/myscript2',
+   *    ],
+   *    function (list) {})
+   *
+   * @param src       Object, Array. items: key is ID, value is src
+   * @param callback  Function called when all srcs is loaded
+   * @param onerror   Function called when load is failed
+   * @returns {*}
+   */
+  javascript(src, callback, onerror) {
+    if (src && typeof src === 'object') {
+
+      if (Array.isArray(src)) {
+        let obj = {};
+        src.map(function (item) {
+          obj[Math.random().toString(32).slice(2)] = item
+        });
+        src = obj;
+      }
+
+      let length = Object.keys(src).length,
+        key,
+        script,
+        scripts = {},
+        iterator = 0;
+      for (key in src) {
+        script = document.createElement('script');
+        script.src = (src[key].substr(-3) === '.js') ? src[key] : src[key] + '.js';
+        script.type = 'application/javascript';
+        script.id = key;
+        script.onerror = onerror;
+        script.onload = function (e) {
+          scripts[this.id] = this;
+          iterator++;
+          if (iterator === length) {
+            callback.call({}, scripts);
+          }
+        };
+        this.global.head.appendChild(script);
+      }
+    }
+  }
+
+  /**
+   * ({ img1: '/path/to/img1' }, function (list) {})
+   * @param list {object}
+   * @param callback {function}
+   */
+  image (list, callback) {
+    if (list && typeof list === 'object') {
+      const length = Object.keys(list).length;
+      const loadedData = {};
+      let name, iterator = 0;
+      for (name in list) {
+        const img = this.global.createElement('img');
+        img.src = list[name];
+        img.name = name;
+        img.onload = function (e) {
+          loadedData[this.name] = this;
+          iterator++;
+          if (iterator === length)
+            callback.call({}, loadedData);
+        };
+      }
+    }
+  }
+
+
+
+  /**
+   * ( {audio1: '/path/to/audio1', }, function (list) {})
+   * @param list
+   * @param callback
+   */
+  audio (list, callback) {
+    if (list && typeof list === 'object') {
+      const length = Object.keys(list).length;
+      const loadedData = {};
+      let name, iterator = 0;
+      for (name in srcs) {
+        const audio = document.createElement('audio');
+        audio.src = list[name];
+        audio.name = name;
+        audio.preload = 'auto';
+        loadedData[name] = audio;
+        iterator++;
+        if (iterator === length) {
+          callback.call({}, loadedData);
+        }
+      }
+    }
+  }
+
+  /**
+   * ( { video1: '/path/to/video1', }, function (list) {})
+   * @param list
+   * @param callback
+   */
+  video (list, callback) {
+    if (list && typeof list === 'object') {
+      const length = Object.keys(list).length;
+      const loadedData = {};
+      let name, iterator = 0;
+      for (name in list) {
+        const video = this.global.createElement('video');
+        video.src = list[name];
+        video.name = name;
+        video.preload = 'auto';
+        loadedData[name] = video;
+        iterator++;
+        if (iterator == length)
+          callback.call({}, loadedData);
+      }
+    }
+  }
+
+
+
+
+
+}
 
   
 

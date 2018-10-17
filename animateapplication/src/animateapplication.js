@@ -147,7 +147,35 @@ class AnimateApplication extends AnimateConfig {
   getGlobal () {
     return this._global
   }
+
+
+  /**
+   * Hit point inside rectangle
+   * @param rectangle
+   * @param point
+   * @returns {boolean}
+   */
+  hitTest (rectangle, point) {
+    const x = parseInt(point.x), y = parseInt(point.y);
+    return x > rectangle[0] &&
+      y > rectangle[1] &&
+      x < rectangle[0] + rectangle[2] &&
+      y < rectangle[1] + rectangle[3];
+  };
+
+  /**
+   * isPointInPath
+   * hitTestPoint(x, y)
+   * hitTestPoint(point)
+   * @param point
+   * @param y
+   * @returns {boolean}
+   */
+  hitTestPoint (point) {
+    return this._context.isPointInPath(point.x, point.y);
+  };
 }
+
 
 /** Set script version. Property [read-only]*/
 Object.defineProperty(AnimateApplication, 'version', {

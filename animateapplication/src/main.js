@@ -1,3 +1,4 @@
+"use strict";
 
   [[['utils/isobject']]]
 
@@ -10,5 +11,7 @@
   [[['extensions/animategraphic']]]
 
   [[['extensions/animatetext']]]
+
+  [[['extensions/animateloader']]]
 
   [[['static']]]

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+    const Loader = new AnimateLoader(Animate);
+
+    Loader.image({
+      rocket: 'demo/assets/rocket.png',
+      meteor1: 'demo/assets/meteor-1.png',
+      meteor2: 'demo/assets/meteor-2.png',
+    }, function (images) {
+      console.log('loaded:', images);
+
+      Animate.getContext().drawImage(images.rocket, 100, 100);
+    });
+
+</script>
+</body>
+</html>

@@ -2,7 +2,6 @@
 const LINE_CAPS_BUTT = 'butt';
 const LINE_CAPS_ROUND = 'round';
 const LINE_CAPS_SQUARE = 'square';
-
 const LINE_JOIN_BEVEL = 'bevel';
 const LINE_JOIN_ROUND = 'round';
 const LINE_JOIN_MITER = 'miter';
@@ -26,12 +25,12 @@ class AnimateGraphic {
     /**@type {function|null}*/
     this.drawContextFunction = null;
 
-    this.formatProperties= {
+    this.formatProperties = {
       color: '#000000',
-      alpha: null,
+      alpha: 1,
       thickness: null,
-      cap: null,
-      join: null,
+      cap: LINE_CAPS_ROUND,
+      join: LINE_JOIN_ROUND,
     };
   }
 

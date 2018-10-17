@@ -32,8 +32,10 @@ Animate.prototype.MovieClip = function (opts, callback, thisInstance) {
     };
 
   for (key in options) {
-    if (opts[key] !== undefined) options[key] = opts[key];
-  }
+    if (opts[key] !== undefined) options[key] = opts[key]}
+
+  for (key in opts) {
+    if (options[key] === undefined) options[key] = opts[key]}
 
   for (key in opts) {
     if (options[key] === undefined) options[key] = opts[key];
