@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+
+  const {
+    Point,
+    Rectangle
+  } = AnimateApplication;
+
+  Text.format({
+    size: 12,
+    family: 'Ubuntu',
+  });
+
+  const Canvas = {};
+  Canvas.keys = {up: false, down: false, left: false, right: false, space: false};
+  Canvas.keysStatus = (keyCode, status) => {
+    if ([EventKeyCodeArrowUp, EventKeyCodeKeyW].includes(keyCode)) {Canvas.keys.up = status;}
+    if ([EventKeyCodeArrowDown, EventKeyCodeKeyS].includes(keyCode)) {Canvas.keys.down = status;}
+    if ([EventKeyCodeArrowLeft, EventKeyCodeKeyA].includes(keyCode)) {Canvas.keys.left = status;}
+    if ([EventKeyCodeArrowRight, EventKeyCodeKeyD].includes(keyCode)) {Canvas.keys.right = status;}
+    if ([EventKeyCodeSpace].includes(keyCode)) {Canvas.keys.space = status;}
+  };
+
+  Canvas.cursor = Point(0, 0);
+  Canvas.cursorClip = function () {
+    const pos = Canvas.cursor;
+    const size = 20;
+    Graphic.color('#000000');
+    Graphic.thickness(0.5);
+    Graphic.line(Point(pos.x, pos.y - size), Point(pos.x, pos.y + size)).stroke();
+    Graphic.line(Point(pos.x - size, pos.y), Point(pos.x + size, pos.y)).stroke();
+  };
+  Canvas.player = Point(200, 200);
+  Canvas.playerSpeed = 2;
+  Canvas.playerRotate = 0;
+  Canvas.playerClip = function () {
+    if (Canvas.keys.up) Canvas.player.y -= Canvas.playerSpeed;
+    if (Canvas.keys.down) Canvas.player.y += Canvas.playerSpeed;
+    if (Canvas.keys.left) Canvas.player.x -= Canvas.playerSpeed;
+    if (Canvas.keys.right) Canvas.player.x += Canvas.playerSpeed;
+    Graphic.rect(Canvas.player, 20, 20).color('#000000').fill();
+  };
+
+
+  Event.keyup((e) => { Canvas.keysStatus(e.keyCode, false); });
+  Event.keydown((e) => { Canvas.keysStatus(e.keyCode, true); });
+  Event.mousemove((eve, pos) => { Canvas.cursor = pos; });
+
+  Event.click((eve) => {});
+
+
+
+  const {
+    update: moveUpdate,
+    distance: moveDistance
+  } = MovePointToPoint();
+
+
+  Animate.scene('main', {}, function (ctx, iter) {
+
+    Canvas.playerClip();
+    Canvas.cursorClip();
+
+    Canvas.player = moveUpdate(Canvas.player, Canvas.cursor, 3.5, () => {console.log('TOUCH')});
+
+  }).start('main');
+
+
+  function MovePointToPoint () {
+    function distance(p1, p2){
+      let xs = p2.x - p1.x;
+      let ys = p2.y - p1.y;
+      return Math.ceil(Math.sqrt((xs * xs) + (ys * ys)));
+    }
+    function update (p1, p2, stepsspeed, cbPointsTouch) {
+      const dist = distance(p1, p2);
+      if (dist > stepsspeed) {
+        const steps = stepsspeed || 1;
+        const speed = steps / dist;
+        const x = p1.x + (p2.x - p1.x) * speed;
+        const y = p1.y + (p2.y - p1.y) * speed;
+        return {x, y};
+      } else {
+        if ( typeof cbPointsTouch === 'function' )
+          cbPointsTouch()
+      }
+      return p1;
+    }
+    return {update, distance};
+  }
+
+
+
+
+</script>
+</body>
+</html>

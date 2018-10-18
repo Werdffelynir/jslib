@@ -78,6 +78,8 @@ class AnimateGraphic {
 
   translate (x, y) {this.context.translate(x, y)}
 
+  rotate (angle) {this.context.rotate(angle)}
+
   restore () {this.context.restore()}
 
   begin () {this.context.beginPath()}

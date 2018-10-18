@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+    Text.format({
+      size: 12,
+      family: 'Ubuntu',
+    });
+
+    const Canvas = {};
+    Canvas.keys = {up: false, down: false, left: false, right: false, space: false};
+    Canvas.keysStatus = (keyCode, status) => {
+      if ([EventKeyCodeArrowUp, EventKeyCodeKeyW].includes(keyCode)) {Canvas.keys.up = status;}
+      if ([EventKeyCodeArrowDown, EventKeyCodeKeyS].includes(keyCode)) {Canvas.keys.down = status;}
+      if ([EventKeyCodeArrowLeft, EventKeyCodeKeyA].includes(keyCode)) {Canvas.keys.left = status;}
+      if ([EventKeyCodeArrowRight, EventKeyCodeKeyD].includes(keyCode)) {Canvas.keys.right = status;}
+      if ([EventKeyCodeSpace].includes(keyCode)) {Canvas.keys.space = status;}
+    };
+    Canvas.cursor = Point(0, 0);
+    Canvas.cursorClip = function () {
+      const pos = Canvas.cursor;
+      const size = 20;
+      Graphic.color('#000000');
+      Graphic.line(Point(pos.x, pos.y - size), Point(pos.x, pos.y + size)).stroke();
+      Graphic.line(Point(pos.x - size, pos.y), Point(pos.x + size, pos.y)).stroke();
+    };
+    Canvas.player = Point(200, 200);
+    Canvas.playerSpeed = 1;
+    Canvas.playerKeyMove = function () {
+      if (Canvas.keys.up) Canvas.player.y -= Canvas.playerSpeed;
+      if (Canvas.keys.down) Canvas.player.y += Canvas.playerSpeed;
+      if (Canvas.keys.left) Canvas.player.x -= Canvas.playerSpeed;
+      if (Canvas.keys.right) Canvas.player.x += Canvas.playerSpeed;
+      Graphic.color('#b3ac85');
+      Graphic.circle(Canvas.player, 20).fill();
+    };
+
+    Event.keyup((e) => { Canvas.keysStatus(e.keyCode, false); });
+    Event.keydown((e) => { Canvas.keysStatus(e.keyCode, true); });
+    Event.mousemove((eve, pos) => Canvas.cursor = pos );
+
+
+    Animate.scene('main', {}, function (ctx, iter) {
+      Canvas.playerKeyMove();
+      Canvas.cursorClip();
+
+    }).start('main');
+
+</script>
+</body>
+</html>

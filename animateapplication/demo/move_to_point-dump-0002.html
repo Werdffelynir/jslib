@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+    Text.format({
+      size: 12,
+      family: 'Ubuntu',
+    });
+
+    const Canvas = {};
+    Canvas.keys = {up: false, down: false, left: false, right: false, space: false};
+    Canvas.keysStatus = (keyCode, status) => {
+      if ([EventKeyCodeArrowUp, EventKeyCodeKeyW].includes(keyCode)) {Canvas.keys.up = status;}
+      if ([EventKeyCodeArrowDown, EventKeyCodeKeyS].includes(keyCode)) {Canvas.keys.down = status;}
+      if ([EventKeyCodeArrowLeft, EventKeyCodeKeyA].includes(keyCode)) {Canvas.keys.left = status;}
+      if ([EventKeyCodeArrowRight, EventKeyCodeKeyD].includes(keyCode)) {Canvas.keys.right = status;}
+      if ([EventKeyCodeSpace].includes(keyCode)) {Canvas.keys.space = status;}
+    };
+
+    Canvas.cursor = Point(0, 0);
+    Canvas.cursorClip = function () {
+      const pos = Canvas.cursor;
+      const size = 20;
+      Graphic.color('#000000');
+      Graphic.thickness(0.5);
+      Graphic.line(Point(pos.x, pos.y - size), Point(pos.x, pos.y + size)).stroke();
+      Graphic.line(Point(pos.x - size, pos.y), Point(pos.x + size, pos.y)).stroke();
+    };
+    Canvas.player = Point(200, 200);
+    Canvas.playerSpeed = 2;
+    Canvas.playerRotate = 0;
+    Canvas.playerClip = function () {
+      if (Canvas.keys.up) Canvas.player.y -= Canvas.playerSpeed;
+      if (Canvas.keys.down) Canvas.player.y += Canvas.playerSpeed;
+      if (Canvas.keys.left) Canvas.player.x -= Canvas.playerSpeed;
+      if (Canvas.keys.right) Canvas.player.x += Canvas.playerSpeed;
+      Graphic.rect(Canvas.player, 20, 20).color('#000000').fill();
+    };
+
+
+    Event.keyup((e) => { Canvas.keysStatus(e.keyCode, false); });
+    Event.keydown((e) => { Canvas.keysStatus(e.keyCode, true); });
+    Event.mousemove((eve, pos) => { Canvas.cursor = pos; });
+
+    Event.click((eve) => {});
+
+
+    const drawClipUpdater = DrawClip();
+
+    Animate.scene('main', {}, function (ctx, iter) {
+
+      Canvas.playerClip();
+      Canvas.cursorClip();
+
+      const pos = drawClipUpdater(Canvas.player, Canvas.cursor);
+      console.log('pos', pos);
+      Graphic.rect(pos, 10, 10).fill();
+
+    }).start('main');
+
+
+
+
+
+    function DrawClip () {
+
+      function distance(pnt1X, pnt1Y, pnt2X, pnt2Y){
+        let xs = pnt2X - pnt1X;
+        let ys = pnt2Y - pnt1Y;
+        xs = xs * xs;
+        ys = ys * ys;
+        return Math.ceil(Math.sqrt(xs + ys));
+      }
+
+      function update (p1, p2) {
+
+        if (distance(p1.x, p1.y, p2.x, p2.y) <= 5)
+          p1.x = p2.x;
+
+        if (distance(p1.x, p1.y, p2.x, p2.y) <= 5)
+          p1.y = p2.y;
+
+        if(p1.x > p2.x){
+          if(p1.x - p2.x > 5)p1.x -= 5;
+          else p1.x = p2.x;
+        } else if(p1.x < p2.x){
+          if(p2.x - p1.x > 5) p1.x += 5;
+          else p1.x = p2.x;
+        }
+        if(p1.y > p2.y) {
+          if(p1.y - p2.y > 5) p1.y -= 5;
+          else p1.y = p2.y;
+        } else if(p1.y < p2.y) {
+          if(p2.y - p1.y > 5) p1.y += 5;
+          else p1.y = p2.y;
+
+        }
+        return p1;
+      }
+      return update;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

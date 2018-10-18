@@ -132,10 +132,11 @@ class AnimateApplication extends AnimateConfig {
     if (props) {
       let key;
       for (key in props)
-        if (isDefined(props[key]))
+        if (isDefined(props[key]) && isDefined(this._context[key])) {
           this._context[key] = props[key];
+        }
     }
-      return this._context
+    return this._context
   }
 
   /**
@@ -175,7 +176,25 @@ class AnimateApplication extends AnimateConfig {
    */
   hitTestPoint (point) {
     return this._context.isPointInPath(point.x, point.y);
-  };
+  }
+
+  /**
+   * @param props
+   * @param callback
+   * @returns {function()}
+   */
+  createMovieclip (props, callback) {
+    const ctx = this._context;
+    return (...propsInside) => {
+      ctx.save();
+      if (isDefined(props.x)) ctx.translate(props.x, props.y);
+      if (isDefined(props.rotate)) ctx.rotate(props.rotate);
+      callback.apply(props, propsInside);
+      ctx.restore();
+    }
+  }
+
+
 }
 
 
