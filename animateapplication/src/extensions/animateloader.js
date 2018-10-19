@@ -1,3 +1,4 @@
+
 class AnimateLoader {
 
   constructor(Animate) {
@@ -74,6 +75,14 @@ class AnimateLoader {
         };
       }
     }
+  }
+
+  img (src, callback) {
+    const img = this.global.createElement("img");
+    img.src = src;
+    img.addEventListener("load", () => {
+      callback.call(this, img)
+    });
   }
 
 

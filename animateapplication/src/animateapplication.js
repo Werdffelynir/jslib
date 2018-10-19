@@ -38,7 +38,7 @@ class AnimateApplication extends AnimateConfig {
     this._fpsInterval = 1000 / this.config.fps;
     this._requestanimationframeid = null;
 
-    this._sceneName = 'default';
+    this._sn = 'default';
     this._paused = false;
     this._iteration = 0;
     this._global = document ? document : {};
@@ -72,26 +72,29 @@ class AnimateApplication extends AnimateConfig {
     }
   }
 
-  draw (sceneName = null) {
-    if (sceneName) this._sceneName = sceneName;
+  draw (sn = null) {
+    if (sn) this._sn = sn;
 
-    this._iteration ++;
-    this._scenes[this._sceneName].map((cb) =>
-        cb.bind(this)(this._context, this._iteration));
+    if (this._sn && this._scenes[this._sn]) {
+      this._iteration ++;
+      this._scenes[this._sn].map((cb) => {
+        if (typeOf(cb, 'function')) cb(this._context, this._iteration)
+      });
+    }
 
     if (this._frameCallback && this._frameCallback.init)
       this._frameCallback.bind(this)(this._context, this._iteration)
-  };
+  }
 
   clear () {
     this._context.clearRect( 0, 0, this.config.width, this.config.height );
     return this;
   }
 
-  scene (sceneName, params, cb) {
-    if (!Array.isArray(this._scenes[sceneName])) this._scenes[sceneName] = [];
-    this._sceneName = sceneName;
-    this._scenes[sceneName].push(cb.bind(this.sceneObject(params)));
+  scene (sn, params, cb) {
+    if (!typeOf(this._scenes[sn], 'array')) this._scenes[sn] = [];
+    this._sn = sn;
+    this._scenes[sn].push(cb.bind(this.sceneObject(params)));
     return this;
   }
 
@@ -101,8 +104,8 @@ class AnimateApplication extends AnimateConfig {
     return this;
   }
 
-  start (sceneName = null) {
-    if (sceneName) this._sceneName = sceneName;
+  start (sn = null) {
+    if (sn) this._sn = sn;
     this.stop();
     this._fpsTimeThen = Date.now();
     this._fpsTimeFirst = this._fpsTimeThen;
@@ -132,9 +135,7 @@ class AnimateApplication extends AnimateConfig {
     if (props) {
       let key;
       for (key in props)
-        if (isDefined(props[key]) && isDefined(this._context[key])) {
-          this._context[key] = props[key];
-        }
+        if (isDefined(props[key]) && isDefined(this._context[key])) this._context[key] = props[key];
     }
     return this._context
   }

@@ -36,6 +36,7 @@ class AnimateText {
       align: FONT_ALIGN_LEFT,
       family: 'sans-serif',
       baseline : FONT_BASELINE_TOP,
+      color : null,
     };
 
     /**@type {CanvasRenderingContext2D}*/
@@ -56,11 +57,13 @@ class AnimateText {
   }
 
   stroke () {
+    if (this.config.color) this.context.strokeStyle = this.config.color;
     this.context.strokeText(this.config.text, this.config.x, this.config.y);
     return this;
   }
 
   fill () {
+    if (this.config.color) this.context.fillStyle = this.config.color;
     this.context.fillText(this.config.text, this.config.x, this.config.y);
     return this;
   };
@@ -79,6 +82,11 @@ class AnimateText {
         break;
       default:
     }
+    return this;
+  }
+
+  color (src) {
+    this.config.color = src;
     return this;
   }
 
