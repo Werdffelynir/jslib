@@ -7,220 +7,41 @@
 </head>
 <body>
 
-    <canvas class="canvas"></canvas>
+<canvas class="canvas"></canvas>
 
 <script>
-    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
-    const Text = new AnimateText(Animate);
-    const Event = new AnimateEvent(Animate);
-    const Graphic = new AnimateGraphic(Animate);
-
-    const {
-      Point,
-      Rectangle
-    } = AnimateApplication;
-
-    Text.format({
-      size: 12,
-      family: 'Ubuntu',
-    });
-
-    const Canvas = {};
-
-    Canvas.cursor = Point(0, 0);
-
-    Event.mousemove((eve, pos) => Canvas.cursor = pos );
-
-     Animate.getContext({
-       fillStyle: 'blue',
-       globalAlpha: 0.3
-     });
-
-     Graphic.shadow(0, 0, 6, '#000000');
-
-    Animate.scene('main', {
-      point: Point(50, 50),
-      speed: 1
-    }, function (ctx, iter) {
-
-       Graphic.ellipse(Point(100, 100), 30, 70, 0, 0, DEGREE_AS_RADIAN).fill().close();
-
-       Graphic.circle(Point(100, 100), 30).fill().close();
-
-       Graphic.alpha(100);
-       Graphic.color('red');
-       Graphic.rect(Point(100, 100), 75, 75).fill();
-
-       Graphic.alpha(50);
-       Graphic.color('blue');
-       Graphic.rect(Point(300, 100), 75, 75).fill();
-
-       Graphic.rectRound(Point(50, 50), 100, 75, 75).fill();
-
-       Graphic.shape([
-        10, 200, 150, 100, 110, 200
-       ], true).stroke();
+  const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const Loader = new AnimateLoader(Animate);
+  const Grid = new AnimateGrid(Animate);
 
 
-      Graphic.color('#b32f00');
-      Graphic.shape(
-        [85,80,85,115,140,115,140,165,305,165,305,110,425,110,425,215,335,215,335,330,160,330,160,275,200,275,200,225,75,225,75,275,120,275,120,380,455,380,455,285,575,285,575,70,400,70,400,25,245,25,245,85,175,85,175,15,20,15,20,80,50,80],
-        true
-      ).fill();
+  const {
+    Point,
+    Rectangle
+  } = AnimateApplication;
 
 
-       ctx.fillRect(this.point.x, this.point.y, 10, 10);
-       Text.print('Police', 10, 10);
+  const Canvas = {};
 
-       Graphic.shadow(0, 0, 6, '#000000');
+  Canvas.cursor = Point(0, 0);
+  Canvas.player = Point(0, 0);
+  Canvas.speed = 1;
 
-       Graphic.alpha(80);
-       Graphic.color('#b32f00');
-       Graphic.rect(this.point, 10, 10).fill();
 
-      Graphic.alpha(100);
-      Graphic.color('#b3ac85');
-      Graphic.circle(this.point, 10).fill();
-      Graphic.clearShadow();
+  Event.mousemove((eve, pos) => Canvas.cursor = pos );
 
-       Graphic.line(Point(10, 10), Point(10, 400))
-         .stroke();
 
-    }).start('main');
+  Animate.scene('main', {
+
+  }, function (ctx, iter) {
 
 
 
+  }).start('main');
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /*      Animate.getContext({fillStyle: 'blue'});
-          Animate.getContext({globalAlpha: 1});
-          Text.print(`Mouse Potion. Frame: ${iter}`,  0, 0);
-          Text.print(`x: ${Canvas.cursor.x}`, 0, 20);
-          Text.print(`y: ${Canvas.cursor.x}`, 0, 40);
-
-          Animate.getContext({fillStyle: 'red'});
-          Animate.getContext({globalAlpha: 0.2});
-          ctx.fillRect(100, 100, 300, 50);*/
-    // Animate.getCanvas().onclick = (e) => { console.log('event:', Event.getMouseEventPosition(e)); };
-    // Animate.getCanvas().onpointermove = (e) => { console.log('event:', e); };
-    // Animate.getGlobal().onkeydown = (e) => { console.log('event:', e); };
-    // console.log(Text.config);
-    // console.log(Animate.getContext());
-    // ctx.font = '16px/16px bold sans, Arial';
-    // ctx.fillText(`x: ${Canvas.cursorPosition.x}  y:${Canvas.cursorPosition.x}`, 25, 25)
-    // console.dir(Animate.getCanvas());
-/*
-    const Canvas = {};
-    Canvas.page = {
-        main: 'main',
-        menu: 'menu',
-        intro: 'intro',
-        level: 'level',
-    };
-    Canvas.currentPage = Canvas.page.main;
-    Canvas.cursorPosition = {};
-    Animate.on('mousemove', (eve, pos) => {
-      Canvas.cursorPosition = pos || {};
-    });
-    Animate.on('click', (eve, pos) => {
-        console.log('click', pos);
-    });
-    document.addEventListener('keydown', (eve, pos) => {
-      console.log('keydown', eve.keyCode);
-      console.log('keydown', eve.key);
-    });
-    Animate.scene('main', {
-      x: 30,
-      y: 30
-    }, function (ctx, iter) {
-      ctx.fillRect(Canvas.cursorPosition.x, Canvas.cursorPosition.y, 25, 25);
-    });
-    Animate.start('main');
-*/
-
-    /*
-    function clip_Background(ctx, color) {
-      ctx.fillStyle = color || 'blue';
-      ctx.fillRect(this.x, this.y, 300, 200);
-    }
-
-    function clip_ShowFPS(ctx) {
-      ctx.fillStyle = 'black';
-      ctx.font = '16px/16px sans';
-      ctx.fillText('FPS: ' + Animate.getFPS() + 'fps; Frame: ' + Animate.getIteration(), 20, 20);
-    }
-
-    Animate.scene('default', {x: 30, y: 30}
-    , function (ctx, iter) {
-      clip_Background.bind(this)(ctx,'blue');
-      clip_ShowFPS.bind(this)(ctx);
-      if (iter > 100 && iter < 200) {
-        Animate.start('default2');
-      }
-    });
-
-    Animate.scene('default2', {
-      x: 60,
-      y: 60
-    }, function (ctx, iter) {
-      clip_Background.bind(this)(ctx,'red');
-      clip_ShowFPS.bind(this)(ctx);
-      if (iter > 200) {
-        Animate.start('default');
-      }
-    });
-
-
-    Animate.start();*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-fillStyle: "#000000"
-filter: "none"
-font: "10px sans-serif"
-globalAlpha: 1
-globalCompositeOperation: "source-over"
-imageSmoothingEnabled: true
-imageSmoothingQuality: "low"
-lineCap: "butt"
-lineDashOffset: 0
-lineJoin: "miter"
-lineWidth: 1
-miterLimit: 10
-shadowBlur: 0
-shadowColor: "rgba(0, 0, 0, 0)"
-shadowOffsetX: 0
-shadowOffsetY: 0
-strokeStyle: "#000000"
-textAlign: "start"
-textBaseline: "alphabetic"
-*/
 </script>
 </body>
 </html>

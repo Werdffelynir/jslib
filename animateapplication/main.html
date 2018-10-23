@@ -37,10 +37,12 @@
 
       return list;
     }
+
     const blocksmap = blockGenerator();
-    console.log(blocksmap);
-    
+
     const Canvas = {};
+    Canvas.groundColorRGB = [85, 85, 85];
+    Canvas.groundColorHash = '#555555';
     Canvas.cursor = Point(0, 0);
     Canvas.point = Point(0, 0);
     Canvas.speed = 20;
@@ -88,19 +90,51 @@
       });
     })({top: 87, down: 83, left: 65, right: 68, space: 32});
 
+
+
+
+    Canvas.movePlayer = () => {
+      if (Canvas.keys.top ) Canvas.point.y -= Canvas.speed;
+      if (Canvas.keys.down ) Canvas.point.y += Canvas.speed;
+      if (Canvas.keys.left ) Canvas.point.x -= Canvas.speed;
+      if (Canvas.keys.right ) Canvas.point.x += Canvas.speed;
+
+      console.log('get color', itGround(Canvas.point.x, Canvas.point.y));
+
+      // if (Canvas.keys.top && itGround(Canvas.point.x, Canvas.point.y - Canvas.speed))
+      //   Canvas.point.y -= Canvas.speed;
+      // if (Canvas.keys.down && itGround(Canvas.point.x, Canvas.point.y + Canvas.speed))
+      //   Canvas.point.y += Canvas.speed;
+      // if (Canvas.keys.left && itGround(Canvas.point.x - Canvas.speed, Canvas.point.y))
+      //   Canvas.point.x -= Canvas.speed;
+      // if (Canvas.keys.right && itGround(Canvas.point.x + Canvas.speed, Canvas.point.y))
+      //   Canvas.point.x += Canvas.speed;
+    };
+
+    const itGround = (x, y) => {
+      const colorData = Animate.getContext().getImageData(x, y, 1, 1).data;
+      return colorData[0] === Canvas.groundColorRGB[0] &&
+             colorData[1] === Canvas.groundColorRGB[1] &&
+             colorData[2] === Canvas.groundColorRGB[2];
+    };
+
+
+
     Animate.scene('main', {}, function (ctx, iterator) {
-
-      if (Canvas.keys.top) Canvas.point.y -= Canvas.speed;
-      if (Canvas.keys.down) Canvas.point.y += Canvas.speed;
-      if (Canvas.keys.left) Canvas.point.x -= Canvas.speed;
-      if (Canvas.keys.right) Canvas.point.x += Canvas.speed;
-
       // Grid.add(20, 1, '#eeeeee');
 
       blocksmap.map((point) => {
         Graphic.rect(point, 20, 20)
-          .color('rgba(255, 0, 0, 0.3)').fill();
+          .color(Canvas.groundColorHash).fill();
       });
+
+      Canvas.movePlayer();
+      // console.log('hitTestPoint', Animate.hitTestPoint(Canvas.point));
+      // console.log('get color', Animate.getContext().isPointInPath(Canvas.point.x, Canvas.point.y));
+      // console.log('get color', Animate.getContext().getImageData(Canvas.point.x, Canvas.point.y, 1, 1).data);
+
+
+
 
       Graphic.rect(Canvas.point, 20, 20)
         .color('rgba(0, 0, 0, 1)').fill();

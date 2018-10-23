@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+    const Loader = new AnimateLoader(Animate);
+    const Grid = new AnimateGrid(Animate);
+
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+
+    const Canvas = {};
+
+    Canvas.cursor = Point(0, 0);
+    Canvas.player = Point(0, 0);
+    Canvas.speed = 1;
+    Canvas.step = 10;
+
+
+    const Map = {
+      width: Animate.width,
+      height: Animate.height,
+      step: 20,
+    };
+    Map.stepsWidth = Map.width / Map.step;
+    Map.stepsHeight = Map.height / Map.step;
+    Map.stack = {};
+    Map.add = (name, points) => {};
+    Map.hasPoint = (name, point) => {
+      let i;
+      for (i = 0; i < Map.stack[name].length; i ++)
+        if (Map.stack[name][i].x === point.x && Map.stack[name][i].y === point.y)
+          return true;
+      return false;
+    };
+    Map.addPoint = (name, point) => { Map.stack[name].push(point) };
+    Map.generate = (name) => {
+      let ix, iy, res = [];
+      for (ix = 0; ix < Map.stepsWidth; ix ++)
+        for (iy = 0; iy < Map.stepsHeight; iy ++) {
+          res.push(Point(ix * Map.step, iy * Map.step))
+        }
+      Map.stack[name] = res;
+      return res;
+    };
+    Map.addSizePoint = (name, point) => {
+      const randLeft = random() > 70;
+      const randRight = random() > 70;
+      const randUp = random() > 70;
+      const randDown = random() > 70;
+
+      if (randLeft && !Map.hasPoint(name, Point(point.x - Map.step, point.y))) { Map.stack[name].push(Point(point.x - Map.step, point.y)) }
+      if (randRight && !Map.hasPoint(name, Point(point.x + Map.step, point.y))) { Map.stack[name].push(Point(point.x + Map.step, point.y)) }
+      if (randUp && !Map.hasPoint(name, Point(point.x, point.y - Map.step))) { Map.stack[name].push(Point(point.x, point.y - Map.step)) }
+      if (randDown && !Map.hasPoint(name, Point(point.x, point.y + Map.step))) { Map.stack[name].push(Point(point.x, point.y + Map.step)) }
+    };
+    Map.generateIsland = (name) => {
+      let
+        x = Map.stepsWidth * Map.step / 2 ,
+        y = Map.stepsHeight * Map.step / 2 ,
+        ix, iy, res = [];
+
+      console.log(x, y);
+      for (ix = 0; ix < Map.stepsWidth; ix ++)
+        for (iy = 0; iy < Map.stepsHeight; iy ++) {
+          res.push(Point(ix * Map.step, iy * Map.step))
+        }
+      Map.stack[name] = res;
+      return res;
+    };
+
+
+    const map_world = Map.generateIsland('world');
+    console.log(map_world);
+
+
+    Event.mousemove((eve, pos) => Canvas.cursor = pos );
+
+
+    Animate.scene('main', {
+
+    }, function (ctx, iter) {
+
+
+
+    }).start('main');
+
+</script>
+</body>
+</html>
