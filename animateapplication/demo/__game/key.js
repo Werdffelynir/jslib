@@ -5,6 +5,8 @@ class Key extends Extension {
     super(animate);
 
     this.keys = {};
+    this.cbKeydown = null;
+    this.cbKeyup = null;
     this.addKeysListeners({
       s:      83,
       a:      65,
@@ -30,20 +32,26 @@ class Key extends Extension {
 
   }
 
-  isPress (key) {
-    return this.keys[key]
-  }
+  isPress (key) {return this.keys[key]}
+
+  onKeydown (cb) {this.cbKeydown = cb}
+
+  onKeyup (cb) {this.cbKeyup = cb}
 
   addKeysListeners (types) {
     Event.keydown((e) => {
       let key;
       for (key in types)
         if (e.keyCode === types[key]) this.keys[key] = true;
+      if (typeOf(this.cbKeydown, 'function'))
+        this.cbKeydown.call(this, e);
     });
     Event.keyup((e) => {
       let key;
       for (key in types)
         if (e.keyCode === types[key]) this.keys[key] = false;
+      if (typeOf(this.cbKeyup, 'function'))
+        this.cbKeyup.call(this, e);
     })
   }
 

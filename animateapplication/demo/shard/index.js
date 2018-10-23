@@ -18,6 +18,7 @@ const game = new Game([
   new Player(Animate),
   new SceneMenu(Animate),
   new SceneGame(Animate),
+  new SceneEnd(Animate),
 ]);
 
 

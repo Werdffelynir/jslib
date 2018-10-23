@@ -9,11 +9,17 @@ class SceneMenu extends Extension {
   init(game) {
     this.gameInstance = game;
 
+    game.getExtension('Key').onKeydown((e) => {
+      if (game.getExtension('Key').isPress('a')) {
+        this.animate.start('menu');
+      }
+      if (game.getExtension('Key').isPress('b')) {
+        this.animate.start('game');
+      }
+    });
 
     Animate.scene('menu', {}, (ctx, iter) => {
       this.showMenuList();
-
-      game.getExtension('Player').draw()
     });
   }
 

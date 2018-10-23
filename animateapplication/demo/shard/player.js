@@ -14,7 +14,9 @@ class Player extends Extension {
   }
 
   draw () {
-    Graphic.rect(Point(100, 100), 20, 20).fill();
+    Graphic.circle(Point(Animate.width / 2, Animate.height / 2), 120)
+      .color('#9550e5')
+      .fill();
   }
 
 }

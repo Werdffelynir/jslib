@@ -10,7 +10,11 @@ class SceneGame extends Extension {
     this.gameInstance = game;
 
     Animate.scene('game', {}, function (ctx, iter) {
-      Text.print('game', 10, 10);
+      Text
+        .color('#000000')
+        .print('game', 10, 10);
+
+      game.getExtension('Player').draw();
     });
   }
 

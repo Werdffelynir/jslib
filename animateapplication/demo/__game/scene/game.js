@@ -11,6 +11,8 @@ class SceneGame extends Extension {
 
     Animate.scene('game', {}, function (ctx, iter) {
       Text.print('game', 10, 10);
+
+      game.getExtension('Player').draw();
     });
   }
 
