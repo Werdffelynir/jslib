@@ -1,8 +1,8 @@
 
 class Key extends Extension {
 
-  constructor (animate) {
-    super(animate);
+  constructor () {
+    super();
 
     this.keys = {};
     this.cbKeydown = null;

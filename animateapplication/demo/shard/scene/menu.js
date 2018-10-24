@@ -1,33 +1,40 @@
 
 class SceneMenu extends Extension {
 
-  constructor (animate) {
+  constructor () {
     super();
-    this.animate = animate;
   }
 
-  init(game) {
-    this.gameInstance = game;
+  init() {
+    const {game, animate} = this;
+    const keyInstance = game.ext('Key');
 
-    game.getExtension('Key').onKeydown((e) => {
-      if (game.getExtension('Key').isPress('a')) {
-        this.animate.start('menu');
+    keyInstance.onKeydown((e) => {
+      if (keyInstance.isPress('a') ) {
+        game.gotoScene(Game.SCENE.MENU);
+
       }
-      if (game.getExtension('Key').isPress('b')) {
-        this.animate.start('game');
+      if (keyInstance.isPress('b') ) {
+        game.gotoScene(Game.SCENE.GAME);
       }
     });
 
-    Animate.scene('menu', {}, (ctx, iter) => {
-      this.showMenuList();
+    animate.scene(Game.SCENE.MENU, {}, (ctx, iter) => {
+      this.qr();
+      this.showMenu();
     });
   }
 
-
-  showMenuList () {
+  showMenu () {
     Text
       .color('#000000')
       .print('MAIN MENU (a)', 10, 10)
       .print('GAME (b)', 10, 30);
+  }
+
+  qr () {
+
+    this.animate.getContext().fillRect(10, 100, 200, 45);
+
   }
 }

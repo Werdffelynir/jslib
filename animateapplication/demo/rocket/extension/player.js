@@ -15,7 +15,7 @@ class Player extends Extension {
 
   draw () {
     Graphic.circle(Point(Animate.width / 2, Animate.height / 2), 120)
-      .color('#9550e5')
+      .color('#c379e5')
       .fill();
   }
 

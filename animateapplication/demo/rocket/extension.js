@@ -9,10 +9,17 @@ class Extension {
 
   init () {}
 
+  /**
+   *
+   * @returns {Animate}
+   */
   get animate () {
     return this.animateInstance;
   }
-
+  /**
+   *
+   * @returns {Game}
+   */
   get game () {
     return this.gameInstance;
   }

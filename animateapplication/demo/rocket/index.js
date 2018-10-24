@@ -1,5 +1,5 @@
 
-const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+const Animate = new AnimateApplication('canvas.canvas', 1200, 400, 60);
 const Text = new AnimateText(Animate);
 const Event = new AnimateEvent(Animate);
 const Graphic = new AnimateGraphic(Animate);
@@ -16,7 +16,7 @@ const {
 const game = new Game(Animate, [
   new Key(),
   new Player(),
-  // new Shard(Animate),
+  new Obstacle(Animate),
   new SceneMenu(Animate),
   // new SceneGame(Animate),
   // new SceneEnd(Animate),
