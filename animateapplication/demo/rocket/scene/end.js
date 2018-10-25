@@ -1,19 +1,18 @@
 
 class SceneEnd extends Extension {
 
-  constructor (animate) {
+  constructor () {
     super();
-    this.animate = animate;
     this.status = 'wine';
   }
 
-  init(game) {
-    this.gameInstance = game;
+  init() {
 
     Animate.scene(Game.SCENE.END, {}, (ctx, iter) => {
-      Text.print('Game over', 10, 10);
-      Text.print('You is ', 10, 30);
+      Text.print('Game over', Animate.getWidth() / 2, Animate.getHeight() / 2);
+      Text.print('You is ', Animate.getWidth() / 2, Animate.getHeight() / 2 + 30);
     });
+
   }
 
 }

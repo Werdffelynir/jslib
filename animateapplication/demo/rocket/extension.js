@@ -3,25 +3,24 @@ class Extension {
 
   constructor () {
     this.name = this.constructor.name;
-    this.animateInstance = null;
-    this.gameInstance = null;
+    this._animate = null;
+    this._game = null;
   }
 
   init () {}
 
   /**
-   *
-   * @returns {Animate}
+   * @returns {AnimateApplication}
    */
   get animate () {
-    return this.animateInstance;
+    return this._animate
   }
+
   /**
-   *
    * @returns {Game}
    */
   get game () {
-    return this.gameInstance;
+    return this._game
   }
 
 }

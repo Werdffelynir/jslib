@@ -43,11 +43,29 @@ class AnimateText {
     this.context = Animate._context;
   }
 
+  /**
+   *
+   * this.format({
+   *    x: 0,
+   *    y: 0,
+   *    text: '',
+   *    type: FONT_TYPE_FILL,
+   *    size: 12,
+   *    align: FONT_ALIGN_LEFT,
+   *    family: 'sans, serif',
+   *    baseline : FONT_BASELINE_TOP,
+   *    color : null,
+   * })
+   *    .print();
+   *
+   * @param textConfig
+   * @returns {AnimateText}
+   */
   format (textConfig) {
-    const conf = textConfig ? {...this.config, ...textConfig} : this.config;
-    this.context.font = `${conf.size}px/${(conf.size + 2)}px ${conf.family}`;
-    this.context.textAlign = conf.align;
-    this.context.textBaseline = conf.baseline;
+    this.config = textConfig ? {...this.config, ...textConfig} : this.config;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    this.context.textAlign = this.config.align;
+    this.context.textBaseline = this.config.baseline;
     return this;
   }
 

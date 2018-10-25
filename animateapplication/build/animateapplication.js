@@ -182,15 +182,28 @@ const position = function (elem) {
   return data;
 };
 
-const convertHEXToRGB = function (hex) {
+const convertHEXtoRGB = function (hex) {
   hex = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, function(m, r, g, b) { return r + r + g + g + b + b });
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16)} : null;
 };
 
-const convertRGBToHEX = function (r, g, b) {
+const convertRGBtoHEX = function (r, g, b) {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 };
+
+/**
+ * wait({}, (resolve, reject) => resolve() );
+ * @param args
+ * @param callback
+ * @returns {Promise<any>}
+ */
+const waiter = function (args, callback) {
+  return new Promise((resolve, reject) => {
+    callback.bind(args)(resolve, reject);
+  })
+};
+
 
 
 
@@ -442,6 +455,10 @@ class AnimateApplication extends AnimateConfig {
       thisInstance);
   }
 
+  backgroundColor (color) {
+    if (this._canvas.style.backgroundColor !== color)
+      this._canvas.style.backgroundColor = color;
+  }
 
 
 }
@@ -617,6 +634,9 @@ const LINE_JOIN_BEVEL = 'bevel';
 const LINE_JOIN_ROUND = 'round';
 const LINE_JOIN_MITER = 'miter';
 
+const FILL_RULE_NONZERO = 'nonzero';
+const FILL_RULE_EVENODD = 'evenodd';
+
 class AnimateGraphic {
 
   constructor (Animate) {
@@ -649,7 +669,8 @@ class AnimateGraphic {
     if (this.formatProperties.alpha) this.context.globalAlpha = this.formatProperties.alpha;
     if (this.formatProperties.thickness) this.context.lineWidth = this.formatProperties.thickness;
     if (this.formatProperties.cap) this.context.lineCap = this.formatProperties.cap;
-    if (this.formatProperties.join) this.context.lineJoin = this.formatProperties.join;
+    if (this.formatProperties.join) this.context.lineJoin = this.formatProperties.join;;
+    return this;
   }
 
   color (src) {
@@ -685,17 +706,35 @@ class AnimateGraphic {
     return this;
   }
 
-  save () {this.context.save()}
+  save () {
+    this.context.save();
+    return this;
+  }
 
-  translate (x, y) {this.context.translate(x, y)}
+  translate (x, y) {
+    this.context.translate(x, y);
+    return this;
+  }
 
-  rotate (angle) {this.context.rotate(angle)}
+  rotate (angle) {
+    this.context.rotate(angle);
+    return this;
+  }
 
-  restore () {this.context.restore()}
+  restore () {
+    this.context.restore();
+    return this;
+  }
 
-  begin () {this.context.beginPath()}
+  begin () {
+    this.context.beginPath();
+    return this;
+  }
 
-  close () {this.context.closePath()}
+  close () {
+    this.context.closePath();
+    return this;
+  }
 
   shadow (x, y, blur, color) {
     this.context.shadowOffsetX = x;
@@ -809,6 +848,12 @@ class AnimateGraphic {
     this.context.fill();
     return this;
   };
+
+  isPointInPath (x, y) {
+    return this.context.isPointInPath(x, y);
+  }
+
+
 }
 
 
@@ -857,11 +902,29 @@ class AnimateText {
     this.context = Animate._context;
   }
 
+  /**
+   *
+   * this.format({
+   *    x: 0,
+   *    y: 0,
+   *    text: '',
+   *    type: FONT_TYPE_FILL,
+   *    size: 12,
+   *    align: FONT_ALIGN_LEFT,
+   *    family: 'sans, serif',
+   *    baseline : FONT_BASELINE_TOP,
+   *    color : null,
+   * })
+   *    .print();
+   *
+   * @param textConfig
+   * @returns {AnimateText}
+   */
   format (textConfig) {
-    const conf = textConfig ? {...this.config, ...textConfig} : this.config;
-    this.context.font = `${conf.size}px/${(conf.size + 2)}px ${conf.family}`;
-    this.context.textAlign = conf.align;
-    this.context.textBaseline = conf.baseline;
+    this.config = textConfig ? {...this.config, ...textConfig} : this.config;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    this.context.textAlign = this.config.align;
+    this.context.textBaseline = this.config.baseline;
     return this;
   }
 
@@ -1096,6 +1159,65 @@ class AnimateGrid {
 
       this.cache[gridname] = this.context.getImageData(0, 0, w, h);
     }
+  }
+
+}
+
+
+  
+class AnimateEffect {
+
+  constructor (Animate) {
+    if ( !(Animate instanceof AnimateApplication) ) {
+      throw new Error(':constructor argument in not of instance AnimateApplication');
+    }
+
+    this.canvas = Animate.getCanvas();
+    this.global = Animate.getGlobal();
+    this.animate = Animate;
+
+    /**@type {CanvasRenderingContext2D}*/
+    this.context = Animate._context;
+
+    this.fadeSpeed = 2;
+  }
+
+  fadeIn () {
+    const ctx = this.context;
+    return this.animate.movieclip(
+      {c: 0, speed: this.fadeSpeed},
+      function (callback) {
+        if (this.c > 255) {
+          callback();
+          this.c = 0;
+        } else {
+          this.c += this.speed;
+          const color = `rgba(${this.c}, ${this.c}, ${this.c}, 1)`;
+          ctx.beginPath();
+          ctx.fillStyle = color;
+          ctx.fillRect(0, 0, this.animate.width, this.animate.height);
+          ctx.closePath();
+        }
+      });
+  }
+
+  fadeOut () {
+    const ctx = this.context;
+    return this.animate.movieclip(
+      {c: 255, speed: this.fadeSpeed},
+      function (callback) {
+        if (this.c < 0) {
+          callback();
+          this.c = 255;
+        } else {
+          this.c -= this.speed;
+          const color = `rgba(${this.c}, ${this.c}, ${this.c}, 1)`;
+          ctx.beginPath();
+          ctx.fillStyle = color;
+          ctx.fillRect(0, 0, this.animate.width, this.animate.height);
+          ctx.closePath();
+        }
+      });
   }
 
 }

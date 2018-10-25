@@ -1,24 +1,29 @@
 
 class SceneGame extends Extension {
 
-  constructor (animate) {
+  constructor () {
     super();
-    this.animate = animate;
   }
 
-  init(game) {
-    this.gameInstance = game;
+  init() {
 
-    const mcShard = game.getExtension('Shard');
-    const mcPlayer = game.getExtension('Player');
+    const player = this.game.getExtension('Player');
+    const obstacle = this.game.getExtension('Obstacle');
+    obstacle.refreshList();
+
 
     Animate.scene(Game.SCENE.GAME, {}, function (ctx, iter) {
       Text
         .color('#000000')
         .print('game', 10, 10);
 
-      mcShard.draw();
-      mcPlayer.draw();
+      obstacle.list.map((w) => {
+        w();
+      });
+
+      Graphic.close();
+      player.draw();
+
     });
   }
 

@@ -245,6 +245,10 @@ class AnimateApplication extends AnimateConfig {
       thisInstance);
   }
 
+  backgroundColor (color) {
+    if (this._canvas.style.backgroundColor !== color)
+      this._canvas.style.backgroundColor = color;
+  }
 
 
 }

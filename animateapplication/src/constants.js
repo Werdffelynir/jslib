@@ -176,4 +176,17 @@ const convertRGBtoHEX = function (r, g, b) {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 };
 
+/**
+ * wait({}, (resolve, reject) => resolve() );
+ * @param args
+ * @param callback
+ * @returns {Promise<any>}
+ */
+const waiter = function (args, callback) {
+  return new Promise((resolve, reject) => {
+    callback.bind(args)(resolve, reject);
+  })
+};
+
+
 

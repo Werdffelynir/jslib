@@ -24,15 +24,23 @@ class Key extends Extension {
       ctrl:   17,
       alt:    18,
       num1:   49,
-      num2:   51,
-      num3:   52,
-      num4:   53,
-      num5:   54,
+      num2:   50,
+      num3:   51,
+      num4:   52,
+      num5:   53,
+      num6:   54,
     })
 
   }
 
-  isPress (key) {return this.keys[key]}
+  isPress (key, cbPressed, onNoPressed) {
+    if (this.keys[key] && typeOf(cbPressed, 'function')) {
+      cbPressed();
+    } else if (typeOf(onNoPressed, 'function')) {
+      onNoPressed();
+    }
+    return this.keys[key];
+  }
 
   onKeydown (cb) {this.cbKeydown = cb}
 

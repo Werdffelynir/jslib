@@ -6,6 +6,9 @@ const LINE_JOIN_BEVEL = 'bevel';
 const LINE_JOIN_ROUND = 'round';
 const LINE_JOIN_MITER = 'miter';
 
+const FILL_RULE_NONZERO = 'nonzero';
+const FILL_RULE_EVENODD = 'evenodd';
+
 class AnimateGraphic {
 
   constructor (Animate) {
@@ -38,7 +41,8 @@ class AnimateGraphic {
     if (this.formatProperties.alpha) this.context.globalAlpha = this.formatProperties.alpha;
     if (this.formatProperties.thickness) this.context.lineWidth = this.formatProperties.thickness;
     if (this.formatProperties.cap) this.context.lineCap = this.formatProperties.cap;
-    if (this.formatProperties.join) this.context.lineJoin = this.formatProperties.join;
+    if (this.formatProperties.join) this.context.lineJoin = this.formatProperties.join;;
+    return this;
   }
 
   color (src) {
@@ -74,17 +78,35 @@ class AnimateGraphic {
     return this;
   }
 
-  save () {this.context.save()}
+  save () {
+    this.context.save();
+    return this;
+  }
 
-  translate (x, y) {this.context.translate(x, y)}
+  translate (x, y) {
+    this.context.translate(x, y);
+    return this;
+  }
 
-  rotate (angle) {this.context.rotate(angle)}
+  rotate (angle) {
+    this.context.rotate(angle);
+    return this;
+  }
 
-  restore () {this.context.restore()}
+  restore () {
+    this.context.restore();
+    return this;
+  }
 
-  begin () {this.context.beginPath()}
+  begin () {
+    this.context.beginPath();
+    return this;
+  }
 
-  close () {this.context.closePath()}
+  close () {
+    this.context.closePath();
+    return this;
+  }
 
   shadow (x, y, blur, color) {
     this.context.shadowOffsetX = x;
@@ -198,4 +220,10 @@ class AnimateGraphic {
     this.context.fill();
     return this;
   };
+
+  isPointInPath (x, y) {
+    return this.context.isPointInPath(x, y);
+  }
+
+
 }
