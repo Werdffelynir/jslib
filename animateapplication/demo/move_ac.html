@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+    const EventKey = new AnimateEventKey(Animate);
+
+    const {
+      Point,
+      Rectangle
+    } = AnimateApplication;
+
+
+    /*
+    Text.format({
+      size: 12,
+      family: 'Ubuntu',
+    });
+
+    const Canvas = {};
+    Canvas.keys = {up: false, down: false, left: false, right: false, space: false};
+    Canvas.keysStatus = (keyCode, status) => {
+      if ([EventKeyCodeArrowUp, EventKeyCodeKeyW].includes(keyCode)) {Canvas.keys.up = status;}
+      if ([EventKeyCodeArrowDown, EventKeyCodeKeyS].includes(keyCode)) {Canvas.keys.down = status;}
+      if ([EventKeyCodeArrowLeft, EventKeyCodeKeyA].includes(keyCode)) {Canvas.keys.left = status;}
+      if ([EventKeyCodeArrowRight, EventKeyCodeKeyD].includes(keyCode)) {Canvas.keys.right = status;}
+      if ([EventKeyCodeSpace].includes(keyCode)) {Canvas.keys.space = status;}
+    };
+
+    Canvas.cursor = Point(0, 0);
+    Canvas.cursorClip = function () {
+      const pos = Canvas.cursor;
+      const size = 20;
+      Graphic.color('#613596');
+      Graphic.thickness(0.5);
+      Graphic.line(Point(pos.x, pos.y - size), Point(pos.x, pos.y + size)).stroke();
+      Graphic.line(Point(pos.x - size, pos.y), Point(pos.x + size, pos.y)).stroke();
+    };
+    Canvas.player = Point(200, 200);
+    Canvas.playerSpeedXDynamic = 0;
+    Canvas.playerSpeedXAcceleration = 0.2;
+    Canvas.playerSpeedYDynamic = 0;
+    Canvas.playerSpeedYAcceleration = 0.08;
+    Canvas.playerSpeed = 2;
+    Canvas.playerRotate = 0;
+    Canvas.playerClip = function () {
+      if (Canvas.keys.up) {
+        Canvas.player.y -= Canvas.playerSpeed;
+        Canvas.playerSpeedYDynamic -= Canvas.playerSpeedYAcceleration;
+      } else {
+        Canvas.playerSpeedYDynamic += Canvas.playerSpeedYAcceleration;
+      }
+      if (Canvas.keys.down) Canvas.player.y += Canvas.playerSpeed;
+      if (Canvas.keys.left) {
+        Canvas.player.x -= Canvas.playerSpeed;
+      }
+      if (Canvas.keys.right) {
+        Canvas.player.x += Canvas.playerSpeed;
+        // Canvas.playerSpeedXDynamic += Canvas.playerSpeedXAcceleration;
+      }
+
+
+
+      if (Canvas.playerSpeedYDynamic > 4) Canvas.playerSpeedYDynamic = 4;
+      Canvas.player.y += Canvas.playerSpeedYDynamic;
+
+      // if (Canvas.playerSpeedXDynamic > 1.2) Canvas.playerSpeedXDynamic = 1.2;
+      // Canvas.player.x += Canvas.playerSpeedXDynamic;
+
+      //if (Canvas.playerSpeedYDynamic > 4)
+      //  Canvas.playerSpeedYDynamic = 4;
+
+      //Canvas.player.y += Canvas.playerSpeedYDynamic;
+
+
+      Graphic.circle(Canvas.player, 20)
+        .color('#613596')
+        .fill();
+
+      if (Canvas.player.y > Animate.height) Canvas.player.y = -20;
+      if (Canvas.player.x < 0) Canvas.player.x = Animate.width;
+    };
+
+
+    Event.keyup((e) => { Canvas.keysStatus(e.keyCode, false); });
+    Event.keydown((e) => { Canvas.keysStatus(e.keyCode, true); });
+    Event.mousemove((eve, pos) => { Canvas.cursor = pos; });
+
+    Event.click((eve) => {});
+
+
+*/
+
+    EventKey.config({
+      keys: {
+        a:      65,
+        s:      83,
+        d:      68,
+        w:      87,
+        space:  32,
+        enter:  13,
+        num1:   49,
+        num2:   50,
+      },
+      keydown: () => {
+        console.log('down');
+      },
+      keyup: () => {
+        console.log('up');
+      },
+    });
+
+
+
+    // const eveClick = Event.click(() => {
+    //   console.log('click');
+    // });
+    // Event.clickRemove(eveClick);
+
+
+    Animate.scene('main', {}, function (ctx, iter) {
+
+/*
+      if (iter === 71) {
+        // console.log(iter)
+        Event.clickRemove(eveClick);
+      }*/
+/*
+      EventKey.isPressed('a',
+        () => {console.log('yes')},
+        () => {console.log('no')}
+      );
+*/
+
+
+
+
+
+    }).start('main');
+
+
+
+
+</script>
+</body>
+</html>

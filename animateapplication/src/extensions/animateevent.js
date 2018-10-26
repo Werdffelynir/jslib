@@ -117,37 +117,149 @@ class AnimateEvent {
   };
 
   click (cb) {
-    this.canvas.addEventListener('click', (event) =>
-      cb.call(this.Animate, event, this.getMouseEventPosition(event))
-    );
+    const eventFunction = (event) =>
+      cb.call(this.Animate, event, this.getMouseEventPosition(event));
+    this.canvas.addEventListener('click', eventFunction );
+    return eventFunction;
   }
 
-  move (cb) {
-    this.canvas.addEventListener('mousemove', (event) =>
-      cb.call(this.Animate, event, this.getMouseEventPosition(event))
-    );
+  clickRemove (eventFunction) {
+    this.canvas.removeEventListener('click', eventFunction );
   }
 
   mousemove (cb) {
-    this.move(cb);
+    const eventFunction = (event) =>
+      cb.call(this.Animate, event, this.getMouseEventPosition(event));
+    this.canvas.addEventListener('mousemove', eventFunction);
+    return eventFunction;
+  }
+
+  mousemoveRemove (eventFunction) {
+    this.canvas.removeEventListener('mousemove', eventFunction );
   }
 
   mousedown (cb) {
-    this.canvas.addEventListener('mousedown', (event) =>
-      cb.call(this.Animate, event, this.getMouseEventPosition(event))
-    );
+    const eventFunction = (event) => cb.call(this.Animate, event, this.getMouseEventPosition(event));
+    this.canvas.addEventListener('mousedown', eventFunction);
+    return eventFunction;
+  }
+
+  mousedownRemove (eventFunction) {
+    this.canvas.removeEventListener('mousedown', eventFunction );
   }
 
   keydown (cb) {
-    this.global.addEventListener('keydown', (event) =>
-      cb.call(this.Animate, event)
-    );
+    const eventFunction = (event) => cb.call(this.Animate, event);
+    this.global.addEventListener('keydown', eventFunction);
+    return eventFunction;
+  }
+
+  keydownRemove (eventFunction) {
+    this.canvas.removeEventListener('keydown', eventFunction );
   }
 
   keyup (cb) {
-    this.global.addEventListener('keyup', (event) =>
-      cb.call(this.Animate, event)
-    );
+    const eventFunction = (event) => cb.call(this.Animate, event);
+    this.global.addEventListener('keyup', eventFunction);
+    return eventFunction;
   }
+
+  keyupRemove (eventFunction) {
+    this.canvas.removeEventListener('keyup', eventFunction );
+  }
+
+}
+
+class AnimateEventKey {
+
+  constructor (Animate) {
+
+    if ( !(Animate instanceof AnimateApplication) )
+      throw new Error(':constructor argument in not of instance AnimateApplication');
+
+    this.Event = new AnimateEvent(Animate);
+
+    this._keysPressed = {};
+    this._config = {
+      keys: {},
+      keysDefault: false,
+      keydown: null,
+      keyup: null,
+    };
+
+
+    // this._keysConfig = {};
+    this._configKeysDefault = {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      b:      66,
+      c:      67,
+      e:      69,
+      q:      81,
+      f:      70,
+      i:      73,
+      space:  32,
+      enter:  13,
+      shift:  16,
+      ctrl:   17,
+      alt:    18,
+      num1:   49,
+      num2:   50,
+      num3:   51,
+      num4:   52,
+      num5:   53,
+      num6:   54,
+    };
+    // this._callbackKeydown = null;
+    // this._callbackKeyup = null;
+
+  }
+
+  isPressed (key, cbPressed, onNoPressed) {
+    if (this._keysPressed[key] && typeOf(cbPressed, 'function')) cbPressed();
+    else if (typeOf(onNoPressed, 'function')) onNoPressed();
+    return this._keysPressed[key];
+  }
+
+  _removeKeysEvent () {}
+  _addKeysEvent () {
+    if (!this._init_keys_statement_ready) {
+      this._init_keys_statement_ready = true;
+
+      const {  keys, keydown, keyup  } = this._config;
+
+      this.Event.keydown((e) => {
+        let key;
+        if (typeOf(this._callbackKeydown, 'function')) this._callbackKeydown.call(this, e);
+        for (key in keys)
+          if (e.keyCode === keys[key]) this._keysPressed[key] = true;
+      });
+      this.Event.keyup((e) => {
+        let key;
+        if (typeOf(this._callbackKeyup, 'function')) this._callbackKeyup.call(this, e);
+        for (key in keys)
+          if (e.keyCode === keys[key])  this._keysPressed[key] = false;
+      })
+    }
+  }
+
+  config (conf) {
+    this._config = {...this._config, ...conf};
+
+    this._keysConfig = this._config.keysDefault ? {...this._keysConfigDefault, ...this._config.keys}
+      : this._config.keys;
+
+    this._callbackKeydown = this._config.keydown;
+    this._callbackKeyup = this._config.keyup;
+    this._initKeysStatement();
+
+    return this;
+  }
+
+  configKeys (src) {this._config.keys = src}
+  configKeydown (src) {this._config.keydown = src}
+  configKeyup (src) {this._config.keyup = src}
 
 }

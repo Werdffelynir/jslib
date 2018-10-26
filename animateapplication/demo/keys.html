@@ -10,7 +10,7 @@
 <canvas class="canvas"></canvas>
 
 <script>
-  const Animate = new AnimateApplication('canvas.canvas', 800, 300, 30);
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
   const Text = new AnimateText(Animate);
   const Event = new AnimateEvent(Animate);
   const Graphic = new AnimateGraphic(Animate);
@@ -94,10 +94,11 @@
 
     // Map
     Graphic.color('#b32f00');
+    Graphic.thickness(3);
     Graphic.shape(
       [85, 80, 85, 115, 140, 115, 140, 165, 305, 165, 305, 110, 425, 110, 425, 215, 335, 215, 335, 330, 160, 330, 160, 275, 200, 275, 200, 225, 75, 225, 75, 275, 120, 275, 120, 380, 455, 380, 455, 285, 575, 285, 575, 70, 400, 70, 400, 25, 245, 25, 245, 85, 175, 85, 175, 15, 20, 15, 20, 80, 50, 80],
       true
-    ).fill();
+    ).stroke();
 
     // hit
     if (!Animate.hitTestPoint(this.point)) {
@@ -106,8 +107,12 @@
 
     // Player
     Graphic.alpha(100);
-    Graphic.color('#b3ac85');
-    Graphic.circle(this.point, 10).fill();
+    Graphic.thickness(2);
+    Graphic.circle(this.point, 10);
+    Graphic.color('#ffffff');
+    Graphic.fill();
+    Graphic.color('#b32f00');
+    Graphic.stroke();
 
   }).start('main');
 

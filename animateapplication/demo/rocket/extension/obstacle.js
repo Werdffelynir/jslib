@@ -69,6 +69,7 @@ class Obstacle extends Extension {
         this.height = canvasHeight + random(0, 50);
       }
 
+/*
       Graphic.rect(Point(this.x, this.y), this.width, this.height)
         .begin()
         .color(this.color)
@@ -77,10 +78,9 @@ class Obstacle extends Extension {
         .close();
 
       if (Graphic.isPointInPath(player.x + 50, player.y + 10)) {
-        //game.gotoScene(Game.SCENE.END);
-        //Animate.backgroundColor('#d31800');
         self.stop = true;
       }
+*/
 
       Graphic
         .begin()
@@ -89,8 +89,6 @@ class Obstacle extends Extension {
         .close();
 
       if (Graphic.isPointInPath(player.x + 50, player.y + 10)) {
-        //game.gotoScene(Game.SCENE.END);
-        //Animate.backgroundColor('#d31800');
         self.stop = true;
       }
 
