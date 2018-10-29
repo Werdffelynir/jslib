@@ -168,9 +168,35 @@ class AnimateGraphic {
     return this;
   };
 
-  rect (point, width = 100, height = 100) {
+  /**
+   * .rect(100, 150, 150, 40)
+   * .rect(Point(100, 150), 150, 40)
+   * @returns {AnimateGraphic}
+   */
+  rect (...args) {
+    let x, y, width, height;
+
+    if (args.length === 1) {
+      x = args[0].x;
+      y = args[0].y;
+      width = args[0].width;
+      height = args[0].height;
+    }
+    else if (args.length === 3) {
+      x = args[0].x;
+      y = args[0].y;
+      width = args[1];
+
+      height = args[2];
+    }
+    else if (args.length === 4) {
+      x = args[0];
+      y = args[1];
+      width = args[2];
+      height = args[3];
+    }
+
     this.drawContextFunction = (ctx) => {
-      const {x, y} = point;
       ctx.beginPath();
       ctx.rect(x, y, width, height);
     };
@@ -227,3 +253,73 @@ class AnimateGraphic {
 
 
 }
+
+
+
+
+const Point = function (x = 0, y = 0) {
+  const src = [x, y];
+  src.x = x;
+  src.y = y;
+  src.animateType = 'Point';
+  return src;
+};
+
+Point.isPoint = function (src) {
+  return src && src.animateType === 'Point';
+};
+
+Point.toPointArguments = function (...args) {
+  args = (args.length === 2) ? [args[0], args[1], 0, 0] : args;
+  const rectangle = Rectangle.toRectangleArguments(...args);
+  return Point(rectangle.x, rectangle.y);
+};
+
+
+
+
+
+const Rectangle = function (x = 0, y = 0, width = 100, height = 100) {
+  const src = [x, y, width, height];
+  src.x = x;
+  src.y = y;
+  src.width = width;
+  src.height = height;
+  src.animateType = 'Rectangle';
+  return src;
+};
+
+Rectangle.isRectangle = function (src) {
+  return src && src.animateType === 'Rectangle';
+};
+
+Rectangle.toRectangleArguments = function (...args) {
+  let src, x = 0, y = 0, width = 0, height = 0;
+
+  if (args.length === 1) {
+    src = args[0];
+    if (typeOf(args[0], 'array')) {
+      x = src[0] ? src[0] : x;
+      y = src[1] ? src[1] : y;
+      width = src[2] ? src[2] : width;
+      height = src[3] ? src[3] : height;
+    } else {
+      x = src.x ? src.x : x;
+      y = src.y ? src.y : y;
+      width = src.width ? src.width : width;
+      height = src.height ? src.height : height;
+    }
+  } else if (args.length === 3) {
+    src = args[0];
+    x = src.x;
+    y = src.y;
+    width = args[1];
+    height = args[2];
+  } else if (args.length === 4) {
+    x = args[0];
+    y = args[1];
+    width = args[2];
+    height = args[3];
+  }
+  return Rectangle(x, y, width, height)
+};

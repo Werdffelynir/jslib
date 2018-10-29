@@ -1,8 +1,8 @@
 
 class AnimateEffect {
 
-  constructor (Animate) {
-    if ( !(Animate instanceof AnimateApplication) ) {
+  constructor(Animate) {
+    if (!(Animate instanceof AnimateApplication)) {
       throw new Error(':constructor argument in not of instance AnimateApplication');
     }
 
@@ -16,7 +16,7 @@ class AnimateEffect {
     this.fadeSpeed = 2;
   }
 
-  fadeIn () {
+  fadeIn() {
     const ctx = this.context;
     return this.animate.movieclip(
       {c: 0, speed: this.fadeSpeed},
@@ -35,7 +35,7 @@ class AnimateEffect {
       });
   }
 
-  fadeOut () {
+  fadeOut() {
     const ctx = this.context;
     return this.animate.movieclip(
       {c: 255, speed: this.fadeSpeed},

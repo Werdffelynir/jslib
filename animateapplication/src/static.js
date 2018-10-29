@@ -1,3 +1,4 @@
+/*
 
 
 AnimateApplication.Point = function (x = 0, y = 0) {
@@ -15,3 +16,4 @@ AnimateApplication.Rectangle = function (x = 0, y = 0, width = 0, height = 0) {
   src.height = height;
   return src;
 };
+*/

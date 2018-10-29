@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+    const EventKey = new AnimateEventKey(Animate);
+
+    EventKey.config({
+      keys: {
+        a:      65,
+        s:      83,
+        d:      68,
+        w:      87,
+        space:  32,
+      },
+      keydown: () => {},
+      keyup: () => {},
+    });
+
+
+    class PointToPoint {
+
+      static distance (p1, p2) {
+        let xs = p2.x - p1.x;
+        let ys = p2.y - p1.y;
+        return Math.ceil(Math.sqrt((xs * xs) + (ys * ys)));
+      }
+
+      static update (p1, p2, stepsspeed = 1, onPointTouch = null) {
+        if (PointToPoint.distance(p1, p2) > 5) {
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const dist = Math.abs(Math.sqrt(dx * dx + dy * dy));
+          const steps = stepsspeed;
+          const speed = steps / dist;
+          const x = p1.x + (p2.x - p1.x) * speed;
+          const y = p1.y + (p2.y - p1.y) * speed;
+          return {x, y};
+        } else {
+          if ( typeOf(onPointTouch, 'function'))
+            onPointTouch()
+        }
+        return p1;
+      }
+    }
+
+    const Canvas = {
+      cursor: Point(),
+      cursorClick: Point(),
+      mapStep: 10,
+      map: [],
+
+    };
+
+    Canvas.mapBuild = function () {
+      const width = Animate.width / Canvas.mapStep;
+      const height = Animate.height / Canvas.mapStep;
+      const map = [];
+
+      let i = 0, ix = 0, iy = 0;
+      for (; ix < width; ix ++) {
+        for (; iy < height; iy ++) {
+          map.push({point: Point(ix * Canvas.mapStep, iy * Canvas.mapStep), id: i ++});
+        }
+        iy = 0;
+      }
+
+      return map;
+    };
+
+
+    const map = Canvas.mapBuild();
+    console.log(map);
+
+    Event.click((e, p) => {
+      Canvas.cursorClick = p
+    });
+
+    Event.mousemove((e, p) => {
+      Canvas.cursor = p
+    });
+
+    Animate.scene('menu', {}, function (ctx, iter) {
+
+      map.map((m) => {
+        Graphic.rect(Point(m.point.x + 1, m.point.y + 1), 8, 8)
+          .color('#413f41').fill();
+      });
+
+    });
+
+
+    Animate.start('menu');
+
+</script>
+</body>
+</html>

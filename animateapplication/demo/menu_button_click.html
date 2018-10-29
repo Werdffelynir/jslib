@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+</head>
+<body>
+
+    <canvas class="canvas"></canvas>
+
+<script>
+    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+    const Text = new AnimateText(Animate);
+    const Event = new AnimateEvent(Animate);
+    const Graphic = new AnimateGraphic(Animate);
+    const EventKey = new AnimateEventKey(Animate);
+
+    EventKey.config({
+      keys: {
+        a:      65,
+        s:      83,
+        d:      68,
+        w:      87,
+        space:  32,
+      },
+      keydown: () => {},
+      keyup: () => {},
+    });
+
+    const CANVAS = {
+      cursor: Point(),
+      cursorClick: Point(),
+      cursorPoints: []
+    };
+
+    CANVAS.buttons = [
+      {
+        text: 'go to menu',
+        link: 'menu',
+        rect: Rectangle(Animate.width / 2 - 80, 200, 160, 40)
+      },
+      {
+        text: 'go to page',
+        link: 'page',
+        rect: Rectangle(Animate.width / 2 - 80, 250, 160, 40)
+      },
+      {
+        text: 'go to settings',
+        link: 'settings',
+        rect: Rectangle(Animate.width / 2 - 80, 300, 160, 40)
+      }
+    ];
+
+    CANVAS.createButton = (button) => {
+      Graphic.rect(button.rect).color('#ddd').fill();
+      Text.format({
+        align: FONT_ALIGN_CENTER,
+        size: 14,
+        color: '#000000'
+      }).print(button.text, button.rect.x + button.rect.width / 2, button.rect.y + 10);
+    };
+
+    CANVAS.mc_menu = Animate.movieclip({}, function () {
+      CANVAS.buttons.map((btn) => {
+        CANVAS.createButton(btn);
+      });
+    });
+
+    Event.click((e, p) => {
+      CANVAS.cursorClick = p;
+      CANVAS.buttons.map((btn) => {
+        if (Animate.hitTest(btn.rect, p)) {
+          Animate.start(btn.link);
+        }
+      });
+    });
+
+    Event.mousemove((e, p) => {
+      CANVAS.cursor = p
+    });
+
+    Animate.scene('menu', {}, function (ctx, iter) {
+      Text.format({
+        align: FONT_ALIGN_CENTER,
+        size: 20,
+        color: 'red'
+      }).print("MENU", Animate.width / 2, 100);
+      CANVAS.mc_menu();
+    });
+
+    Animate.scene('page', {}, function (ctx, iter) {
+      Text.format({
+        align: FONT_ALIGN_CENTER,
+        size: 20,
+        color: 'red'
+      }).print("PAGE", Animate.width / 2, 100);
+      CANVAS.mc_menu();
+    });
+
+    Animate.scene('settings', {}, function (ctx, iter) {
+      Text.format({
+        align: FONT_ALIGN_CENTER,
+        size: 20,
+        color: 'red'
+      }).print("SETTINGS", Animate.width / 2, 100);
+      CANVAS.mc_menu();
+    });
+
+    Animate.start('menu');
+
+</script>
+</body>
+</html>

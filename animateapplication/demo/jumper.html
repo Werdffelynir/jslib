@@ -51,16 +51,16 @@
 
 
     Canvas.player = Animate.createMovieclip({
-      position: Point(100, 300),
+      position: Point(100, 10),
       speed: 1,
-      dy: 0,
-      acceleration: 0.09,
+      dy: 1,
+      acceleration: 0.05,
       jump: false,
       toLeft: false,
       toRight: false,
     }, function () {
 
-      Graphic.circle(this.position, 40).color('#aca511').fill();
+      Graphic.circle(this.position, 20).fill();
       this.dy += (this.dy > 4) ? 0 : this.acceleration;
       this.position.y += this.dy;
 
@@ -74,16 +74,16 @@
 
       if (!this.jump) {
         EventKey.isPressed('a',
-          () => { this.toLeft = true },
-          () => { this.toLeft = false });
+          () => { this.toLeft = true;},
+          () => { this.toLeft = false;});
         EventKey.isPressed('d',
-          () => { this.toRight = true },
-          () => { this.toRight = false });
+          () => { this.toRight = true; },
+          () => { this.toRight = false; });
         EventKey.isPressed('space', () => this.dy = -this.dy );
       }
 
-      if (this.toLeft) this.position.x -= this.speed * 1.8;
-      if (this.toRight) this.position.x += this.speed * 1.8;
+      if (this.toLeft) this.position.x -= this.speed;
+      if (this.toRight) this.position.x += this.speed;
     });
 
     // E V E N T S

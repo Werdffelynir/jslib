@@ -4,12 +4,31 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
 </head>
 <body>
 
-    <canvas class="canvas"></canvas>
+<canvas class="canvas"></canvas>
 
 <script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
+
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
+
 
   class PointToPoint {
 
@@ -19,151 +38,56 @@
       return Math.ceil(Math.sqrt((xs * xs) + (ys * ys)));
     }
 
-    static update (p1, p2, stepsspeed, cbPointsTouch) {
+    static update (p1, p2, stepsspeed = 1, onPointTouch = null) {
       if (PointToPoint.distance(p1, p2) > 5) {
         const dx = p2.x - p1.x;
         const dy = p2.y - p1.y;
         const dist = Math.abs(Math.sqrt(dx * dx + dy * dy));
-        const steps = stepsspeed || 1;
+        const steps = stepsspeed;
         const speed = steps / dist;
         const x = p1.x + (p2.x - p1.x) * speed;
         const y = p1.y + (p2.y - p1.y) * speed;
         return {x, y};
       } else {
-        if ( typeof cbPointsTouch === 'function')
-          cbPointsTouch()
+        if ( typeOf(onPointTouch, 'function'))
+          onPointTouch()
       }
       return p1;
     }
   }
 
+  const Canvas = {
+    cursor: Point(),
+    cursorClick: Point(),
+    chains: [],
+  };
 
-  class KeyBind {
-
-    constructor (types) {
-      this.keys = {};
-      this.types = types;
-      this.listener();
-    }
-
-    isPress (key) {
-      return !!this.keys[key]
-    }
-
-    listener () {
-      const bind = (eve, value) => {
-        let key;
-        for (key in this.types)
-          if (this.types[key] === eve.keyCode) this.keys[key] = value;
-      };
-      Event.keydown((eve) => bind(eve, true) );
-      Event.keyup((eve) => bind(eve, false) );
-    }
+  let i, limit = 400;
+  for (i = 0; i < limit; limit --) {
+    Canvas.chains.push({point: Point(), speed: 1 + (limit / 100)});
   }
 
+  Event.click((e, p) => {
+    Canvas.cursorClick = p
+  });
 
+  Event.mousemove((e, p) => {
+    Canvas.cursor = p
+  });
 
-    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 12);
-    const Text = new AnimateText(Animate);
-    const Event = new AnimateEvent(Animate);
-    const Graphic = new AnimateGraphic(Animate);
+  Animate.scene('menu', {}, function (ctx, iter) {
+    Text.print("MENU", Animate.width / 2, 100);
 
-    const {
-      Point,
-      Rectangle
-    } = AnimateApplication;
-
-    Text.format({
-      size: 12,
-      family: 'Ubuntu',
+    Canvas.chains.map((chain, i) => {
+      Graphic.circle(chain.point, 20).color('rgba(100,100,255,0.01)').fill();
+      Graphic.circle(chain.point, 10).color('rgba(100,100,255,0.02)').fill();
+      chain.point = PointToPoint.update(chain.point, Canvas.cursorClick, chain.speed);
     });
 
-    const Canvas = {};
-    Canvas.player = Point(0, 0);
-    Canvas.playerSpeed = 5;
-    Canvas.cursor = Point(0, 0);
-    Canvas.chains = [];
-    Canvas.playerMovieclip = () => {
-      if (keyBind.isPress('a')) Canvas.player.x -= Canvas.playerSpeed;
-      if (keyBind.isPress('d')) Canvas.player.x += Canvas.playerSpeed;
-      if (keyBind.isPress('w')) Canvas.player.y -= Canvas.playerSpeed;
-      if (keyBind.isPress('s')) Canvas.player.y += Canvas.playerSpeed;
-      Graphic.rect(Canvas.player, 25, 25).color('#000000').fill();
-    };
-
-    Event.mousemove((eve, pos) => { Canvas.cursor = pos; });
-
-    Event.click((eve) => {});
-
-    let
-      i,
-      limit = 100;
-    for (i = 0; i < limit; limit --) {
-      Canvas.chains.push({point: {...Canvas.player}, speed: (limit / 100) * 0.1 });
-    }
-
-    console.log(Canvas.chains);
-
-    const keyBind = new KeyBind({
-      a: 65,
-      s: 83,
-      d: 68,
-      w: 87,
-      space: 32
-    });
+  });
 
 
-    Animate.scene('main', {}, function (ctx, iter) {
-
-      PointToPoint.update (p1, p2, stepsspeed);
-      // PointToPoint.update();
-      Canvas.playerMovieclip();
-
-    }).start('main');
-
-
-
-
-
-
-    // const {update, distance} = MovePointToPoint();
-    // console.log(keyBind.isPress('a'));
-    // console.log(keyBinder.keys);
-    // Canvas.playerClip();
-    // Canvas.cursorClip();
-    //
-    // Canvas.chain[0] = update(Canvas.chain[0], Canvas.cursor, 0.9);
-    // Graphic.rect(Canvas.chain[0], 10, 10).fill();
-/*    function MovePointToPoint () {
-
-      function distance(p1, p2){
-        let xs = p2.x - p1.x;
-        let ys = p2.y - p1.y;
-        return Math.ceil(Math.sqrt((xs * xs) + (ys * ys)));
-      }
-
-      function update (p1, p2, stepsspeed, cbPointsTouch) {
-        if (distance(p1, p2) > 5) {
-          const dx = p2.x - p1.x;
-          const dy = p2.y - p1.y;
-          const dist = Math.abs(Math.sqrt(dx * dx + dy * dy));
-          const steps = stepsspeed || 1;
-          const speed = steps / dist;
-          const x = p1.x + (p2.x - p1.x) * speed;
-          const y = p1.y + (p2.y - p1.y) * speed;
-          return {x, y};
-        } else {
-          if ( typeof cbPointsTouch === 'function')
-            cbPointsTouch()
-        }
-        return p1;
-      }
-      return {update, distance};
-    }*/
-
-
-
-
+  Animate.start('menu');
 
 </script>
 </body>

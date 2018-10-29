@@ -205,9 +205,6 @@ const waiter = function (args, callback) {
 };
 
 
-
-
-
   
 class AnimateConfig {
   constructor (config) {
@@ -597,8 +594,7 @@ class AnimateEvent {
   }
 
   clickRemove (eventFunction) {
-    this.canvas.removeEventListener('click', eventFunction );
-  }
+    this.canvas.removeEventListener('click', eventFunction )}
 
   mousemove (cb) {
     const eventFunction = (event) =>
@@ -608,8 +604,7 @@ class AnimateEvent {
   }
 
   mousemoveRemove (eventFunction) {
-    this.canvas.removeEventListener('mousemove', eventFunction );
-  }
+    this.canvas.removeEventListener('mousemove', eventFunction )}
 
   mousedown (cb) {
     const eventFunction = (event) => cb.call(this.Animate, event, this.getMouseEventPosition(event));
@@ -618,8 +613,7 @@ class AnimateEvent {
   }
 
   mousedownRemove (eventFunction) {
-    this.canvas.removeEventListener('mousedown', eventFunction );
-  }
+    this.canvas.removeEventListener('mousedown', eventFunction )}
 
   keydown (cb) {
     const eventFunction = (event) => cb.call(this.Animate, event);
@@ -628,8 +622,7 @@ class AnimateEvent {
   }
 
   keydownRemove (eventFunction) {
-    this.canvas.removeEventListener('keydown', eventFunction );
-  }
+    this.canvas.removeEventListener('keydown', eventFunction )}
 
   keyup (cb) {
     const eventFunction = (event) => cb.call(this.Animate, event);
@@ -638,8 +631,7 @@ class AnimateEvent {
   }
 
   keyupRemove (eventFunction) {
-    this.canvas.removeEventListener('keyup', eventFunction );
-  }
+    this.canvas.removeEventListener('keyup', eventFunction )}
 
 }
 
@@ -652,10 +644,15 @@ class AnimateEventKey {
 
     this.Event = new AnimateEvent(Animate);
 
-    this._config = {};
-    this._keys = {};
-    this._keysConfig = {};
-    this._keysConfigDefault = {
+    this._keysPressed = {};
+    this._config = {
+      keys: {},
+      keysDefault: false,
+      keydown: null,
+      keyup: null,
+    };
+
+    this._keysDefault = {
       a:      65,
       s:      83,
       d:      68,
@@ -678,74 +675,99 @@ class AnimateEventKey {
       num5:   53,
       num6:   54,
     };
-    this._callbackKeydown = null;
-    this._callbackKeyup = null;
 
   }
 
   /**
-   *    EventKey.isPress('a',
-   *       () => {console.log('yes')},
-   *       () => {console.log('no')}
-   *    );
+   * .isPressed('a', () => {}, () => {});
    * @param key
    * @param cbPressed
    * @param onNoPressed
    * @returns {*}
    */
-  isPress (key, cbPressed, onNoPressed) {
-    return this.isPressed(key, cbPressed, onNoPressed);
+  isPressed (key, cbPressed, onNoPressed) {
+    if (this._keysPressed[key] && typeOf(cbPressed, 'function')) cbPressed();
+    else if (typeOf(onNoPressed, 'function')) onNoPressed();
+    return this._keysPressed[key];
   }
 
-  isPressed (key, cbPressed, onNoPressed) {
-    if (this._keys[key] && typeOf(cbPressed, 'function')) {
-      cbPressed();
-    } else if (typeOf(onNoPressed, 'function')) {
-      onNoPressed();
-    }
-    return this._keys[key];
+  _removeCallbackEventKeys () {
+    this.Event.keydownRemove(this._config.keydown);
+    this.Event.keyupRemove(this._config.keyup);
+  }
+
+  _removeGlobalCallbackEventKeys () {
+    this.Event.keydownRemove(this._eventCallbackKeydown);
+    this.Event.keyupRemove(this._eventCallbackKeyup);
   }
 
   _initKeysStatement () {
     if (!this._init_keys_statement_ready) {
       this._init_keys_statement_ready = true;
 
-      this.Event.keydown((e) => {
-        let key;
-        for (key in this._keysConfig)
-          if (e.keyCode === this._keysConfig[key]) this._keys[key] = true;
+      const { keys, keydown, keyup  } = this._config;
 
-        if (typeOf(this._callbackKeydown, 'function'))
-          this._callbackKeydown.call(this, e);
-      });
-      this.Event.keyup((e) => {
+      this._eventCallbackKeydown = (e) => {
         let key;
-        for (key in this._keysConfig)
-          if (e.keyCode === this._keysConfig[key]) this._keys[key] = false;
+        if (typeOf(this._config.keydown, 'function')) this._config.keydown.call(this, e);
+        for (key in this._config.keys)
+          if (e.keyCode === this._config.keys[key]) this._keysPressed[key] = true;
+      };
+      this.Event.keydown(this._eventCallbackKeydown);
 
-        if (typeOf(this._callbackKeyup, 'function'))
-          this._callbackKeyup.call(this, e);
-      })
+      this._eventCallbackKeyup = (e) => {
+        let key;
+        if (typeOf(this._config.keyup, 'function')) this._config.keyup.call(this, e);
+        for (key in this._config.keys)
+          if (e.keyCode === this._config.keys[key]) this._keysPressed[key] = false;
+      };
+      this.Event.keyup(this._eventCallbackKeyup);
     }
   }
 
+  /**
+   * EventKey.config({
+   *  keys: {
+   *    a:      65,
+   *    s:      83,
+   *    d:      68,
+   *    w:      87,
+   *    space:  32, },
+   *  keydown: () => { },
+   *  keyup: () => {},
+   * });
+   * @param conf
+   * @returns {AnimateEventKey}
+   */
   config (conf) {
-    this._config = {...{
-        keys: {},
-        keysDefault: false,
-        keydown: null,
-        keyup: null,
-      }, ...conf};
+    this._config = {...this._config, ...conf};
 
-    this._keysConfig = this._config.keysDefault
-      ? {...this._keysConfigDefault, ...this._config.keys}
-      : this._config.keys;
-
-    this._callbackKeydown = this._config.keydown;
-    this._callbackKeyup = this._config.keyup;
+    if (conf.keysDefault) {
+      this._config.keys = {...this._keysDefault, ...this._config.keys};
+    }
     this._initKeysStatement();
-
     return this;
+  }
+
+  configKeys (src) {
+    if (src)
+      this._config.keys = {...this._config.keys, ...src};
+    else
+      return this._config.keys;
+  }
+
+  configKeydown (src) {
+    if (typeOf(src, 'function'))
+      this._config.keydown = src;
+    else
+      return this._config.keydown;
+  }
+
+  configKeyup (src) {
+    if (typeOf(src, 'function'))
+      this._config.keyup = src;
+    else
+      return this._config.keyup;
   }
 
 }
@@ -921,9 +943,35 @@ class AnimateGraphic {
     return this;
   };
 
-  rect (point, width = 100, height = 100) {
+  /**
+   * .rect(100, 150, 150, 40)
+   * .rect(Point(100, 150), 150, 40)
+   * @returns {AnimateGraphic}
+   */
+  rect (...args) {
+    let x, y, width, height;
+
+    if (args.length === 1) {
+      x = args[0].x;
+      y = args[0].y;
+      width = args[0].width;
+      height = args[0].height;
+    }
+    else if (args.length === 3) {
+      x = args[0].x;
+      y = args[0].y;
+      width = args[1];
+
+      height = args[2];
+    }
+    else if (args.length === 4) {
+      x = args[0];
+      y = args[1];
+      width = args[2];
+      height = args[3];
+    }
+
     this.drawContextFunction = (ctx) => {
-      const {x, y} = point;
       ctx.beginPath();
       ctx.rect(x, y, width, height);
     };
@@ -980,6 +1028,76 @@ class AnimateGraphic {
 
 
 }
+
+
+
+
+const Point = function (x = 0, y = 0) {
+  const src = [x, y];
+  src.x = x;
+  src.y = y;
+  src.animateType = 'Point';
+  return src;
+};
+
+Point.isPoint = function (src) {
+  return src && src.animateType === 'Point';
+};
+
+Point.toPointArguments = function (...args) {
+  args = (args.length === 2) ? [args[0], args[1], 0, 0] : args;
+  const rectangle = Rectangle.toRectangleArguments(...args);
+  return Point(rectangle.x, rectangle.y);
+};
+
+
+
+
+
+const Rectangle = function (x = 0, y = 0, width = 100, height = 100) {
+  const src = [x, y, width, height];
+  src.x = x;
+  src.y = y;
+  src.width = width;
+  src.height = height;
+  src.animateType = 'Rectangle';
+  return src;
+};
+
+Rectangle.isRectangle = function (src) {
+  return src && src.animateType === 'Rectangle';
+};
+
+Rectangle.toRectangleArguments = function (...args) {
+  let src, x = 0, y = 0, width = 0, height = 0;
+
+  if (args.length === 1) {
+    src = args[0];
+    if (typeOf(args[0], 'array')) {
+      x = src[0] ? src[0] : x;
+      y = src[1] ? src[1] : y;
+      width = src[2] ? src[2] : width;
+      height = src[3] ? src[3] : height;
+    } else {
+      x = src.x ? src.x : x;
+      y = src.y ? src.y : y;
+      width = src.width ? src.width : width;
+      height = src.height ? src.height : height;
+    }
+  } else if (args.length === 3) {
+    src = args[0];
+    x = src.x;
+    y = src.y;
+    width = args[1];
+    height = args[2];
+  } else if (args.length === 4) {
+    x = args[0];
+    y = args[1];
+    width = args[2];
+    height = args[3];
+  }
+  return Rectangle(x, y, width, height)
+};
 
 
   
@@ -1292,8 +1410,8 @@ class AnimateGrid {
   
 class AnimateEffect {
 
-  constructor (Animate) {
-    if ( !(Animate instanceof AnimateApplication) ) {
+  constructor(Animate) {
+    if (!(Animate instanceof AnimateApplication)) {
       throw new Error(':constructor argument in not of instance AnimateApplication');
     }
 
@@ -1307,7 +1425,7 @@ class AnimateEffect {
     this.fadeSpeed = 2;
   }
 
-  fadeIn () {
+  fadeIn() {
     const ctx = this.context;
     return this.animate.movieclip(
       {c: 0, speed: this.fadeSpeed},
@@ -1326,7 +1444,7 @@ class AnimateEffect {
       });
   }
 
-  fadeOut () {
+  fadeOut() {
     const ctx = this.context;
     return this.animate.movieclip(
       {c: 255, speed: this.fadeSpeed},
@@ -1347,8 +1465,8 @@ class AnimateEffect {
 
 }
 
+  /*
 
-  
 
 AnimateApplication.Point = function (x = 0, y = 0) {
   const src = [x, y];
@@ -1365,4 +1483,5 @@ AnimateApplication.Rectangle = function (x = 0, y = 0, width = 0, height = 0) {
   src.height = height;
   return src;
 };
+*/
 

@@ -187,6 +187,3 @@ const waiter = function (args, callback) {
     callback.bind(args)(resolve, reject);
   })
 };
-
-
-
