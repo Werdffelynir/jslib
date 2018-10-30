@@ -166,6 +166,11 @@ const position = function (elem) {
   return data;
 };
 
+/**
+ * convertHEXtoRGB
+ * @param hex
+ * @returns {*}
+ */
 const convertHEXtoRGB = function (hex) {
   hex = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, function(m, r, g, b) { return r + r + g + g + b + b });
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -174,6 +179,10 @@ const convertHEXtoRGB = function (hex) {
 
 const convertRGBtoHEX = function (r, g, b) {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+};
+
+const trim = function(str) {
+  return str.replace(/^\s+|\s+$/gm,'');
 };
 
 /**
@@ -187,3 +196,18 @@ const waiter = function (args, callback) {
     callback.bind(args)(resolve, reject);
   })
 };
+
+const isEqualArrays = function (arr1, arr2) {
+  if (arr1 === arr2)
+    return true;
+
+  else if (!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !== arr2.length)
+    return false;
+
+  for (let i = 0; i < arr1.length; ++i)
+    if (arr1[i] !== arr2[i])
+      return false;
+
+  return true;
+};
+

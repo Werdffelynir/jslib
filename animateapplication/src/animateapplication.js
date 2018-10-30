@@ -78,7 +78,9 @@ class AnimateApplication extends AnimateConfig {
     if (this._sn && this._scenes[this._sn]) {
       this._iteration ++;
       this._scenes[this._sn].map((cb) => {
-        if (typeOf(cb, 'function')) cb(this._context, this._iteration)
+        if (typeOf(cb, 'function')) {
+          cb(this._context, this._iteration)
+        }
       });
     }
 
@@ -190,8 +192,9 @@ class AnimateApplication extends AnimateConfig {
       ctx.save();
       if (isDefined(props.x)) ctx.translate(props.x, props.y);
       if (isDefined(props.rotate)) ctx.rotate(props.rotate);
-      callback.apply(props, propsInside);
+      const callResult = callback.apply(props, propsInside);
       ctx.restore();
+      return callResult;
     }
   }
 
@@ -233,14 +236,15 @@ class AnimateApplication extends AnimateConfig {
         if (this.rotate !== undefined) {
           context.rotate(this.rotate)}
         if (this.rotation !== undefined) {
-          context.rotate(Animate.degreesToRadians(this.rotation))}
+          context.rotate(degreesToRadians(this.rotation))}
         if (this.alpha !== undefined) {
           context.globalAlpha = this.alpha }
         if (this.composite !== undefined) {
           context.globalCompositeOperation = this.composite}
 
-        callback.apply(this, args);
+        const callResult = callback.apply(this, args);
         context.restore();
+        return callResult;
       },
       thisInstance);
   }

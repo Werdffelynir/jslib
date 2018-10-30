@@ -182,6 +182,11 @@ const position = function (elem) {
   return data;
 };
 
+/**
+ * convertHEXtoRGB
+ * @param hex
+ * @returns {*}
+ */
 const convertHEXtoRGB = function (hex) {
   hex = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, function(m, r, g, b) { return r + r + g + g + b + b });
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -190,6 +195,10 @@ const convertHEXtoRGB = function (hex) {
 
 const convertRGBtoHEX = function (r, g, b) {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+};
+
+const trim = function(str) {
+  return str.replace(/^\s+|\s+$/gm,'');
 };
 
 /**
@@ -203,6 +212,21 @@ const waiter = function (args, callback) {
     callback.bind(args)(resolve, reject);
   })
 };
+
+const isEqualArrays = function (arr1, arr2) {
+  if (arr1 === arr2)
+    return true;
+
+  else if (!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !== arr2.length)
+    return false;
+
+  for (let i = 0; i < arr1.length; ++i)
+    if (arr1[i] !== arr2[i])
+      return false;
+
+  return true;
+};
+
 
 
   
@@ -285,7 +309,9 @@ class AnimateApplication extends AnimateConfig {
     if (this._sn && this._scenes[this._sn]) {
       this._iteration ++;
       this._scenes[this._sn].map((cb) => {
-        if (typeOf(cb, 'function')) cb(this._context, this._iteration)
+        if (typeOf(cb, 'function')) {
+          cb(this._context, this._iteration)
+        }
       });
     }
 
@@ -397,8 +423,9 @@ class AnimateApplication extends AnimateConfig {
       ctx.save();
       if (isDefined(props.x)) ctx.translate(props.x, props.y);
       if (isDefined(props.rotate)) ctx.rotate(props.rotate);
-      callback.apply(props, propsInside);
+      const callResult = callback.apply(props, propsInside);
       ctx.restore();
+      return callResult;
     }
   }
 
@@ -440,14 +467,15 @@ class AnimateApplication extends AnimateConfig {
         if (this.rotate !== undefined) {
           context.rotate(this.rotate)}
         if (this.rotation !== undefined) {
-          context.rotate(Animate.degreesToRadians(this.rotation))}
+          context.rotate(degreesToRadians(this.rotation))}
         if (this.alpha !== undefined) {
           context.globalAlpha = this.alpha }
         if (this.composite !== undefined) {
           context.globalCompositeOperation = this.composite}
 
-        callback.apply(this, args);
+        const callResult = callback.apply(this, args);
         context.restore();
+        return callResult;
       },
       thisInstance);
   }
@@ -563,6 +591,101 @@ const EventKeyCodeNumpad7 = 103;
 const EventKeyCodeNumpad8 = 104;
 const EventKeyCodeNumpad9 = 105;
 
+
+const KeyCode = {
+  Backspace : 8,
+  Tab : 9,
+  Enter : 13,
+  Shift : 16,
+  Ctrl : 17,
+  Alt : 18,
+  Pause : 19,
+  Break : 19,
+  CapsLock : 20,
+  Esc : 27,
+  Space : 32,
+  PageUp : 33,
+  PageDown : 34,
+  End : 35,
+  Home : 36,
+  ArrowLeft : 37,
+  ArrowUp : 38,
+  ArrowRight : 39,
+  ArrowDown : 40,
+  PrntScrn : 44,
+  Insert : 45,
+  Delete : 46,
+  WINStart : 91,
+  WINMenu : 93,
+  F1 : 112,
+  F2 : 113,
+  F3 : 114,
+  F4 : 115,
+  F5 : 116,
+  F6 : 117,
+  F7 : 118,
+  F8 : 119,
+  F9 : 120,
+  F10 : 121,
+  F11 : 122,
+  F12 : 123,
+  NumLock : 144,
+  ScrollLock : 145,
+  Coma : 188,
+  Dot : 190,
+  Slash : 191,
+  Backquote : 192,
+  BracketLeft : 219,
+  Backslash : 220,
+  BracketRight : 221,
+  Quote : 222,
+  Digit0 : 48,
+  Digit1 : 49,
+  Digit2 : 50,
+  Digit3 : 51,
+  Digit4 : 52,
+  Digit5 : 53,
+  Digit6 : 54,
+  Digit7 : 55,
+  Digit8 : 56,
+  Digit9 : 57,
+  KeyA : 65,
+  KeyB : 66,
+  KeyC : 67,
+  KeyD : 68,
+  KeyE : 69,
+  KeyF : 70,
+  KeyG : 71,
+  KeyH : 72,
+  KeyI : 73,
+  KeyJ : 74,
+  KeyK : 75,
+  KeyL : 76,
+  KeyM : 77,
+  KeyN : 78,
+  KeyO : 79,
+  KeyP : 80,
+  KeyQ : 81,
+  KeyR : 82,
+  KeyS : 83,
+  KeyT : 84,
+  KeyU : 85,
+  KeyV : 86,
+  KeyW : 87,
+  KeyX : 88,
+  KeyY : 89,
+  KeyZ : 90,
+  Numpad0 : 96,
+  Numpad1 : 97,
+  Numpad2 : 98,
+  Numpad3 : 99,
+  Numpad4 : 100,
+  Numpad5 : 101,
+  Numpad6 : 102,
+  Numpad7 : 103,
+  Numpad8 : 104,
+  Numpad9 : 105,
+};
 
 
 class AnimateEvent {

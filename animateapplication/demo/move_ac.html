@@ -8,101 +8,46 @@
 </head>
 <body>
 
-    <canvas class="canvas"></canvas>
+<canvas class="canvas"></canvas>
 
 <script>
-    const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
-    const Text = new AnimateText(Animate);
-    const Event = new AnimateEvent(Animate);
-    const Graphic = new AnimateGraphic(Animate);
-    const EventKey = new AnimateEventKey(Animate);
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
 
-    EventKey.config({
-      keys: {
-        a:      65,
-        s:      83,
-        d:      68,
-        w:      87,
-        space:  32,
-      },
-      keydown: () => {},
-      keyup: () => {},
-    });
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
 
-    // C U S T O M
-    const Canvas = {
-      cursor: Point(),
-      cursorClick: Point(),
-    };
-
-
-    const onceCreator = function () {
-      let init = false;
-      return (cb) => {
-        if (!init) {
-          init = true;
-          cb()
-        }
-      }
-    };
-
-    const once = onceCreator();
+  // C U S T O M
+  const Canvas = {
+    cursor: Point(),
+    cursorClick: Point(),
+  };
 
 
+  // E V E N T S
 
-    Canvas.player = Animate.createMovieclip({
-      position: Point(100, 300),
-      speed: 1,
-      dy: 0,
-      acceleration: 0.09,
-      jump: false,
-      toLeft: false,
-      toRight: false,
-    }, function () {
+  Event.click((e, p) => {Canvas.cursorClick = p});
+  Event.mousemove((e, p) => {Canvas.cursor = p});
 
-      Graphic.circle(this.position, 40).color('#aca511').fill();
-      this.dy += (this.dy > 4) ? 0 : this.acceleration;
-      this.position.y += this.dy;
+  // S C E N E S
+  Animate.scene('menu', {}, function (ctx, iter) {
 
-      if (this.position.y > Animate.height - 10) {
-        this.position.y = Animate.height - 10;
-        this.jump = false;
-      } else {
-        this.jump = true;
-      }
+  });
 
 
-      if (!this.jump) {
-        EventKey.isPressed('a',
-          () => { this.toLeft = true },
-          () => { this.toLeft = false });
-        EventKey.isPressed('d',
-          () => { this.toRight = true },
-          () => { this.toRight = false });
-        EventKey.isPressed('space', () => this.dy = -this.dy );
-      }
-
-      if (this.toLeft) this.position.x -= this.speed * 1.8;
-      if (this.toRight) this.position.x += this.speed * 1.8;
-    });
-
-    // E V E N T S
-
-    Event.click((e, p) => {
-      Canvas.cursorClick = p
-    });
-
-    Event.mousemove((e, p) => {
-      Canvas.cursor = p
-    });
-
-    // S C E N E S
-    Animate.scene('menu', {}, function (ctx, iter) {
-      Canvas.player();
-    });
-
-
-    Animate.start('menu');
+  Animate.start('menu');
 
 </script>
 </body>
