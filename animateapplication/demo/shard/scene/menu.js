@@ -20,8 +20,8 @@ class SceneMenu extends Extension {
     });
 
     animate.scene(Game.SCENE.MENU, {}, (ctx, iter) => {
-      this.qr();
-      this.showMenu();
+
+      //this.showMenu();
     });
   }
 
@@ -32,9 +32,4 @@ class SceneMenu extends Extension {
       .print('GAME (b)', 10, 30);
   }
 
-  qr () {
-
-    this.animate.getContext().fillRect(10, 100, 200, 45);
-
-  }
 }

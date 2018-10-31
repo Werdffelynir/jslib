@@ -69,19 +69,52 @@ class AnimateText {
     return this;
   }
 
-  text (text) {
-    this.config.text = text;
-    return this;
-  }
+  x (src) {
+    this.config.x = src;
+    return this}
+
+  y (src) {
+    this.config.y = src;
+    return this}
+
+  text (src) {
+    this.config.text = src;
+    return this}
+
+  size (src) {
+    this.config.size = src;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    return this}
+
+  family (src) {
+    this.config.family = src;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    return this}
+
+  align (src) {
+    this.config.align = src;
+    this.context.textAlign = this.config.align;
+    return this}
+
+  baseline (src) {
+    this.config.baseline = src;
+    this.context.textBaseline = this.config.baseline;
+    return this}
+
+  color (src) {
+    this.config.color = src;
+    return this}
 
   stroke () {
-    if (this.config.color) this.context.strokeStyle = this.config.color;
+    if (this.config.color)
+      this.context.strokeStyle = this.config.color;
     this.context.strokeText(this.config.text, this.config.x, this.config.y);
     return this;
   }
 
   fill () {
-    if (this.config.color) this.context.fillStyle = this.config.color;
+    if (this.config.color)
+      this.context.fillStyle = this.config.color;
     this.context.fillText(this.config.text, this.config.x, this.config.y);
     return this;
   };
@@ -100,11 +133,6 @@ class AnimateText {
         break;
       default:
     }
-    return this;
-  }
-
-  color (src) {
-    this.config.color = src;
     return this;
   }
 

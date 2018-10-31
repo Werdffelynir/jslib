@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+
+  const txtRectX = 100;
+  const txtRectY = 100;
+  const txtRect = [
+    {
+      bg: { point: [0 + txtRectX,    0 + txtRectY] },
+      tx: { point: [0 + txtRectX,    0 + txtRectY], text: 'BOTTOM Line',
+        baseline: FONT_BASELINE_BOTTOM  }},
+    {
+      bg: { point: [100 + txtRectX,  0 + txtRectY] },
+      tx: { point: [100 + txtRectX,  0 + txtRectY], text: 'HANGING Line',
+        baseline: FONT_BASELINE_HANGING  }},
+    {
+      bg: { point: [200 + txtRectX,  0 + txtRectY] },
+      tx: { point: [200 + txtRectX,  0 + txtRectY], text: 'IDEOGRAPHIC Line',
+        baseline: FONT_BASELINE_IDEOGRAPHIC  }},
+    {
+      bg: { point: [300 + txtRectX,  0 + txtRectY] },
+      tx: { point: [300 + txtRectX,  0 + txtRectY], text: 'MIDDLE Line',
+        baseline: FONT_BASELINE_MIDDLE  }},
+    {
+      bg: { point: [400 + txtRectX,  0 + txtRectY] },
+      tx: { point: [400 + txtRectX,  0 + txtRectY], text: 'TOP Line',
+        baseline: FONT_BASELINE_TOP  }},
+    {
+      bg: { point: [500 + txtRectX,  0 + txtRectY] },
+      tx: { point: [500 + txtRectX,  0 + txtRectY], text: 'TLPHABETIC Line',
+        baseline: FONT_BASELINE_TLPHABETIC  }},
+  ];
+
+  // S C E N E S
+  Animate.scene('menu', {}, function (ctx, iter) {
+
+    txtRect.map((obj) => {
+      Graphic
+        .line(Point(obj.bg.point[0], obj.bg.point[1]), Point(obj.bg.point[0] + 100, obj.bg.point[1]))
+        .thickness(0.5)
+        .color('#4b4b4b')
+        .stroke();
+
+      Text
+        .baseline(obj.tx.baseline)
+        .color('#2a2a2a')
+        .print(obj.tx.text, obj.tx.point[0],  obj.tx.point[1]);
+    });
+
+  }).start('menu');
+
+</script>
+</body>
+</html>

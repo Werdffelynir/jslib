@@ -10,7 +10,7 @@ class SceneMenu extends Extension {
       Text.format({
         x: 10,
         y: 10,
-        text: '1. MAIN MENU; 2. GAME; 3. END;',
+        text: '1. MAIN MENU; 2. GAME; 3. END; 5. RELOAD;',
         size: 12,
         color : '#000000',
       }) .print();

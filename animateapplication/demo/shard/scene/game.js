@@ -1,9 +1,8 @@
 
 class SceneGame extends Extension {
 
-  constructor (animate) {
+  constructor () {
     super();
-    this.animate = animate;
   }
 
   init(game) {

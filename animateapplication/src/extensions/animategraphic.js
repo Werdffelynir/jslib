@@ -177,16 +177,22 @@ class AnimateGraphic {
     let x, y, width, height;
 
     if (args.length === 1) {
-      x = args[0].x;
-      y = args[0].y;
-      width = args[0].width;
-      height = args[0].height;
+      if (typeOf(args[0], 'array')) {
+        x = args[0][0];
+        y = args[0][1];
+        width = args[0][2];
+        height = args[0][3];
+      } else {
+        x = args[0].x;
+        y = args[0].y;
+        width = args[0].width;
+        height = args[0].height;
+      }
     }
     else if (args.length === 3) {
       x = args[0].x;
       y = args[0].y;
       width = args[1];
-
       height = args[2];
     }
     else if (args.length === 4) {

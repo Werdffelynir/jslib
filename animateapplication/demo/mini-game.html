@@ -41,39 +41,20 @@
       Hero.position = Point(Animate.width / 2, Animate.height - 60);
       Enemy.create();
       Animate.start('game');
-    },
-    overMessage: 'Game Over'
+    }
   };
+
   const Hero = {
     position: Point(Animate.width / 2, Animate.height - 60),
     speed: 3,
     health: 3,
-    clipHero: Animate.clip({dx: 0, dy: 0, ds: 3}, function () {
-
-      EventKey.isPressed('a', () => {
-        this.dx = -this.ds;
-        //Hero.position.x -= Hero.speed;
-      });
-      EventKey.isPressed('d', () => {
-        this.dx = this.ds;
-        //Hero.position.x += Hero.speed
-      });
-
-      if (this.dx > 0) this.dx -= 0.1;
-      if (this.dx < 0) this.dx += 0.1;
-
-      Hero.position.x += this.dx;
-
+    clipHero: Animate.clip({}, function () {
+      EventKey.isPressed('a', () => { Hero.position.x -= Hero.speed });
+      EventKey.isPressed('d', () => { Hero.position.x += Hero.speed });
       Graphic.rect(Hero.position, 80, 60).color('#555555').fill();
     }),
     clipHealth: Animate.clip({x: 10, step: 25} , function () {
       if (Hero.health === 0) {
-        Game.overMessage = 'Game Over';
-        Animate.start('end');
-        return;
-      }
-      else if (Hero.health >= 5) {
-        Game.overMessage = 'VICTORY';
         Animate.start('end');
         return;
       }
@@ -84,14 +65,11 @@
   };
   const Enemy = {
     list: [],
-    add: function (count = 0) {
-      Array(count).fill(null).map(() => {
-        Enemy.list.push({ position: Point(random(20, 780), random(-50, -450)), speed: random(50, 150) / 100 })
-      });
-    },
     create: function () {
       Enemy.list = [];
-      Enemy.add(10);
+      Array(10).fill(null).map(() => {
+        Enemy.list.push({ position: Point(random(20, 780), random(-50, -450)), speed: random(50, 150) / 100 })
+      });
     },
     clipEnemies: Animate.clip({} , function () {
       Enemy.list.map((obj, index) => {
@@ -109,7 +87,6 @@
   };
   const Health = {
     list: [],
-    add: function () {},
     create: function () {
       Health.list = [];
       Array(random(1, 5)).fill(null).map(() => {
@@ -144,6 +121,7 @@
   Animate.scene('menu', {}, function (ctx, iter) {
     Text.print('Game', Animate.width / 2, Animate.height / 2);
   });
+
   Animate.scene('game', {}, function (ctx, iter) {
     Hero.clipHero();
     Hero.clipHealth();
@@ -153,11 +131,11 @@
     if (iter % 1000 === 0) {
       console.log('Health.create');
       Health.create();
-      Enemy.add(10);
     }
   });
+
   Animate.scene('end', {}, function (ctx, iter) {
-    Text.print(Game.overMessage, Animate.width / 2, Animate.height / 2);
+    Text.print('Game Over', Animate.width / 2, Animate.height / 2);
   });
 
   Animate.start('menu');

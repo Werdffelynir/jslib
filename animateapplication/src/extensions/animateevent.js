@@ -1,5 +1,4 @@
 
-const EventKeyCode = 0;
 const EventKeyCodeBackspace = 8;
 const EventKeyCodeTab = 9;
 const EventKeyCodeEnter = 13;
@@ -94,7 +93,7 @@ const EventKeyCodeNumpad8 = 104;
 const EventKeyCodeNumpad9 = 105;
 
 
-const KeyCode = {
+const EventKeyCode = {
   Backspace : 8,
   Tab : 9,
   Enter : 13,

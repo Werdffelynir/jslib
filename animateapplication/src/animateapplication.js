@@ -30,6 +30,7 @@ class AnimateApplication extends AnimateConfig {
     this._canvas = null;
     this._context = null;
     this._frameCallback = null;
+    this._frameSceneObject = null;
 
     this._fpsTimeNow = 0;
     this._fpsTimeThen = 0;
@@ -46,9 +47,9 @@ class AnimateApplication extends AnimateConfig {
     try {
       this._canvas = this._global.querySelector(this.config.selector);
       this._context = this._canvas.getContext('2d');
-
-      this.width = this._canvas.width = this.config.width ;
-      this.height = this._canvas.height = this.config.height;
+// this.width = this.height =
+      this._canvas.width = this.config.width ;
+      this._canvas.height = this.config.height;
     } catch (err) {
       throw new Error(err);
     }
@@ -84,12 +85,21 @@ class AnimateApplication extends AnimateConfig {
       });
     }
 
-    if (this._frameCallback && this._frameCallback.init)
-      this._frameCallback.bind(this)(this._context, this._iteration)
+    if (this._frameCallback)
+      this._frameCallback(this._context, this._iteration);
   }
 
   clear () {
     this._context.clearRect( 0, 0, this.config.width, this.config.height );
+    return this;
+  }
+
+  frame (params, cb) {
+    if (typeOf(params, 'object') && typeOf(cb, 'function')) {
+      this._frameCallback = cb.bind(this.sceneObject(params));
+    } else {
+      throw new Error("Method [AnimateApplication::frame] arguments is filed!");
+    }
     return this;
   }
 
@@ -119,6 +129,18 @@ class AnimateApplication extends AnimateConfig {
   getFPS () {
     return Math.ceil(this._iteration / ( (this._fpsTimeThen - this._fpsTimeFirst) / 1000))
   }
+
+  get sceneName () {
+    return this._sn}
+
+  get width () {
+    return this.config.width}
+
+  get height () {
+    return this.config.height}
+
+  get iteration () {
+    return this._iteration}
 
   getIteration () {
     return this._iteration
@@ -181,26 +203,8 @@ class AnimateApplication extends AnimateConfig {
     return this._context.isPointInPath(point.x, point.y);
   }
 
-  /**
-   * @param props
-   * @param callback
-   * @returns {function()}
-   */
-  createMovieclip (props, callback) {
-    const ctx = this._context;
-    return (...propsInside) => {
-      ctx.save();
-      if (isDefined(props.x)) ctx.translate(props.x, props.y);
-      if (isDefined(props.rotate)) ctx.rotate(props.rotate);
-      const callResult = callback.apply(props, propsInside);
-      ctx.restore();
-      return callResult;
-    }
-  }
-
-
-  clip (options, callback, thisInstance) {
-    return (...args) => callback.bind(options).apply(thisInstance || {}, args || {})
+  clip (opts, callback, thisInstance) {
+    return (...args) => callback.bind(opts).apply(thisInstance || {}, args || {})
   };
 
   movieclip (opts, callback, thisInstance) {
@@ -215,13 +219,13 @@ class AnimateApplication extends AnimateConfig {
         scale: undefined,
         alpha: undefined,
         composite: undefined,
-        setTranslate: function () {this.translate = arguments},
-        setTransform: function () {this.transform = arguments},
-        setScale: function () {this.scale = arguments},
-        setRotate: function () {this.rotate = arguments[0]},
-        setRotation: function () {this.rotation = arguments[0]},
-        setAlpha: function () {this.alpha = arguments[0]},
-        setComposite: function () {this.composite = arguments[0]},
+        setTranslate: function (...args) {this.translate = args},
+        setTransform: function (...args) {this.transform = args},
+        setScale: function (...args) {this.scale = args},
+        setRotate: function (...args) {this.rotate = args[0]},
+        setRotation: function (...args) {this.rotation = args[0]},
+        setAlpha: function (...args) {this.alpha = args[0]},
+        setComposite: function (...args) {this.composite = args[0]},
         instance: this
       }, ...opts};
 
@@ -247,6 +251,18 @@ class AnimateApplication extends AnimateConfig {
         return callResult;
       },
       thisInstance);
+  }
+
+  fragment (opts, callback) {
+    const ctx = this._context;
+    return (...propsInside) => {
+      ctx.save();
+      if (isDefined(opts.x)) ctx.translate(opts.x, opts.y);
+      if (isDefined(opts.rotate)) ctx.rotate(opts.rotate);
+      const callResult = callback.apply(opts, propsInside);
+      ctx.restore();
+      return callResult;
+    }
   }
 
   backgroundColor (color) {

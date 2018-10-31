@@ -5,10 +5,6 @@ const Event = new AnimateEvent(Animate);
 const Graphic = new AnimateGraphic(Animate);
 const Loader = new AnimateLoader(Animate);
 const Grid = new AnimateGrid(Animate);
-const {
-  Point,
-  Rectangle
-} = AnimateApplication;
 
 Animate.getCanvas().style.border = '5px solid red';
 

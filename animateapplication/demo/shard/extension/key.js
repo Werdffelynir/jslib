@@ -28,6 +28,7 @@ class Key extends Extension {
       num3:   52,
       num4:   53,
       num5:   54,
+      esc:    EventKeyCode.Esc,
     })
 
   }

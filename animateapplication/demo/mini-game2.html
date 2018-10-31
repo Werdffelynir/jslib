@@ -28,6 +28,8 @@
     keydown: () => {},
     keyup: () => {},
   });
+  Animate.backgroundColor('#2a2a2a')
+  Graphic.shadow(0, 0, 5, '#707070');
 
   // C U S T O M
   const Canvas = {
@@ -52,11 +54,9 @@
 
       EventKey.isPressed('a', () => {
         this.dx = -this.ds;
-        //Hero.position.x -= Hero.speed;
       });
       EventKey.isPressed('d', () => {
         this.dx = this.ds;
-        //Hero.position.x += Hero.speed
       });
 
       if (this.dx > 0) this.dx -= 0.1;
@@ -64,7 +64,7 @@
 
       Hero.position.x += this.dx;
 
-      Graphic.rect(Hero.position, 80, 60).color('#555555').fill();
+      Graphic.rect(Hero.position, 80, 50).color('#555555').stroke();
     }),
     clipHealth: Animate.clip({x: 10, step: 25} , function () {
       if (Hero.health === 0) {
@@ -95,7 +95,7 @@
     },
     clipEnemies: Animate.clip({} , function () {
       Enemy.list.map((obj, index) => {
-        Graphic.circle(obj.position, 20).color('#7b44bf').fill();
+        Graphic.circle(obj.position, 20).color('#7b44bf').stroke();
         obj.position.y += obj.speed;
         if (Animate.hitTest([Hero.position.x, Hero.position.y, 80, 60], obj.position)) {
           Hero.health --;
@@ -109,16 +109,17 @@
   };
   const Health = {
     list: [],
-    add: function () {},
-    create: function () {
+    clean: function () {
       Health.list = [];
+    },
+    create: function () {
       Array(random(1, 5)).fill(null).map(() => {
         Health.list.push({ position: Point(random(20, 780), random(-50, -450)), speed: random(50, 150) / 100 })
       });
     },
     clipHealth: Animate.clip({} , function () {
       Health.list.map((obj, index) => {
-        Graphic.circle(obj.position, 20).color('#bf0d00').fill();
+        Graphic.circle(obj.position, 20).color('#bf0d00').stroke();
         obj.position.y += obj.speed;
         if (Animate.hitTest([Hero.position.x, Hero.position.y, 80, 60], obj.position)) {
           Hero.health ++;
@@ -134,6 +135,7 @@
     Canvas.cursorClick = p;
     if (Animate.sceneName !== 'game') {
       Game.start();
+      Health.clean();
       Health.create();
     }
   });
@@ -142,7 +144,7 @@
 
   // S C E N E S
   Animate.scene('menu', {}, function (ctx, iter) {
-    Text.print('Game', Animate.width / 2, Animate.height / 2);
+    Text.color('#fff').print('Game', Animate.width / 2, Animate.height / 2);
   });
   Animate.scene('game', {}, function (ctx, iter) {
     Hero.clipHero();
@@ -157,7 +159,7 @@
     }
   });
   Animate.scene('end', {}, function (ctx, iter) {
-    Text.print(Game.overMessage, Animate.width / 2, Animate.height / 2);
+    Text.color('#fff').print(Game.overMessage, Animate.width / 2, Animate.height / 2);
   });
 
   Animate.start('menu');

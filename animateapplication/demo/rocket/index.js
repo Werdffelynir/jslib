@@ -7,12 +7,6 @@ const Loader = new AnimateLoader(Animate);
 const Grid = new AnimateGrid(Animate);
 
 
-const {
-  Point,
-  Rectangle
-} = AnimateApplication;
-
-
 const game = new Game(Animate, [
   new Key(),
   new Player(),

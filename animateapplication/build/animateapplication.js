@@ -228,6 +228,34 @@ const isEqualArrays = function (arr1, arr2) {
 };
 
 
+function range(start, end, step = 1) {
+  const allNumbers = [start, end, step].every(Number.isFinite);
+
+  if (!allNumbers)
+    throw new TypeError('range() expects only finite numbers as arguments.');
+
+  if (step <= 0)
+    throw new Error('step must be a number greater than 0.');
+
+  if (start > end)
+    step = -step;
+
+  const length = Math.floor(Math.abs((end - start) / step)) + 1;
+  return Array.from(Array(length), (x, index) => start + index * step);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 class AnimateConfig {
@@ -261,6 +289,7 @@ class AnimateApplication extends AnimateConfig {
     this._canvas = null;
     this._context = null;
     this._frameCallback = null;
+    this._frameSceneObject = null;
 
     this._fpsTimeNow = 0;
     this._fpsTimeThen = 0;
@@ -277,9 +306,9 @@ class AnimateApplication extends AnimateConfig {
     try {
       this._canvas = this._global.querySelector(this.config.selector);
       this._context = this._canvas.getContext('2d');
-
-      this.width = this._canvas.width = this.config.width ;
-      this.height = this._canvas.height = this.config.height;
+// this.width = this.height =
+      this._canvas.width = this.config.width ;
+      this._canvas.height = this.config.height;
     } catch (err) {
       throw new Error(err);
     }
@@ -315,12 +344,21 @@ class AnimateApplication extends AnimateConfig {
       });
     }
 
-    if (this._frameCallback && this._frameCallback.init)
-      this._frameCallback.bind(this)(this._context, this._iteration)
+    if (this._frameCallback)
+      this._frameCallback(this._context, this._iteration);
   }
 
   clear () {
     this._context.clearRect( 0, 0, this.config.width, this.config.height );
+    return this;
+  }
+
+  frame (params, cb) {
+    if (typeOf(params, 'object') && typeOf(cb, 'function')) {
+      this._frameCallback = cb.bind(this.sceneObject(params));
+    } else {
+      throw new Error("Method [AnimateApplication::frame] arguments is filed!");
+    }
     return this;
   }
 
@@ -350,6 +388,18 @@ class AnimateApplication extends AnimateConfig {
   getFPS () {
     return Math.ceil(this._iteration / ( (this._fpsTimeThen - this._fpsTimeFirst) / 1000))
   }
+
+  get sceneName () {
+    return this._sn}
+
+  get width () {
+    return this.config.width}
+
+  get height () {
+    return this.config.height}
+
+  get iteration () {
+    return this._iteration}
 
   getIteration () {
     return this._iteration
@@ -412,26 +462,8 @@ class AnimateApplication extends AnimateConfig {
     return this._context.isPointInPath(point.x, point.y);
   }
 
-  /**
-   * @param props
-   * @param callback
-   * @returns {function()}
-   */
-  createMovieclip (props, callback) {
-    const ctx = this._context;
-    return (...propsInside) => {
-      ctx.save();
-      if (isDefined(props.x)) ctx.translate(props.x, props.y);
-      if (isDefined(props.rotate)) ctx.rotate(props.rotate);
-      const callResult = callback.apply(props, propsInside);
-      ctx.restore();
-      return callResult;
-    }
-  }
-
-
-  clip (options, callback, thisInstance) {
-    return (...args) => callback.bind(options).apply(thisInstance || {}, args || {})
+  clip (opts, callback, thisInstance) {
+    return (...args) => callback.bind(opts).apply(thisInstance || {}, args || {})
   };
 
   movieclip (opts, callback, thisInstance) {
@@ -446,13 +478,13 @@ class AnimateApplication extends AnimateConfig {
         scale: undefined,
         alpha: undefined,
         composite: undefined,
-        setTranslate: function () {this.translate = arguments},
-        setTransform: function () {this.transform = arguments},
-        setScale: function () {this.scale = arguments},
-        setRotate: function () {this.rotate = arguments[0]},
-        setRotation: function () {this.rotation = arguments[0]},
-        setAlpha: function () {this.alpha = arguments[0]},
-        setComposite: function () {this.composite = arguments[0]},
+        setTranslate: function (...args) {this.translate = args},
+        setTransform: function (...args) {this.transform = args},
+        setScale: function (...args) {this.scale = args},
+        setRotate: function (...args) {this.rotate = args[0]},
+        setRotation: function (...args) {this.rotation = args[0]},
+        setAlpha: function (...args) {this.alpha = args[0]},
+        setComposite: function (...args) {this.composite = args[0]},
         instance: this
       }, ...opts};
 
@@ -480,6 +512,18 @@ class AnimateApplication extends AnimateConfig {
       thisInstance);
   }
 
+  fragment (opts, callback) {
+    const ctx = this._context;
+    return (...propsInside) => {
+      ctx.save();
+      if (isDefined(opts.x)) ctx.translate(opts.x, opts.y);
+      if (isDefined(opts.rotate)) ctx.rotate(opts.rotate);
+      const callResult = callback.apply(opts, propsInside);
+      ctx.restore();
+      return callResult;
+    }
+  }
+
   backgroundColor (color) {
     if (this._canvas.style.backgroundColor !== color)
       this._canvas.style.backgroundColor = color;
@@ -497,7 +541,6 @@ Object.defineProperty(AnimateApplication, 'version', {
 
 
   
-const EventKeyCode = 0;
 const EventKeyCodeBackspace = 8;
 const EventKeyCodeTab = 9;
 const EventKeyCodeEnter = 13;
@@ -592,7 +635,7 @@ const EventKeyCodeNumpad8 = 104;
 const EventKeyCodeNumpad9 = 105;
 
 
-const KeyCode = {
+const EventKeyCode = {
   Backspace : 8,
   Tab : 9,
   Enter : 13,
@@ -1075,16 +1118,22 @@ class AnimateGraphic {
     let x, y, width, height;
 
     if (args.length === 1) {
-      x = args[0].x;
-      y = args[0].y;
-      width = args[0].width;
-      height = args[0].height;
+      if (typeOf(args[0], 'array')) {
+        x = args[0][0];
+        y = args[0][1];
+        width = args[0][2];
+        height = args[0][3];
+      } else {
+        x = args[0].x;
+        y = args[0].y;
+        width = args[0].width;
+        height = args[0].height;
+      }
     }
     else if (args.length === 3) {
       x = args[0].x;
       y = args[0].y;
       width = args[1];
-
       height = args[2];
     }
     else if (args.length === 4) {
@@ -1294,19 +1343,52 @@ class AnimateText {
     return this;
   }
 
-  text (text) {
-    this.config.text = text;
-    return this;
-  }
+  x (src) {
+    this.config.x = src;
+    return this}
+
+  y (src) {
+    this.config.y = src;
+    return this}
+
+  text (src) {
+    this.config.text = src;
+    return this}
+
+  size (src) {
+    this.config.size = src;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    return this}
+
+  family (src) {
+    this.config.family = src;
+    this.context.font = `${this.config.size}px/${(this.config.size + 2)}px ${this.config.family}`;
+    return this}
+
+  align (src) {
+    this.config.align = src;
+    this.context.textAlign = this.config.align;
+    return this}
+
+  baseline (src) {
+    this.config.baseline = src;
+    this.context.textBaseline = this.config.baseline;
+    return this}
+
+  color (src) {
+    this.config.color = src;
+    return this}
 
   stroke () {
-    if (this.config.color) this.context.strokeStyle = this.config.color;
+    if (this.config.color)
+      this.context.strokeStyle = this.config.color;
     this.context.strokeText(this.config.text, this.config.x, this.config.y);
     return this;
   }
 
   fill () {
-    if (this.config.color) this.context.fillStyle = this.config.color;
+    if (this.config.color)
+      this.context.fillStyle = this.config.color;
     this.context.fillText(this.config.text, this.config.x, this.config.y);
     return this;
   };
@@ -1325,11 +1407,6 @@ class AnimateText {
         break;
       default:
     }
-    return this;
-  }
-
-  color (src) {
-    this.config.color = src;
     return this;
   }
 

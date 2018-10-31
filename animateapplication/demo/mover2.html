@@ -35,6 +35,34 @@
     cursorClick: Point(),
   };
 
+  const Hero = {
+    positionPoint: Point(),
+    mc: Animate.movieclip({
+      speed: 1,
+      x: 100,
+      y: 100,
+      faceTo: 'top'
+    }, function () {
+      this.setTranslate(this.x, this.y);
+      if (this.isinit) {
+
+          if (EventKey.isPressed('a')) {this.x -= this.speed; this.faceTo = 'left'}
+          if (EventKey.isPressed('d')) {this.x += this.speed; this.faceTo = 'right'}
+          if (EventKey.isPressed('w')) {this.y -= this.speed; this.faceTo = 'top'}
+          if (EventKey.isPressed('s')) {this.y += this.speed; this.faceTo = 'down'}
+
+          if (this.faceTo === 'left')   this.setRotation(270);
+          if (this.faceTo === 'right')  this.setRotation(90);
+          if (this.faceTo === 'top')    this.setRotation(0);
+          if (this.faceTo === 'down')   this.setRotation(180);
+
+          Graphic.shape([0,5,-20,15,0,-25,20,15]).fill();
+      }
+      this.isinit = true;
+    })
+
+  };
+
 
   // E V E N T S
 
@@ -44,14 +72,23 @@
 
   // S C E N E S
   Animate.scene('menu', {}, function (ctx, iter) {
-
+    Hero.mc();
   });
 
   Animate.frame({} , function ( ctx, iteration ) {
-
+    Text.print('Test game text', 10, 10)
   });
 
   Animate.start('menu');
+
+
+
+
+
+
+
+
+
 
 </script>
 </body>
