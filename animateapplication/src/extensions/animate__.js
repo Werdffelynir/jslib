@@ -6,8 +6,13 @@ class Animate___ {
       throw new Error(':constructor argument in not of instance AnimateApplication');
     }
 
+    /**@type {HTMLCanvasElement}*/
     this.canvas = Animate.getCanvas();
+
+    /**@type {Document|Global}*/
     this.global = Animate.getGlobal();
+
+    /**@type {AnimateApplication}*/
     this.Animate = Animate;
 
     /**@type {CanvasRenderingContext2D}*/

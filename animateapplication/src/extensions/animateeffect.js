@@ -8,7 +8,7 @@ class AnimateEffect {
 
     this.canvas = Animate.getCanvas();
     this.global = Animate.getGlobal();
-    this.animate = Animate;
+    this.Animate = Animate;
 
     /**@type {CanvasRenderingContext2D}*/
     this.context = Animate._context;
@@ -18,7 +18,9 @@ class AnimateEffect {
 
   fadeIn() {
     const ctx = this.context;
-    return this.animate.movieclip(
+    const width = this.Animate.width;
+    const height = this.Animate.height;
+    return this.Animate.movieclip(
       {c: 0, speed: this.fadeSpeed},
       function (callback) {
         if (this.c > 255) {
@@ -29,7 +31,7 @@ class AnimateEffect {
           const color = `rgba(${this.c}, ${this.c}, ${this.c}, 1)`;
           ctx.beginPath();
           ctx.fillStyle = color;
-          ctx.fillRect(0, 0, this.animate.width, this.animate.height);
+          ctx.fillRect(0, 0, width, height);
           ctx.closePath();
         }
       });
@@ -37,7 +39,9 @@ class AnimateEffect {
 
   fadeOut() {
     const ctx = this.context;
-    return this.animate.movieclip(
+    const width = this.Animate.width;
+    const height = this.Animate.height;
+    return this.Animate.movieclip(
       {c: 255, speed: this.fadeSpeed},
       function (callback) {
         if (this.c < 0) {
@@ -48,7 +52,7 @@ class AnimateEffect {
           const color = `rgba(${this.c}, ${this.c}, ${this.c}, 1)`;
           ctx.beginPath();
           ctx.fillStyle = color;
-          ctx.fillRect(0, 0, this.animate.width, this.animate.height);
+          ctx.fillRect(0, 0, width, height);
           ctx.closePath();
         }
       });

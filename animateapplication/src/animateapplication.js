@@ -133,6 +133,14 @@ class AnimateApplication extends AnimateConfig {
   get sceneName () {
     return this._sn}
 
+  /** @returns {CanvasRenderingContext2D|null} */
+  get context () {
+    return this._context}
+
+  /** @returns {HTMLCanvasElement|null} */
+  get canvas () {
+    return this._canvas}
+
   get width () {
     return this.config.width}
 
@@ -152,9 +160,7 @@ class AnimateApplication extends AnimateConfig {
     return this.config.height
   }
 
-  /**
-   * @returns {null|CanvasRenderingContext2D}
-   */
+  /** @returns {null|CanvasRenderingContext2D} */
   getContext (props = null) {
     if (props) {
       let key;
@@ -164,17 +170,12 @@ class AnimateApplication extends AnimateConfig {
     return this._context
   }
 
-  /**
-   * @returns {null|HTMLCanvasElement}
-   */
+  /** @returns {null|HTMLCanvasElement} */
   getCanvas () {
     return this._canvas
   }
 
-  /**
-   *
-   * @returns {Document | *}
-   */
+  /** @returns {Document | *} */
   getGlobal () {
     return this._global
   }

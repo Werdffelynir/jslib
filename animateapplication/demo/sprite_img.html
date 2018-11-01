@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 12);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
+  const Sprite = new AnimateSprite(Animate);
+
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
+
+  // C U S T O M
+  const Canvas = {
+    cursor: Point(),
+    cursorClick: Point(),
+  };
+
+
+  Sprite.upload({
+    ground: 'assets/sprite_ground.png',
+  }, (img) => {
+    Sprite.config(img.ground, 50, [6, 4]);
+    Animate.start('menu');
+  });
+
+
+  // E V E N T S
+
+  Event.click((e, p) => {Canvas.cursorClick = p});
+  Event.mousemove((e, p) => {Canvas.cursor = p});
+
+
+  // S C E N E S
+  let _i = 0;
+  Animate.scene('menu', {}, function (ctx, iteration) {
+
+    Text.print('Frame: ' + _i, 10, 9);
+    Sprite.draw(10, 10, _i, 50);
+
+    if (_i < Sprite.frames().length - 1) {
+      _i ++;
+    } else _i = 0;
+
+  });
+
+  Animate.frame({} , function ( ctx, iteration ) {
+
+  });
+
+</script>
+</body>
+</html>

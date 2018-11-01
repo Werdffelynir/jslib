@@ -18,4 +18,6 @@
 
   [[['extensions/animateeffect']]]
 
+  [[['extensions/animatesprite']]]
+
   [[['static']]]
