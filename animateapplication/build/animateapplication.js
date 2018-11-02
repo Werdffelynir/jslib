@@ -228,7 +228,7 @@ const isEqualArrays = function (arr1, arr2) {
 };
 
 
-function range(start, end, step = 1) {
+const range = function (start, end, step = 1) {
   const allNumbers = [start, end, step].every(Number.isFinite);
 
   if (!allNumbers)
@@ -242,8 +242,18 @@ function range(start, end, step = 1) {
 
   const length = Math.floor(Math.abs((end - start) / step)) + 1;
   return Array.from(Array(length), (x, index) => start + index * step);
-}
+};
 
+const shuffleArray = function (array) {
+  let i, j, temp;
+  for (i = array.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+};
 
 
 
@@ -1696,6 +1706,7 @@ class AnimateSprite {
   uploadImage (name, url, callback) {
     const img = this.global.createElement('img');
     img.src = url;
+    img.spriteName = name;
     img.onload = event => callback.call({}, img, event);
     return this
   }
@@ -1713,10 +1724,11 @@ class AnimateSprite {
     for (name in list) {
       if (list.hasOwnProperty(name) && typeOf(list[name], 'string')) {
         this.uploadImage(name, list[name], (img, event) => {
-          img.event = event;
-          loadedData[name] = img;
+          loadedData[img.spriteName] = img;
           i ++;
-          if (i === length) callback.call({}, loadedData);
+          if (i === length) {
+            callback.call({}, loadedData);
+          }
         })
       }
     }
@@ -1724,7 +1736,9 @@ class AnimateSprite {
   }
 
   /**
-   * Sprite.config(imageData, 50, [6, 4]);
+   *
+   * Sprite.config('spriteName', imageData, [128, 64], [4, 4])
+   * Sprite.config('spriteName', imageData, [64, 64], [4, 4]) === Sprite.config('spriteName', imageData, 64, 4)
    * @param name
    * @param img
    * @param step
@@ -1734,14 +1748,14 @@ class AnimateSprite {
   config (name, img, step, grid) {
     const config = this._config[name] = {};
     config.img = img;
-    config.step = step;
-    config.grid = grid;
-    config.params = {sx: 0, sy: 0, sWidth: step, sHeight: step, dx: 0, dy: 0, dWidth: 0, dHeight: 0};
+    config.step = typeOf(step, 'array') ? step : [step, step];
+    config.grid = typeOf(grid, 'array') ? grid : [grid, grid];
+    config.params = {sx: 0, sy: 0, sWidth: config.step[0], sHeight: config.step[1], dx: 0, dy: 0, dWidth: 0, dHeight: 0};
     config.frames = {length: 0};
     let ix = 0, iy = 0, i = 0;
     for (; iy < grid[1]; iy ++ ) {
       for (; ix < grid[0]; ix ++ ) {
-        config.frames['frame'+i] = {x: ix * step, y: iy * step};
+        config.frames['frame'+i] = {x: ix * config.step[0], y: iy * config.step[1]};
         i ++;
       }
       ix = 0;
@@ -1751,7 +1765,8 @@ class AnimateSprite {
   }
 
   /**
-   * Sprite.draw(100, 100, 0, 50);
+   * Sprite.draw('spriteName', 0, 0, 0, 50);
+   * Sprite.draw('spriteName', 0, 0, 0, [128, 64]);
    * @param name
    * @param x
    * @param y
@@ -1762,11 +1777,14 @@ class AnimateSprite {
   draw (name, x, y, frame, size) {
     const config = this._config[name];
     if (!config.frames['frame'+frame])
-      throw new Error('Frame number not exist!');
+      throw new Error('Frames "'+name+'" not exist!');
+
     let {sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = config.params;
+    size = typeOf(size, 'array') ? size : [size, size];
     dx = x;
     dy = y;
-    dWidth = dHeight = size;
+    dWidth = size[0];
+    dHeight = size[1];
     sx = config.frames['frame'+frame].x;
     sy = config.frames['frame'+frame].y;
     this.context.drawImage(config.img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
@@ -1778,7 +1796,6 @@ class AnimateSprite {
   }
 
 }
-
 
   /*
 

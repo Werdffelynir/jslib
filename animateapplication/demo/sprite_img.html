@@ -11,7 +11,7 @@
 <canvas class="canvas"></canvas>
 
 <script>
-  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 12);
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 0.5);
   const Text = new AnimateText(Animate);
   const Event = new AnimateEvent(Animate);
   const Graphic = new AnimateGraphic(Animate);
@@ -39,9 +39,13 @@
 
   Sprite.upload({
     ground: 'assets/sprite_ground.png',
+    ground2d: 'assets/sprite_ground2d.png',
   }, (img) => {
-    Sprite.config(img.ground, 50, [6, 4]);
+    Sprite.config('ground', img.ground, 50, [6, 4]);
+    Sprite.config('ground2d', img.ground2d, [128, 64], [4, 4]);
+
     Animate.start('menu');
+    // console.log(img);
   });
 
 
@@ -52,15 +56,18 @@
 
 
   // S C E N E S
-  let _i = 0;
+  let i = 0;
   Animate.scene('menu', {}, function (ctx, iteration) {
 
-    Text.print('Frame: ' + _i, 10, 9);
-    Sprite.draw(10, 10, _i, 50);
+    Text.print('Frame: ' + i, 10, 9);
+    Sprite.draw('ground',   10,  10, i, 50);
+    Sprite.draw('ground',   100, 10, 5, 50);
+    Sprite.draw('ground2d', 200, 10, 1, [128, 64]);
+    Sprite.draw('ground2d', 300, 10, 3, [128, 64]);
 
-    if (_i < Sprite.frames().length - 1) {
-      _i ++;
-    } else _i = 0;
+    if (i < Sprite.frames('ground').length - 1) {
+      i ++;
+    } else i = 0;
 
   });
 

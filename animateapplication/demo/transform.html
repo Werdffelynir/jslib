@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+    <style>
+        #transform_params { width: 440px; }
+        #page > .cell:first-child {width: 600px; }
+        #transform_params input{ width: 80px; }
+    </style>
+</head>
+<body>
+
+<div id="page" class="table">
+    <div class="cell valign-top">
+        <canvas class="canvas"></canvas>
+    </div>
+    <div class="cell valign-top">
+        <h3>x100 Transform</h3>
+        <div id="transform_params" class="table">
+            <div class="cell">
+                <div><input type="number" name="m11" value="100"> <span>Horizontal scaling.</span></div>
+                <div><input type="number" name="m12" value="0"> <span>Horizontal skewing.</span></div>
+                <div><input type="number" name="m21" value="0"> <span>Vertical skewing.</span></div>
+                <div><input type="number" name="m22" value="100"> <span>Vertical scaling.</span></div>
+            </div>
+            <div class="cell valign-top">
+                <div><input type="number" name="dx"  value="0" step="10"> <span>Horizontal moving.</span></div>
+                <div><input type="number" name="dy"  value="0" step="10"> <span>Vertical moving.</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 600, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
+
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
+
+  // C U S T O M
+  const Canvas = {
+    cursor: Point(),
+    cursorClick: Point(),
+  };
+
+  Canvas.figure = Animate.clip(
+    {
+      m11: 1, m12: 0, m21: 0, m22: 1, dx: 0, dy: 0,
+      move: function (x, y) {this.dx = x; this.dy = y;}
+    }, function (ctx, cb) {
+        ctx.save();
+        ctx.setTransform(this.m11, this.m12, this.m21, this.m22, this.dx, this.dy);
+        cb(ctx);
+        ctx.restore();
+        return this;
+    }
+  );
+
+
+
+  // E V E N T S
+
+  Event.click((e, p) => {Canvas.cursorClick = p});
+  Event.mousemove((e, p) => {Canvas.cursor = p});
+
+
+  let figure;
+
+    // S C E N E S
+  Animate.scene('menu', {}, function (ctx, iter) {
+
+    figure = Canvas.figure(Animate.context, (ctx) => {
+      ctx.strokeRect(0, 0, 200, 100);
+    });
+
+  });
+
+
+  // I N P U T S
+  const transform_inputs = document.querySelectorAll('#transform_params input[type="number"]');
+  [].slice.call(transform_inputs).map((inp) => {inp.addEventListener('input', (e) => {
+    const n = e.target.name;
+    figure[n] = (n === 'dx' || n === 'dy') ?  parseInt(e.target.value) : parseInt(e.target.value) / 100;
+  })});
+
+
+  Animate.frame({} , function ( ctx, iteration ) { });
+
+
+  Animate.start('menu');
+
+</script>
+</body>
+</html>

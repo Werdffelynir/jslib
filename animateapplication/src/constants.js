@@ -212,7 +212,7 @@ const isEqualArrays = function (arr1, arr2) {
 };
 
 
-function range(start, end, step = 1) {
+const range = function (start, end, step = 1) {
   const allNumbers = [start, end, step].every(Number.isFinite);
 
   if (!allNumbers)
@@ -226,8 +226,18 @@ function range(start, end, step = 1) {
 
   const length = Math.floor(Math.abs((end - start) / step)) + 1;
   return Array.from(Array(length), (x, index) => start + index * step);
-}
+};
 
+const shuffleArray = function (array) {
+  let i, j, temp;
+  for (i = array.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+};
 
 
 

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 30);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
+
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
+
+  // C U S T O M
+  const Game = {
+    ctx: Animate.context,
+    cursor: Point(),
+    cursorClick: Point(),
+    startMessage: 'Game',
+    endMessage: 'Game Over',
+  };
+  Game.startGame = () => {
+    Animate.start('game');
+  };
+
+  Game.iterativeObjectsList = [];
+  Game.iterativeObject = function (object) {
+    const add = (object) => {
+      object.open = true;
+      Game.iterativeObjectsList.push(object);
+    };
+    const check = () => Game.iterativeObjectsList[0].color === Game.iterativeObjectsList[1].color;
+    const rem_all = (hide = false) => {
+      let i = 0;
+      for (; i < Game.iterativeObjectsList.length; i ++) {
+        Game.iterativeObjectsList[i].open = false;
+        Game.iterativeObjectsList[i].hide = hide;
+      }
+      Game.iterativeObjectsList = [];
+    };
+    const rem = (object) => {
+      let i = 0;
+      for (; i < Game.iterativeObjectsList.length; i ++) {
+        if (Game.iterativeObjectsList[i].index === object.index) {
+          object.open = false;
+          Game.iterativeObjectsList.splice(i, 1);
+        }
+      }
+    };
+
+    if (object.open) {
+      rem(object)
+    } else {
+      switch (Game.iterativeObjectsList.length) {
+        case 0:
+          add(object);
+          break;
+        case 1:
+          add(object);
+          if (check()) {
+            rem_all(true);
+          }
+          break;
+        case 2:
+          rem_all();
+          add(object);
+          break;
+        default:
+      }
+    }
+
+  };
+
+  Game.gridElements = [];
+  Game.grid = Animate.clip({
+    size: 40,
+    width: 3,
+    height: 4,
+  }, function () {
+    if (!this.isInit) {
+      this.isInit = true;
+      let _colors = [];
+      const _count = this.width * this.height;
+      const addRandomColor = (src) => {
+        const rc = randomColor();
+        if (src.indexOf(rc) === -1) src.push(rc);
+        else addRandomColor(src);
+      };
+      [...Array(_count / 2)].map(() => {
+        addRandomColor(_colors)
+      });
+
+      let ix = 0, iy = 0, i = 0, colors = shuffleArray([..._colors, ..._colors]);
+      for (; ix < this.width; ix++) {
+        for (; iy < this.height; iy++) {
+          Game.gridElements.push({
+            rect: Rectangle(ix * this.size, iy * this.size, this.size - 2, this.size - 2),
+            colorDefault: '#efefef',
+            color: colors.pop(),
+            open: false,
+            hide: false,
+            index: i,
+          });
+          i++;
+        }
+        iy = 0;
+      }
+    }
+
+    Game.gridElements.map((o) => {
+      if (!o.hide)
+        Graphic.color(o.open ? o.color : o.colorDefault).rect(o.rect).fill();
+    });
+
+  });
+
+  // E V E N T S
+
+  Event.click((e, point) => {
+    Game.cursorClick = point;
+    if (Animate.sceneName !== 'game') {
+      Animate.start('game');
+    }
+    if (Animate.sceneName === 'game') {
+      Game.gridElements.map((o) => {
+        if (Animate.hitTest(o.rect, point)) {
+          Game.iterativeObject(o);
+        }
+      });
+    }
+  });
+  Event.mousemove((e, p) => {Game.cursor = p});
+
+
+  // S C E N E S
+  Animate.scene('menu', {}, function (ctx, iter) {
+    Text.color('#000000').print(Game.startMessage, Animate.width / 2, Animate.height / 2)
+  });
+
+  Animate.scene('game', {}, function (ctx, iter) {
+    Game.grid();
+  });
+
+  Animate.scene('end', {}, function (ctx, iter) {
+    Text.color('#000000').print(Game.endMessage, Animate.width / 2, Animate.height / 2)
+  });
+
+  Animate.frame({} , function ( ctx, iteration ) {
+    Text.print('Frame: ' + iteration + ' Scene: ' + Animate.sceneName + ' fps: ' + Animate.getFPS(), 10, 10);
+  });
+
+  Animate.start('game');
+
+</script>
+</body>
+</html>
