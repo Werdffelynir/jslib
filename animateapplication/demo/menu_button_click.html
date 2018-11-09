@@ -107,6 +107,17 @@
       CANVAS.mc_menu();
     });
 
+    Animate.frame({} , () => {
+      switch (Animate.sceneName) {
+        case 'menu' : Animate.backgroundColor('#ffffff');
+          break;
+        case 'page' : Animate.backgroundColor('#f8f9c8');
+          break;
+        case 'settings' : Animate.backgroundColor('#eae2ff');
+          break;
+      }
+    });
+
     Animate.start('menu');
 
 </script>

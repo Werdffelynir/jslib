@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../build/animateapplication.js"></script>
+    <link rel="stylesheet" href="./css/grid.css">
+</head>
+<body>
+
+<canvas class="canvas"></canvas>
+
+<script>
+  const Animate = new AnimateApplication('canvas.canvas', 800, 400, 60);
+  const Text = new AnimateText(Animate);
+  const Event = new AnimateEvent(Animate);
+  const Graphic = new AnimateGraphic(Animate);
+  const EventKey = new AnimateEventKey(Animate);
+
+  EventKey.config({
+    keys: {
+      a:      65,
+      s:      83,
+      d:      68,
+      w:      87,
+      space:  32,
+    },
+    keydown: () => {},
+    keyup: () => {},
+  });
+
+  // C U S T O M
+  const Canvas = {
+    cursor: Point(),
+    cursorClick: Point(),
+    centerPoint: Point(Animate.width / 2, Animate.height / 2),
+  };
+
+  const createAnimateCircle = function (radius, thickness, startPosition = 0, endPosition = 100, color = '#000000') {
+    const ctx = Animate.context;
+    return Animate.fragment({
+      radius: radius,
+      thickness: thickness,
+      startPosition: startPosition,
+      endPosition: endPosition,
+      anticlockwise: false,
+      color: color,
+    }, function (sp, ep) {
+      if (sp >= 0) this.startPosition = sp;
+      if (ep >= 0) this.endPosition = ep;
+      const startAngle = degreesToRadians(360 / 100 * this.startPosition);
+      const endAngle = degreesToRadians(360 / 100 * this.endPosition);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = this.thickness;
+      ctx.strokeStyle = this.color;
+      ctx.arc(
+        Canvas.centerPoint.x,
+        Canvas.centerPoint.y, this.radius, startAngle, endAngle, this.anticlockwise);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.restore();
+
+    });
+  };
+
+
+  const c200        = createAnimateCircle(200, 16, 0,  100, '#000000');
+  const c200mask1   = createAnimateCircle(200, 18, 0,  20,  '#ffffff');
+  const c200mask2   = createAnimateCircle(200, 12, 60, 70,  '#ffffff');
+  const c200mask3   = createAnimateCircle(200, 12, 80, 90,  '#ffffff');
+  const c150        = createAnimateCircle(150, 10, 0,  100, '#000000');
+  const c100        = createAnimateCircle(100, 5,  0,  100, '#000000');
+  const c70         = createAnimateCircle(70,  18, 0,  100, '#000000');
+  const c70mask1    = createAnimateCircle(70, 12,  10, 20,  '#ffffff');
+  const c70mask2    = createAnimateCircle(70, 12,  40, 50,  '#ffffff');
+  const c70mask3    = createAnimateCircle(70, 12,  60, 70,  '#ffffff');
+  const c70mask4    = createAnimateCircle(70, 12,  90, 100, '#ffffff');
+
+  // E V E N T S
+
+  Event.click((e, p) => {Canvas.cursorClick = p});
+  Event.mousemove((e, p) => {Canvas.cursor = p});
+
+
+  // S C E N E S
+  Animate.scene('menu', {}, function (ctx, iter) {
+    c200(0, iter / 0.5);
+    c200mask1();
+    c200mask2();
+    c200mask3();
+    c150(0, iter / 0.3);
+    c100(0, iter);
+    c70();
+    c70mask1(iter / 0.2, iter / 0.3);
+    // c70mask2();
+    // c70mask3();
+    // c70mask4();
+  });
+
+  Animate.frame({} , function ( ctx, iteration ) {
+
+  });
+
+  Animate.start('menu');
+
+</script>
+</body>
+</html>
