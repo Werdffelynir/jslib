@@ -277,6 +277,6 @@ class AnimateApplication extends AnimateConfig {
 
 /** Set script version. Property [read-only]*/
 Object.defineProperty(AnimateApplication, 'version', {
-  enumerable: false, configurable: false, writable: false, value: '0.8.0.0'
+  enumerable: false, configurable: false, writable: false, value: '0.8.1.0'
 });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-  [[['utils/isobject']]]
+  [[['utils/utils']]]
 
   [[['constants']]]
 

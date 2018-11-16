@@ -239,13 +239,3 @@ const shuffleArray = function (array) {
   return array;
 };
 
-
-
-
-
-
-
-
-
-
-
