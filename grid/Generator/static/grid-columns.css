@@ -1,0 +1,42 @@
+
+.clear:before, .clear:after{content: " "; display: table;}
+.clear:after {clear: both;}
+.clear {*zoom: 1;}
+.clear-line{clear: both; width: 100%; height: 1px; margin-top: -1px}
+
+.grid-1:first-child,
+.grid-2:first-child,
+.grid-3:first-child,
+.grid-4:first-child,
+.grid-5:first-child,
+.grid-6:first-child,
+.grid-7:first-child,
+.grid-8:first-child,
+.grid-9:first-child,
+.grid-10:first-child,
+.grid-11:first-child{margin-left:0;}
+.grid-1{width:8.3134403935185%;}
+.grid-2{width:16.648582175926%;}
+.grid-3{width:24.983723958333%;}
+.grid-4{width:33.318865740741%;}
+.grid-5{width:41.654007523148%;}
+.grid-6{width:49.989149305556%;}
+.grid-7{width:58.324291087963%;}
+.grid-8{width:66.65943287037%;}
+.grid-9{width:74.994574652778%;}
+.grid-10{width:83.329716435185%;}
+.grid-11{width:91.664858217593%;}
+.grid-1,
+.grid-2,
+.grid-3,
+.grid-4,
+.grid-5,
+.grid-6,
+.grid-7,
+.grid-8,
+.grid-9,
+.grid-10,
+.grid-11{display:inline; float:left; margin: 0 0 0 0.20833333333333%; list-style:none;}
+.first{margin-left:0; clear:left;}
+.full,.grid,.grid-12{display:block; width:100%; clear:both;}
+.full>div:nth-child(1),.grid>div:nth-child(1),.grid-12>div:nth-child(1){margin-left:0; clear:left;}

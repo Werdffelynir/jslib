@@ -14,7 +14,7 @@
         this._requires_stack = {};
 
         // Set Configurations
-        if (arguments.length == 1 && arguments[0] && typeof arguments[0] === 'object') {
+        if (arguments.length === 1 && arguments[0] && typeof arguments[0] === 'object') {
             for (var k in arguments[0]) {
                 if (this[k] === undefined || ['path', 'debug'].indexOf(k) !== -1)
                     this[k] = arguments[0][k];
@@ -598,11 +598,11 @@ NamespaceApplication.on = function (selector, eventName, callback, bubble) {
   var i, elements = null,
     typeSelector = NamespaceApplication.typeOf(selector);
 
-  if (typeSelector == 'string')
+  if (typeSelector === 'string')
     elements = NamespaceApplication.queryAll(selector);
-  else if (typeSelector == 'object' && selector.nodeType == Node.ELEMENT_NODE)
+  else if (typeSelector === 'object' && selector.nodeType === Node.ELEMENT_NODE)
     elements = [selector];
-  else if (typeSelector == 'array')
+  else if (typeSelector === 'array')
     elements = selector;
 
   if (elements) {
@@ -675,7 +675,7 @@ NamespaceApplication.copy = function (src, addProperties) {
  * App style\s to HTMLElement\s
  *
  * .css(HTMLElement, 'background-color: #ffffff; color: #3a363f' )
- * .css(HTMLElement, {background-color: '#ffffff'} )
+ * .css(HTMLElement, {backgroundColor: '#ffffff'} )
  * .css(HTMLElement', 'background-color', '#ffffff' )
  * .css([HTMLElement, HTMLElement, ...], {fontSize: '22px'})
  *
