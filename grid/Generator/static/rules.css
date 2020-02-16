@@ -1,0 +1,40 @@
+.is-hidden{visibility: hidden}
+.none,.hide{display: none}
+.block{display: block}
+.inline{display: inline}
+.inline-block{display: inline-block}
+
+.text-left{text-align:left}
+.text-right{text-align:right}
+.text-center{text-align:center}
+
+.font-bold{font-weight: bold}
+.font-italic{font-style: italic}
+.font-normal{font-style: normal; font-weight: normal}
+
+.margin-top{margin-top:0}
+.margin-bottom{margin-bottom: 0}
+.margin-left{margin-left: 0}
+.margin-right{margin-right: 0}
+.margin-center{margin: 0 auto}
+.float-left{float: left}
+.float-right{float: right}
+
+.table{display:table; width:100%}
+.table>*{display:table-cell; vertical-align:middle}
+.table-cell{display:table-cell; vertical-align:middle}
+.table-row{display:table-row}
+.table-column{display:table-column}
+.table-capt{display:table-caption}
+
+.valign-baseline{vertical-align:baseline}
+.valign-bottom{vertical-align:bottom}
+.valign-middle{vertical-align:middle}
+.valign-top{vertical-align:top}
+
+.select-off{-webkit-user-select: none; -moz-user-select: none; user-select: none}
+
+.flex{display: flex}
+.flex-around{display: flex; justify-content: space-around}
+.flex-between{display: flex; justify-content: space-between}
+.flex-center{display: flex; align-items: center}
